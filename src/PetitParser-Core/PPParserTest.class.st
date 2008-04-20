@@ -24,28 +24,26 @@ PPParserTest >> assert: aParser parse: aCollection to: anObject [
 
 { #category : #examples }
 PPParserTest >> comment [
-	^ ($" asParser , (PPPredicateParser char: $") not star , $" asParser) token
+	^ ($" asParser , $" asParser not star , $" asParser) token
 ]
 
 { #category : #examples }
 PPParserTest >> identifier [
-	^ (PPPredicateParser letter , PPPredicateParser word star) token
+	^ (#letter asParser , #word asParser star) token
 ]
 
 { #category : #examples }
 PPParserTest >> number [
-	^ ($- asParser optional , PPPredicateParser digit plus , ($. asParser , PPPredicateParser digit plus) optional) token
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token
 ]
 
 { #category : #testing }
-PPParserTest >> testAlternating [
+PPParserTest >> testAction [
 	| parser |
-	parser := $a asParser | $b asParser.
+	parser := #any asParser ==> [ :a | a ].
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'b' to: $b.
-	self assert: parser fail: ''.
-	self assert: parser fail: 'c'.
-	self assert: parser fail: 'ca'
+	self assert: parser fail: ''
 ]
 
 { #category : #'testing-extension' }
@@ -56,6 +54,17 @@ PPParserTest >> testCharacter [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'.
 	self assert: parser fail: 'A'
+]
+
+{ #category : #testing }
+PPParserTest >> testChoice [
+	| parser |
+	parser := $a asParser | $b asParser.
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser parse: 'b' to: $b.
+	self assert: parser fail: ''.
+	self assert: parser fail: 'c'.
+	self assert: parser fail: 'ca'
 ]
 
 { #category : #testing }
@@ -343,7 +352,7 @@ PPParserTest >> testPredicateWord [
 ]
 
 { #category : #testing }
-PPParserTest >> testSequential [
+PPParserTest >> testSequence [
 	| parser |
 	parser := $a asParser , $b asParser.
 	self assert: parser parse: 'ab' to: #($a $b).
@@ -373,6 +382,15 @@ PPParserTest >> testString [
 
 	self assert: parser fail: 'a'.
 	self assert: parser fail: 'ac'
+]
+
+{ #category : #testing }
+PPParserTest >> testToken [
+	| parser |
+	parser := $a asParser token.
+	self assert: parser parse: 'a' to: 'a'.
+	self assert: parser fail: ''.
+	self assert: parser fail: 'b'
 ]
 
 { #category : #'testing-extension' }
