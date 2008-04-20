@@ -4,51 +4,77 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : #'instance-creation' }
 PPParser class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #operations }
-PPParser >> , aParser [
+PPParser >> , aParser [ 
 	"Answer a new parser that parses the receiver followed by aParser."
+
+	^ PPSequenceParser new , self , aParser
+]
+
+{ #category : #operations }
+PPParser >> ==> aBlock [
+	"Assigns aBlock as a success action handler."
 	
-	^ PPSequence new , self , aParser
+	^ (PPActionParser on: self) block: aBlock
+]
+
+{ #category : #converting }
+PPParser >> asParser [
+	^ self
 ]
 
 { #category : #initialization }
 PPParser >> initialize [
+	action := [ :value | value ].
+	failure := PPFailure new
 ]
 
-{ #category : #operations }
-PPParser >> many [
-	"Answer a new parser that parses the receiver zero or more times."
-
-	^ PPMany on: self
-]
-
-{ #category : #operations }
-PPParser >> many1 [
-	"Answer a new parser that parses the receiver one or more times."
-
-	^ self , self many
+{ #category : #testing }
+PPParser >> isUnresolved [
+	^ false
 ]
 
 { #category : #operations }
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ self | PPEpsilon new
+	^ self | PPEpsilonParser new
 ]
 
 { #category : #parsing }
 PPParser >> parse: aStream [
-	self subclassResponsabily
+	self subclassResponsability
 ]
 
 { #category : #operations }
-PPParser >> | aParser [
-	"Answer a new parser that either parses the receiver or aParser."
+PPParser >> plus [
+	"Answer a new parser that parses the receiver one or more times."
 
-	^ PPAlternative new | self | aParser
+	^ (self , self star) ==> [ :value | (Array with: value first) , value second ]
+]
+
+{ #category : #operations }
+PPParser >> star [
+	"Answer a new parser that parses the receiver zero or more times."
+
+	^ PPStarParser on: self
+]
+
+{ #category : #operations }
+PPParser >> token [
+	"Answer a new parser that parses a token."
+	
+	^ PPTokenParser on: self
+]
+
+{ #category : #operations }
+PPParser >> | aParser [ 
+	"Answer a new parser that either parses the receiver or aParser."
+	
+	^ PPChoiceParser new | self | aParser
 ]
