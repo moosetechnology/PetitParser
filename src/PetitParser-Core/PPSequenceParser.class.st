@@ -13,7 +13,7 @@ PPSequenceParser >> , aRule [
 ]
 
 { #category : #parsing }
-PPSequenceParser >> parse: aStream [
+PPSequenceParser >> basicParse: aStream [
 	| index item items position |
 	index := 1.
 	position := aStream position.

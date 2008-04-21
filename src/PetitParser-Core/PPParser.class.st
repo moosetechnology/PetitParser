@@ -28,6 +28,11 @@ PPParser >> asParser [
 	^ self
 ]
 
+{ #category : #parsing }
+PPParser >> basicParse: aStream [
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 	action := [ :value | value ].
@@ -48,7 +53,7 @@ PPParser >> optional [
 
 { #category : #parsing }
 PPParser >> parse: aStream [
-	self subclassResponsability
+	^ aStream for: self do: [ self basicParse: aStream ]
 ]
 
 { #category : #operations }

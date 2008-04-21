@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #parsing }
-PPTokenParser >> parse: aStream [
+PPTokenParser >> basicParse: aStream [
 	| start stop element |
 	start := aStream position.
-	element := super parse: aStream.
+	element := super basicParse: aStream.
 	element isFailure ifTrue: [ ^ element ].
 	stop := aStream position.
 	[ aStream atEnd not and: [ aStream peek isSeparator ] ]

@@ -10,16 +10,16 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #accessing }
-PPActionParser >> block: aBlock [
-	block := aBlock
-]
-
 { #category : #parsing }
-PPActionParser >> parse: aStream [
+PPActionParser >> basicParse: aStream [
 	| element |
-	element := super parse: aStream.
+	element := super basicParse: aStream.
 	^ element isFailure
 		ifTrue: [ element ]
 		ifFalse: [ block value: element ]
+]
+
+{ #category : #accessing }
+PPActionParser >> block: aBlock [
+	block := aBlock
 ]

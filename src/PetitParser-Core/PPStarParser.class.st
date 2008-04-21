@@ -8,11 +8,11 @@ Class {
 }
 
 { #category : #parsing }
-PPStarParser >> parse: aStream [ 
+PPStarParser >> basicParse: aStream [
 	| position elements element |
 	elements := OrderedCollection new.
 	[ position := aStream position.
-	element := parser parse: aStream.
+	element := super basicParse: aStream.
 	element isFailure ifTrue: [ 
 		aStream position: position.
 		^ elements asArray ].

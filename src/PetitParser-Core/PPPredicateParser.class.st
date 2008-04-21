@@ -96,6 +96,13 @@ PPPredicateParser class >> word [
 		negated: [ :each | each isAlphaNumeric not ] message: 'no letter or digit expected'
 ]
 
+{ #category : #parsing }
+PPPredicateParser >> basicParse: aStream [
+	^ (aStream atEnd not and: [ predicate value: aStream peek ])
+		ifFalse: [ PPFailure reason: predicateMessage position: aStream position ]
+		ifTrue: [ aStream next ]
+]
+
 { #category : #initialization }
 PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
 	predicate := aBlock.
@@ -109,13 +116,6 @@ PPPredicateParser >> not [
 	"Negate the receiving predicate parser."
 	
 	^ PPPredicateParser on: negated message: negatedMessage negated: predicate message: predicateMessage
-]
-
-{ #category : #parsing }
-PPPredicateParser >> parse: aStream [
-	^ (aStream atEnd not and: [ predicate value: aStream peek ])
-		ifFalse: [ PPFailure reason: predicateMessage position: aStream position ]
-		ifTrue: [ aStream next ]
 ]
 
 { #category : #printing }

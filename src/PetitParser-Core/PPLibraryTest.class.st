@@ -7,7 +7,7 @@ Class {
 { #category : #utilities }
 PPLibraryTest >> assert: aParser fail: aCollection [
 	| stream result |
-	stream := aCollection readStream.
+	stream := PPStream on: aCollection.
 	result := aParser parse: stream.
 	self assert: result isFailure.
 	self assert: stream position = 0
@@ -16,7 +16,7 @@ PPLibraryTest >> assert: aParser fail: aCollection [
 { #category : #utilities }
 PPLibraryTest >> assert: aParser parse: aCollection to: anObject [
 	| stream result |
-	stream := aCollection readStream.
+	stream := PPStream on: aCollection.
 	result := aParser parse: stream.
 	self assert: result = anObject.
 	self assert: stream atEnd
@@ -104,6 +104,16 @@ PPLibraryTest >> testInterval [
 	self assert: parser fail: #(4)
 ]
 
+{ #category : #'testing-abstract' }
+PPLibraryTest >> testLeftRecursion [
+	| parser |
+	parser := PPChoiceParser new.
+	parser | (parser , #digit asParser ==> [ :node | 10 * node first + node second digitValue]).
+	parser | (#digit asParser ==> [ :node | node digitValue ]).
+	
+	
+]
+
 { #category : #testing }
 PPLibraryTest >> testOptional [
 	| parser |
@@ -138,7 +148,9 @@ PPLibraryTest >> testParseAaaBbb [
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aabb' to: 'aabb'.
 	self assert: parser parse: 'aaabbb' to: 'aaabbb'.
+	self halt.
 	self assert: parser parse: 'aaaabbbb' to: 'aaaabbbb'.
+	
 
 	self assert: parser fail: 'a'.
 	self assert: parser fail: 'b'.

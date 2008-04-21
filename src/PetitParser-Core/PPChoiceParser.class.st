@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #parsing }
-PPChoiceParser >> parse: aStream [
+PPChoiceParser >> basicParse: aStream [
 	| item |
 	parsers do: [ :parser |
 		item := parser parse: aStream.
