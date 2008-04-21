@@ -1,5 +1,5 @@
 Class {
 	#name : #PPStream,
-	#superclass : #Object,
+	#superclass : #ReadStream,
 	#category : #'PetitParser-Core'
 }

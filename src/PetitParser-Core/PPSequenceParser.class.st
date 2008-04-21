@@ -14,16 +14,18 @@ PPSequenceParser >> , aRule [
 
 { #category : #parsing }
 PPSequenceParser >> parse: aStream [
-	| position items item |
+	| index item items position |
+	index := 1.
 	position := aStream position.
-	items := OrderedCollection new: parsers size.
+	items := Array new: parsers size.
 	parsers do: [ :parser |
 		item := parser parse: aStream.
 		item isFailure ifTrue: [
 			aStream position: position.
 			^ item ].
-		items add: item ].
-	^ items asArray
+		items at: index put: item.
+		index := index + 1 ].
+	^ items
 ]
 
 { #category : #printing }

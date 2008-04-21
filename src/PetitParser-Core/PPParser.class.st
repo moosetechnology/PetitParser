@@ -43,7 +43,7 @@ PPParser >> isUnresolved [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ self | PPEpsilonParser new
+	^ PPChoiceParser new | self | PPEpsilonParser new
 ]
 
 { #category : #parsing }
@@ -55,7 +55,7 @@ PPParser >> parse: aStream [
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
-	^ (self , self star) ==> [ :value | (Array with: value first) , value second ]
+	^ (PPSequenceParser new , self , self star) ==> [ :value | (Array with: value first) , value second ]
 ]
 
 { #category : #operations }
