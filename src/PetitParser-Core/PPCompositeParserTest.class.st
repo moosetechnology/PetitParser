@@ -9,8 +9,9 @@ Class {
 
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection fails: aString at: anInteger [
-	| result |
-	result := parser parse: aCollection readStream.
+	| stream result |
+	stream := PPStream on: aCollection.
+	result := parser parse: stream.
 	self assert: (result isFailure).
 	self assert: (result position = anInteger).
 	self assert: (result reason includesSubstring: aString)
@@ -18,8 +19,9 @@ PPCompositeParserTest >> assert: aCollection fails: aString at: anInteger [
 
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
-	| result |
-	result := parser parse: aCollection readStream.
+	| stream result |
+	stream := PPStream on: aCollection.
+	result := parser parse: stream.
 	self assert: result = anObject
 ]
 

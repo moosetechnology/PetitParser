@@ -33,6 +33,11 @@ PPLibraryTest >> identifier [
 ]
 
 { #category : #examples }
+PPLibraryTest >> integer [
+	^ #digit asParser plus
+]
+
+{ #category : #examples }
 PPLibraryTest >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token
 ]
@@ -230,6 +235,24 @@ PPLibraryTest >> testParseIdentifier [
 	self assert: self identifier fail: ' '.
 	self assert: self identifier fail: '1'.
 	self assert: self identifier fail: '1a'
+]
+
+{ #category : #'testing-abstract' }
+PPLibraryTest >> testParseListOfNumbersLeftRecursive [
+	"S ::= S , number | number"
+	
+	| number parser |
+	number := self number ==> [ :node | Number readFrom: node copy ].
+	parser := PPChoiceParser new.
+	parser | (parser , $, asParser token , number ==> [ :node | node first copyWith: node last ]).
+	parser | (number ==> [ :node | Array with: node ]).
+	parser := parser , PPEndOfInputParser new ==> [ :node | node first ].
+
+	self assert: parser parse: '1' to: (1 to: 1) asArray.
+	self assert: parser parse: '1, 2' to: (1 to: 2) asArray.
+	self assert: parser parse: '1, 2, 3' to: (1 to: 3) asArray.
+	self assert: parser parse: '1, 2, 3, 4' to: (1 to: 4) asArray.
+	self assert: parser parse: '1, 2, 3, 4, 5' to: (1 to: 5) asArray
 ]
 
 { #category : #'testing-examples' }

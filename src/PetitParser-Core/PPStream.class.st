@@ -2,29 +2,33 @@ Class {
 	#name : #PPStream,
 	#superclass : #ReadStream,
 	#instVars : [
-		'memotable'
+		'cache'
 	],
 	#category : #'PetitParser-Core'
 }
 
 { #category : #accessing }
 PPStream >> for: aParser do: aBlock [
-	| positions counter |
-	positions := memotable
+	| memento |
+	memento := (cache
 		at: aParser
-		ifAbsentPut: [ IdentityDictionary new ].
-	counter := positions
-		at: position
-		ifAbsentPut: [ 0 -> aBlock value ].
-	counter key: counter key + 1.
-	^ counter key < readLimit 
-		ifTrue: [ counter value ]
-		ifFalse: [ PPFailingParser reason: 'Left recursion' position: position ]
+		ifAbsentPut: [ IdentityDictionary new ])
+			at: position
+			ifAbsentPut: [ PPMemento new ].
+	memento result isNil 
+		ifFalse: [ position := memento position ]
+		ifTrue: [
+			memento increment.
+			memento result: (readLimit - position + 1 < memento count
+				ifTrue: [ PPFailure reason: 'Overflow' position: position ]
+				ifFalse: [ aBlock value ]).
+			memento position: position ].
+	^ memento result
 ]
 
 { #category : #initialization }
 PPStream >> initialize [
-	memotable := IdentityDictionary new
+	cache := IdentityDictionary new
 ]
 
 { #category : #private }
@@ -37,4 +41,9 @@ PPStream >> on: aCollection [
 PPStream >> on: aCollection from: firstIndex to: lastIndex [
 	self initialize.
 	super on: aCollection from: firstIndex to: lastIndex
+]
+
+{ #category : #accessing }
+PPStream >> peek [
+	^ self atEnd ifFalse: [ collection at: position + 1 ]
 ]

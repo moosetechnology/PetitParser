@@ -24,9 +24,7 @@ PPUnresolvedParser >> isUnresolved [
 
 { #category : #parsing }
 PPUnresolvedParser >> parse: aStream [
-	"This should never happen."
-
-	self error: 'Need to be resolved before execution.'
+	self error: self printString , ' need to be resolved before execution.'
 ]
 
 { #category : #accessing }
