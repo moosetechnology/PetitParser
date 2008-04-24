@@ -46,6 +46,11 @@ PPMemento >> position: anObject [
 ]
 
 { #category : #accessing }
+PPMemento >> result [
+	^ result
+]
+
+{ #category : #accessing }
 PPMemento >> result: anObject [
 	result := anObject
 ]

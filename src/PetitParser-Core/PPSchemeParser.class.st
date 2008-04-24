@@ -40,7 +40,7 @@ PPSchemeParser >> expression [
 
 { #category : #'productions-literals' }
 PPSchemeParser >> identifier [
-		#letter plus token ==> [ :node | RBVariableNode named: node copy ]
+	#letter plus token ==> [ :node | RBVariableNode named: node copy ]
 ]
 
 { #category : #'productions-expressions' }
@@ -51,8 +51,8 @@ PPSchemeParser >> if [
 
 { #category : #'productions-expressions' }
 PPSchemeParser >> lambda [
-		(open , 'lambda' token , identifier , expression , close) ==> [ :node |
-			``[ `,(node fourth) ] arguments: (Array with: ``(`,(node third))) ]
+	(open , 'lambda' token , identifier , expression , close) ==> [ :node |
+		``[ `,(node fourth) ] arguments: (Array with: ``(`,(node third))) ]
 ]
 
 { #category : #'productions-expressions' }
@@ -62,8 +62,8 @@ PPSchemeParser >> let [
 
 { #category : #'productions-literals' }
 PPSchemeParser >> number [
-		($- optional , #digit plus , ($. , #digit plus) optional) token
-			==> [ :node | ``(`,(Number readFrom: node copy)) ]
+	($- optional , #digit plus , ($. , #digit plus) optional) token
+		==> [ :node | ``(`,(Number readFrom: node copy)) ]
 ]
 
 { #category : #tokens }
@@ -73,7 +73,7 @@ PPSchemeParser >> open [
 
 { #category : #'productions-literals' }
 PPSchemeParser >> selector [
-		#space not plus token ==> [ :node | node copy asSymbol ]
+	#space not plus token ==> [ :node | node copy asSymbol ]
 ]
 
 { #category : #productions }
@@ -83,6 +83,6 @@ PPSchemeParser >> startProduction [
 
 { #category : #'productions-literals' }
 PPSchemeParser >> string [
-		($" , $" not star , $") token 
-			==> [ :node | ``(`,(node copyFrom: 2 to: node size - 1)) ]
+	($" , $" not star , $") token 
+		==> [ :node | ``(`,(node copyFrom: 2 to: node size - 1)) ]
 ]

@@ -20,11 +20,6 @@ PPDelegateParser >> basicParse: aStream [
 	^ parser parse: aStream
 ]
 
-{ #category : #printing }
-PPDelegateParser >> printOn: aStream [ 
-	aStream nextPut: $(; print: parser; nextPut: $)
-]
-
 { #category : #initialization }
 PPDelegateParser >> setParser: aParser [
 	parser := aParser

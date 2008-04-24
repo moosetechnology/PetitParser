@@ -153,7 +153,6 @@ PPLibraryTest >> testParseAaaBbb [
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aabb' to: 'aabb'.
 	self assert: parser parse: 'aaabbb' to: 'aaabbb'.
-	self halt.
 	self assert: parser parse: 'aaaabbbb' to: 'aaaabbbb'.
 	
 

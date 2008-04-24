@@ -3,7 +3,7 @@ A parser that parses a sequence of parsers.
 "
 Class {
 	#name : #PPSequenceParser,
-	#superclass : #PPMultipleParser,
+	#superclass : #PPListParser,
 	#category : #'PetitParser-Core'
 }
 
@@ -26,13 +26,4 @@ PPSequenceParser >> basicParse: aStream [
 		items at: index put: item.
 		index := index + 1 ].
 	^ items
-]
-
-{ #category : #printing }
-PPSequenceParser >> printOn: aStream [
-	aStream nextPut: $(.
-	parsers
-		do: [ :each | aStream print: each ]
-		separatedBy: [ aStream nextPutAll: ' , ' ].
-	aStream nextPut: $)
 ]

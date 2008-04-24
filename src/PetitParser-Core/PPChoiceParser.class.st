@@ -3,7 +3,7 @@ A parser that uses the first parser that succeeds.
 "
 Class {
 	#name : #PPChoiceParser,
-	#superclass : #PPMultipleParser,
+	#superclass : #PPListParser,
 	#category : #'PetitParser-Core'
 }
 
@@ -15,15 +15,6 @@ PPChoiceParser >> basicParse: aStream [
 		item isFailure
 			ifFalse: [ ^ item ] ].
 	^ item
-]
-
-{ #category : #printing }
-PPChoiceParser >> printOn: aStream [
-	aStream nextPut: $(.
-	parsers
-		do: [ :each | aStream print: each ]
-		separatedBy: [ aStream nextPutAll: ' | ' ].
-	aStream nextPut: $)
 ]
 
 { #category : #operations }

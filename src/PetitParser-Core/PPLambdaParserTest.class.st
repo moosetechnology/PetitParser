@@ -11,25 +11,19 @@ PPLambdaParserTest >> parseClass [
 
 { #category : #testing }
 PPLambdaParserTest >> testAbstraction [
-	| parser |
-	parser := PPLambdaParser new.
-	self assert: parser parse: '\x.y' to: #($\ 'x' $. 'y').
-	self assert: parser parse: '\x.\y.z' to: #($\ 'x' $. ($\ 'y' $. 'z'))
+	self assert: '\x.y' is: #($\ 'x' $. 'y').
+	self assert: '\x.\y.z' is: #($\ 'x' $. ($\ 'y' $. 'z'))
 ]
 
 { #category : #testing }
 PPLambdaParserTest >> testApplication [
-	| parser |
-	parser := PPLambdaParser new.
-	self assert: parser parse: 'x x' to: #('x' 'x').
-	self assert: parser parse: 'x y' to: #('x' 'y').
-	self assert: parser parse: 'x y z' to: #(('x' 'y') 'z')
+	self assert: 'x x' is: #('x' 'x').
+	self assert: 'x y' is: #('x' 'y').
+	self assert: 'x y z' is: #(('x' 'y') 'z')
 ]
 
 { #category : #testing }
 PPLambdaParserTest >> testVariable [
-	| parser |
-	parser := PPLambdaParser new.
-	self assert: parser parse: 'x' to: 'x'.
-	self assert: parser parse: 'xy' to: 'xy'
+	self assert: 'x' is: 'x'.
+	self assert: 'xy' is: 'xy'
 ]

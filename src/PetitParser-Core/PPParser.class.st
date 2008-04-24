@@ -35,8 +35,6 @@ PPParser >> basicParse: aStream [
 
 { #category : #initialization }
 PPParser >> initialize [
-	action := [ :value | value ].
-	failure := PPFailure new
 ]
 
 { #category : #testing }

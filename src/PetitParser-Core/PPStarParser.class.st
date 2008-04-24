@@ -18,9 +18,3 @@ PPStarParser >> basicParse: aStream [
 		^ elements asArray ].
 	elements add: element ] repeat
 ]
-
-{ #category : #printing }
-PPStarParser >> printOn: aStream [
-	super printOn: aStream.
-	aStream nextPut: $*
-]

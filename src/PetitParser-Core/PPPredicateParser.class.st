@@ -117,8 +117,3 @@ PPPredicateParser >> not [
 	
 	^ PPPredicateParser on: negated message: negatedMessage negated: predicate message: predicateMessage
 ]
-
-{ #category : #printing }
-PPPredicateParser >> printOn: aStream [
-	aStream nextPut: $<; nextPutAll: predicateMessage; nextPut: $>
-]

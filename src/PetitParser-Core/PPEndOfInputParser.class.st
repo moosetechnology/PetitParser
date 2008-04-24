@@ -12,8 +12,3 @@ PPEndOfInputParser >> parse: aStream [
 	^ aStream atEnd 
 		ifFalse: [ PPFailure reason: 'end of input expected' position: aStream position ]
 ]
-
-{ #category : #printing }
-PPEndOfInputParser >> printOn: aStream [
-	aStream nextPut: $$
-]

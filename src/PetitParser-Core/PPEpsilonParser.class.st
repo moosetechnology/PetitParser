@@ -11,8 +11,3 @@ Class {
 PPEpsilonParser >> parse: aStream [
 	^ nil
 ]
-
-{ #category : #printing }
-PPEpsilonParser >> printOn: aStream [
-	aStream nextPut: $ø
-]
