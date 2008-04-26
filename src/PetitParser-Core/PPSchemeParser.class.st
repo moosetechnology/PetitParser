@@ -78,7 +78,7 @@ PPSchemeParser >> selector [
 
 { #category : #productions }
 PPSchemeParser >> startProduction [
-	expression , PPEndOfInputParser new ==> [ :node | node first ]
+	expression end
 ]
 
 { #category : #'productions-literals' }

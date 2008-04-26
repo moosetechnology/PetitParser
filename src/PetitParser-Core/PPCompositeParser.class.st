@@ -55,8 +55,7 @@ PPCompositeParser >> productionAt: aSymbol definition: aBlock [
 		ifPresent: [ :production | ^ production ].
 	productions
 		at: aSymbol
-		put: (unresolved 
-			add: (PPUnresolvedParser on: aSymbol)).
+		put: (unresolved add: (PPUnresolvedParser on: aSymbol)).
 	^ productions
 		at: aSymbol
 		put: aBlock value
@@ -68,7 +67,7 @@ PPCompositeParser >> resolve [
 	unresolved := unresolved asArray.
 	resolved := unresolved collect: [ :each | productions at: each symbol ].
 	unresolved elementsForwardIdentityTo: resolved.
-	unresolved := nil
+	unresolved := #()
 ]
 
 { #category : #accessing }

@@ -33,6 +33,13 @@ PPParser >> basicParse: aStream [
 	self subclassResponsibility
 ]
 
+{ #category : #operations }
+PPParser >> end [
+	"Ensure the end of the input and return the result of the receiver."
+
+	^ PPSequenceParser new , self , PPEndOfInputParser new ==> #first
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 ]
@@ -58,7 +65,7 @@ PPParser >> parse: aStream [
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
-	^ (PPSequenceParser new , self , self star) ==> [ :value | (Array with: value first) , value second ]
+	^ PPSequenceParser new , self , self star ==> [ :value | (Array with: value first) , value second ]
 ]
 
 { #category : #operations }

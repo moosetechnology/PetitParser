@@ -41,8 +41,8 @@ PPMemento >> position [
 ]
 
 { #category : #accessing }
-PPMemento >> position: anObject [
-	position := anObject
+PPMemento >> position: anInteger [
+	position := anInteger
 ]
 
 { #category : #accessing }

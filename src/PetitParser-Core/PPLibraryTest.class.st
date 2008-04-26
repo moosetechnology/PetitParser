@@ -148,7 +148,7 @@ PPLibraryTest >> testParseAaaBbb [
 	| s0 s1 parser |
 	s0 := (s1 := PPSequenceParser new) | PPEpsilonParser new.
 	s1 , $a asParser , s0 , $b asParser.
-	parser := (s0 , PPEndOfInputParser new) token.
+	parser := s0 end token.
 
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aabb' to: 'aabb'.
@@ -169,7 +169,7 @@ PPLibraryTest >> testParseAandB [
 	"S ::= (A B)+"
 	
 	| parser |
-	parser := (($a asParser , $b asParser) plus , PPEndOfInputParser new) token.
+	parser := ($a asParser , $b asParser) plus token end.
 
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'abab' to: 'abab'.
@@ -188,7 +188,7 @@ PPLibraryTest >> testParseAorB [
 	"S ::= (A | B)+"
 
 	| parser |
-	parser := (($a asParser | $b asParser) plus , PPEndOfInputParser new) token.
+	parser := ($a asParser | $b asParser) plus token end.
 
 	self assert: parser parse: 'a' to: 'a'.
 	self assert: parser parse: 'b' to: 'b'.
@@ -245,7 +245,7 @@ PPLibraryTest >> testParseListOfNumbersLeftRecursive [
 	parser := PPChoiceParser new.
 	parser | (parser , $, asParser token , number ==> [ :node | node first copyWith: node last ]).
 	parser | (number ==> [ :node | Array with: node ]).
-	parser := parser , PPEndOfInputParser new ==> [ :node | node first ].
+	parser := parser end.
 
 	self assert: parser parse: '1' to: (1 to: 1) asArray.
 	self assert: parser parse: '1, 2' to: (1 to: 2) asArray.

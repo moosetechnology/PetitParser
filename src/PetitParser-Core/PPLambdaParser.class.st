@@ -21,7 +21,7 @@ PPLambdaParser >> expression [
 
 { #category : #accessing }
 PPLambdaParser >> startProduction [
-	(expression , PPEndOfInputParser new) ==> [ :value | value first ]
+	expression end
 ]
 
 { #category : #productions }

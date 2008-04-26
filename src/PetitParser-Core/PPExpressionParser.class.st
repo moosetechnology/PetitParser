@@ -6,15 +6,15 @@ Class {
 
 { #category : #productions }
 PPExpressionParser >> expr [
-		term
-	|	((expr , $+ token , term) ==> [ :node | node first + node third ]) 
-	|	((expr , $- token , term) ==> [ :node | node first - node third ])
+		(expr , $+ token , term ==> [ :node | node first + node third ]) 
+	|	(expr , $- token , term ==> [ :node | node first - node third ])
+	|	(term)
 ]
 
 { #category : #productions }
 PPExpressionParser >> fact [
-		($( , expr , $) ==> [ :node | node second ]) 
-	|	num
+		($( token , expr , $) token ==> [ :node | node second ]) 
+	| 	(num)
 ]
 
 { #category : #productions }
@@ -25,12 +25,12 @@ PPExpressionParser >> num [
 
 { #category : #accessing }
 PPExpressionParser >> startProduction [
-	(expr , PPEndOfInputParser new) ==> [ :value | value first ]
+	expr end
 ]
 
 { #category : #productions }
 PPExpressionParser >> term [
-		fact
-	|	((term , $* token , fact) ==> [ :node | node first * node third ]) 
-	|	((term , $/ token , fact) ==> [ :node | node first / node third ])	  
+		(term , $* token , fact ==> [ :node | node first * node third ]) 
+	|	(term , $/ token , fact ==> [ :node | node first / node third ])
+	|	(fact)
 ]
