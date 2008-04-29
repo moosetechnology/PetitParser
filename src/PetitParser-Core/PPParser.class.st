@@ -33,6 +33,16 @@ PPParser >> basicParse: aStream [
 	self subclassResponsibility
 ]
 
+{ #category : #'operations-conveniance' }
+PPParser >> delimitedBy: aParser [
+	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."
+	
+	^ PPSequenceParser new , (self separatedBy: aParser) , aParser optional ==> [ :node | 
+		node second	isNil
+			ifTrue: [ node first ]
+			ifFalse: [ node first copyWith: node second ] ]
+]
+
 { #category : #operations }
 PPParser >> end [
 	"Ensure the end of the input and return the result of the receiver."
@@ -62,10 +72,27 @@ PPParser >> parse: aStream [
 ]
 
 { #category : #operations }
+PPParser >> peek [
+	"Answer a parser that peeks at the result of the receiver, but does not consume it."
+
+	^ PPPeekParser on: self
+]
+
+{ #category : #operations }
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
 	^ PPSequenceParser new , self , self star ==> [ :value | (Array with: value first) , value second ]
+]
+
+{ #category : #'operations-conveniance' }
+PPParser >> separatedBy: aParser [
+	"Answer a parser that parses the receiver one or more times, separated by aParser."
+	
+	^ PPSequenceParser new , self , (aParser , self) star ==> [ :node | 
+		Array streamContents: [ :stream |
+			stream nextPut: node first.
+			node second do: [ :each | stream nextPutAll: each ] ] ]
 ]
 
 { #category : #operations }

@@ -6,8 +6,8 @@ Class {
 
 { #category : #productions }
 PPExpressionParser >> expr [
-		(term , $+ token , expr ==> [ :node | node first + node third ]) 
-	|	(term , $- token , expr ==> [ :node | node first - node third ])
+		(expr , $+ token , term ==> [ :node | node first + node third ]) 
+	|	(expr , $- token , term ==> [ :node | node first - node third ])
 	|	(term)
 ]
 
@@ -30,7 +30,7 @@ PPExpressionParser >> startProduction [
 
 { #category : #productions }
 PPExpressionParser >> term [
-		(fact , $* token , term ==> [ :node | node first * node third ]) 
-	|	(fact , $/ token , term ==> [ :node | node first / node third ])
+		(term , $* token , fact ==> [ :node | node first * node third ]) 
+	|	(term , $/ token , fact ==> [ :node | node first / node third ])
 	|	(fact)
 ]

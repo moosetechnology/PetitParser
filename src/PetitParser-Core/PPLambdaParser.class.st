@@ -11,7 +11,7 @@ PPLambdaParser >> abstraction [
 
 { #category : #productions }
 PPLambdaParser >> application [
-	expression , expression
+	$( token , expression , expression , $) token
 ]
 
 { #category : #productions }

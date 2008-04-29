@@ -24,7 +24,7 @@ PPMemento >> count: anInteger [
 	count := anInteger
 ]
 
-{ #category : #action }
+{ #category : #actions }
 PPMemento >> increment [
 	count := count + 1
 ]

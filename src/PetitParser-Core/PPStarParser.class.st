@@ -11,10 +11,10 @@ Class {
 PPStarParser >> basicParse: aStream [
 	| position elements element |
 	elements := OrderedCollection new.
-	[ position := aStream position.
-	element := super basicParse: aStream.
-	element isFailure ifTrue: [ 
-		aStream position: position.
-		^ elements asArray ].
-	elements add: element ] repeat
+	[	position := aStream position.
+	 	element := super basicParse: aStream.
+	 	element isFailure ifTrue: [
+			aStream position: position.
+			^ elements asArray ].
+		elements add: element ] repeat
 ]

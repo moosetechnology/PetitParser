@@ -99,7 +99,7 @@ PPPredicateParser class >> word [
 { #category : #parsing }
 PPPredicateParser >> basicParse: aStream [
 	^ (aStream atEnd not and: [ predicate value: aStream peek ])
-		ifFalse: [ PPFailure reason: predicateMessage position: aStream position ]
+		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
 		ifTrue: [ aStream next ]
 ]
 

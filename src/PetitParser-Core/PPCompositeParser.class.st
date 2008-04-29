@@ -18,14 +18,15 @@ PPCompositeParser class >> transformParser [
 			with: (DSLSearchPattern new
 				expression: '`#var';
 				action: [ :visitor |
-					(visitor node value isString or: [ visitor node value isCharacter ])
+					(visitor node isWithinBlock not and: [ visitor node value isString or: [ visitor node value isCharacter ] ])
 						ifTrue: [ visitor node replaceWith: ``(`,(visitor node value) asParser) ] ])
 			with: (DSLSearchPattern new
 				expression: '`var';
 				action: [ :visitor |
-					((visitor theClass bindingOf: visitor node name) isNil
+					(visitor node isWithinBlock not 
+						and: [ (visitor theClass bindingOf: visitor node name) isNil
 						and: [ (visitor tree allDefinedVariables includes: visitor node name) not
-						and: [ (visitor theClass allInstVarNames includes: visitor node name) not ] ])
+						and: [ (visitor theClass allInstVarNames includes: visitor node name) not ] ] ])
 						ifTrue: [ visitor node replaceWith: (``(self selector) selector: visitor node name asSymbol) ] ])
 			with: [ :visitor |
 				visitor tree body lastIsReturn ifTrue: [

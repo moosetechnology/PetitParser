@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #parsing }
-PPEndOfInputParser >> parse: aStream [
+PPEndOfInputParser >> basicParse: aStream [
 	^ aStream atEnd 
-		ifFalse: [ PPFailure reason: 'end of input expected' position: aStream position ]
+		ifFalse: [ PPFailure reason: 'end of input expected' at: aStream position ]
 ]

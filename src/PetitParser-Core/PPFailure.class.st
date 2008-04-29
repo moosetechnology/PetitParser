@@ -14,7 +14,7 @@ PPFailure class >> reason: aString [
 ]
 
 { #category : #'instance-creation' }
-PPFailure class >> reason: aString position: anInteger [
+PPFailure class >> reason: aString at: anInteger [
 	^ self new reason: aString; position: anInteger
 ]
 

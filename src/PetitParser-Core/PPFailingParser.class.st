@@ -14,7 +14,7 @@ PPFailingParser class >> message: aString [
 
 { #category : #parsing }
 PPFailingParser >> basicParse: aStream [
-	^ PPFailure reason: message position: aStream position
+	^ PPFailure reason: message at: aStream position
 ]
 
 { #category : #accessing }

@@ -22,7 +22,10 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 	| stream result |
 	stream := PPStream on: aCollection.
 	result := parser parse: stream.
-	self assert: result = anObject
+	self 
+		assert: result = anObject
+		description: 'Got: ' , result printString , '; Expected: ' , anObject printString
+		resumable: true
 ]
 
 { #category : #accessing }
