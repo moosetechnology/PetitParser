@@ -9,15 +9,15 @@ Class {
 
 { #category : #parsing }
 PPChoiceParser >> basicParse: aStream [
-	| item |
-	parsers do: [ :parser |
-		item := parser parse: aStream.
-		item isFailure
-			ifFalse: [ ^ item ] ].
-	^ item
+	| element |
+	parsers do: [ :each |
+		element := each parse: aStream.
+		element isFailure
+			ifFalse: [ ^ element ] ].
+	^ element
 ]
 
 { #category : #operations }
 PPChoiceParser >> | aRule [ 
-	parsers add: aRule
+	parsers addLast: aRule
 ]

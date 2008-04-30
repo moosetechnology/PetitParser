@@ -9,21 +9,19 @@ Class {
 
 { #category : #operations }
 PPSequenceParser >> , aRule [ 
-	parsers add: aRule
+	parsers addLast: aRule
 ]
 
 { #category : #parsing }
 PPSequenceParser >> basicParse: aStream [
-	| index item items position |
-	index := 1.
-	position := aStream position.
-	items := Array new: parsers size.
-	parsers do: [ :parser |
-		item := parser parse: aStream.
-		item isFailure ifTrue: [
-			aStream position: position.
-			^ item ].
-		items at: index put: item.
-		index := index + 1 ].
-	^ items
+	| start elements element |
+	start := aStream position.
+	elements := Array new: parsers size.
+	parsers keysAndValuesDo: [ :index :each |
+		element := each parse: aStream.
+		element isFailure ifTrue: [
+			aStream position: start.
+			^ element ].
+		elements at: index put: element ].
+	^ elements
 ]

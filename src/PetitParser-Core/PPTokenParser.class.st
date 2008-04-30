@@ -9,7 +9,7 @@ Class {
 
 { #category : #parsing }
 PPTokenParser >> basicParse: aStream [
-	| start stop element |
+	| start element stop |
 	start := aStream position.
 	element := super basicParse: aStream.
 	element isFailure ifTrue: [ ^ element ].

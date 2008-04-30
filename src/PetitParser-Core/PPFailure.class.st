@@ -35,7 +35,9 @@ PPFailure >> position: anInteger [
 
 { #category : #printing }
 PPFailure >> printOn: aStream [
-	aStream nextPutAll: reason
+	aStream nextPutAll: reason.
+	position isNil 
+		ifFalse: [ aStream nextPutAll: ' at '; print: position ]
 ]
 
 { #category : #accessing }
