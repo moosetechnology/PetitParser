@@ -154,16 +154,15 @@ PPParserTest >> testInterval [
 	self assert: parser fail: #(4)
 ]
 
-{ #category : #'testing-sophisticated' }
+{ #category : #'testing-composed' }
 PPParserTest >> testLeftRecursiveList [
 	"S ::= S , number | number"
 	
-	| int start parser |
-	int := self integer ==> [ :node | node copy asInteger ].
-	start := PPChoiceParser new.
-	start | (start , $, asParser token , int ==> [ :node | node first copyWith: node last ]).
-	start | (int ==> [ :node | Array with: node ]).
-	parser := start end.
+	| number list parser |
+	number := self integer ==> [ :node | node asInteger ].
+	list := (number separatedBy: $, asParser token)
+		==> [ :node | node reject: [ :each | each isString ] ].
+	parser := list end.
 
 	self assert: parser parse: '1' to: (1 to: 1) asArray.
 	self assert: parser parse: '1,2' to: (1 to: 2) asArray.
@@ -189,16 +188,16 @@ PPParserTest >> testLeftRecursiveList [
 	self assert: parser fail: '1,,2'
 ]
 
-{ #category : #'testing-sophisticated' }
+{ #category : #'testing-composed' }
 PPParserTest >> testLeftRecursiveNumber [
 	"S ::= S digit | digit"
 	
-	| digit start parser |
+	| digit integer parser |
 	digit := #digit asParser ==> #digitValue.
-	start := PPChoiceParser new.
-	start | (start , digit ==> [ :node | 10 * node first + node last ]).
-	start | (digit).
-	parser := start end.
+	integer := PPChoiceParser new.
+	integer | (integer , digit ==> [ :node | 10 * node first + node last ]).
+	integer | (digit).
+	parser := integer end.
 
 	self assert: parser parse: '1' to: 1.
 	self assert: parser parse: '12' to: 12.
@@ -238,7 +237,7 @@ PPParserTest >> testOrdered [
 	self assert: parser fail: #(1 1 2)
 ]
 
-{ #category : #'testing-sophisticated' }
+{ #category : #'testing-composed' }
 PPParserTest >> testParseAaaBbb [
 	"S0 ::= a S1 b
 	 S1 ::= S0 | epsilon"
@@ -264,7 +263,7 @@ PPParserTest >> testParseAaaBbb [
 	self assert: parser fail: 'aaabb'
 ]
 
-{ #category : #'testing-sophisticated' }
+{ #category : #'testing-composed' }
 PPParserTest >> testParseAbAbAb [
 	"S ::= (A B)+"
 	
@@ -286,7 +285,7 @@ PPParserTest >> testParseAbAbAb [
 	self assert: parser fail: 'bab'
 ]
 
-{ #category : #'testing-sophisticated' }
+{ #category : #'testing-composed' }
 PPParserTest >> testParseAbabbb [
 	"S ::= (A | B)+"
 

@@ -14,14 +14,9 @@ PPMemento class >> new [
 	^ self basicNew initialize
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing-readonly' }
 PPMemento >> count [
 	^ count
-]
-
-{ #category : #accessing }
-PPMemento >> count: anInteger [
-	count := anInteger
 ]
 
 { #category : #actions }

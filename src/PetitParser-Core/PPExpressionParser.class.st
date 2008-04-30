@@ -6,7 +6,8 @@ Class {
 
 { #category : #productions }
 PPExpressionParser >> expression [
-		(expression , ($+ | $-) token , term)
+		(expression , $+ token , term)
+	|	(expression , $- token , term)
 	|	(term)
 ]
 
@@ -28,6 +29,7 @@ PPExpressionParser >> startProduction [
 
 { #category : #productions }
 PPExpressionParser >> term [
-		(term , ($* | $/) token , factor)
+		(term , $* token , factor)
+	|	(term , $/ token , factor)	
 	|	(factor)
 ]

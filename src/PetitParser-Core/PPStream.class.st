@@ -18,7 +18,7 @@ PPStream >> for: aParser do: aBlock [
 	memento result isNil 
 		ifTrue: [
 			memento result: (readLimit - position + 1 < memento count
-				ifTrue: [ PPFailure reason: 'Overflow' at: position ]
+				ifTrue: [ PPFailure reason: 'overflow' at: position ]
 				ifFalse: [ memento increment. aBlock value ]).
 			memento position: position ]
 		ifFalse: [ position := memento position ].
