@@ -6,12 +6,12 @@ Class {
 
 { #category : #productions }
 PPLambdaParser >> abstraction [
-	$\ , variable , $. , expression
+	$\ token , variable , $. token , expression ==> [ :node | Array with: node second with: node fourth ]
 ]
 
 { #category : #productions }
 PPLambdaParser >> application [
-	$( token , expression , expression , $) token
+	$( token , expression , expression , $) token ==> [ :node | Array with: node second with: node third ]
 ]
 
 { #category : #productions }
@@ -26,5 +26,5 @@ PPLambdaParser >> startProduction [
 
 { #category : #productions }
 PPLambdaParser >> variable [
-	#letter plus token
+	(#letter , #word star) token
 ]

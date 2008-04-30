@@ -158,18 +158,30 @@ PPParserTest >> testInterval [
 PPParserTest >> testLeftRecursiveList [
 	"S ::= S , number | number"
 	
-	| number start parser |
-	number := self number ==> [ :node | node copy asNumber ].
+	| int start parser |
+	int := self integer ==> [ :node | node copy asInteger ].
 	start := PPChoiceParser new.
-	start | (start , $, asParser token , number ==> [ :node | node first copyWith: node last ]).
-	start | (number ==> [ :node | Array with: node ]).
+	start | (start , $, asParser token , int ==> [ :node | node first copyWith: node last ]).
+	start | (int ==> [ :node | Array with: node ]).
 	parser := start end.
+
+	self assert: parser parse: '1' to: (1 to: 1) asArray.
+	self assert: parser parse: '1,2' to: (1 to: 2) asArray.
+	self assert: parser parse: '1,2,3' to: (1 to: 3) asArray.
+	self assert: parser parse: '1,2,3,4' to: (1 to: 4) asArray.
+	self assert: parser parse: '1,2,3,4,5' to: (1 to: 5) asArray.
 
 	self assert: parser parse: '1' to: (1 to: 1) asArray.
 	self assert: parser parse: '1, 2' to: (1 to: 2) asArray.
 	self assert: parser parse: '1, 2, 3' to: (1 to: 3) asArray.
 	self assert: parser parse: '1, 2, 3, 4' to: (1 to: 4) asArray.
 	self assert: parser parse: '1, 2, 3, 4, 5' to: (1 to: 5) asArray.
+
+	self assert: parser parse: '1' to: (1 to: 1) asArray.
+	self assert: parser parse: '1 ,2' to: (1 to: 2) asArray.
+	self assert: parser parse: '1 ,2 ,3' to: (1 to: 3) asArray.
+	self assert: parser parse: '1 ,2 ,3 ,4' to: (1 to: 4) asArray.
+	self assert: parser parse: '1 ,2 ,3 ,4 ,5' to: (1 to: 5) asArray.
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: ','.

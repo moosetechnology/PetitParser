@@ -23,11 +23,21 @@ PPCompositeParser class >> transformParser [
 			with: (DSLSearchPattern new
 				expression: '`var';
 				action: [ :visitor |
-					(visitor node isWithinBlock not 
+					(visitor node isWithinBlock not
 						and: [ (visitor theClass bindingOf: visitor node name) isNil
 						and: [ (visitor tree allDefinedVariables includes: visitor node name) not
-						and: [ (visitor theClass allInstVarNames includes: visitor node name) not ] ] ])
+						and: [ (visitor theClass allInstVarNames includes: visitor node name) not
+						and: [ (#('self' 'super' 'thisContext') includes: visitor node name) not ] ] ] ])
 						ifTrue: [ visitor node replaceWith: (``(self selector) selector: visitor node name asSymbol) ] ])
+			with: (DSLSearchPattern new
+				expression: 'super `message';
+				action: [ :visitor |
+					| method tree |
+					method := visitor theClass superclass lookupSelector: visitor node selector.
+					method isNil ifFalse: [
+						tree := RBParser parseMethod: method decompileString.
+						tree isNil 
+							ifFalse: [ visitor node replaceWith: tree body statements first value arguments second body ] ] ])
 			with: [ :visitor |
 				visitor tree body lastIsReturn ifTrue: [
 					visitor tree body statements last

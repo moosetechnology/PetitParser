@@ -16,5 +16,5 @@ PPTokenParser >> basicParse: aStream [
 	stop := aStream position.
 	[ aStream atEnd not and: [ aStream peek isSeparator ] ]
 		whileTrue: [ aStream next ].
-	^ aStream collection sliceFrom: start + 1 to: stop
+	^ aStream collection copyFrom: start + 1 to: stop
 ]

@@ -13,8 +13,8 @@ PPExpressionParser >> expr [
 
 { #category : #productions }
 PPExpressionParser >> fact [
-		($( token , expr , $) token ==> [ :node | node second ]) 
-	| 	(num)
+		($( token , expr , $) token ==> [ :node | node second ])	
+	|	(num)
 ]
 
 { #category : #productions }
