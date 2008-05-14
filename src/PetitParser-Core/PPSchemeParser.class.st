@@ -73,7 +73,7 @@ PPSchemeParser >> open [
 
 { #category : #'productions-literals' }
 PPSchemeParser >> selector [
-	#space not plus token ==> [ :node | node copy asSymbol ]
+	#space not plus token ==> #asSymbol
 ]
 
 { #category : #productions }

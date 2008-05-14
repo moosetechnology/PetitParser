@@ -101,8 +101,8 @@ PPParserTest >> testDelimitedBy [
 	self assert: parser parse: 'ababab' to: #($a $b $a $b $a $b).
 	
 	self assert: parser parse: 'ac' to: #($a) end: 1.
+	self assert: parser parse: 'abc' to: #($a $b) end: 2.
 	self assert: parser parse: 'abac' to: #($a $b $a) end: 3.
-	self assert: parser parse: 'abab' to: #($a $b $a $b) end: 4.
 	self assert: parser parse: 'ababc' to: #($a $b $a $b) end: 4.
 	
 	self assert: parser fail: ''.
@@ -155,7 +155,7 @@ PPParserTest >> testInterval [
 ]
 
 { #category : #'testing-composed' }
-PPParserTest >> testLeftRecursiveList [
+PPParserTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	
 	| number list parser |
@@ -188,28 +188,6 @@ PPParserTest >> testLeftRecursiveList [
 	self assert: parser fail: '1,,2'
 ]
 
-{ #category : #'testing-composed' }
-PPParserTest >> testLeftRecursiveNumber [
-	"S ::= S digit | digit"
-	
-	| digit integer parser |
-	digit := #digit asParser ==> #digitValue.
-	integer := PPChoiceParser new.
-	integer | (integer , digit ==> [ :node | 10 * node first + node last ]).
-	integer | (digit).
-	parser := integer end.
-
-	self assert: parser parse: '1' to: 1.
-	self assert: parser parse: '12' to: 12.
-	self assert: parser parse: '123' to: 123.
-	self assert: parser parse: '1234' to: 1234.
-	self assert: parser parse: '12345' to: 12345.
-	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'a'.
-	self assert: parser fail: 'abc'
-]
-
 { #category : #testing }
 PPParserTest >> testOptional [
 	| parser |
@@ -235,6 +213,37 @@ PPParserTest >> testOrdered [
 	self assert: parser fail: #(1).
 	self assert: parser fail: #(1 1).
 	self assert: parser fail: #(1 1 2)
+]
+
+{ #category : #'testing-composed' }
+PPParserTest >> testPalindrome [
+	"S0 ::= a S1 a | b S1 b | ...
+	 S1 ::= S0 | epsilon"
+	
+	| s0 s1 parser |
+	s0 := PPChoiceParser new.
+	s1 := PPChoiceParser new.
+	s0 | ($a asParser , s1 , $a asParser).
+	s0 | ($b asParser , s1 , $b asParser).	
+	s0 | ($c asParser , s1 , $c asParser).	
+	s1 | s0 | PPEpsilonParser new.
+	parser := s0 token end.
+
+	self assert: parser parse: 'aa' to: 'aa'.
+	self assert: parser parse: 'bb' to: 'bb'.
+	self assert: parser parse: 'cc' to: 'cc'.
+	
+	self assert: parser parse: 'abba' to: 'abba'.
+	self assert: parser parse: 'baab' to: 'baab'.
+
+	self assert: parser parse: 'abccba' to: 'abccba'.
+	self assert: parser parse: 'abaaba' to: 'abaaba'.
+	self assert: parser parse: 'cbaabc' to: 'cbaabc'.
+
+	self assert: parser fail: 'a'.
+	self assert: parser fail: 'ab'.
+	self assert: parser fail: 'aab'.
+	self assert: parser fail: 'abccbb'
 ]
 
 { #category : #'testing-composed' }

@@ -8,6 +8,17 @@ Class {
 	#category : #'PetitParser-Builder'
 }
 
+{ #category : #private }
+PPCompositeParser class >> isActionNode: aNode [
+	aNode parent isNil
+		ifTrue: [ ^ false ].
+	(aNode parent isSend 
+		and: [ aNode parent selector = #==>
+		and: [ aNode parent arguments first = aNode ] ])
+			ifTrue: [ ^ true ].
+	^ self isActionNode: aNode parent
+]
+
 { #category : #rules }
 PPCompositeParser class >> transformParser [
 	<transform: 100>
@@ -18,12 +29,12 @@ PPCompositeParser class >> transformParser [
 			with: (DSLSearchPattern new
 				expression: '`#var';
 				action: [ :visitor |
-					(visitor node isWithinBlock not and: [ visitor node value isString or: [ visitor node value isCharacter ] ])
+					((self isActionNode: visitor node) not and: [ visitor node value isString or: [ visitor node value isCharacter ] ])
 						ifTrue: [ visitor node replaceWith: ``(`,(visitor node value) asParser) ] ])
 			with: (DSLSearchPattern new
 				expression: '`var';
 				action: [ :visitor |
-					(visitor node isWithinBlock not
+					((self isActionNode: visitor node) not
 						and: [ (visitor theClass bindingOf: visitor node name) isNil
 						and: [ (visitor tree allDefinedVariables includes: visitor node name) not
 						and: [ (visitor theClass allInstVarNames includes: visitor node name) not
@@ -36,7 +47,7 @@ PPCompositeParser class >> transformParser [
 					method := visitor theClass superclass lookupSelector: visitor node selector.
 					method isNil ifFalse: [
 						tree := RBParser parseMethod: method decompileString.
-						tree isNil 
+						tree isNil
 							ifFalse: [ visitor node replaceWith: tree body statements first value arguments second body ] ] ])
 			with: [ :visitor |
 				visitor tree body lastIsReturn ifTrue: [
