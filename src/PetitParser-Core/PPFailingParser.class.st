@@ -1,3 +1,6 @@
+"
+A parser that consumes nothing and always fails.
+"
 Class {
 	#name : #PPFailingParser,
 	#superclass : #PPParser,

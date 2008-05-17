@@ -19,6 +19,11 @@ PPCompositeParser class >> isActionNode: aNode [
 	^ self isActionNode: aNode parent
 ]
 
+{ #category : #parsing }
+PPCompositeParser class >> parse: aString [
+	^ self new parse: (PPStream on: aString)
+]
+
 { #category : #rules }
 PPCompositeParser class >> transformParser [
 	<transform: 100>
@@ -66,7 +71,7 @@ PPCompositeParser >> initialize [
 	super initialize.
 	productions := Dictionary new.
 	unresolved := OrderedCollection new.
-	parser := self startProduction.
+	parser := self start.
 	self resolve
 ]
 
@@ -93,7 +98,7 @@ PPCompositeParser >> resolve [
 ]
 
 { #category : #accessing }
-PPCompositeParser >> startProduction [
+PPCompositeParser >> start [
 	"Answer the production to start this parser with."
 	
 	self subclassResponsibility

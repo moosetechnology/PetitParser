@@ -1,5 +1,5 @@
 "
-A parser that always succeeds.
+A parser that consumes nothing and always succeeds.
 "
 Class {
 	#name : #PPEpsilonParser,

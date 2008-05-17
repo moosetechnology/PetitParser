@@ -76,8 +76,8 @@ PPSchemeParser >> selector [
 	#space not plus token ==> #asSymbol
 ]
 
-{ #category : #productions }
-PPSchemeParser >> startProduction [
+{ #category : #accessing }
+PPSchemeParser >> start [
 	expression end
 ]
 

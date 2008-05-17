@@ -1,5 +1,5 @@
 "
-I peek at the input but do not consume it.
+A parser that peeks at the result of the delegate, but does not consume it.
 "
 Class {
 	#name : #PPPeekParser,

@@ -1,20 +1,10 @@
-"
-A parser that produces a token from the range my delegate parses.
-"
 Class {
 	#name : #PPTokenParser,
-	#superclass : #PPDelegateParser,
+	#superclass : #PPFlattenParser,
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #parsing }
-PPTokenParser >> basicParse: aStream [
-	| start element stop |
-	start := aStream position.
-	element := super basicParse: aStream.
-	element isFailure ifTrue: [ ^ element ].
-	stop := aStream position.
-	[ aStream atEnd not and: [ aStream peek isSeparator ] ]
-		whileTrue: [ aStream next ].
-	^ aStream collection copyFrom: start + 1 to: stop
+{ #category : #hooks }
+PPTokenParser >> create: aCollection from: aStartInteger to: aStopInteger [
+	^ aCollection sliceFrom: aStartInteger to: aStopInteger
 ]

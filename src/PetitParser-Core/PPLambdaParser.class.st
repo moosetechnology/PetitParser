@@ -20,7 +20,7 @@ PPLambdaParser >> expression [
 ]
 
 { #category : #accessing }
-PPLambdaParser >> startProduction [
+PPLambdaParser >> start [
 	expression end
 ]
 

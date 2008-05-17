@@ -50,6 +50,13 @@ PPParser >> end [
 	^ PPSequenceParser new , self , PPEndOfInputParser new ==> #first
 ]
 
+{ #category : #operations }
+PPParser >> flatten [
+	"Answer a new parser that flattens the underlying collection."
+	
+	^ PPFlattenParser on: self
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 ]
@@ -104,7 +111,7 @@ PPParser >> star [
 
 { #category : #operations }
 PPParser >> token [
-	"Answer a new parser that parses a token."
+	"Answer a new parser that answers a token."
 	
 	^ PPTokenParser on: self
 ]

@@ -159,9 +159,9 @@ PPParserTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	
 	| number list parser |
-	number := self integer ==> [ :node | node asInteger ].
+	number := self integer ==> #asInteger.
 	list := (number separatedBy: $, asParser token)
-		==> [ :node | node reject: [ :each | each isString ] ].
+		==> [ :node | node select: [ :each | each isInteger ] ].
 	parser := list end.
 
 	self assert: parser parse: '1' to: (1 to: 1) asArray.
@@ -403,6 +403,15 @@ PPParserTest >> testParseReturn [
 ]
 
 { #category : #testing }
+PPParserTest >> testPeek [
+	| parser |
+	parser := $a asParser peek.
+	
+	self assert: parser parse: 'a' to: $a end: 0.
+	self assert: parser fail: 'b'
+]
+
+{ #category : #testing }
 PPParserTest >> testPlus [
 	| parser |
 	parser := $a asParser plus.
@@ -630,7 +639,8 @@ PPParserTest >> testToken [
 	self assert: parser parse: 'a  a' to: 'a' end: 3.
 	
 	self assert: parser fail: ''.
-	self assert: parser fail: 'b'
+	self assert: parser fail: 'b'.
+	self assert: parser fail: ' a'
 ]
 
 { #category : #'testing-extension' }

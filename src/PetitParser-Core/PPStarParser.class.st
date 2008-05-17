@@ -1,5 +1,5 @@
 "
-A parser that parses zero or more instances of my delegate.
+A parser that eagerly parses zero or more instances of my delegate.
 "
 Class {
 	#name : #PPStarParser,

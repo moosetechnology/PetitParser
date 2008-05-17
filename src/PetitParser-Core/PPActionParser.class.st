@@ -14,8 +14,8 @@ Class {
 PPActionParser >> basicParse: aStream [
 	| element |
 	^ (element := super basicParse: aStream) isFailure
-		ifTrue: [ element ]
 		ifFalse: [ block value: element ]
+		ifTrue: [ element ]
 ]
 
 { #category : #accessing }

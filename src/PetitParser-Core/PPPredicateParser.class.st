@@ -47,6 +47,13 @@ PPPredicateParser class >> digit [
 ]
 
 { #category : #'factory-objects' }
+PPPredicateParser class >> eol [
+	^ self
+		on: [ :each | String crlf includes: each ] message: 'newline expected'
+		negated: [ :each | (String crlf includes: each) not ] message: 'no newline expected'
+]
+
+{ #category : #'factory-objects' }
 PPPredicateParser class >> expect: anObject [
 	^ self 
 		on: [ :each | each = anObject ] message: anObject printString , ' expected'
@@ -115,5 +122,7 @@ PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBloc
 PPPredicateParser >> not [
 	"Negate the receiving predicate parser."
 	
-	^ PPPredicateParser on: negated message: negatedMessage negated: predicate message: predicateMessage
+	^ PPPredicateParser 
+		on: negated message: negatedMessage 
+		negated: predicate message: predicateMessage
 ]
