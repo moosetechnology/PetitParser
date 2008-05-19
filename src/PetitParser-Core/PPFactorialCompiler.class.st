@@ -47,7 +47,7 @@ PPFactorialCompiler >> function [
 
 { #category : #grammar }
 PPFactorialCompiler >> literal [
-	super literal ==> #lift
+	super literal ==> [ :node | node asNumber lift ]
 ]
 
 { #category : #grammar }

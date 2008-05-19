@@ -6,7 +6,7 @@ Class {
 
 { #category : #token }
 PPFactorialParser >> add [
-	$+ token
+	$+ flatten
 ]
 
 { #category : #grammar }
@@ -21,12 +21,12 @@ PPFactorialParser >> binary [
 
 { #category : #token }
 PPFactorialParser >> close [
-	$) token
+	$) flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> cmp [
-	'==' token
+	'==' flatten
 ]
 
 { #category : #grammar }
@@ -36,12 +36,12 @@ PPFactorialParser >> condition [
 
 { #category : #token }
 PPFactorialParser >> else [
-	'else' token
+	'else' flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> equal [
-	$= token
+	$= flatten
 ]
 
 { #category : #grammar }
@@ -56,12 +56,12 @@ PPFactorialParser >> function [
 
 { #category : #token }
 PPFactorialParser >> id [
-	#letter plus token
+	#letter plus flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> if [
-	'if' token
+	'if' flatten
 ]
 
 { #category : #grammar }
@@ -71,12 +71,12 @@ PPFactorialParser >> literal [
 
 { #category : #token }
 PPFactorialParser >> num [
-	#digit plus token ==> #asNumber
+	#digit plus flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> open [
-	$( token
+	$( flatten
 ]
 
 { #category : #grammar }
@@ -91,12 +91,12 @@ PPFactorialParser >> start [
 
 { #category : #token }
 PPFactorialParser >> sub [
-	$- token
+	$- flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> then [
-	'then' token
+	'then' flatten
 ]
 
 { #category : #grammar }

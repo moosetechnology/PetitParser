@@ -23,28 +23,28 @@ PPParserTest >> assert: aParser parse: aCollection to: anObject end: anInteger [
 	| stream result |
 	stream := PPStream on: aCollection.
 	result := aParser parse: stream.
-	self assert: result = anObject.
+	self assert: result value = anObject.
 	self assert: stream position = anInteger
 ]
 
 { #category : #examples }
 PPParserTest >> comment [
-	^ ($" asParser , $" asParser not star , $" asParser) token
+	^ ($" asParser , $" asParser not star , $" asParser) flatten
 ]
 
 { #category : #examples }
 PPParserTest >> identifier [
-	^ (#letter asParser , #word asParser star) token
+	^ (#letter asParser , #word asParser star) flatten
 ]
 
 { #category : #examples }
 PPParserTest >> integer [
-	^ (#digit asParser plus) token
+	^ (#digit asParser plus) flatten
 ]
 
 { #category : #examples }
 PPParserTest >> number [
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten
 ]
 
 { #category : #testing }
@@ -140,6 +140,25 @@ PPParserTest >> testFailing [
 	self assert: parser fail: 'aa'
 ]
 
+{ #category : #testing }
+PPParserTest >> testFlatten [
+	| parser |
+	parser := $a asParser flatten.
+	
+	self assert: parser parse: 'a' to: 'a'.
+	self assert: parser parse: 'a ' to: 'a'.
+	self assert: parser parse: 'a	' to: 'a'.
+	self assert: parser parse: 'a  ' to: 'a'.
+	
+	self assert: parser parse: 'a a' to: 'a' end: 2.
+	self assert: parser parse: 'a	a' to: 'a' end: 2.
+	self assert: parser parse: 'a  a' to: 'a' end: 3.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'b'.
+	self assert: parser fail: ' a'
+]
+
 { #category : #'testing-extension' }
 PPParserTest >> testInterval [
 	| parser |
@@ -160,7 +179,7 @@ PPParserTest >> testListOfIntegers [
 	
 	| number list parser |
 	number := self integer ==> #asInteger.
-	list := (number separatedBy: $, asParser token)
+	list := (number separatedBy: $, asParser flatten)
 		==> [ :node | node select: [ :each | each isInteger ] ].
 	parser := list end.
 
@@ -227,7 +246,7 @@ PPParserTest >> testPalindrome [
 	s0 | ($b asParser , s1 , $b asParser).	
 	s0 | ($c asParser , s1 , $c asParser).	
 	s1 | s0 | PPEpsilonParser new.
-	parser := s0 token end.
+	parser := s0 flatten end.
 
 	self assert: parser parse: 'aa' to: 'aa'.
 	self assert: parser parse: 'bb' to: 'bb'.
@@ -254,7 +273,7 @@ PPParserTest >> testParseAaaBbb [
 	| s0 s1 parser |
 	s0 := $a asParser , (s1 := PPChoiceParser new) , $b asParser.
 	s1 | s0 | PPEpsilonParser new.
-	parser := s0 token.
+	parser := s0 flatten.
 
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aabb' to: 'aabb'.
@@ -277,7 +296,7 @@ PPParserTest >> testParseAbAbAb [
 	"S ::= (A B)+"
 	
 	| parser |
-	parser := ($a asParser , $b asParser) plus token.
+	parser := ($a asParser , $b asParser) plus flatten.
 
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'abab' to: 'abab'.
@@ -299,7 +318,7 @@ PPParserTest >> testParseAbabbb [
 	"S ::= (A | B)+"
 
 	| parser |
-	parser := ($a asParser | $b asParser) plus token.
+	parser := ($a asParser | $b asParser) plus flatten.
 
 	self assert: parser parse: 'a' to: 'a'.
 	self assert: parser parse: 'b' to: 'b'.
@@ -388,7 +407,7 @@ PPParserTest >> testParseNumber [
 { #category : #'testing-examples' }
 PPParserTest >> testParseReturn [
 	| number spaces return |
-	number := #digit asParser plus token.
+	number := #digit asParser plus flatten.
 	spaces := #space asParser star.
 	return := (spaces , $^ asParser , spaces , number)
 		==> [ :nodes | { #return. nodes at: 4 } ].

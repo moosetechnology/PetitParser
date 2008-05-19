@@ -6,5 +6,5 @@ Class {
 
 { #category : #hooks }
 PPTokenParser >> create: aCollection from: aStartInteger to: aStopInteger [
-	^ aCollection sliceFrom: aStartInteger to: aStopInteger
+	^ PPToken on: aCollection from: aStartInteger to: aStopInteger
 ]

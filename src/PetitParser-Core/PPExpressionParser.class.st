@@ -11,7 +11,7 @@ PPExpressionParser >> add [
 
 { #category : #'productions-operations' }
 PPExpressionParser >> addop [
-	($+ | $-) token ==> #asSymbol
+	($+ | $-) flatten ==> #asSymbol
 ]
 
 { #category : #private }
@@ -27,7 +27,7 @@ PPExpressionParser >> evalArray: anArray [
 
 { #category : #productions }
 PPExpressionParser >> expr [
-	$( token , add , $) token ==> #second
+	$( flatten , add , $) flatten ==> #second
 ]
 
 { #category : #'productions-operations' }
@@ -37,12 +37,12 @@ PPExpressionParser >> mul [
 
 { #category : #'productions-operations' }
 PPExpressionParser >> mulop [
-	($* | $/) token ==> #asSymbol
+	($* | $/) flatten ==> #asSymbol
 ]
 
 { #category : #productions }
 PPExpressionParser >> num [
-	($- optional , #digit plus , ($. , #digit plus) optional) token ==> #asNumber
+	($- optional , #digit plus , ($. , #digit plus) optional) flatten ==> #asNumber
 ]
 
 { #category : #accessing }
