@@ -1,105 +1,126 @@
 Class {
 	#name : #PPFactorialParser,
 	#superclass : #PPCompositeParser,
+	#instVars : [
+		'apply',
+		'binary',
+		'condition',
+		'expression',
+		'function',
+		'literal',
+		'operation',
+		'variable',
+		'add',
+		'close',
+		'cmp',
+		'else',
+		'equal',
+		'id',
+		'if',
+		'num',
+		'open',
+		'sub',
+		'then'
+	],
 	#category : #'PetitParser-Builder'
 }
 
 { #category : #token }
 PPFactorialParser >> add [
-	$+ flatten
+	^ $+ asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> apply [
-	open , id , expression star , close
+	^ open , id , expression star , close
 ]
 
 { #category : #grammar }
 PPFactorialParser >> binary [
-	open , expression , operation , expression , close
+	^ open , expression , operation , expression , close
 ]
 
 { #category : #token }
 PPFactorialParser >> close [
-	$) flatten
+	^ $) asParser flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> cmp [
-	'==' flatten
+	^ '==' asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> condition [
-	if , expression , then , expression , else , expression
+	^ if , expression , then , expression , else , expression
 ]
 
 { #category : #token }
 PPFactorialParser >> else [
-	'else' flatten
+	^ 'else' asParser flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> equal [
-	$= flatten
+	^ $= asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> expression [
-	apply | condition | binary | variable | literal
+	^ apply | condition | binary | variable | literal
 ]
 
 { #category : #grammar }
 PPFactorialParser >> function [
-	id , variable star , equal , expression
+	^ id , variable star , equal , expression
 ]
 
 { #category : #token }
 PPFactorialParser >> id [
-	#letter plus flatten
+	^ #letter asParser plus flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> if [
-	'if' flatten
+	^ 'if' asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> literal [
-	num
+	^ num
 ]
 
 { #category : #token }
 PPFactorialParser >> num [
-	#digit plus flatten
+	^ #digit asParser plus flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> open [
-	$( flatten
+	^ $( asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> operation [
-	cmp | add | sub
+	^ cmp | add | sub
 ]
 
 { #category : #accessing }
 PPFactorialParser >> start [
-	function end
+	^ function end
 ]
 
 { #category : #token }
 PPFactorialParser >> sub [
-	$- flatten
+	^ $- asParser flatten
 ]
 
 { #category : #token }
 PPFactorialParser >> then [
-	'then' flatten
+	^ 'then' asParser flatten
 ]
 
 { #category : #grammar }
 PPFactorialParser >> variable [
-	id
+	^ id
 ]

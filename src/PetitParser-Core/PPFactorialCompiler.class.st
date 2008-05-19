@@ -6,9 +6,9 @@ Class {
 
 { #category : #grammar }
 PPFactorialCompiler >> apply [
-	super apply ==> [ :node |
+	^ super apply ==> [ :node |
 		RBMessageNode
-			receiver: ``(self) 
+			receiver: (RBVariableNode named: 'self')
 			selector: (self
 				selector: node second
 				count: node third size) 
@@ -17,23 +17,33 @@ PPFactorialCompiler >> apply [
 
 { #category : #grammar }
 PPFactorialCompiler >> binary [
-	super binary ==> [ :node |
-		``(`,(node second) ? `,(node fourth))
-			selector: node third asSymbol;
-			yourself ]
+	^ super binary ==> [ :node | 
+		RBMessageNode
+			receiver: node second
+			selector: node third asSymbol
+			arguments: (Array with: node fourth) ]
 ]
 
 { #category : #grammar }
 PPFactorialCompiler >> condition [
-	super condition ==> [ :node |
-		``(`,(node second)
-			ifTrue: [ `,(node fourth) ]
-			ifFalse: [ `,(node sixth) ]) ]
+	^ super condition ==> [ :node | 
+		RBMessageNode 
+			receiver: node second
+			selector: #ifTrue:ifFalse:
+			arguments: (Array 
+				with: (RBBlockNode 
+					arguments: #()
+					body: (RBSequenceNode 
+						statements: (Array with: node fourth)))
+				with: (RBBlockNode 
+					arguments: #()
+					body: (RBSequenceNode 
+						statements: (Array with: node sixth)))) ]
 ]
 
 { #category : #grammar }
 PPFactorialCompiler >> function [
-	super function ==> [ :node |
+	^ super function ==> [ :node |
 		RBMethodNode
 			selector: (self
 				selector: node first
@@ -47,12 +57,12 @@ PPFactorialCompiler >> function [
 
 { #category : #grammar }
 PPFactorialCompiler >> literal [
-	super literal ==> [ :node | node asNumber lift ]
+	^ super literal ==> [ :node | RBLiteralNode value: node asNumber ]
 ]
 
 { #category : #grammar }
 PPFactorialCompiler >> operation [
-	super operation ==> [ :node |
+	^ super operation ==> [ :node |
 		node asString = '=='
 			ifTrue: [ #= ]
 			ifFalse: [ node asSymbol ] ]
@@ -72,5 +82,5 @@ PPFactorialCompiler >> selector: aString count: anInteger [
 
 { #category : #grammar }
 PPFactorialCompiler >> variable [
-	super variable ==> [ :node | RBVariableNode named: node ]
+	^ super variable ==> [ :node | RBVariableNode named: node ]
 ]

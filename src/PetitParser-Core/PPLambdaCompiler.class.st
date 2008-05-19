@@ -36,15 +36,15 @@ PPLambdaCompiler class >> true [
 
 { #category : #productions }
 PPLambdaCompiler >> abstraction [
-	super abstraction ==> [ :node | ``[ :t | `,(node second) ] arguments: (Array with: node first) ]
+	^ super abstraction ==> [ :node | RBBlockNode arguments: (Array with: node first) body: (RBSequenceNode statements: (Array with: node second)) ]
 ]
 
 { #category : #productions }
 PPLambdaCompiler >> application [
-	super application ==> [ :node | ``(`,(node first) value: `,(node second)) ]
+	^ super application ==> [ :node | RBMessageNode receiver: node first selector: #value: arguments: (Array with: node second) ]
 ]
 
 { #category : #productions }
 PPLambdaCompiler >> variable [
-	super variable ==> [ :node | RBVariableNode named: node ]
+	^ super variable ==> [ :node | RBVariableNode named: node ]
 ]

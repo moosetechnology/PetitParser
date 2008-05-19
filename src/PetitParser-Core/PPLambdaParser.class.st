@@ -1,30 +1,36 @@
 Class {
 	#name : #PPLambdaParser,
 	#superclass : #PPCompositeParser,
+	#instVars : [
+		'expression',
+		'abstraction',
+		'application',
+		'variable'
+	],
 	#category : #'PetitParser-Builder'
 }
 
 { #category : #productions }
 PPLambdaParser >> abstraction [
-	$\ flatten , variable , $. flatten , expression ==> [ :node | Array with: node second with: node fourth ]
+	^ $\ asParser flatten , variable , $. asParser flatten , expression ==> [ :node | Array with: node second with: node fourth ]
 ]
 
 { #category : #productions }
 PPLambdaParser >> application [
-	$( flatten , expression , expression , $) flatten ==> [ :node | Array with: node second with: node third ]
+	^ $( asParser flatten , expression , expression , $) asParser flatten ==> [ :node | Array with: node second with: node third ]
 ]
 
 { #category : #productions }
 PPLambdaParser >> expression [
-	variable | abstraction | application
+	^ variable | abstraction | application
 ]
 
 { #category : #accessing }
 PPLambdaParser >> start [
-	expression end
+	^ expression end
 ]
 
 { #category : #productions }
 PPLambdaParser >> variable [
-	(#letter , #word star) flatten
+	^ (#letter asParser , #word asParser star) flatten
 ]

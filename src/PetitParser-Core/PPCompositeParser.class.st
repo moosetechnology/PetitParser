@@ -1,100 +1,40 @@
 Class {
 	#name : #PPCompositeParser,
 	#superclass : #PPDelegateParser,
-	#instVars : [
-		'productions',
-		'unresolved'
-	],
 	#category : #'PetitParser-Builder'
 }
-
-{ #category : #private }
-PPCompositeParser class >> isActionNode: aNode [
-	aNode parent isNil
-		ifTrue: [ ^ false ].
-	(aNode parent isSend 
-		and: [ aNode parent selector = #==>
-		and: [ aNode parent arguments first = aNode ] ])
-			ifTrue: [ ^ true ].
-	^ self isActionNode: aNode parent
-]
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString [
 	^ self new parse: (PPStream on: aString)
 ]
 
-{ #category : #rules }
-PPCompositeParser class >> transformParser [
-	<transform: 100>
-
-	^ DSLConditionPattern new
-		if: [ :visitor | visitor tree isMethod and: [ visitor tree selector isUnary and: [ visitor theClass ~= PPCompositeParser ] ] ]
-		then: (Array
-			with: (DSLSearchPattern new
-				expression: '`#var';
-				action: [ :visitor |
-					((self isActionNode: visitor node) not and: [ visitor node value isString or: [ visitor node value isCharacter ] ])
-						ifTrue: [ visitor node replaceWith: ``(`,(visitor node value) asParser) ] ])
-			with: (DSLSearchPattern new
-				expression: '`var';
-				action: [ :visitor |
-					((self isActionNode: visitor node) not
-						and: [ (visitor theClass bindingOf: visitor node name) isNil
-						and: [ (visitor tree allDefinedVariables includes: visitor node name) not
-						and: [ (visitor theClass allInstVarNames includes: visitor node name) not
-						and: [ (#('self' 'super' 'thisContext') includes: visitor node name) not ] ] ] ])
-						ifTrue: [ visitor node replaceWith: (``(self selector) selector: visitor node name asSymbol) ] ])
-			with: (DSLSearchPattern new
-				expression: 'super `message';
-				action: [ :visitor |
-					| method tree |
-					method := visitor theClass superclass lookupSelector: visitor node selector.
-					method isNil ifFalse: [
-						tree := RBParser parseMethod: method decompileString.
-						tree isNil
-							ifFalse: [ visitor node replaceWith: tree body statements first value arguments second body ] ] ])
-			with: [ :visitor |
-				visitor tree body lastIsReturn ifTrue: [
-					visitor tree body statements last
-						replaceWith: visitor tree body statements last value ].
-				visitor tree body addNodeFirst: ``(self
-					productionAt: `,(visitor tree selector)
-					definition: [ `,(visitor tree body) ]).
-				visitor tree body statements allButFirst
-					do: [ :each | visitor tree body removeNode: each ].
-				visitor tree body addReturn ])
+{ #category : #parsing }
+PPCompositeParser class >> parse: aString ifError: aBlock [
+	| result |
+	^ (result := self parse: aString) isFailure
+		ifTrue: [ aBlock value: result ]
+		ifFalse: [ result ]
 ]
 
 { #category : #initialization }
 PPCompositeParser >> initialize [
+	| resolved unresolved symbol |
 	super initialize.
-	productions := Dictionary new.
-	unresolved := OrderedCollection new.
-	parser := self start.
-	self resolve
-]
-
-{ #category : #accessing }
-PPCompositeParser >> productionAt: aSymbol definition: aBlock [
-	productions 
-		at: aSymbol
-		ifPresent: [ :production | ^ production ].
-	productions
-		at: aSymbol
-		put: (unresolved add: (PPUnresolvedParser on: aSymbol)).
-	^ productions
-		at: aSymbol
-		put: aBlock value
-]
-
-{ #category : #actions }
-PPCompositeParser >> resolve [
-	| resolved |
-	unresolved := unresolved asArray.
-	resolved := unresolved collect: [ :each | productions at: each symbol ].
-	unresolved elementsForwardIdentityTo: resolved.
-	unresolved := #()
+	resolved := Array new: self class instSize.
+	unresolved := Array new: self class instSize.
+	1 to: self class instSize do: [ :each |
+		self instVarAt: each put: (unresolved at: each put: PPUnresolvedParser new) ].
+	self class allInstVarNames keysAndValuesDo: [ :index :name |
+		symbol := index = 1 ifTrue: [ #start ] ifFalse: [ name asSymbol ].
+		(self respondsTo: symbol)
+			ifTrue: [ resolved at: index put: (self perform: symbol) ]
+			ifFalse: [ self error: 'Unable to initialize ' , symbol printString ].
+		(resolved at: index) == self
+			ifTrue: [ self error: 'Invalid parser definition for ' , symbol printString ] ].
+	unresolved with: resolved do: [ :a :b |
+		(a isKindOf: PPUnresolvedParser)
+			ifTrue: [ a becomeForward: b ] ]
 ]
 
 { #category : #accessing }
