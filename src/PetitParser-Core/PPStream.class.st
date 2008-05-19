@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
+{ #category : #converting }
+PPStream >> asParserStream [
+	^ self
+]
+
 { #category : #accessing }
 PPStream >> for: aParser do: aBlock [
 	| memento |

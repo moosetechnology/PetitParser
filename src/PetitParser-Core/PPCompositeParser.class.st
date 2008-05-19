@@ -6,7 +6,7 @@ Class {
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString [
-	^ self new parse: (PPStream on: aString)
+	^ self new parse: aString asParserStream
 ]
 
 { #category : #parsing }
@@ -31,7 +31,7 @@ PPCompositeParser >> initialize [
 			ifTrue: [ resolved at: index put: (self perform: symbol) ]
 			ifFalse: [ self error: 'Unable to initialize ' , symbol printString ].
 		(resolved at: index) == self
-			ifTrue: [ self error: 'Invalid parser definition for ' , symbol printString ] ].
+			ifTrue: [ self error: 'Invalid definition for ' , symbol printString ] ].
 	unresolved with: resolved do: [ :a :b |
 		(a isKindOf: PPUnresolvedParser)
 			ifTrue: [ a becomeForward: b ] ]
