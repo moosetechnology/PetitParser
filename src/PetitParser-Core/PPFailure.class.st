@@ -10,12 +10,12 @@ Class {
 
 { #category : #'instance-creation' }
 PPFailure class >> reason: aString [
-	^ self new reason: aString
+	^ self basicNew reason: aString
 ]
 
 { #category : #'instance-creation' }
 PPFailure class >> reason: aString at: anInteger [
-	^ self new reason: aString; position: anInteger
+	^ self basicNew reason: aString; position: anInteger
 ]
 
 { #category : #testing }

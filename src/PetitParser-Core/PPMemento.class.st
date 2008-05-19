@@ -9,7 +9,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance-creation' }
 PPMemento class >> new [
 	^ self basicNew initialize
 ]
