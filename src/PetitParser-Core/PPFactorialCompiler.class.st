@@ -62,10 +62,7 @@ PPFactorialCompiler >> literal [
 
 { #category : #grammar }
 PPFactorialCompiler >> operation [
-	^ super operation ==> [ :node |
-		node asString = '=='
-			ifTrue: [ #= ]
-			ifFalse: [ node asSymbol ] ]
+	^ super operation ==> [ :node | node = '==' ifTrue: [ #= ] ifFalse: [ node asSymbol ] ]
 ]
 
 { #category : #private }

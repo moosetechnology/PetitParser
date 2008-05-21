@@ -1,88 +1,92 @@
 Class {
 	#name : #PPSchemeParser,
 	#superclass : #PPCompositeParser,
+	#instVars : [
+		'open',
+		'close',
+		'boolean',
+		'character',
+		'number',
+		'string',
+		'list'
+	],
 	#category : #'PetitParser-Builder'
 }
 
-{ #category : #'productions-expressions' }
-PPSchemeParser >> application [
-	open , selector , expression star , close ==> [ :node | 
-		RBMessageNode 
-			qqReceiver: node third first 
-			selector: node second 
-			arguments: node third allButFirst ]
-]
-
-{ #category : #'productions-literals' }
-PPSchemeParser >> boolean [
-		('#t' token ==> [ :node | ``(true) ])
-	|	('#f' token ==> [ :node | ``(false) ])
-]
-
-{ #category : #tokens }
-PPSchemeParser >> close [
-	$) token
-]
-
-{ #category : #productions }
-PPSchemeParser >> expression [
-		number
-	|	string
-	|	boolean
-	|	identifier
-	|	lambda
-	|	application
-		
+{ #category : #grammar }
+PPSchemeParser >> body [
 	
-
-
 ]
 
-{ #category : #'productions-literals' }
-PPSchemeParser >> identifier [
-	#letter plus token ==> [ :node | RBVariableNode named: node copy ]
+{ #category : #'grammar-literals' }
+PPSchemeParser >> boolean [
+	"The standard boolean objects for true and false have external representations #t and #f."
+
+	^ ('#t' asParser | '#f' asParser) flatten ==> [ :each | each = '#t' ]
 ]
 
-{ #category : #'productions-expressions' }
-PPSchemeParser >> if [
-		(open , 'if' token , expression , expression , close)
-	|	(open , 'if' token , expression , expression , expression , close)
+{ #category : #'grammar-literals' }
+PPSchemeParser >> character [
+	"Characters are represented using the notation #\<character>."
+
+	^ ('#\' asParser , #any asParser) flatten ==> #second
 ]
 
-{ #category : #'productions-expressions' }
+{ #category : #token }
+PPSchemeParser >> close [
+	^ $) asParser token
+]
+
+{ #category : #'grammar-expression' }
+PPSchemeParser >> definition [
+	
+]
+
+{ #category : #token }
+PPSchemeParser >> false [
+	^ 'false' asParser token
+]
+
+{ #category : #token }
+PPSchemeParser >> id [
+	^ (#letter asParser , (#word asParser | $- asParser) star) token
+]
+
+{ #category : #'grammar-expression' }
 PPSchemeParser >> lambda [
-	(open , 'lambda' token , identifier , expression , close) ==> [ :node |
-		``[ `,(node fourth) ] arguments: (Array with: ``(`,(node third))) ]
+	
 ]
 
-{ #category : #'productions-expressions' }
+{ #category : #'grammar-expression' }
 PPSchemeParser >> let [
 	
 ]
 
-{ #category : #'productions-literals' }
+{ #category : #'grammar-literals' }
 PPSchemeParser >> number [
-	($- optional , #digit plus , ($. , #digit plus) optional) token
-		==> [ :node | ``(`,(Number readFrom: node copy)) ]
+	"The syntax of external representations for number objects is described formally by the <number> rule in the formal grammar."
+
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser star) optional) flatten ==> #asNumber
 ]
 
-{ #category : #tokens }
+{ #category : #token }
 PPSchemeParser >> open [
-	$( token
-]
-
-{ #category : #'productions-literals' }
-PPSchemeParser >> selector [
-	#space not plus token ==> #asSymbol
+	^ $( asParser token
 ]
 
 { #category : #accessing }
 PPSchemeParser >> start [
-	expression end
+	^ atom | expression
 ]
 
-{ #category : #'productions-literals' }
+{ #category : #'grammar-literals' }
 PPSchemeParser >> string [
-	($" , $" not star , $") token 
-		==> [ :node | ``(`,(node copyFrom: 2 to: node size - 1)) ]
+	"String are represented by sequences of characters enclosed within doublequotes."
+
+	^ ($" asParser , $" asParser not star , $" asParser) flatten ==> [ :value | value copyFrom: 2 to: value size - 1 ]
+]
+
+{ #category : #token }
+PPSchemeParser >> true [
+	^ 'true' asParser token
 ]
