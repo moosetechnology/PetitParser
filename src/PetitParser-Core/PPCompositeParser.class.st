@@ -17,6 +17,11 @@ PPCompositeParser class >> parse: aString ifError: aBlock [
 		ifFalse: [ result ]
 ]
 
+{ #category : #private }
+PPCompositeParser >> endOfLastToken [
+	^ 0
+]
+
 { #category : #initialization }
 PPCompositeParser >> initialize [
 	| resolved unresolved symbol |
@@ -35,6 +40,10 @@ PPCompositeParser >> initialize [
 	unresolved with: resolved do: [ :a :b |
 		(a isKindOf: PPUnresolvedParser)
 			ifTrue: [ a becomeForward: b ] ]
+]
+
+{ #category : #private }
+PPCompositeParser >> parseSelector: aString [
 ]
 
 { #category : #accessing }

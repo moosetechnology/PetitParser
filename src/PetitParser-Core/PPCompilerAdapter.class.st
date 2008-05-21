@@ -42,6 +42,11 @@ PPCompilerAdapter >> initializeOn: aParserClass [
 PPCompilerAdapter >> new [
 ]
 
+{ #category : #adapting }
+PPCompilerAdapter >> parseSelector: aString [
+	^ nil
+]
+
 { #category : #accessing }
 PPCompilerAdapter >> parserClass [
 	^ parserClass
