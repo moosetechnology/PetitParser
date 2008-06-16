@@ -20,7 +20,7 @@ PPEbnfCompiler >> expression [
 
 { #category : #grammar }
 PPEbnfCompiler >> grouping [
-	^ super grouping ==> [ :nodes | nodes second ]
+	^ super grouping ==> #second
 ]
 
 { #category : #grammar }
