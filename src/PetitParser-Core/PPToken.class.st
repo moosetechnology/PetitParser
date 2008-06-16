@@ -3,18 +3,17 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'collection',
-		'from',
-		'to'
+		'start',
+		'stop'
 	],
 	#category : #'PetitParser-Core'
 }
 
 { #category : #'instance-creation' }
-PPToken class >> on: aSequenzeableCollection from: aFromInteger to: aToInteger [ 
+PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
 	^ self basicNew 
 		initializeOn: aSequenzeableCollection
-		from: aFromInteger
-		to: aToInteger
+		start: aStartInteger stop: aStopInteger
 ]
 
 { #category : #accessing }
@@ -22,44 +21,60 @@ PPToken >> collection [
 	^ collection
 ]
 
-{ #category : #accessing }
-PPToken >> from [
-	^ from
-]
-
-{ #category : #'accessing-compatibility' }
-PPToken >> id [
-	^ 0
+{ #category : #copying }
+PPToken >> copyFrom: aStartInteger to: aStopInteger [
+	^ self class on: collection start: start + aStartInteger - 1 stop: stop + aStopInteger - 3
 ]
 
 { #category : #initialization }
-PPToken >> initializeOn: aSequenzeableCollection from: aFromInteger to: aToInteger [ 
+PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
 	collection := aSequenzeableCollection.
-	from := aFromInteger.
-	to := aToInteger
+	start := aStartInteger.
+	stop := aStopInteger
+]
+
+{ #category : #'accessing-compatibility' }
+PPToken >> isRBToken [
+	^ false
 ]
 
 { #category : #'accessing-compatibility' }
 PPToken >> length [
-	^ to - from + 1
+	^ self size
+]
+
+{ #category : #printing }
+PPToken >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPut: $(; nextPutAll: self value; nextPut: $)
+]
+
+{ #category : #accessing }
+PPToken >> size [
+	^ self stop - self start + 1
+]
+
+{ #category : #accessing }
+PPToken >> start [
+	^ start
 ]
 
 { #category : #'accessing-compatibility' }
 PPToken >> startPosition [
-	^ from
+	^ self start
+]
+
+{ #category : #accessing }
+PPToken >> stop [
+	^ stop
 ]
 
 { #category : #'accessing-compatibility' }
 PPToken >> stopPosition [
-	^ to
-]
-
-{ #category : #accessing }
-PPToken >> to [
-	^ to
+	^ self stop
 ]
 
 { #category : #accessing }
 PPToken >> value [
-	^ collection copyFrom: from to: to
+	^ collection copyFrom: start to: stop
 ]
