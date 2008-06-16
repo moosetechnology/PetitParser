@@ -69,6 +69,7 @@ PPEbnfCompiler >> rule [
 				statements: (Array with: nodes third);
 				addReturn;
 				yourself);
+			source: nodes second collection;
 			yourself ]
 ]
 
