@@ -23,6 +23,13 @@ PPParser >> ==> aBlock [
 	^ (PPActionParser on: self) block: aBlock
 ]
 
+{ #category : #operations }
+PPParser >> and [
+	"Answer a parser that succeeds whenever the receiver does, but consumes no input."
+
+	^ PPAndParser on: self
+]
+
 { #category : #converting }
 PPParser >> asParser [
 	^ self
@@ -67,22 +74,22 @@ PPParser >> isUnresolved [
 ]
 
 { #category : #operations }
+PPParser >> not [
+	"Answer a parser that succeeds whenever the receiver fails."
+
+	^ PPNotParser on: self
+]
+
+{ #category : #operations }
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ PPChoiceParser new | self | PPEpsilonParser new
+	^ PPChoiceParser new | self | PPEpsilonParser new ==> #yourself
 ]
 
 { #category : #parsing }
 PPParser >> parse: aStream [
 	^ aStream for: self do: [ self basicParse: aStream ]
-]
-
-{ #category : #operations }
-PPParser >> peek [
-	"Answer a parser that peeks at the result of the receiver, but does not consume it."
-
-	^ PPPeekParser on: self
 ]
 
 { #category : #operations }

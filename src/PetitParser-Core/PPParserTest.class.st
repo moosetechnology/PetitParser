@@ -7,10 +7,20 @@ Class {
 { #category : #utilities }
 PPParserTest >> assert: aParser fail: aCollection [
 	| stream result |
-	stream := PPStream on: aCollection.
+	stream := aCollection asParserStream.
 	result := aParser parse: stream.
 	self assert: result isFailure.
 	self assert: stream position = 0
+]
+
+{ #category : #utilities }
+PPParserTest >> assert: aParser parse: aCollection [
+	self assert: aParser parse: aCollection to: nil end: aCollection size 
+]
+
+{ #category : #utilities }
+PPParserTest >> assert: aParser parse: aCollection end: anInteger [
+	self assert: aParser parse: aCollection to: nil end: anInteger
 ]
 
 { #category : #utilities }
@@ -19,17 +29,19 @@ PPParserTest >> assert: aParser parse: aCollection to: anObject [
 ]
 
 { #category : #utilities }
-PPParserTest >> assert: aParser parse: aCollection to: anObject end: anInteger [
+PPParserTest >> assert: aParser parse: aParseObject to: aTargetObject end: anInteger [
 	| stream result |
-	stream := PPStream on: aCollection.
+	stream := aParseObject asParserStream.
 	result := aParser parse: stream.
-	self assert: result value = anObject.
+	aTargetObject isNil
+		ifTrue: [ self deny: result isFailure ]
+		ifFalse: [ self assert: result value = aTargetObject ].
 	self assert: stream position = anInteger
 ]
 
 { #category : #examples }
 PPParserTest >> comment [
-	^ ($" asParser , $" asParser not star , $" asParser) flatten
+	^ ($" asParser , $" asParser negate star , $" asParser) flatten
 ]
 
 { #category : #examples }
@@ -58,6 +70,15 @@ PPParserTest >> testAction [
 	self assert: parser parse: 'cba' to: $C end: 1.
 	
 	self assert: parser fail: ''
+]
+
+{ #category : #testing }
+PPParserTest >> testAnd [
+	| parser |
+	parser := 'foo' asParser flatten , 'bar' asParser flatten and.
+	
+	self assert: parser parse: 'foobar' to: #('foo' 'bar') end: 3.
+	self assert: parser fail: 'foobaz'
 ]
 
 { #category : #'testing-extension' }
@@ -159,6 +180,34 @@ PPParserTest >> testFlatten [
 	self assert: parser fail: ' a'
 ]
 
+{ #category : #'testing-composed' }
+PPParserTest >> testIfThenElse [
+	"S ::= if C then S else S | if C then S | X"
+	
+	| start if then else cond expr parser |
+	start := PPChoiceParser new.
+	if := 'if' asParser token.
+	then := 'then' asParser token.
+	else := 'else' asParser token.
+	cond := 'C' asParser token.
+	expr := 'X' asParser token.
+	start | (if , cond , then , start , else , start).
+	start | (if , cond , then , start).
+	start | (expr).
+	parser := start end.
+	
+	self assert: parser parse: 'X'.
+	self assert: parser parse: 'if C then X'.
+	self assert: parser parse: 'if C then X else X'.
+	
+	self assert: parser parse: 'if C then if C then X'.
+	self assert: parser parse: 'if C then if C then X else if C then X'.
+	self assert: parser parse: 'if C then if C then X else X else if C then X'.
+	self assert: parser parse: 'if C then if C then X else X else if C then X else X'.
+	
+	self assert: parser fail: 'if C else X'
+]
+
 { #category : #'testing-extension' }
 PPParserTest >> testInterval [
 	| parser |
@@ -205,6 +254,41 @@ PPParserTest >> testListOfIntegers [
 	self assert: parser fail: ','.
 	self assert: parser fail: '1,'.
 	self assert: parser fail: '1,,2'
+]
+
+{ #category : #'testing-composed' }
+PPParserTest >> testNestedComments [
+	"C ::= B I* E"
+	"I ::= !E (C | T)"
+	"B ::= /*"
+	"E ::= */"
+	"T ::= ."
+	
+	| begin end any inside parser |
+	begin := '/*' asParser.
+	end := '*/' asParser.
+	any := #any asParser.
+	
+	parser := PPSequenceParser new.
+	inside := end not , (parser | any).
+	parser , begin , inside star , end.
+	
+	self assert: parser parse: '/*ab*/cd' end: 6.
+	self assert: parser parse: '/*a/*b*/c*/'.
+	self assert: parser fail: '/*a/*b*/c'
+]
+
+{ #category : #testing }
+PPParserTest >> testNot [
+	| parser |
+	parser := 'foo' asParser flatten , 'bar' asParser flatten not.
+	
+	self assert: parser parse: 'foobaz' to: #('foo' nil) end: 3.
+	self assert: parser fail: 'foobar'.
+	
+	parser := 'foo' asParser flatten , 'bar' asParser flatten not not.
+	self assert: parser fail: 'foobaz'.
+	self assert: parser parse: 'foobar'
 ]
 
 { #category : #testing }
@@ -289,6 +373,27 @@ PPParserTest >> testParseAaaBbb [
 	self assert: parser fail: 'b'.
 	self assert: parser fail: 'aab'.
 	self assert: parser fail: 'aaabb'
+]
+
+{ #category : #'testing-composed' }
+PPParserTest >> testParseAaaaaa [
+	"S ::= a a S | epsilon"
+	
+	| s0 s1 parser |
+	s0 := PPChoiceParser new.
+	s1 := $a asParser , $a asParser , s0.
+	s0 | s1 | PPEpsilonParser new.
+	parser := s0 flatten.
+
+	self assert: parser parse: '' to: ''.
+	self assert: parser parse: 'aa' to: 'aa'.
+	self assert: parser parse: 'aaaa' to: 'aaaa'.
+	self assert: parser parse: 'aaaaaa' to: 'aaaaaa'.
+
+	self assert: parser parse: 'a' to: '' end: 0.
+	self assert: parser parse: 'aaa' to: 'aa' end: 2.
+	self assert: parser parse: 'aaaaa' to: 'aaaa' end: 4.
+	self assert: parser parse: 'aaaaaaa' to: 'aaaaaa' end: 6
 ]
 
 { #category : #'testing-composed' }
@@ -421,15 +526,6 @@ PPParserTest >> testParseReturn [
 	self assert: return fail: '^'
 ]
 
-{ #category : #testing }
-PPParserTest >> testPeek [
-	| parser |
-	parser := $a asParser peek.
-	
-	self assert: parser parse: 'a' to: $a end: 0.
-	self assert: parser fail: 'b'
-]
-
 { #category : #'testing-extension' }
 PPParserTest >> testPluggable [
 	| parser |
@@ -476,9 +572,9 @@ PPParserTest >> testPredicateAny [
 	self assert: parser parse: '1' to: $1.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser fail: ''.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: '1'.
-	self assert: parser not fail: 'a'
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: '1'.
+	self assert: parser negate fail: 'a'
 ]
 
 { #category : #'testing-predicate' }
@@ -490,10 +586,10 @@ PPParserTest >> testPredicateCharacter [
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
 	self assert: parser fail: 'a'.
-	self assert: parser not parse: '1' to: $1.
-	self assert: parser not parse: 'a' to: $a.
-	self assert: parser not fail: '*'.
-	self assert: parser not fail: ''
+	self assert: parser negate parse: '1' to: $1.
+	self assert: parser negate parse: 'a' to: $a.
+	self assert: parser negate fail: '*'.
+	self assert: parser negate fail: ''
 ]
 
 { #category : #'testing-predicate' }
@@ -505,11 +601,11 @@ PPParserTest >> testPredicateControl [
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
 	self assert: parser fail: 'a'.
-	self assert: parser not parse: '1' to: $1.
-	self assert: parser not parse: 'a' to: $a.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: String cr.
-	self assert: parser not fail: String tab
+	self assert: parser negate parse: '1' to: $1.
+	self assert: parser negate parse: 'a' to: $a.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: String cr.
+	self assert: parser negate fail: String tab
 ]
 
 { #category : #'testing-predicate' }
@@ -520,10 +616,10 @@ PPParserTest >> testPredicateDigit [
 	self assert: parser parse: '9' to: $9.
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
-	self assert: parser not parse: ' ' to: $ .
-	self assert: parser not parse: 'a' to: $a.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: '0'
+	self assert: parser negate parse: ' ' to: $ .
+	self assert: parser negate parse: 'a' to: $a.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: '0'
 ]
 
 { #category : #'testing-predicate' }
@@ -534,10 +630,10 @@ PPParserTest >> testPredicateLetter [
 	self assert: parser parse: 'Z' to: $Z.
 	self assert: parser fail: ''.
 	self assert: parser fail: '0'.
-	self assert: parser not parse: '1' to: $1.
-	self assert: parser not parse: ' ' to: $ .
-	self assert: parser not fail: ''.
-	self assert: parser not fail: 'a'
+	self assert: parser negate parse: '1' to: $1.
+	self assert: parser negate parse: ' ' to: $ .
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: 'a'
 ]
 
 { #category : #'testing-predicate' }
@@ -549,11 +645,11 @@ PPParserTest >> testPredicateLowercase [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'A'.
 	self assert: parser fail: '0'.
-	self assert: parser not parse: 'A' to: $A.
-	self assert: parser not parse: 'Z' to: $Z.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: 'a'.
-	self assert: parser not fail: '0'
+	self assert: parser negate parse: 'A' to: $A.
+	self assert: parser negate parse: 'Z' to: $Z.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: 'a'.
+	self assert: parser negate fail: '0'
 ]
 
 { #category : #'testing-predicate' }
@@ -564,10 +660,10 @@ PPParserTest >> testPredicateSpace [
 	self assert: parser parse: ' ' to: Character space.
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
-	self assert: parser not parse: 'a' to: $a.
-	self assert: parser not parse: '/' to: $/.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: ' '
+	self assert: parser negate parse: 'a' to: $a.
+	self assert: parser negate parse: '/' to: $/.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: ' '
 ]
 
 { #category : #'testing-predicate' }
@@ -579,11 +675,11 @@ PPParserTest >> testPredicateUppercase [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
 	self assert: parser fail: '0'.
-	self assert: parser not parse: 'a' to: $a.
-	self assert: parser not parse: 'z' to: $z.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: 'A'.
-	self assert: parser not fail: '0'
+	self assert: parser negate parse: 'a' to: $a.
+	self assert: parser negate parse: 'z' to: $z.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: 'A'.
+	self assert: parser negate fail: '0'
 ]
 
 { #category : #'testing-predicate' }
@@ -595,10 +691,10 @@ PPParserTest >> testPredicateWord [
 	self assert: parser parse: '0' to: $0.
 	self assert: parser fail: ''.
 	self assert: parser fail: '-'.
-	self assert: parser not parse: ' ' to: $ .
-	self assert: parser not parse: '-' to: $-.
-	self assert: parser not fail: ''.
-	self assert: parser not fail: 'a'
+	self assert: parser negate parse: ' ' to: $ .
+	self assert: parser negate parse: '-' to: $-.
+	self assert: parser negate fail: ''.
+	self assert: parser negate fail: 'a'
 ]
 
 { #category : #testing }

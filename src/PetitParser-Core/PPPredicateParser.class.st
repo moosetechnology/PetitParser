@@ -93,7 +93,7 @@ PPPredicateParser class >> space [
 
 { #category : #'factory-chars' }
 PPPredicateParser class >> uppercase [
-	^ self lowercase not
+	^ self lowercase negate
 ]
 
 { #category : #'factory-chars' }
@@ -119,7 +119,7 @@ PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBloc
 ]
 
 { #category : #operators }
-PPPredicateParser >> not [
+PPPredicateParser >> negate [
 	"Negate the receiving predicate parser."
 	
 	^ PPPredicateParser 

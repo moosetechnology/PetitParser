@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'instance-creation' }
+PPFailure class >> at: anInteger [
+	^ self basicNew position: anInteger
+]
+
+{ #category : #'instance-creation' }
 PPFailure class >> reason: aString [
 	^ self basicNew reason: aString
 ]
@@ -35,8 +40,10 @@ PPFailure >> position: anInteger [
 
 { #category : #printing }
 PPFailure >> printOn: aStream [
-	aStream nextPutAll: reason.
-	position isNil 
+	reason isNil
+		ifTrue: [ super printOn: aStream ]
+		ifFalse: [ aStream nextPutAll: reason ].
+	position isNil
 		ifFalse: [ aStream nextPutAll: ' at '; print: position ]
 ]
 
