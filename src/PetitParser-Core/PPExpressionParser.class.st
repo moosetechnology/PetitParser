@@ -2,65 +2,61 @@ Class {
 	#name : #PPExpressionParser,
 	#superclass : #PPCompositeParser,
 	#instVars : [
-		'add',
-		'addop',
-		'expr',
-		'mul',
-		'mulop',
-		'pow',
-		'powop',
-		'num',
-		'val'
+		'terms',
+		'addition',
+		'factors',
+		'multiplication',
+		'power',
+		'primary',
+		'parentheses',
+		'number'
 	],
 	#category : #'PetitParser-Builder'
 }
 
-{ #category : #'productions-operations' }
-PPExpressionParser >> add [
-	^ (mul separatedBy: addop) foldLeft: [ :a :op :b | a perform: op with: b ]
+{ #category : #grammar }
+PPExpressionParser >> addition [
+	^ (factors separatedBy: ($+ asParser | $- asParser) flatten) 
+		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
-{ #category : #'productions-operations' }
-PPExpressionParser >> addop [
-	^ ($+ asParser | $- asParser) flatten ==> #asSymbol
+{ #category : #grammar }
+PPExpressionParser >> factors [
+	^ multiplication | division | power
 ]
 
-{ #category : #productions }
-PPExpressionParser >> expr [
-	^ $( asParser flatten , add , $) asParser flatten ==> #second
+{ #category : #grammar }
+PPExpressionParser >> multiplication [
+	^ (power separatedBy: ($* asParser | $/ asParser) flatten)
+		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
-{ #category : #'productions-operations' }
-PPExpressionParser >> mul [
-	^ (pow separatedBy: mulop) foldLeft: [ :a :op :b | a perform: op with: b ]
-]
-
-{ #category : #'productions-operations' }
-PPExpressionParser >> mulop [
-	^ ($* asParser | $/ asParser) flatten ==> #asSymbol
-]
-
-{ #category : #productions }
-PPExpressionParser >> num [
+{ #category : #grammar }
+PPExpressionParser >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten ==> #asNumber
 ]
 
-{ #category : #'productions-operations' }
-PPExpressionParser >> pow [
-	^ (val separatedBy: powop) foldRight: [ :a :op :b | a raisedTo: b ]
+{ #category : #grammar }
+PPExpressionParser >> parentheses [
+	^ $( asParser flatten , terms , $) asParser flatten ==> #second
 ]
 
-{ #category : #'productions-operations' }
-PPExpressionParser >> powop [
-	^ $^ asParser flatten ==> #asSymbol
+{ #category : #grammar }
+PPExpressionParser >> power [
+	^ (primary separatedBy: $^ asParser flatten) foldRight: [ :a :op :b | a raisedTo: b ]
+]
+
+{ #category : #grammar }
+PPExpressionParser >> primary [
+	^ number | parentheses
 ]
 
 { #category : #accessing }
 PPExpressionParser >> start [
-	^ add end
+	^ terms end
 ]
 
-{ #category : #productions }
-PPExpressionParser >> val [
-	^ num | expr
+{ #category : #grammar }
+PPExpressionParser >> terms [
+	^ addition | factors
 ]

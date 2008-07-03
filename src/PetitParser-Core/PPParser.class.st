@@ -105,6 +105,13 @@ PPParser >> isUnresolved [
 	^ false
 ]
 
+{ #category : #'operations-mapping' }
+PPParser >> map: aBlock [
+	"Map the result of the receiver to the arguments of aBlock."
+	
+	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
+]
+
 { #category : #operations }
 PPParser >> not [
 	"Answer a parser that succeeds whenever the receiver fails."

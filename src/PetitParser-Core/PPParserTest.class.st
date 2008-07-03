@@ -304,6 +304,24 @@ PPParserTest >> testListOfIntegers [
 	self assert: parser fail: '1,,2'
 ]
 
+{ #category : #'testing-mapping' }
+PPParserTest >> testMap2 [
+	| parser |
+	parser := (#any asParser , #any asParser) 
+		map: [ :a :b | Array with: b with: a ].
+
+	self assert: parser parse: #(a b) to: #(b a)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMap3 [
+	| parser |
+	parser := (#any asParser , #any asParser , #any asParser)
+		map: [ :a :b :c | Array with: c with: b with: a ].
+
+	self assert: parser parse: #(a b c) to: #(c b a)
+]
+
 { #category : #'testing-composed' }
 PPParserTest >> testNestedComments [
 	"C ::= B I* E"
