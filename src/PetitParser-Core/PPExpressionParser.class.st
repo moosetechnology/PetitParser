@@ -22,7 +22,7 @@ PPExpressionParser >> addition [
 
 { #category : #grammar }
 PPExpressionParser >> factors [
-	^ multiplication | division | power
+	^ multiplication | power
 ]
 
 { #category : #grammar }
