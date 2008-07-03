@@ -7,6 +7,8 @@ Class {
 		'expr',
 		'mul',
 		'mulop',
+		'pow',
+		'powop',
 		'num',
 		'val'
 	],
@@ -15,23 +17,12 @@ Class {
 
 { #category : #'productions-operations' }
 PPExpressionParser >> add [
-	^ (mul separatedBy: addop) ==> [ :node | self evalArray: node ]
+	^ (mul separatedBy: addop) foldLeft: [ :a :op :b | a perform: op with: b ]
 ]
 
 { #category : #'productions-operations' }
 PPExpressionParser >> addop [
 	^ ($+ asParser | $- asParser) flatten ==> #asSymbol
-]
-
-{ #category : #private }
-PPExpressionParser >> evalArray: anArray [
-	| collection |
-	collection := OrderedCollection withAll: anArray.
-	[ collection size > 1 ] whileTrue: [
-		collection addFirst: (collection removeFirst 
-			perform: collection removeFirst 
-			with: collection removeFirst) ].
-	^ collection first
 ]
 
 { #category : #productions }
@@ -41,7 +32,7 @@ PPExpressionParser >> expr [
 
 { #category : #'productions-operations' }
 PPExpressionParser >> mul [
-	^ (val separatedBy: mulop) ==> [ :node | self evalArray: node ]
+	^ (pow separatedBy: mulop) foldLeft: [ :a :op :b | a perform: op with: b ]
 ]
 
 { #category : #'productions-operations' }
@@ -52,6 +43,16 @@ PPExpressionParser >> mulop [
 { #category : #productions }
 PPExpressionParser >> num [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten ==> #asNumber
+]
+
+{ #category : #'productions-operations' }
+PPExpressionParser >> pow [
+	^ (val separatedBy: powop) foldRight: [ :a :op :b | a raisedTo: b ]
+]
+
+{ #category : #'productions-operations' }
+PPExpressionParser >> powop [
+	^ $^ asParser flatten ==> #asSymbol
 ]
 
 { #category : #accessing }

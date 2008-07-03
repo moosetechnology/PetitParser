@@ -59,7 +59,7 @@ PPParserTest >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testAction [
 	| parser |
 	parser := #any asParser ==> [ :a | a asUppercase ].
@@ -178,6 +178,54 @@ PPParserTest >> testFlatten [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'.
 	self assert: parser fail: ' a'
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldLeft2 [
+	| parser |
+	parser := #any asParser star 
+		foldLeft: [ :a :b | Array with: a with: b ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b) to: #(a b).
+	self assert: parser parse: #(a b c) to: #((a b) c).
+	self assert: parser parse: #(a b c d) to: #(((a b) c) d).
+	self assert: parser parse: #(a b c d e) to: #((((a b) c) d) e)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldLeft3 [
+	| parser |
+	parser := #any asParser star 
+		foldLeft: [ :a :b :c | Array with: a with: b with: c ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b c) to: #(a b c).
+	self assert: parser parse: #(a b c d e) to: #((a b c) d e)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldRight2 [
+	| parser |
+	parser := #any asParser star 
+		foldRight: [ :a :b | Array with: a with: b ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b) to: #(a b).
+	self assert: parser parse: #(a b c) to: #(a (b c)).
+	self assert: parser parse: #(a b c d) to: #(a (b (c d))).
+	self assert: parser parse: #(a b c d e) to: #(a (b (c (d e))))
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldRight3 [
+	| parser |
+	parser := #any asParser star 
+		foldRight: [ :a :b :c | Array with: a with: b with: c ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b c) to: #(a b c).
+	self assert: parser parse: #(a b c d e) to: #(a b (c d e))
 ]
 
 { #category : #'testing-composed' }

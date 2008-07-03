@@ -9,7 +9,7 @@ PPExpressionParserTest >> parseClass [
 	^ PPExpressionParser
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testAdd [
 	self assert: '1 + 2' is: 3.
 	self assert: '2 + 1' is: 3.
@@ -19,7 +19,7 @@ PPExpressionParserTest >> testAdd [
 	self assert: '-2 + 1' is: -1
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testAddMany [
 	self assert: '1' is: 1.
 	self assert: '1 + 2' is: 3.
@@ -42,19 +42,28 @@ PPExpressionParserTest >> testBrackets [
 	self assert: '(2 + 6) / 2' is: 4
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testDiv [
 	self assert: '12 / 3' is: 4.
 	self assert: '-16 / -4' is: 4
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
+PPExpressionParserTest >> testDivMany [
+	self assert: '100 / 2' is: 50.
+	self assert: '100 / 2 / 2' is: 25.
+	self assert: '100 / 2 / 2 / 5' is: 5.
+	self assert: '100 / 2 / 2 / 5 / 5' is: 1
+	
+]
+
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testMul [
 	self assert: '2 * 3' is: 6.
 	self assert: '2 * -4' is: -8
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testMulMany [
 	self assert: '1 * 2' is: 2.
 	self assert: '1 * 2 * 3' is: 6.
@@ -74,6 +83,21 @@ PPExpressionParserTest >> testNum [
 	self assert: '-9.9' is: -9.9
 ]
 
+{ #category : #'testing-operations' }
+PPExpressionParserTest >> testPow [
+	self assert: '2 ^ 3' is: 8.
+	self assert: '-2 ^ 3' is: -8.
+	self assert: '-2 ^ -3' is: -0.125
+]
+
+{ #category : #'testing-operations' }
+PPExpressionParserTest >> testPowMany [
+	self assert: '4 ^ 3' is: 64.
+	self assert: '4 ^ 3 ^ 2' is: 262144.
+	self assert: '4 ^ 3 ^ 2 ^ 1' is: 262144.
+	self assert: '4 ^ 3 ^ 2 ^ 1 ^ 0' is: 262144
+]
+
 { #category : #'testing-expression' }
 PPExpressionParserTest >> testPriority [
 	self assert: '2 * 3 + 4' is: 10.
@@ -82,7 +106,7 @@ PPExpressionParserTest >> testPriority [
 	self assert: '2 + 6 / 2' is: 5
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testSub [
 	self assert: '1 - 2' is: -1.
 	self assert: '1.3 - 2' is: -0.7.
@@ -90,7 +114,7 @@ PPExpressionParserTest >> testSub [
 	self assert: '-1 - -2' is: 1
 ]
 
-{ #category : #testing }
+{ #category : #'testing-operations' }
 PPExpressionParserTest >> testSubMany [
 	self assert: '1' is: 1.
 	self assert: '1 - 2' is: -1.

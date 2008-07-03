@@ -64,6 +64,38 @@ PPParser >> flatten [
 	^ PPFlattenParser on: self
 ]
 
+{ #category : #'operations-mapping' }
+PPParser >> foldLeft: aBlock [
+	"Fold the result of the receiver from left-to-right into aBlock. The argument aBlock must take two or more arguments."
+	
+	| size args |
+	size := aBlock numArgs.
+	args := Array new: size.
+	^ self ==> [ :nodes |
+		args at: 1 put: (nodes at: 1).
+		2 to: nodes size by: size - 1 do: [ :index |
+			args
+				replaceFrom: 2 to: size with: nodes startingAt: index;
+				at: 1 put: (aBlock valueWithArguments: args) ].
+		args at: 1 ]
+]
+
+{ #category : #'operations-mapping' }
+PPParser >> foldRight: aBlock [
+	"Fold the result of the receiver from right-to-left into aBlock. The argument aBlock must take two or more arguments."
+
+	| size args |
+	size := aBlock numArgs.
+	args := Array new: size.
+	^ self ==> [ :nodes |
+		args at: size put: (nodes at: nodes size).
+		nodes size - size + 1 to: 1 by: 1 - size do: [ :index |
+			args
+				replaceFrom: 1 to: size - 1 with: nodes startingAt: index;
+				at: size put: (aBlock valueWithArguments: args) ].
+		args at: size ]
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 ]
