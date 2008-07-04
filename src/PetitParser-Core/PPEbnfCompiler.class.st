@@ -73,11 +73,6 @@ PPEbnfCompiler >> rule [
 			yourself ]
 ]
 
-{ #category : #accessing }
-PPEbnfCompiler >> start [
-	^ rule , [ :stream | self class parserClass parseDoIt: stream upToEnd ] asParser
-]
-
 { #category : #grammar }
 PPEbnfCompiler >> terminal [
 	| cropped |

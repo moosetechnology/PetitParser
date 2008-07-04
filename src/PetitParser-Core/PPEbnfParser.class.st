@@ -113,12 +113,13 @@ PPEbnfParser >> start [
 
 { #category : #token }
 PPEbnfParser >> string [
-	^ (($" asParser , $" asParser not star , $" asParser) | ($' asParser , $' asParser not star , $' asParser)) token
+	^ ($" asParser , $" asParser negate star , $" asParser) token
+	|  ($' asParser , $' asParser negate star , $' asParser) token
 ]
 
 { #category : #grammar }
 PPEbnfParser >> term [
-	^ option | repetition | grouping | nonterminal | terminal
+	^ option | repetition | grouping | terminal | nonterminal
 ]
 
 { #category : #grammar }
