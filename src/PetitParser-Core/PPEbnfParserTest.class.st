@@ -50,7 +50,8 @@ PPEbnfParserTest >> testRule [
 	| result |
 	result := self parse: 'foo = bar ;'.
 	self assert: result first value = 'foo'.
-	self assert: result last value = ';'
+	self assert: result second value = '='.
+	self assert: result fourth value = ';'
 ]
 
 { #category : #testing }
