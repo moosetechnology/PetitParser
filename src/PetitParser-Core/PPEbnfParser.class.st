@@ -21,7 +21,8 @@ Class {
 		'string',
 		'terminator',
 		'terminal',
-		'nonterminal'
+		'nonterminal',
+		'production'
 	],
 	#category : #'PetitParser-Builder'
 }
@@ -82,6 +83,11 @@ PPEbnfParser >> optionOpen [
 ]
 
 { #category : #grammar }
+PPEbnfParser >> production [
+	^ [ :stream | SqueakParser parseExpression: stream ] asParser
+]
+
+{ #category : #grammar }
 PPEbnfParser >> repetition [
 	^ repetitionOpen , expression , repetitionClose
 ]
@@ -98,7 +104,7 @@ PPEbnfParser >> repetitionOpen [
 
 { #category : #grammar }
 PPEbnfParser >> rule [
-	^ identifier , definition , expression , terminator
+	^ identifier , definition , expression , terminator , production
 ]
 
 { #category : #token }

@@ -52,6 +52,14 @@ PPEbnfCompiler >> option [
 ]
 
 { #category : #grammar }
+PPEbnfCompiler >> production [
+	^ super production ==> [ :node |
+		RBBlockNode
+			arguments: (Array with: (RBVariableNode named: 'node'))
+			body: node ]
+]
+
+{ #category : #grammar }
 PPEbnfCompiler >> repetition [
 	^ super repetition ==> [ :nodes | 
 		RBMessageNode
@@ -66,7 +74,13 @@ PPEbnfCompiler >> rule [
 			selectorParts: (Array with: nodes first)
 			arguments: Array new;
 			body: (RBSequenceNode new
-				statements: (Array with: nodes third);
+				statements: (Array 
+					with: (nodes fifth body isEmpty
+						ifTrue: [ nodes third ]
+						ifFalse: [
+							RBMessageNode
+								receiver: nodes third selector: #==>
+								arguments: (Array with: nodes fifth) ]));
 				addReturn;
 				yourself);
 			source: nodes second collection;
