@@ -14,12 +14,12 @@ PPStream >> asParserStream [
 
 { #category : #accessing }
 PPStream >> for: aParser do: aBlock [
-	| memento |
-	memento := (cache
+	| buffer memento |
+	buffer := cache
 		at: aParser
-		ifAbsentPut: [ IdentityDictionary new ])
-			at: position
-			ifAbsentPut: [ PPMemento new ].
+		ifAbsentPut: [ Array new: collection size + 1 ].
+	memento := (buffer at: position + 1)
+		ifNil: [ buffer at: position + 1 put: PPMemento new ].
 	memento result isNil 
 		ifTrue: [
 			memento result: (readLimit - position + 1 < memento count
