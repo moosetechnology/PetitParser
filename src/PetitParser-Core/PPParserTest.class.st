@@ -1,43 +1,8 @@
 Class {
 	#name : #PPParserTest,
-	#superclass : #TestCase,
+	#superclass : #PPAbstractParseTest,
 	#category : #'PetitParser-Tests'
 }
-
-{ #category : #utilities }
-PPParserTest >> assert: aParser fail: aCollection [
-	| stream result |
-	stream := aCollection asParserStream.
-	result := aParser parse: stream.
-	self assert: result isFailure.
-	self assert: stream position = 0
-]
-
-{ #category : #utilities }
-PPParserTest >> assert: aParser parse: aCollection [
-	self assert: aParser parse: aCollection to: nil end: aCollection size 
-]
-
-{ #category : #utilities }
-PPParserTest >> assert: aParser parse: aCollection end: anInteger [
-	self assert: aParser parse: aCollection to: nil end: anInteger
-]
-
-{ #category : #utilities }
-PPParserTest >> assert: aParser parse: aCollection to: anObject [
-	self assert: aParser parse: aCollection to: anObject end: aCollection size 
-]
-
-{ #category : #utilities }
-PPParserTest >> assert: aParser parse: aParseObject to: aTargetObject end: anInteger [
-	| stream result |
-	stream := aParseObject asParserStream.
-	result := aParser parse: stream.
-	aTargetObject isNil
-		ifTrue: [ self deny: result isFailure ]
-		ifFalse: [ self assert: result value = aTargetObject ].
-	self assert: stream position = anInteger
-]
 
 { #category : #examples }
 PPParserTest >> comment [
