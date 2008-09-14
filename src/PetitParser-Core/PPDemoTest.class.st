@@ -46,7 +46,7 @@ PPDemoTest >> addMulParser [
 
 { #category : #examples }
 PPDemoTest >> straightLineParser [
-	| goal stm stmList id char dec exp expList mulExp primExp nonzero num lower upper |
+	| goal stm stmList id char dec exp expList mulExp primExp nonzero num lower upper eof |
 	stmList := PPSequenceParser new.
 	stm := PPChoiceParser new.
 	exp := PPSequenceParser new.
@@ -61,9 +61,9 @@ PPDemoTest >> straightLineParser [
 	dec := PPPredicateParser between: $0 and: $9.
 	id := char, ( char | dec ) star.
 	num := $0 asParser | ( nonzero, dec star).
-"	eof := PPEndOfInputParser new.
-	"
-	goal := stmList. ", eof"
+	eof := PPEndOfInputParser new.
+
+	goal := stmList. "does not work with eof at the end"
 	stmList , stm , ( $; asParser, stm ) star.
 	stm | ( id, ':=' asParser, exp )
 		| ( 'print' asParser, $( asParser, expList, $) asParser ). 

@@ -106,6 +106,14 @@ PPParserTest >> testEndOfInput [
 ]
 
 { #category : #testing }
+PPParserTest >> testEndOfInputAfterMatch [
+	| parser |
+	parser := 'stuff' asParser, PPEndOfInputParser new.
+	
+	self assert: parser parse: 'stuff' to: #($s $t $u $f $f nil).
+]
+
+{ #category : #testing }
 PPParserTest >> testEpsilon [
 	| parser |
 	parser := PPEpsilonParser new.
