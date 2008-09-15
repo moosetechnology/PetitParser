@@ -16,18 +16,18 @@ Class {
 
 { #category : #grammar }
 PPExpressionParser >> addition [
-	^ (factors separatedBy: ($+ asParser | $- asParser) flatten) 
+	^ (factors separatedBy: ($+ asParser / $- asParser) flatten) 
 		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
 { #category : #grammar }
 PPExpressionParser >> factors [
-	^ multiplication | power
+	^ multiplication / power
 ]
 
 { #category : #grammar }
 PPExpressionParser >> multiplication [
-	^ (power separatedBy: ($* asParser | $/ asParser) flatten)
+	^ (power separatedBy: ($* asParser / $/ asParser) flatten)
 		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
@@ -48,7 +48,7 @@ PPExpressionParser >> power [
 
 { #category : #grammar }
 PPExpressionParser >> primary [
-	^ number | parentheses
+	^ number / parentheses
 ]
 
 { #category : #accessing }
@@ -58,5 +58,5 @@ PPExpressionParser >> start [
 
 { #category : #grammar }
 PPExpressionParser >> terms [
-	^ addition | factors
+	^ addition / factors
 ]

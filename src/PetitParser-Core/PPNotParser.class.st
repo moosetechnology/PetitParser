@@ -8,8 +8,7 @@ Class {
 PPNotParser >> basicParse: aStream [ 
 	| element |
 	element := super basicParse: aStream.
-	^ element isFailure
-		ifFalse: [ PPFailure at: aStream position ]
+	^ element isFailure ifFalse: [ PPFailure at: aStream position ]
 ]
 
 { #category : #operations }

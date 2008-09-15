@@ -16,12 +16,12 @@ PPDemoTest >> addMulInterpreter [
 	mul := PPChoiceParser new.
 	prim := PPChoiceParser new.
 	dec := (PPPredicateParser between: $0 and: $9) ==> [ :token | token asciiValue - $0 asciiValue ].
-	add | ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
-		| mul.
-	mul | ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
-		| prim.
-	prim | (($( asParser , add , $) asParser) 		==> [ :nodes | nodes at: 2 ])
-		| dec.
+	add / ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
+		/ mul.
+	mul / ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
+		/ prim.
+	prim / (($( asParser , add , $) asParser) 		==> [ :nodes | nodes at: 2 ])
+		/ dec.
 	^ add
 ]
 
@@ -34,12 +34,12 @@ PPDemoTest >> addMulParser [
 	prim := PPChoiceParser new.
 	dec := PPPredicateParser between: $0 and: $9.
 
-	add | ( mul, $+ asParser, add )
-		| mul.
-	mul | ( prim, $* asParser, mul)
-		| prim.
-	prim | ( $( asParser, add, $) asParser)
-		| dec.
+	add / ( mul, $+ asParser, add )
+		/ mul.
+	mul / ( prim, $* asParser, mul)
+		/ prim.
+	prim / ( $( asParser, add, $) asParser)
+		/ dec.
 
 	^ add
 ]
@@ -56,23 +56,23 @@ PPDemoTest >> straightLineParser [
 	
 	lower := PPPredicateParser between: $a and: $z.
 	upper := PPPredicateParser between: $A and: $Z.
-	char := lower | upper.
+	char := lower / upper.
 	nonzero := PPPredicateParser between: $1 and: $9.
 	dec := PPPredicateParser between: $0 and: $9.
-	id := char, ( char | dec ) star.
-	num := $0 asParser | ( nonzero, dec star).
+	id := char, ( char / dec ) star.
+	num := $0 asParser / ( nonzero, dec star).
 	eof := PPEndOfInputParser new.
 
 	goal := stmList. "does not work with eof at the end"
 	stmList , stm , ( $; asParser, stm ) star.
-	stm | ( id, ':=' asParser, exp )
-		| ( 'print' asParser, $( asParser, expList, $) asParser ). 
-	exp , mulExp, ( ( $+ asParser | $- asParser ), mulExp ) star.
+	stm / ( id, ':=' asParser, exp )
+		/ ( 'print' asParser, $( asParser, expList, $) asParser ). 
+	exp , mulExp, ( ( $+ asParser / $- asParser ), mulExp ) star.
 	expList , exp, ( $, asParser, exp ) star.
-	mulExp , primExp, ( ( $* asParser | $/ asParser ), primExp ) star.
-	primExp | id
-		| num
-		| ( $( asParser, stmList, $, asParser, exp, $) asParser ).
+	mulExp , primExp, ( ( $* asParser / $/ asParser ), primExp ) star.
+	primExp / id
+		/ num
+		/ ( $( asParser, stmList, $, asParser, exp, $) asParser ).
 	^ goal
 
 ]

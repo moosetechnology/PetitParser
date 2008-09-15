@@ -22,7 +22,7 @@ PPLambdaParser >> application [
 
 { #category : #productions }
 PPLambdaParser >> expression [
-	^ variable | abstraction | application
+	^ variable / abstraction / application
 ]
 
 { #category : #accessing }

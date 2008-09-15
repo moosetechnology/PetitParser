@@ -17,6 +17,13 @@ PPParser >> , aParser [
 ]
 
 { #category : #operations }
+PPParser >> / aParser [ 
+	"Answer a new parser that either parses the receiver or aParser."
+	
+	^ PPChoiceParser new / self / aParser
+]
+
+{ #category : #operations }
 PPParser >> ==> aBlock [
 	"Assigns aBlock as a success action handler."
 	
@@ -54,7 +61,7 @@ PPParser >> delimitedBy: aParser [
 PPParser >> end [
 	"Ensure the end of the input and return the result of the receiver."
 
-	^ PPSequenceParser new , self , PPEndOfInputParser new ==> #first
+	^ PPEndOfInputParser on: self
 ]
 
 { #category : #operations }
@@ -123,7 +130,7 @@ PPParser >> not [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ PPChoiceParser new | self | PPEpsilonParser new ==> #yourself
+	^ PPChoiceParser new / self / PPEpsilonParser new ==> #yourself
 ]
 
 { #category : #parsing }
@@ -162,9 +169,7 @@ PPParser >> token [
 	^ PPTokenParser on: self
 ]
 
-{ #category : #operations }
+{ #category : #deprecated }
 PPParser >> | aParser [ 
-	"Answer a new parser that either parses the receiver or aParser."
-	
-	^ PPChoiceParser new | self | aParser
+	^ self / aParser
 ]

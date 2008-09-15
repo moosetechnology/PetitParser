@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
+{ #category : #operations }
+PPChoiceParser >> / aRule [ 
+	parsers addLast: aRule
+]
+
 { #category : #parsing }
 PPChoiceParser >> basicParse: aStream [
 	| element |
@@ -15,9 +20,4 @@ PPChoiceParser >> basicParse: aStream [
 		element isFailure
 			ifFalse: [ ^ element ] ].
 	^ element
-]
-
-{ #category : #operations }
-PPChoiceParser >> | aRule [ 
-	parsers addLast: aRule
 ]
