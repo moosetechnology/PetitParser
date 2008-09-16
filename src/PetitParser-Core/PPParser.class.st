@@ -47,6 +47,11 @@ PPParser >> basicParse: aStream [
 	self subclassResponsibility
 ]
 
+{ #category : #operations }
+PPParser >> def: aParser [
+	self become: aParser
+]
+
 { #category : #'operations-conveniance' }
 PPParser >> delimitedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."

@@ -134,15 +134,15 @@ PPParserTest >> testIfThenElse [
 	"S ::= if C then S else S | if C then S | X"
 	
 	| start if then else cond expr parser |
-	start := PPChoiceParser new.
+	start := PPParser new.
 	if := 'if' asParser token.
 	then := 'then' asParser token.
 	else := 'else' asParser token.
 	cond := 'C' asParser token.
 	expr := 'X' asParser token.
-	start / (if , cond , then , start , else , start).
-	start / (if , cond , then , start).
-	start / (expr).
+	start def: (if , cond , then , start , else , start)
+		/ (if , cond , then , start)
+		/ (expr).
 	parser := start end.
 	
 	self assert: parser parse: 'X'.
@@ -204,9 +204,9 @@ PPParserTest >> testNestedComments [
 	end := '*/' asParser.
 	any := #any asParser.
 	
-	parser := PPSequenceParser new.
+	parser := PPParser new.
 	inside := end not , (parser / any).
-	parser , begin , inside star , end.
+	parser def: begin , inside star , end.
 	
 	self assert: parser parse: '/*ab*/cd' end: 6.
 	self assert: parser parse: '/*a/*b*/c*/'.
@@ -247,12 +247,12 @@ PPParserTest >> testPalindrome [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPChoiceParser new.
-	s1 := PPChoiceParser new.
-	s0 / ($a asParser , s1 , $a asParser).
-	s0 / ($b asParser , s1 , $b asParser).	
-	s0 / ($c asParser , s1 , $c asParser).	
-	s1 / s0 / PPEpsilonParser new.
+	s0 := PPParser new.
+	s1 := PPParser new.
+	s0 def: ($a asParser , s1 , $a asParser)
+		/ ($b asParser , s1 , $b asParser)
+		/ ($c asParser , s1 , $c asParser).	
+	s1 def: s0 / PPEpsilonParser new.
 	parser := s0 flatten end.
 
 	self assert: parser parse: 'aa' to: 'aa'.
@@ -278,8 +278,10 @@ PPParserTest >> testParseAaaBbb [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := $a asParser , (s1 := PPChoiceParser new) , $b asParser.
-	s1 / s0 / PPEpsilonParser new.
+	s0 := PPParser new.
+	s1 := PPParser new.
+	s0 def: $a asParser , s1 , $b asParser.
+	s1 def: s0 / PPEpsilonParser new.
 	parser := s0 flatten.
 
 	self assert: parser parse: 'ab' to: 'ab'.
@@ -303,9 +305,9 @@ PPParserTest >> testParseAaaaaa [
 	"S ::= a a S | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPChoiceParser new.
+	s0 := PPParser new.
 	s1 := $a asParser , $a asParser , s0.
-	s0 / s1 / PPEpsilonParser new.
+	s0 def: s1 / PPEpsilonParser new.
 	parser := s0 flatten.
 
 	self assert: parser parse: '' to: ''.

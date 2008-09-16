@@ -12,15 +12,15 @@ Class {
 PPDemoTest >> addMulInterpreter [
 	"Same as testMiniGrammar but with semantic actions"
 	| mul prim add dec |
-	add := PPChoiceParser new.
-	mul := PPChoiceParser new.
-	prim := PPChoiceParser new.
+	add := PPParser new.
+	mul := PPParser new.
+	prim := PPParser new.
 	dec := (PPPredicateParser between: $0 and: $9) ==> [ :token | token asciiValue - $0 asciiValue ].
-	add / ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
+	add def: ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
 		/ mul.
-	mul / ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
+	mul def: ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
 		/ prim.
-	prim / (($( asParser , add , $) asParser) 		==> [ :nodes | nodes at: 2 ])
+	prim def: (($( asParser , add , $) asParser) 		==> [ :nodes | nodes at: 2 ])
 		/ dec.
 	^ add
 ]
@@ -29,16 +29,16 @@ PPDemoTest >> addMulInterpreter [
 PPDemoTest >> addMulParser [
 	"Simple demo of scripting a parser"
 	| add mul prim dec |
-	add := PPChoiceParser new.
-	mul := PPChoiceParser new.
-	prim := PPChoiceParser new.
+	add := PPParser new.
+	mul := PPParser new.
+	prim := PPParser new.
 	dec := PPPredicateParser between: $0 and: $9.
 
-	add / ( mul, $+ asParser, add )
+	add def: ( mul, $+ asParser, add )
 		/ mul.
-	mul / ( prim, $* asParser, mul)
+	mul def: ( prim, $* asParser, mul)
 		/ prim.
-	prim / ( $( asParser, add, $) asParser)
+	prim def: ( $( asParser, add, $) asParser)
 		/ dec.
 
 	^ add
@@ -46,13 +46,14 @@ PPDemoTest >> addMulParser [
 
 { #category : #examples }
 PPDemoTest >> straightLineParser [
-	| goal stm stmList id char dec exp expList mulExp primExp nonzero num lower upper eof |
-	stmList := PPSequenceParser new.
-	stm := PPChoiceParser new.
-	exp := PPSequenceParser new.
-	expList := PPSequenceParser new.
-	mulExp := PPSequenceParser new.
-	primExp := PPChoiceParser new.
+	| goal stm stmList id char dec exp expList mulExp primExp nonzero num lower upper |
+	goal := PPParser new.
+	stmList := PPParser new.
+	stm := PPParser new.
+	exp := PPParser new.
+	expList := PPParser new.
+	mulExp := PPParser new.
+	primExp := PPParser new.
 	
 	lower := PPPredicateParser between: $a and: $z.
 	upper := PPPredicateParser between: $A and: $Z.
@@ -61,16 +62,15 @@ PPDemoTest >> straightLineParser [
 	dec := PPPredicateParser between: $0 and: $9.
 	id := char, ( char / dec ) star.
 	num := $0 asParser / ( nonzero, dec star).
-	eof := PPEndOfInputParser new.
 
-	goal := stmList. "does not work with eof at the end"
-	stmList , stm , ( $; asParser, stm ) star.
-	stm / ( id, ':=' asParser, exp )
+	goal def: stmList end. "does not work with eof at the end"
+	stmList def: stm , ( $; asParser, stm ) star.
+	stm def: ( id, ':=' asParser, exp )
 		/ ( 'print' asParser, $( asParser, expList, $) asParser ). 
-	exp , mulExp, ( ( $+ asParser / $- asParser ), mulExp ) star.
-	expList , exp, ( $, asParser, exp ) star.
-	mulExp , primExp, ( ( $* asParser / $/ asParser ), primExp ) star.
-	primExp / id
+	exp def: mulExp, ( ( $+ asParser / $- asParser ), mulExp ) star.
+	expList def: exp, ( $, asParser, exp ) star.
+	mulExp def: primExp, ( ( $* asParser / $/ asParser ), primExp ) star.
+	primExp def: id
 		/ num
 		/ ( $( asParser, stmList, $, asParser, exp, $) asParser ).
 	^ goal
@@ -100,8 +100,7 @@ PPDemoTest >> testSLassign [
 
 { #category : #tests }
 PPDemoTest >> testSLprint [
-	
 	self assert: self straightLineParser
 		parse: 'print(3,4)'
-		to:  #(#($p $r $i $n $t $( #(#(#(#($3 #()) #()) #()) #(#($, #(#(#($4 #()) #()) #())))) $)) #())
+		to: #(#($p $r $i $n $t $( #(#(#($3 #()) #()) #() #(#($, #(#(#($4 #()) #()) #())))) $)) #())
 ]

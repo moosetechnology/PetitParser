@@ -9,7 +9,7 @@ Class {
 
 { #category : #operations }
 PPChoiceParser >> / aRule [ 
-	parsers addLast: aRule
+	^ self copy add: aRule
 ]
 
 { #category : #parsing }
