@@ -1,6 +1,6 @@
 Extension { #name : #Symbol }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-converting' }
 Symbol >> asParser [
 	^ PPPredicateParser perform: self
 ]

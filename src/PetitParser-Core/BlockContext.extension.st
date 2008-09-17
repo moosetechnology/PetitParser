@@ -1,6 +1,6 @@
 Extension { #name : #BlockContext }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-converting' }
 BlockContext >> asParser [
 	^ PPPluggableParser on: self
 ]

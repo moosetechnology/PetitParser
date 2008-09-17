@@ -1,8 +1,6 @@
 Extension { #name : #Set }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-converting' }
 Set >> asParser [
-	^ self 
-		inject: PPChoiceParser new
-		into: [ :result :each | result | each asParser ]
+	^ PPChoiceParser withAll: (self collect: [ :each | each asParser ])
 ]

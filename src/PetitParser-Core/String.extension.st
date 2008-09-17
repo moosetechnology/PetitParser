@@ -1,6 +1,6 @@
 Extension { #name : #String }
 
-{ #category : #'*petitparser' }
-String >> asLiteral [
-	^ PPStringLiteral on: self
+{ #category : #'*petitparser-converting' }
+String >> asParser [
+	^ PPStringParser on: self
 ]

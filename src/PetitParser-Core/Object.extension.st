@@ -1,6 +1,6 @@
 Extension { #name : #Object }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-converting' }
 Object >> asParser [
 	^ PPPredicateParser expect: self
 ]

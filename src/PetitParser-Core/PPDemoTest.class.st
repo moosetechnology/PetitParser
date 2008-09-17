@@ -95,12 +95,12 @@ PPDemoTest >> testSLassign [
 	
 	self assert: self straightLineParser
 		parse: 'abc:=1'
-		to: #(#($a #($b $c) #($: $=) #(#(#($1 #()) #()) #())) #())
+		to: #(#($a #($b $c) ':=' #(#(#($1 #()) #()) #())) #())
 ]
 
 { #category : #tests }
 PPDemoTest >> testSLprint [
 	self assert: self straightLineParser
 		parse: 'print(3,4)'
-		to: #(#($p $r $i $n $t $( #(#(#($3 #()) #()) #() #(#($, #(#(#($4 #()) #()) #())))) $)) #())
+		to: #(#('print' $( #(#(#($3 #()) #()) #() #(#($, #(#(#($4 #()) #()) #())))) $)) #())
 ]

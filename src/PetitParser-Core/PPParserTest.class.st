@@ -86,7 +86,9 @@ PPParserTest >> testEndOfInput [
 PPParserTest >> testEndOfInputAfterMatch [
 	| parser |
 	parser := 'stuff' asParser end.
-	self assert: parser parse: 'stuff' to: #($s $t $u $f $f)
+	self assert: parser parse: 'stuff' to: 'stuff'.
+	self assert: parser fail: 'stufff'.
+	self assert: parser fail: 'fluff'
 ]
 
 { #category : #testing }

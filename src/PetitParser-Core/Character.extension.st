@@ -1,6 +1,8 @@
 Extension { #name : #Character }
 
 { #category : #'*petitparser' }
-Character >> asLiteral [
-	^ PPCharacterLiteral on: self
+Character >> - aCharacter [
+	"Create a range of characters between the receiver and the argument."
+	
+	^ PPPredicateParser between: self and: aCharacter
 ]

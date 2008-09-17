@@ -1,6 +1,3 @@
-"
-A parser that uses the first parser that succeeds.
-"
 Class {
 	#name : #PPChoiceParser,
 	#superclass : #PPListParser,
@@ -9,7 +6,7 @@ Class {
 
 { #category : #operations }
 PPChoiceParser >> / aRule [ 
-	^ self copy add: aRule
+	^ self copyWith: aRule
 ]
 
 { #category : #parsing }

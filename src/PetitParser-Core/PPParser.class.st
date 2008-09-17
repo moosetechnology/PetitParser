@@ -13,14 +13,14 @@ PPParser class >> new [
 PPParser >> , aParser [ 
 	"Answer a new parser that parses the receiver followed by aParser."
 
-	^ PPSequenceParser new , self , aParser
+	^ PPSequenceParser withAll: (Array with: self with: aParser)
 ]
 
 { #category : #operations }
 PPParser >> / aParser [ 
 	"Answer a new parser that either parses the receiver or aParser."
 	
-	^ PPChoiceParser new / self / aParser
+	^ PPChoiceParser withAll: (Array with: self with: aParser)
 ]
 
 { #category : #operations }
@@ -49,14 +49,16 @@ PPParser >> basicParse: aStream [
 
 { #category : #operations }
 PPParser >> def: aParser [
-	self become: aParser
+	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
+
+	self becomeForward: aParser
 ]
 
 { #category : #'operations-conveniance' }
 PPParser >> delimitedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."
 	
-	^ PPSequenceParser new , (self separatedBy: aParser) , aParser optional ==> [ :node | 
+	^ (self separatedBy: aParser) , (aParser optional) ==> [ :node | 
 		node second	isNil
 			ifTrue: [ node first ]
 			ifFalse: [ node first copyWith: node second ] ]
@@ -135,7 +137,7 @@ PPParser >> not [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ PPChoiceParser new / self / PPEpsilonParser new ==> #yourself
+	^ self / PPEpsilonParser new
 ]
 
 { #category : #parsing }
@@ -147,14 +149,14 @@ PPParser >> parse: aStream [
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
-	^ PPSequenceParser new , self , self star ==> [ :value | (Array with: value first) , value second ]
+	^ self , self star ==> [ :value | value allButLast , value last ]
 ]
 
 { #category : #'operations-conveniance' }
 PPParser >> separatedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated by aParser."
 	
-	^ PPSequenceParser new , self , (aParser , self) star ==> [ :node | 
+	^ (self) , (aParser , self) star ==> [ :node | 
 		Array streamContents: [ :stream |
 			stream nextPut: node first.
 			node second do: [ :each | stream nextPutAll: each ] ] ]
@@ -172,9 +174,4 @@ PPParser >> token [
 	"Answer a new parser that answers a token."
 	
 	^ PPTokenParser on: self
-]
-
-{ #category : #deprecated }
-PPParser >> | aParser [ 
-	^ self / aParser
 ]

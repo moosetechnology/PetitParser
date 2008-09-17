@@ -7,19 +7,23 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #adding }
-PPListParser >> add: aRule [
-	parsers addLast: aRule
+{ #category : #'instance-creation' }
+PPListParser class >> withAll: anArray [
+	^ self basicNew initializeWithAll: anArray
+]
+
+{ #category : #copying }
+PPListParser >> copyWith: aParser [
+	^ self species withAll: (parsers copyWith: aParser)
 ]
 
 { #category : #initialization }
 PPListParser >> initialize [
 	super initialize.
-	parsers := OrderedCollection new
+	parsers := #()
 ]
 
-{ #category : #copying }
-PPListParser >> postCopy [
-	super postCopy.
-	parsers := parsers copy
+{ #category : #initialization }
+PPListParser >> initializeWithAll: anArray [
+	parsers := anArray
 ]
