@@ -7,11 +7,9 @@ Class {
 { #category : #testing }
 PPExtensionTest >> testCharacter [
 	| parser |
-	parser := $a - $c.	
+	parser := $a asParser.	
 	self assert: parser parse: 'a' to: $a.
-	self assert: parser parse: 'b' to: $b.
-	self assert: parser parse: 'c' to: $c.
-	self assert: parser fail: 'd'
+	self assert: parser fail: 'b'
 ]
 
 { #category : #testing }

@@ -5,19 +5,6 @@ Class {
 }
 
 { #category : #testing }
-PPMappingTest >> testAction [
-	| parser |
-	parser := #any asParser ==> [ :a | a asUppercase ].
-	
-	self assert: parser parse: 'a' to: $A.
-	
-	self assert: parser parse: 'ba' to: $B end: 1.
-	self assert: parser parse: 'cba' to: $C end: 1.
-	
-	self assert: parser fail: ''
-]
-
-{ #category : #testing }
 PPMappingTest >> testFoldLeft2 [
 	| parser |
 	parser := #any asParser star 

@@ -15,7 +15,7 @@ PPDemoTest >> addMulInterpreter [
 	add := PPParser new.
 	mul := PPParser new.
 	prim := PPParser new.
-	dec := (PPPredicateParser between: $0 and: $9) ==> [ :token | token asciiValue - $0 asciiValue ].
+	dec := ($0 - $9)									==> [ :token | token asciiValue - $0 asciiValue ].
 	add def: ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
 		/ mul.
 	mul def: ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
@@ -32,7 +32,7 @@ PPDemoTest >> addMulParser [
 	add := PPParser new.
 	mul := PPParser new.
 	prim := PPParser new.
-	dec := PPPredicateParser between: $0 and: $9.
+	dec := $0 - $9.
 
 	add def: ( mul, $+ asParser, add )
 		/ mul.
@@ -55,15 +55,15 @@ PPDemoTest >> straightLineParser [
 	mulExp := PPParser new.
 	primExp := PPParser new.
 	
-	lower := PPPredicateParser between: $a and: $z.
-	upper := PPPredicateParser between: $A and: $Z.
+	lower := $a - $z.
+	upper := $A - $Z.
 	char := lower / upper.
-	nonzero := PPPredicateParser between: $1 and: $9.
-	dec := PPPredicateParser between: $0 and: $9.
+	nonzero := $1 - $9.
+	dec := $0 - $9.
 	id := char, ( char / dec ) star.
 	num := $0 asParser / ( nonzero, dec star).
 
-	goal def: stmList end. "does not work with eof at the end"
+	goal def: stmList end.
 	stmList def: stm , ( $; asParser, stm ) star.
 	stm def: ( id, ':=' asParser, exp )
 		/ ( 'print' asParser, $( asParser, expList, $) asParser ). 
