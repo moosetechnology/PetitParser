@@ -22,7 +22,7 @@ PPDemoTest >> addMulInterpreter [
 		/ prim.
 	prim def: (($( asParser , add , $) asParser) 		==> [ :nodes | nodes at: 2 ])
 		/ dec.
-	^ add
+	^ add end
 ]
 
 { #category : #examples }
@@ -41,7 +41,7 @@ PPDemoTest >> addMulParser [
 	prim def: ( $( asParser, add, $) asParser)
 		/ dec.
 
-	^ add
+	^ add end
 ]
 
 { #category : #examples }
