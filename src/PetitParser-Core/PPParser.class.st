@@ -13,14 +13,14 @@ PPParser class >> new [
 PPParser >> , aParser [ 
 	"Answer a new parser that parses the receiver followed by aParser."
 
-	^ PPSequenceParser withAll: (Array with: self with: aParser)
+	^ PPSequenceParser with: self with: aParser
 ]
 
 { #category : #operations }
 PPParser >> / aParser [ 
 	"Answer a new parser that either parses the receiver or aParser."
 	
-	^ PPChoiceParser withAll: (Array with: self with: aParser)
+	^ PPChoiceParser with: self with: aParser
 ]
 
 { #category : #operations }
@@ -123,7 +123,7 @@ PPParser >> isUnresolved [
 PPParser >> map: aBlock [
 	"Map the result of the receiver to the arguments of aBlock."
 	
-	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
+	^ self ==> aBlock
 ]
 
 { #category : #operations }
@@ -149,7 +149,7 @@ PPParser >> parse: aStream [
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
-	^ self , self star ==> [ :value | value allButLast , value last ]
+	^ (PPSequenceParser with: self with: self star) ==> [ :value | value last copyWithFirst: value first ]
 ]
 
 { #category : #'operations-conveniance' }

@@ -8,8 +8,13 @@ Class {
 }
 
 { #category : #'instance-creation' }
-PPListParser class >> withAll: anArray [
-	^ self basicNew initializeWithAll: anArray
+PPListParser class >> with: aFirstParser with: aSecondParser [
+	^ self withAll: (Array with: aFirstParser with: aSecondParser)
+]
+
+{ #category : #'instance-creation' }
+PPListParser class >> withAll: aCollection [
+	^ self basicNew initializeWithAll: aCollection asArray
 ]
 
 { #category : #copying }

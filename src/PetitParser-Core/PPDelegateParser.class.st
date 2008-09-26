@@ -16,7 +16,7 @@ PPDelegateParser class >> on: aParser [
 ]
 
 { #category : #parsing }
-PPDelegateParser >> basicParse: aStream [ 
+PPDelegateParser >> basicParse: aStream [
 	^ parser parse: aStream
 ]
 

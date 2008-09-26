@@ -34,6 +34,11 @@ PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aSto
 ]
 
 { #category : #'accessing-compatibility' }
+PPToken >> isPatternVariable [
+	^ false
+]
+
+{ #category : #'accessing-compatibility' }
 PPToken >> isRBToken [
 	^ false
 ]

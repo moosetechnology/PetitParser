@@ -26,3 +26,8 @@ PPSequenceParser >> basicParse: aStream [
 				^ element ] ].
 	^ elements
 ]
+
+{ #category : #operations }
+PPSequenceParser >> map: aBlock [
+	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
+]
