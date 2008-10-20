@@ -117,11 +117,6 @@ PPParser >> foldRight: aBlock [
 PPParser >> initialize [
 ]
 
-{ #category : #testing }
-PPParser >> isUnresolved [
-	^ false
-]
-
 { #category : #'operations-mapping' }
 PPParser >> map: aBlock [
 	"Map the result of the receiver to the arguments of aBlock."
