@@ -12,9 +12,9 @@ Class {
 PPDemoTest >> addMulInterpreter [
 	"Same as testMiniGrammar but with semantic actions"
 	| mul prim add dec |
-	add := PPParser new.
-	mul := PPParser new.
-	prim := PPParser new.
+	add := PPUnresolvedParser new.
+	mul := PPUnresolvedParser new.
+	prim := PPUnresolvedParser new.
 	dec := ($0 - $9)									==> [ :token | token asciiValue - $0 asciiValue ].
 	add def: ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
 		/ mul.
@@ -29,9 +29,9 @@ PPDemoTest >> addMulInterpreter [
 PPDemoTest >> addMulParser [
 	"Simple demo of scripting a parser"
 	| add mul prim dec |
-	add := PPParser new.
-	mul := PPParser new.
-	prim := PPParser new.
+	add := PPUnresolvedParser new.
+	mul := PPUnresolvedParser new.
+	prim := PPUnresolvedParser new.
 	dec := $0 - $9.
 
 	add def: ( mul, $+ asParser, add )
@@ -47,13 +47,13 @@ PPDemoTest >> addMulParser [
 { #category : #examples }
 PPDemoTest >> straightLineParser [
 	| goal stm stmList id char dec exp expList mulExp primExp nonzero num lower upper |
-	goal := PPParser new.
-	stmList := PPParser new.
-	stm := PPParser new.
-	exp := PPParser new.
-	expList := PPParser new.
-	mulExp := PPParser new.
-	primExp := PPParser new.
+	goal := PPUnresolvedParser new.
+	stmList := PPUnresolvedParser new.
+	stm := PPUnresolvedParser new.
+	exp := PPUnresolvedParser new.
+	expList := PPUnresolvedParser new.
+	mulExp := PPUnresolvedParser new.
+	primExp := PPUnresolvedParser new.
 	
 	lower := $a - $z.
 	upper := $A - $Z.

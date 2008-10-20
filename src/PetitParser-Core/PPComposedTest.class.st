@@ -9,7 +9,7 @@ PPComposedTest >> testIfThenElse [
 	"S ::= if C then S else S | if C then S | X"
 	
 	| start if then else cond expr parser |
-	start := PPParser new.
+	start := PPUnresolvedParser new.
 	if := 'if' asParser token.
 	then := 'then' asParser token.
 	else := 'else' asParser token.
@@ -81,7 +81,7 @@ PPComposedTest >> testNestedComments [
 	end := '*/' asParser.
 	any := #any asParser.
 	
-	parser := PPParser new.
+	parser := PPUnresolvedParser new.
 	inside := end not , (parser / any).
 	parser def: begin , inside star , end.
 	
@@ -96,8 +96,8 @@ PPComposedTest >> testPalindrome [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPParser new.
-	s1 := PPParser new.
+	s0 := PPUnresolvedParser new.
+	s1 := PPUnresolvedParser new.
 	s0 def: ($a asParser , s1 , $a asParser)
 		/ ($b asParser , s1 , $b asParser)
 		/ ($c asParser , s1 , $c asParser).	
@@ -127,8 +127,8 @@ PPComposedTest >> testParseAaaBbb [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPParser new.
-	s1 := PPParser new.
+	s0 := PPUnresolvedParser new.
+	s1 := PPUnresolvedParser new.
 	s0 def: $a asParser , s1 , $b asParser.
 	s1 def: s0 / PPEpsilonParser new.
 	parser := s0 flatten.
@@ -154,7 +154,7 @@ PPComposedTest >> testParseAaaaaa [
 	"S ::= a a S | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPParser new.
+	s0 := PPUnresolvedParser new.
 	s1 := $a asParser , $a asParser , s0.
 	s0 def: s1 / PPEpsilonParser new.
 	parser := s0 flatten.
