@@ -28,13 +28,13 @@ PPCompositeParser >> initialize [
 		reject: [ :assoc | superInstVarNames includes: assoc value ].
 	instVarNames do: [ :assoc |
 		self instVarAt: assoc key put: (PPUnresolvedParser new name: assoc value) ].
+	parser := self start.
 	instVarNames do: [ :assoc |
 		(self respondsTo: assoc value)
 			ifFalse: [ self error: 'Unable to initialize ' , assoc value printString ]
 			ifTrue: [ 
 				(self instVarAt: assoc key) 
-					def: ((self perform: assoc value) name: assoc value) ] ].
-	parser := self start
+					def: ((self perform: assoc value) name: assoc value) ] ]
 ]
 
 { #category : #accessing }
