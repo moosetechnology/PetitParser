@@ -1,6 +1,9 @@
 Class {
 	#name : #PPParser,
 	#superclass : #Object,
+	#instVars : [
+		'name'
+	],
 	#category : #'PetitParser-Core'
 }
 

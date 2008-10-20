@@ -22,7 +22,7 @@ PPCompositeParser >> endOfLastToken [
 	^ 0
 ]
 
-{ #category : #initialization }
+{ #category : #'PetitParser-Builder' }
 PPCompositeParser >> initialize [
 	| resolved unresolved symbol |
 	super initialize.
@@ -30,8 +30,8 @@ PPCompositeParser >> initialize [
 	unresolved := Array new: self class instSize.
 	1 to: self class instSize do: [ :each |
 		self instVarAt: each put: (unresolved at: each put: PPUnresolvedParser new) ].
-	self class allInstVarNames keysAndValuesDo: [ :index :name |
-		symbol := index = 1 ifTrue: [ #start ] ifFalse: [ name asSymbol ].
+	self class allInstVarNames keysAndValuesDo: [ :index :each |
+		symbol := index = 1 ifTrue: [ #start ] ifFalse: [ each asSymbol ].
 		(self respondsTo: symbol)
 			ifTrue: [ resolved at: index put: (self perform: symbol) ]
 			ifFalse: [ self error: 'Unable to initialize ' , symbol printString ].
