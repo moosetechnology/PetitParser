@@ -129,6 +129,16 @@ PPParser >> map: aBlock [
 	^ self ==> aBlock
 ]
 
+{ #category : #accessing }
+PPParser >> name [
+	^ name
+]
+
+{ #category : #accessing }
+PPParser >> name: aString [
+	name := aString
+]
+
 { #category : #operations }
 PPParser >> not [
 	"Answer a parser that succeeds whenever the receiver fails."
@@ -153,6 +163,13 @@ PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
 	^ (PPSequenceParser with: self with: self star) ==> [ :value | value last copyWithFirst: value first ]
+]
+
+{ #category : #printing }
+PPParser >> printOn: aStream [
+	super printOn: aStream.
+	self name isNil
+		ifFalse: [ aStream nextPut: $(; nextPutAll: self name; nextPut: $) ]
 ]
 
 { #category : #'operations-conveniance' }
