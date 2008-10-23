@@ -2,15 +2,15 @@ Extension { #name : #Collection }
 
 { #category : #'*petitparser' }
 Collection >> flatten [
-	^ (self flattenInto: OrderedCollection new) asArray
+	^ Array streamContents: [ :stream |
+		self flattenedDo: [ :each |
+			stream nextPut: each ] ]
 ]
 
 { #category : #'*petitparser' }
-Collection >> flattenInto: aCollection [
+Collection >> flattenedDo: aBlock [
 	self do: [ :each |
-		each isNil ifFalse: [
-			(each isCollection and: [ each isString not ])
-				ifTrue: [ each flattenInto: aCollection ]
-				ifFalse: [ aCollection add: each ] ] ].
-	^ aCollection
+		(each isCollection and: [ each isString not ])
+			ifTrue: [ each flattenedDo: aBlock ]
+			ifFalse: [ aBlock value: each ] ]
 ]
