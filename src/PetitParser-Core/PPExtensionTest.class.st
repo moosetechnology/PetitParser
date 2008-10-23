@@ -33,6 +33,15 @@ PPExtensionTest >> testClosure [
 ]
 
 { #category : #testing }
+PPExtensionTest >> testFlatten [
+	self assert: #() flatten = #().
+	self assert: #(1 2) flatten = #(1 2).
+	self assert: #('abc') flatten = #('abc').
+	self assert: #(1 (2 3) 4) flatten = #(1 2 3 4).
+	self assert: #(1 (2 () (3 (((4)))))) flatten = #(1 2 3 4)
+]
+
+{ #category : #testing }
 PPExtensionTest >> testOrdered [
 	| parser |
 	parser := #(1 2) asParser.

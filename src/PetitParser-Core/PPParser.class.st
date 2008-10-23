@@ -190,3 +190,10 @@ PPParser >> token [
 	
 	^ PPTokenParser on: self
 ]
+
+{ #category : #operations }
+PPParser >> wrapped [
+	"Answer a new parser that is simply wrapped."
+	
+	^ PPDelegateParser on: self
+]
