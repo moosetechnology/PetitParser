@@ -145,7 +145,7 @@ PPParser >> not [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ self / PPEpsilonParser new
+	^ PPChoiceParser with: self with: PPEpsilonParser new
 ]
 
 { #category : #parsing }
