@@ -22,6 +22,11 @@ PPListParser >> copyWith: aParser [
 	^ self species withAll: (parsers copyWith: aParser)
 ]
 
+{ #category : #utilities }
+PPListParser >> following [
+	^ parsers
+]
+
 { #category : #initialization }
 PPListParser >> initialize [
 	super initialize.

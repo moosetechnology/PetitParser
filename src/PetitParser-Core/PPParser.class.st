@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #'instance-creation' }
+PPParser class >> named: aString [
+	^ self new name: aString
+]
+
+{ #category : #'instance-creation' }
 PPParser class >> new [
 	^ self basicNew initialize
 ]
@@ -113,8 +118,20 @@ PPParser >> foldRight: aBlock [
 		args at: size ]
 ]
 
+{ #category : #utilities }
+PPParser >> following [
+	"Answer a set of parsers that could follow the receiver."
+	
+	^ #()
+]
+
 { #category : #initialization }
 PPParser >> initialize [
+]
+
+{ #category : #testing }
+PPParser >> isUnresolved [
+	^ false
 ]
 
 { #category : #'operations-mapping' }
@@ -189,6 +206,19 @@ PPParser >> token [
 	"Answer a new parser that answers a token."
 	
 	^ PPTokenParser on: self
+]
+
+{ #category : #utilities }
+PPParser >> walk: aBlock [
+	self walk: aBlock seen: IdentitySet new
+]
+
+{ #category : #utilities }
+PPParser >> walk: aBlock seen: aCollection [
+	aBlock value: (aCollection add: self).
+	self following do: [ :each |
+		(aCollection includes: each)
+			ifFalse: [ each walk: aBlock seen: aCollection ] ]
 ]
 
 { #category : #operations }

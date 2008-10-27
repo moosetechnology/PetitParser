@@ -20,6 +20,11 @@ PPDelegateParser >> basicParse: aStream [
 	^ parser parse: aStream
 ]
 
+{ #category : #utilities }
+PPDelegateParser >> following [
+	^ Array with: parser
+]
+
 { #category : #initialization }
 PPDelegateParser >> setParser: aParser [
 	parser := aParser

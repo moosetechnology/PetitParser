@@ -4,9 +4,9 @@ Class {
 	#category : #'PetitParser-Builder'
 }
 
-{ #category : #'instance-creation' }
-PPUnresolvedParser class >> on: aSymbol [
-	^ self new initializeOn: aSymbol
+{ #category : #testing }
+PPUnresolvedParser >> isUnresolved [
+	^ true
 ]
 
 { #category : #parsing }
