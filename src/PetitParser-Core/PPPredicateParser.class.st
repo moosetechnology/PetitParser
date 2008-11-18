@@ -61,6 +61,16 @@ PPPredicateParser class >> expect: anObject [
 ]
 
 { #category : #'factory-chars' }
+PPPredicateParser class >> hex [
+	^ self 
+		on: [ :each | 
+			(each between: $0 and: $9) 
+				or: [ (each between: $a and: $f) 
+				or: [ (each between: $A and: $F) ] ] ] 
+		message: 'hex digit expected'
+]
+
+{ #category : #'factory-chars' }
 PPPredicateParser class >> letter [
 	^ self 
 		on: [ :each | each isLetter ] message: 'letter expected'

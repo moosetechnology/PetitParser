@@ -141,6 +141,27 @@ PPParser >> map: aBlock [
 	^ self ==> aBlock
 ]
 
+{ #category : #operations }
+PPParser >> max: anInteger [
+	"Answer a new parser that parses the receiver at most anInteger times."
+	
+	^ PPRepeatingParser on: self max: anInteger
+]
+
+{ #category : #operations }
+PPParser >> min: anInteger [
+	"Answer a new parser that parses the receiver at least anInteger times."
+	
+	^ PPRepeatingParser on: self min: anInteger
+]
+
+{ #category : #operations }
+PPParser >> min: aMinInteger max: aMaxInteger [
+	"Answer a new parser that parses the receiver at least aMinInteger and at most aMaxInteger times."
+	
+	^ PPRepeatingParser on: self min: aMinInteger max: aMaxInteger
+]
+
 { #category : #accessing }
 PPParser >> name [
 	^ name
@@ -174,7 +195,7 @@ PPParser >> parse: aStream [
 PPParser >> plus [
 	"Answer a new parser that parses the receiver one or more times."
 
-	^ (PPSequenceParser with: self with: self star) ==> [ :value | value last copyWithFirst: value first ]
+	^ self min: 1
 ]
 
 { #category : #printing }
@@ -198,7 +219,7 @@ PPParser >> separatedBy: aParser [
 PPParser >> star [
 	"Answer a new parser that parses the receiver zero or more times."
 
-	^ PPStarParser on: self
+	^ PPRepeatingParser on: self
 ]
 
 { #category : #operations }

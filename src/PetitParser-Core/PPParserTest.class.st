@@ -121,6 +121,44 @@ PPParserTest >> testFlatten [
 ]
 
 { #category : #testing }
+PPParserTest >> testMax [
+	| parser |
+	parser := $a asParser max: 2.
+
+	self assert: parser parse: '' to: #().
+	self assert: parser parse: 'a' to: #($a).
+	self assert: parser parse: 'aa' to: #($a $a).
+	self assert: parser parse: 'aaa' to: #($a $a) end: 2.
+	self assert: parser parse: 'aaaa' to: #($a $a) end: 2
+]
+
+{ #category : #testing }
+PPParserTest >> testMin [
+	| parser |
+	parser := $a asParser min: 2.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'.
+	self assert: parser parse: 'aa' to: #($a $a).
+	self assert: parser parse: 'aaa' to: #($a $a $a).
+	self assert: parser parse: 'aaaa' to: #($a $a $a $a)
+]
+
+{ #category : #testing }
+PPParserTest >> testMinMax [
+	| parser |
+	parser := $a asParser min: 2 max: 4.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'.
+	self assert: parser parse: 'aa' to: #($a $a).
+	self assert: parser parse: 'aaa' to: #($a $a $a).
+	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
+	self assert: parser parse: 'aaaaa' to: #($a $a $a $a) end: 4.
+	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4
+]
+
+{ #category : #testing }
 PPParserTest >> testNot [
 	| parser |
 	parser := 'foo' asParser flatten , 'bar' asParser flatten not.
