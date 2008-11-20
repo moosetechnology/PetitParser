@@ -66,7 +66,7 @@ PPParser >> def: aParser [
 PPParser >> delimitedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."
 	
-	^ (self separatedBy: aParser) , (aParser optional) ==> [ :node | 
+	^ (PPSequenceParser with: (self separatedBy: aParser) with: (aParser optional)) ==> [ :node | 
 		node second	isNil
 			ifTrue: [ node first ]
 			ifFalse: [ node first copyWith: node second ] ]
@@ -209,7 +209,7 @@ PPParser >> printOn: aStream [
 PPParser >> separatedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated by aParser."
 	
-	^ (self) , (aParser , self) star ==> [ :node | 
+	^ (PPSequenceParser with: self with: (PPSequenceParser with: aParser with: self) star) ==> [ :node |
 		Array streamContents: [ :stream |
 			stream nextPut: node first.
 			node second do: [ :each | stream nextPutAll: each ] ] ]
