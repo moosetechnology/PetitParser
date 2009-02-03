@@ -24,5 +24,5 @@ PPPluggableParser >> basicParse: aStream [
 
 { #category : #accessing }
 PPPluggableParser >> block: aBlock [
-	block := aBlock
+	block := aBlock fixTemps
 ]

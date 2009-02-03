@@ -122,9 +122,9 @@ PPPredicateParser >> basicParse: aStream [
 
 { #category : #initialization }
 PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
-	predicate := aBlock.
+	predicate := aBlock fixTemps.
 	predicateMessage := aString.
-	negated := aNegatedBlock.
+	negated := aNegatedBlock fixTemps.
 	negatedMessage := aNegatedString
 ]
 

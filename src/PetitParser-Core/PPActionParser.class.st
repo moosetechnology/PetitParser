@@ -20,5 +20,5 @@ PPActionParser >> basicParse: aStream [
 
 { #category : #accessing }
 PPActionParser >> block: aBlock [
-	block := aBlock
+	block := aBlock fixTemps
 ]
