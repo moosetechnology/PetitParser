@@ -1,11 +1,11 @@
 Extension { #name : #PositionableStream }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-core-converting' }
 PositionableStream >> asParserStream [
 	^ collection asParserStream
 ]
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-core-accessing' }
 PositionableStream >> collection [
 	^ collection
 ]

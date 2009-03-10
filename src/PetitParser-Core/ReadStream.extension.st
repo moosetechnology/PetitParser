@@ -1,6 +1,6 @@
 Extension { #name : #ReadStream }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-core' }
 ReadStream >> for: aParser do: aBlock [
 	^ aBlock value
 ]

@@ -1,6 +1,6 @@
 Extension { #name : #Text }
 
-{ #category : #'*petitparser' }
+{ #category : #'*petitparser-core' }
 Text >> asParserStream [
 	^ string asParserStream
 ]

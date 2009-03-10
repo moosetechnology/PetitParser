@@ -1,11 +1,11 @@
 Extension { #name : #SequenceableCollection }
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*petitparser-core-converting' }
 SequenceableCollection >> asParser [
 	^ PPSequenceParser withAll: (self collect: [ :each | each asParser ])
 ]
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*petitparser-core-converting' }
 SequenceableCollection >> asParserStream [
 	^ PPStream on: self
 ]

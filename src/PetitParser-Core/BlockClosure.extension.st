@@ -1,6 +1,6 @@
 Extension { #name : #BlockClosure }
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*petitparser-core-converting' }
 BlockClosure >> asParser [
 	^ PPPluggableParser on: self
 ]

@@ -1,11 +1,11 @@
 Extension { #name : #Object }
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*petitparser-core-converting' }
 Object >> asParser [
 	^ PPPredicateParser expect: self
 ]
 
-{ #category : #'*petitparser-testing' }
+{ #category : #'*petitparser-core-testing' }
 Object >> isFailure [
 	^ false
 ]
