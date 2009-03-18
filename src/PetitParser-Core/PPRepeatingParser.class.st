@@ -11,22 +11,22 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser [
 	^ (super on: aParser) setMin: 0 max: SmallInteger maxVal
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser max: aMaxInteger [
 	^ (super on: aParser) setMin: 0 max: aMaxInteger
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser min: aMinInteger [
 	^ (super on: aParser) setMin: aMinInteger max: SmallInteger maxVal 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
 	^ (super on: aParser) setMin: aMinInteger max: aMaxInteger
 ]

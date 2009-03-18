@@ -20,7 +20,10 @@ PPFailure class >> reason: aString [
 
 { #category : #'instance-creation' }
 PPFailure class >> reason: aString at: anInteger [
-	^ self basicNew reason: aString; position: anInteger
+	^ self basicNew
+		reason: aString;
+		position: anInteger;
+		yourself
 ]
 
 { #category : #testing }
