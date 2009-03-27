@@ -30,21 +30,18 @@ PPStream >> for: aParser do: aBlock [
 	^ memento result
 ]
 
-{ #category : #initialization }
-PPStream >> initialize [
-	cache := IdentityDictionary new
-]
-
 { #category : #private }
 PPStream >> on: aCollection [
 	self initialize.
 	super on: aCollection
 ]
 
-{ #category : #private }
+{ #category : #initialization }
 PPStream >> on: aCollection from: firstIndex to: lastIndex [
-	self initialize.
-	super on: aCollection from: firstIndex to: lastIndex
+	cache := IdentityDictionary new.
+	collection := aCollection.
+	position := firstIndex.
+	readLimit := lastIndex
 ]
 
 { #category : #accessing }
