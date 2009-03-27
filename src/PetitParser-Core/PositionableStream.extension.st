@@ -2,7 +2,7 @@ Extension { #name : #PositionableStream }
 
 { #category : #'*petitparser-core-converting' }
 PositionableStream >> asParserStream [
-	^ self contents asParserStream
+	^ PPStream on: collection from: position to: readLimit
 ]
 
 { #category : #'*petitparser-core-accessing' }
