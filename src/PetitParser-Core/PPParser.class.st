@@ -35,7 +35,15 @@ PPParser >> / aParser [
 PPParser >> ==> aBlock [
 	"Assigns aBlock as a success action handler."
 	
-	^ (PPActionParser on: self) block: aBlock
+	^ PPActionParser on: self block: aBlock
+]
+
+{ #category : #utilities }
+PPParser >> allFollowing [
+	"Answer a set of all parsers that could follow the receiver."
+	
+	^ Array streamContents: [ :stream | 
+		self walk: [ :parser | stream nextPut: parser ] ]
 ]
 
 { #category : #operations }
@@ -59,14 +67,14 @@ PPParser >> basicParse: aStream [
 PPParser >> def: aParser [
 	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
 
-	self becomeForward: aParser
+	^ self becomeForward: aParser
 ]
 
 { #category : #'operations-conveniance' }
 PPParser >> delimitedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."
 	
-	^ (PPSequenceParser with: (self separatedBy: aParser) with: (aParser optional)) ==> [ :node | 
+	^ (self separatedBy: aParser) , (aParser optional) ==> [ :node |
 		node second	isNil
 			ifTrue: [ node first ]
 			ifFalse: [ node first copyWith: node second ] ]
@@ -120,7 +128,7 @@ PPParser >> foldRight: aBlock [
 
 { #category : #utilities }
 PPParser >> following [
-	"Answer a set of parsers that could follow the receiver."
+	"Answer a set of immediate parsers that could follow the receiver."
 	
 	^ #()
 ]
@@ -183,7 +191,7 @@ PPParser >> not [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ PPChoiceParser with: self with: PPEpsilonParser new
+	^ self / PPEpsilonParser new
 ]
 
 { #category : #parsing }
@@ -209,7 +217,7 @@ PPParser >> printOn: aStream [
 PPParser >> separatedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated by aParser."
 	
-	^ (PPSequenceParser with: self with: (PPSequenceParser with: aParser with: self) star) ==> [ :node |
+	^ (self) , (aParser , self) star ==> [ :node |
 		Array streamContents: [ :stream |
 			stream nextPut: node first.
 			node second do: [ :each | stream nextPutAll: each ] ] ]
@@ -231,12 +239,15 @@ PPParser >> token [
 
 { #category : #utilities }
 PPParser >> walk: aBlock [
+	"Walk over all the parsers that are possibly reachable from the receiver and evaluate aBlock on each of them."
+
 	self walk: aBlock seen: IdentitySet new
 ]
 
-{ #category : #utilities }
+{ #category : #private }
 PPParser >> walk: aBlock seen: aCollection [
-	aBlock value: (aCollection add: self).
+	aBlock value: self.
+	aCollection add: self.
 	self following do: [ :each |
 		(aCollection includes: each)
 			ifFalse: [ each walk: aBlock seen: aCollection ] ]

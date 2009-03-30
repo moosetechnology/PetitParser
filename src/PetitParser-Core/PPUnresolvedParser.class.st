@@ -4,12 +4,12 @@ Class {
 	#category : #'PetitParser-Builder'
 }
 
+{ #category : #parsing }
+PPUnresolvedParser >> basicParse: aStream [
+	self error: self printString , ' need to be resolved before execution.'
+]
+
 { #category : #testing }
 PPUnresolvedParser >> isUnresolved [
 	^ true
-]
-
-{ #category : #parsing }
-PPUnresolvedParser >> parse: aStream [
-	self error: self printString , ' need to be resolved before execution.'
 ]

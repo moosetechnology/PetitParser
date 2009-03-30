@@ -18,17 +18,17 @@ PPRepeatingParser class >> on: aParser [
 
 { #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser max: aMaxInteger [
-	^ (super on: aParser) setMin: 0 max: aMaxInteger
+	^ (self on: aParser) setMin: 0 max: aMaxInteger
 ]
 
 { #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser min: aMinInteger [
-	^ (super on: aParser) setMin: aMinInteger max: SmallInteger maxVal 
+	^ (self on: aParser) setMin: aMinInteger max: SmallInteger maxVal 
 ]
 
 { #category : #'instance creation' }
 PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
-	^ (super on: aParser) setMin: aMinInteger max: aMaxInteger
+	^ (self on: aParser) setMin: aMinInteger max: aMaxInteger
 ]
 
 { #category : #parsing }
