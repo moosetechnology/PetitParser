@@ -184,6 +184,19 @@ PPParserTest >> testMinMax [
 	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4
 ]
 
+{ #category : #'testing-accessing' }
+PPParserTest >> testNamed [
+	| parser |
+	parser := PPSequenceParser new.
+	self assert: parser name isNil.
+	
+	parser := PPChoiceParser named: 'choice'.
+	self assert: parser name = 'choice'.
+	
+	parser := $* asParser name: 'star'.
+	self assert: parser name = 'star'
+]
+
 { #category : #testing }
 PPParserTest >> testNot [
 	| parser |
@@ -228,6 +241,16 @@ PPParserTest >> testPlus [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'.
 	self assert: parser fail: 'ba'
+]
+
+{ #category : #'testing-accessing' }
+PPParserTest >> testPrint [
+	| parser |
+	parser := PPSequenceParser new.
+	self assert: parser printString = 'a PPSequenceParser'.
+	
+	parser := PPChoiceParser named: 'choice'.
+	self assert: parser printString = 'a PPChoiceParser(choice)'
 ]
 
 { #category : #testing }

@@ -6,3 +6,8 @@ Character >> - aCharacter [
 	
 	^ PPPredicateParser between: self and: aCharacter
 ]
+
+{ #category : #'*petitparser-converting' }
+Character >> asParser [
+	^ PPPredicateParser char: self
+]

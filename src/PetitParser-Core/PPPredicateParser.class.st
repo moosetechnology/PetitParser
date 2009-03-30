@@ -46,7 +46,7 @@ PPPredicateParser class >> digit [
 		negated: [ :each | each isDigit not ] message: 'no digit expected'
 ]
 
-{ #category : #'factory-objects' }
+{ #category : #'factory-chars' }
 PPPredicateParser class >> eol [
 	^ self
 		on: [ :each | String crlf includes: each ] message: 'newline expected'
