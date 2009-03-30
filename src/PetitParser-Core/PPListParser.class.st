@@ -7,12 +7,12 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPListParser class >> with: aFirstParser with: aSecondParser [
 	^ self withAll: (Array with: aFirstParser with: aSecondParser)
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPListParser class >> withAll: aCollection [
 	^ self basicNew initializeWithAll: aCollection asArray
 ]

@@ -10,7 +10,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPDelegateParser class >> on: aParser [
 	^ self new setParser: aParser
 ]

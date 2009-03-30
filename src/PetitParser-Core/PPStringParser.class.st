@@ -10,7 +10,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPStringParser class >> on: aString [
 	^ self new string: aString
 ]

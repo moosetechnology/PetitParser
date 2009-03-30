@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPPluggableParser class >> on: aBlock [
 	^ self new block: aBlock
 ]

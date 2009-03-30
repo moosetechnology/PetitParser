@@ -10,7 +10,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPFailingParser class >> message: aString [
 	^ self new message: aString
 ]

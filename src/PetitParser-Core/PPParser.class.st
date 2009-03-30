@@ -7,12 +7,12 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPParser class >> named: aString [
 	^ self new name: aString
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPParser class >> new [
 	^ self basicNew initialize
 ]

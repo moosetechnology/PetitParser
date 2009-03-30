@@ -84,12 +84,12 @@ PPPredicateParser class >> lowercase [
 		negated: #isUppercase message: 'uppercase letter expected'
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPPredicateParser class >> on: aBlock message: aString [
 	^ self on: aBlock message: aString negated: [ :each | (aBlock value: each) not ] message: 'no ' , aString
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPPredicateParser class >> on: aBlock message: aString negated: aNegatedBlock message: aNegatedString [
 	^ self new initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString
 ]

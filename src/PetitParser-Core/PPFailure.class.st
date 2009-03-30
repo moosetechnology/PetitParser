@@ -8,17 +8,17 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPFailure class >> at: anInteger [
 	^ self basicNew position: anInteger
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPFailure class >> reason: aString [
 	^ self basicNew reason: aString
 ]
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPFailure class >> reason: aString at: anInteger [
 	^ self basicNew
 		reason: aString;

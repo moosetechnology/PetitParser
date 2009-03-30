@@ -20,7 +20,7 @@ PPStream >> for: aParser do: aBlock [
 		ifAbsentPut: [ Array new: collection size + 1 ].
 	memento := (buffer at: position + 1)
 		ifNil: [ buffer at: position + 1 put: PPMemento new ].
-	memento result isNil 
+	memento result isNil
 		ifTrue: [
 			memento result: (readLimit - position + 1 < memento count
 				ifTrue: [ PPFailure reason: 'overflow' at: position ]

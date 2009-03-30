@@ -9,7 +9,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'instance-creation' }
+{ #category : #'instance creation' }
 PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
 	^ self basicNew 
 		initializeOn: aSequenzeableCollection
