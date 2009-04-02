@@ -15,11 +15,6 @@ PPExamplesTest >> identifier [
 ]
 
 { #category : #parsers }
-PPExamplesTest >> integer [
-	^ (#digit asParser plus) flatten
-]
-
-{ #category : #parsers }
 PPExamplesTest >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten
 ]

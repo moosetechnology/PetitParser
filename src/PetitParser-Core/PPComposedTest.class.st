@@ -35,6 +35,22 @@ PPComposedTest >> testIfThenElse [
 ]
 
 { #category : #testing }
+PPComposedTest >> testLeftRecursion [
+	"S ::= S 'x' S / '1'"
+	
+	| parser |
+	parser := PPUnresolvedParser new.
+	parser def: ((parser , $x asParser , parser) / $1 asParser) memoized flatten.
+
+	self assert: parser parse: '1' to: '1'.
+	self assert: parser parse: '1x1' to: '1x1'.
+	self assert: parser parse: '1x1x1' to: '1x1x1'.
+	self assert: parser parse: '1x1x1x1' to: '1x1x1x1'.
+	self assert: parser parse: '1x1x1x1x1' to: '1x1x1x1x1'.
+	self assert: parser parse: '1x1x1x1x1x1' to: '1x1x1x1x1x1'
+]
+
+{ #category : #testing }
 PPComposedTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	

@@ -36,6 +36,16 @@ PPParserTest >> testAnd [
 ]
 
 { #category : #testing }
+PPParserTest >> testBlock [
+	| parser |
+	parser := [ :s | s next ] asParser.
+	
+	self assert: parser parse: 'ab' to: $a end: 1.
+	self assert: parser parse: 'b' to: $b.
+	self assert: parser parse: '' to: nil
+]
+
+{ #category : #testing }
 PPParserTest >> testChoice [
 	| parser |
 	parser := $a asParser / $b asParser.
@@ -156,6 +166,24 @@ PPParserTest >> testMax [
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a) end: 2.
 	self assert: parser parse: 'aaaa' to: #($a $a) end: 2
+]
+
+{ #category : #testing }
+PPParserTest >> testMemoized [
+	| count parser twice |
+	count := 0.
+	parser := [ :s | count := count + 1. s next ] asParser memoized.
+	twice := parser and , parser.
+	
+	count := 0.
+	self assert: parser parse: 'a' to: $a.
+	self assert: count = 1.
+
+	count := 0.
+	self assert: twice parse: 'a' to: #($a $a).
+	self assert: count = 1.
+	
+	self assert: parser memoized = parser
 ]
 
 { #category : #testing }

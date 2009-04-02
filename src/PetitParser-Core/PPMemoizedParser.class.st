@@ -13,23 +13,24 @@ Class {
 
 { #category : #operations }
 PPMemoizedParser >> memoized [
+	"Ther is no point in memoizing more than once."
+
 	^ self
 ]
 
 { #category : #parsing }
 PPMemoizedParser >> parse: aStream [
-	| position memento |
+	| memento |
 	aStream == stream
 		ifFalse: [ self reset: aStream ].
-	position := stream position.
-	memento := (buffer at: position + 1)
-		ifNil: [ buffer at: position + 1 put: PPMemento new ].
-	memento result isNil
+	memento := (buffer at: stream position + 1)
+		ifNil: [ buffer at: stream position + 1 put: PPMemento new ].
+	memento position isNil
 		ifTrue: [
-			memento result: (stream size - position + 1 < memento count
-				ifTrue: [ PPFailure reason: 'overflow' at: position ]
-				ifFalse: [ memento increment. super parse: aStream ]).
-			memento position: position ]
+			memento result: (stream size - stream position + 2 < memento count
+				ifTrue: [ PPFailure reason: 'overflow' at: stream position ]
+				ifFalse: [ memento increment. super parse: stream ]).
+			memento position: stream position ]
 		ifFalse: [ stream position: memento position ].
 	^ memento result
 ]

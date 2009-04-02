@@ -14,7 +14,7 @@ PPPluggableParser class >> on: aBlock [
 
 { #category : #accessing }
 PPPluggableParser >> block: aBlock [
-	block := aBlock fixTemps
+	block := aBlock
 ]
 
 { #category : #parsing }
