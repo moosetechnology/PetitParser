@@ -12,24 +12,6 @@ PPStream >> asParserStream [
 	^ self
 ]
 
-{ #category : #accessing }
-PPStream >> for: aParser do: aBlock [
-	| buffer memento |
-	buffer := cache
-		at: aParser
-		ifAbsentPut: [ Array new: collection size + 1 ].
-	memento := (buffer at: position + 1)
-		ifNil: [ buffer at: position + 1 put: PPMemento new ].
-	memento result isNil
-		ifTrue: [
-			memento result: (readLimit - position + 1 < memento count
-				ifTrue: [ PPFailure reason: 'overflow' at: position ]
-				ifFalse: [ memento increment. aBlock value ]).
-			memento position: position ]
-		ifFalse: [ position := memento position ].
-	^ memento result
-]
-
 { #category : #initialization }
 PPStream >> initialize [
 	cache := IdentityDictionary new

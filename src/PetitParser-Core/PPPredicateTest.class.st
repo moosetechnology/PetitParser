@@ -63,15 +63,6 @@ PPPredicateTest >> testDigit [
 ]
 
 { #category : #testing }
-PPPredicateTest >> testEol [
-	| parser |
-	parser := PPPredicateParser eol.
-	self assert: parser parse: String cr to: Character cr.
-	self assert: parser parse: String lf to: Character lf.
-	self assert: parser fail: ' '
-]
-
-{ #category : #testing }
 PPPredicateTest >> testHex [
 	| parser |
 	parser := #hex asParser.

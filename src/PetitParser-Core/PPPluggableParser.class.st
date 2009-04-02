@@ -12,17 +12,17 @@ PPPluggableParser class >> on: aBlock [
 	^ self new block: aBlock
 ]
 
+{ #category : #accessing }
+PPPluggableParser >> block: aBlock [
+	block := aBlock fixTemps
+]
+
 { #category : #parsing }
-PPPluggableParser >> basicParse: aStream [
+PPPluggableParser >> parse: aStream [
 	| position result |
 	position := aStream position.
 	result := block value: aStream.
 	result isFailure
 		ifTrue: [ aStream position: position ].
 	^ result
-]
-
-{ #category : #accessing }
-PPPluggableParser >> block: aBlock [
-	block := aBlock fixTemps
 ]

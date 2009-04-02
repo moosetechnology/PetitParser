@@ -15,14 +15,14 @@ PPDelegateParser class >> on: aParser [
 	^ self new setParser: aParser
 ]
 
-{ #category : #parsing }
-PPDelegateParser >> basicParse: aStream [
-	^ parser parse: aStream
-]
-
 { #category : #utilities }
 PPDelegateParser >> following [
 	^ Array with: parser
+]
+
+{ #category : #parsing }
+PPDelegateParser >> parse: aStream [
+	^ parser parse: aStream
 ]
 
 { #category : #initialization }

@@ -46,7 +46,7 @@ PPPredicateParser class >> digit [
 		negated: [ :each | each isDigit not ] message: 'no digit expected'
 ]
 
-{ #category : #'factory-chars' }
+{ #category : #'factory-objects' }
 PPPredicateParser class >> eol [
 	^ self
 		on: [ :each | String crlf includes: each ] message: 'newline expected'
@@ -113,13 +113,6 @@ PPPredicateParser class >> word [
 		negated: [ :each | each isAlphaNumeric not ] message: 'no letter or digit expected'
 ]
 
-{ #category : #parsing }
-PPPredicateParser >> basicParse: aStream [
-	^ (aStream atEnd not and: [ predicate value: aStream peek ])
-		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
-		ifTrue: [ aStream next ]
-]
-
 { #category : #initialization }
 PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
 	predicate := aBlock fixTemps.
@@ -135,4 +128,11 @@ PPPredicateParser >> negate [
 	^ PPPredicateParser 
 		on: negated message: negatedMessage 
 		negated: predicate message: predicateMessage
+]
+
+{ #category : #parsing }
+PPPredicateParser >> parse: aStream [
+	^ (aStream atEnd not and: [ predicate value: aStream peek ])
+		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
+		ifTrue: [ aStream next ]
 ]

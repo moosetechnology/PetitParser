@@ -16,7 +16,7 @@ PPStringParser class >> on: aString [
 ]
 
 { #category : #parsing }
-PPStringParser >> basicParse: aStream [
+PPStringParser >> parse: aStream [
 	| position result |
 	position := aStream position.
 	result := aStream next: string size.

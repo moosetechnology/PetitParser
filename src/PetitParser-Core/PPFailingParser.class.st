@@ -15,12 +15,12 @@ PPFailingParser class >> message: aString [
 	^ self new message: aString
 ]
 
-{ #category : #parsing }
-PPFailingParser >> basicParse: aStream [
-	^ PPFailure reason: message at: aStream position
-]
-
 { #category : #accessing }
 PPFailingParser >> message: aString [
 	message := aString
+]
+
+{ #category : #parsing }
+PPFailingParser >> parse: aStream [
+	^ PPFailure reason: message at: aStream position
 ]

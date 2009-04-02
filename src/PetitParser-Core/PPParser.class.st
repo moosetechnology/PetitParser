@@ -58,11 +58,6 @@ PPParser >> asParser [
 	^ self
 ]
 
-{ #category : #parsing }
-PPParser >> basicParse: aStream [
-	self subclassResponsibility
-]
-
 { #category : #operations }
 PPParser >> def: aParser [
 	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
@@ -157,6 +152,13 @@ PPParser >> max: anInteger [
 ]
 
 { #category : #operations }
+PPParser >> memoized [
+	"Answer a memoized parser, for refraining redundant computations. This ensures polynomial time O(n^4) for left-recursive grammars and O(n^3) for non left-recursive grammars in the worst case."
+	
+	^ PPMemoizedParser on: self
+]
+
+{ #category : #operations }
 PPParser >> min: anInteger [
 	"Answer a new parser that parses the receiver at least anInteger times."
 	
@@ -196,7 +198,7 @@ PPParser >> optional [
 
 { #category : #parsing }
 PPParser >> parse: aStream [
-	^ aStream for: self do: [ self basicParse: aStream ]
+	self subclassResponsibility
 ]
 
 { #category : #operations }
@@ -246,11 +248,11 @@ PPParser >> walk: aBlock [
 
 { #category : #private }
 PPParser >> walk: aBlock seen: aCollection [
+	aBlock value: self.
+	aCollection add: self.
 	self following do: [ :each |
-		(aCollection includes: each) ifFalse: [ 
-			aBlock value: each.
-			aCollection add: each.
-			each walk: aBlock seen: aCollection ] ]
+		(aCollection includes: each)
+			ifFalse: [ each walk: aBlock seen: aCollection ] ]
 ]
 
 { #category : #operations }

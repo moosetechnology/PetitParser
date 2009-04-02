@@ -32,19 +32,19 @@ PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
 ]
 
 { #category : #parsing }
-PPRepeatingParser >> basicParse: aStream [
+PPRepeatingParser >> parse: aStream [
 	| start element elements |
 	start := aStream position.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [
-		element := super basicParse: aStream.
+		element := super parse: aStream.
 		element isFailure
 			ifFalse: [ elements addLast: element ]
 			ifTrue: [
 				aStream position: start.
 				^ element ] ].
 	[ elements size < max ] whileTrue: [
-		element := super basicParse: aStream.
+		element := super parse: aStream.
 	 	element isFailure
 			ifTrue: [ ^ elements asArray ].
 		elements addLast: element ].

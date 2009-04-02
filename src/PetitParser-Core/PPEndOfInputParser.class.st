@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #parsing }
-PPEndOfInputParser >> basicParse: aStream [
+PPEndOfInputParser >> parse: aStream [
 	| position result |
 	position := aStream position.
-	result := super basicParse: aStream.
+	result := super parse: aStream.
 	(result isFailure or: [ aStream atEnd ])
 		ifTrue: [ ^ result ].
 	aStream position: position.

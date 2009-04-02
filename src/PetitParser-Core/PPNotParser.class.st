@@ -4,14 +4,14 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #parsing }
-PPNotParser >> basicParse: aStream [ 
-	| element |
-	element := super basicParse: aStream.
-	^ element isFailure ifFalse: [ PPFailure at: aStream position ]
-]
-
 { #category : #operations }
 PPNotParser >> not [
 	^ parser
+]
+
+{ #category : #parsing }
+PPNotParser >> parse: aStream [
+	| element |
+	element := super parse: aStream.
+	^ element isFailure ifFalse: [ PPFailure at: aStream position ]
 ]

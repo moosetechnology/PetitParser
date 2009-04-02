@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #parsing }
-PPAndParser >> basicParse: aStream [
+PPAndParser >> parse: aStream [
 	| element position |
 	position := aStream position.
-	element := super basicParse: aStream.
+	element := super parse: aStream.
 	aStream position: position.
 	^ element
 ]

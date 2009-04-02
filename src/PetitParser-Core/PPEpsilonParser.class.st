@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #parsing }
-PPEpsilonParser >> basicParse: aStream [
-	^ nil
-]
-
-{ #category : #parsing }
 PPEpsilonParser >> parse: aStream [
 	^ nil
 ]

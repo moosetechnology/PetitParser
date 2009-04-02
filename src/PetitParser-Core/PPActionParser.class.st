@@ -15,15 +15,15 @@ PPActionParser class >> on: aParser block: aBlock [
 	^ (self on: aParser) block: aBlock
 ]
 
-{ #category : #parsing }
-PPActionParser >> basicParse: aStream [
-	| element |
-	^ (element := super basicParse: aStream) isFailure
-		ifFalse: [ block value: element ]
-		ifTrue: [ element ]
-]
-
 { #category : #accessing }
 PPActionParser >> block: aBlock [
 	block := aBlock fixTemps
+]
+
+{ #category : #parsing }
+PPActionParser >> parse: aStream [
+	| element |
+	^ (element := super parse: aStream) isFailure
+		ifFalse: [ block value: element ]
+		ifTrue: [ element ]
 ]

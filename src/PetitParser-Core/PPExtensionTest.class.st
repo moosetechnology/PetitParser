@@ -64,13 +64,6 @@ PPExtensionTest >> testRange [
 ]
 
 { #category : #testing }
-PPExtensionTest >> testStream [
-	| stream |
-	stream := 'abc' readStream asParserStream.
-	self assert: (stream isKindOf: PPStream)
-]
-
-{ #category : #testing }
 PPExtensionTest >> testString [
 	| parser |
 	parser := 'ab' asParser.
@@ -87,13 +80,6 @@ PPExtensionTest >> testSymbol [
 	parser := #any asParser.
 	self assert: parser parse: 'a'.
 	self assert: parser fail: ''
-]
-
-{ #category : #testing }
-PPExtensionTest >> testText [
-	| stream |
-	stream := 'abc' asText asParserStream.
-	self assert: (stream isKindOf: PPStream)
 ]
 
 { #category : #testing }

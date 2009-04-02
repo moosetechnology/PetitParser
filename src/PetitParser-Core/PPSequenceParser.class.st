@@ -12,8 +12,13 @@ PPSequenceParser >> , aRule [
 	^ self copyWith: aRule
 ]
 
+{ #category : #operations }
+PPSequenceParser >> map: aBlock [
+	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
+]
+
 { #category : #parsing }
-PPSequenceParser >> basicParse: aStream [
+PPSequenceParser >> parse: aStream [
 	| start elements element |
 	start := aStream position.
 	elements := Array new: parsers size.
@@ -25,9 +30,4 @@ PPSequenceParser >> basicParse: aStream [
 				aStream position: start.
 				^ element ] ].
 	^ elements
-]
-
-{ #category : #operations }
-PPSequenceParser >> map: aBlock [
-	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
 ]

@@ -13,7 +13,7 @@ PPChoiceParser >> / aRule [
 ]
 
 { #category : #parsing }
-PPChoiceParser >> basicParse: aStream [
+PPChoiceParser >> parse: aStream [
 	| elements element |
 	elements := Array new: parsers size.
 	parsers keysAndValuesDo: [ :index :each |
