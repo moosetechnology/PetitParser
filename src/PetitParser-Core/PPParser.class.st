@@ -248,11 +248,11 @@ PPParser >> walk: aBlock [
 
 { #category : #private }
 PPParser >> walk: aBlock seen: aCollection [
-	aBlock value: self.
-	aCollection add: self.
 	self following do: [ :each |
-		(aCollection includes: each)
-			ifFalse: [ each walk: aBlock seen: aCollection ] ]
+		(aCollection includes: each) ifFalse: [ 
+			aBlock value: each.
+			aCollection add: each.
+			each walk: aBlock seen: aCollection ] ]
 ]
 
 { #category : #operations }

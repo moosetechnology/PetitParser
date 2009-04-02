@@ -53,6 +53,15 @@ PPMappingTest >> testFoldRight3 [
 ]
 
 { #category : #testing }
+PPMappingTest >> testMap1 [
+	| parser |
+	parser := #any asParser 
+		map: [ :a | Array with: a ].
+
+	self assert: parser parse: #(a) to: #(a)
+]
+
+{ #category : #testing }
 PPMappingTest >> testMap2 [
 	| parser |
 	parser := (#any asParser , #any asParser) 

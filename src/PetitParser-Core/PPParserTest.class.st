@@ -13,6 +13,19 @@ PPParserTest >> testAction [
 	self assert: parser parse: 'b' to: $B
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testAllFollowing [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	
+	self assert: p1 allFollowing isEmpty.
+	self assert: p2 allFollowing size = 1.
+	self assert: p3 allFollowing size = 3
+]
+
 { #category : #testing }
 PPParserTest >> testAnd [
 	| parser |
@@ -120,6 +133,19 @@ PPParserTest >> testFlatten [
 	self assert: parser fail: ' a'
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testFollowing [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	
+	self assert: p1 following isEmpty.
+	self assert: p2 following size = 1.
+	self assert: p3 following size = 2
+]
+
 { #category : #testing }
 PPParserTest >> testMax [
 	| parser |
@@ -156,6 +182,19 @@ PPParserTest >> testMinMax [
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
 	self assert: parser parse: 'aaaaa' to: #($a $a $a $a) end: 4.
 	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4
+]
+
+{ #category : #'testing-accessing' }
+PPParserTest >> testNamed [
+	| parser |
+	parser := PPSequenceParser new.
+	self assert: parser name isNil.
+	
+	parser := PPChoiceParser named: 'choice'.
+	self assert: parser name = 'choice'.
+	
+	parser := $* asParser name: 'star'.
+	self assert: parser name = 'star'
 ]
 
 { #category : #testing }
@@ -202,6 +241,16 @@ PPParserTest >> testPlus [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'.
 	self assert: parser fail: 'ba'
+]
+
+{ #category : #'testing-accessing' }
+PPParserTest >> testPrint [
+	| parser |
+	parser := PPSequenceParser new.
+	self assert: parser printString = 'a PPSequenceParser'.
+	
+	parser := PPChoiceParser named: 'choice'.
+	self assert: parser printString = 'a PPChoiceParser(choice)'
 ]
 
 { #category : #testing }
