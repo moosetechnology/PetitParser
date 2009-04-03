@@ -1,26 +1,12 @@
 Class {
 	#name : #PPStream,
 	#superclass : #ReadStream,
-	#instVars : [
-		'cache'
-	],
 	#category : #'PetitParser-Core'
 }
 
 { #category : #converting }
 PPStream >> asParserStream [
 	^ self
-]
-
-{ #category : #initialization }
-PPStream >> initialize [
-	cache := IdentityDictionary new
-]
-
-{ #category : #initialization }
-PPStream >> on: aCollection [
-	self initialize.
-	super on: aCollection
 ]
 
 { #category : #initialization }

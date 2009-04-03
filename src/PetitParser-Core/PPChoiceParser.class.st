@@ -16,8 +16,9 @@ PPChoiceParser >> / aRule [
 PPChoiceParser >> parse: aStream [
 	| elements element |
 	elements := Array new: parsers size.
-	parsers keysAndValuesDo: [ :index :each |
-		element := each parse: aStream.
+	1 to: parsers size do: [ :index |
+		element := (parsers at: index)
+			parse: aStream.
 		element isFailure 
 			ifFalse: [ ^ element ].
 		elements at: index put: element ].

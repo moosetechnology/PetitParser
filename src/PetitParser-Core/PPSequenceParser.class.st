@@ -22,8 +22,9 @@ PPSequenceParser >> parse: aStream [
 	| start elements element |
 	start := aStream position.
 	elements := Array new: parsers size.
-	parsers keysAndValuesDo: [ :index :each |
-		element := each parse: aStream.
+	1 to: parsers size do: [ :index |
+		element := (parsers at: index) 
+			parse: aStream.
 		element isFailure 
 			ifFalse: [ elements at: index put: element ]
 			ifTrue: [
