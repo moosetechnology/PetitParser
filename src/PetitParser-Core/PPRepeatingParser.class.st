@@ -54,7 +54,8 @@ PPRepeatingParser >> parse: aStream [
 { #category : #printing }
 PPRepeatingParser >> printOn: aStream [
 	super printOn: aStream.
-	aStream nextPutAll: ' ['; print: min; nextPutAll: ', '; print: max; nextPut: $]
+	aStream nextPutAll: ' ['; print: min; nextPutAll: ', '; nextPutAll: (max = SmallInteger maxVal
+		ifTrue: [ '*' ] ifFalse: [ max asString ]); nextPut: $]
 ]
 
 { #category : #initialization }

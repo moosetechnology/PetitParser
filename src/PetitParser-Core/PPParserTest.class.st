@@ -165,7 +165,9 @@ PPParserTest >> testMax [
 	self assert: parser parse: 'a' to: #($a).
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a) end: 2.
-	self assert: parser parse: 'aaaa' to: #($a $a) end: 2
+	self assert: parser parse: 'aaaa' to: #($a $a) end: 2.
+	
+	self assert: parser printString = 'a PPRepeatingParser [0, 2]'
 ]
 
 { #category : #testing }
@@ -195,7 +197,9 @@ PPParserTest >> testMin [
 	self assert: parser fail: 'a'.
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a $a).
-	self assert: parser parse: 'aaaa' to: #($a $a $a $a)
+	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
+	
+	self assert: parser printString = 'a PPRepeatingParser [2, *]'
 ]
 
 { #category : #testing }
@@ -209,7 +213,9 @@ PPParserTest >> testMinMax [
 	self assert: parser parse: 'aaa' to: #($a $a $a).
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
 	self assert: parser parse: 'aaaaa' to: #($a $a $a $a) end: 4.
-	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4
+	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4.
+	
+	self assert: parser printString = 'a PPRepeatingParser [2, 4]'
 ]
 
 { #category : #'testing-accessing' }
@@ -349,4 +355,24 @@ PPParserTest >> testToken [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'.
 	self assert: parser fail: ' a'
+]
+
+{ #category : #testing }
+PPParserTest >> testUnresolved [
+	| parser |
+	parser := PPUnresolvedParser new.
+	
+	self assert: parser isUnresolved.
+	self should: [ parser parse: '' ] raise: Error.
+	self should: [ parser parse: 'a' ] raise: Error.
+	self should: [ parser parse: 'ab' ] raise: Error
+]
+
+{ #category : #testing }
+PPParserTest >> testWrapped [
+	| parser |
+	parser := $a asParser wrapped.
+	
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser fail: 'b'
 ]

@@ -10,6 +10,36 @@ Class {
 	#category : #'PetitParser-Builder'
 }
 
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> and [
+	^ self parse: '\p.\q.((p q) p)'
+]
+
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> false [
+	^ self parse: '\x.\y.y'
+]
+
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> ifthenelse [
+	^ self parse: '\p.p'
+]
+
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> not [
+	^ self parse: '\p.\a.\b.((p b) a)'
+]
+
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> or [
+	^ self parse: '\p.\q.((p p) q)'
+]
+
+{ #category : #'curch-booleans' }
+PPLambdaParser class >> true [
+	^ self parse: '\x.\y.x'
+]
+
 { #category : #productions }
 PPLambdaParser >> abstraction [
 	^ $\ asParser flatten , variable , $. asParser flatten , expression ==> [ :node | Array with: node second with: node fourth ]

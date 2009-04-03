@@ -1,0 +1,64 @@
+Class {
+	#name : #PPTokenTest,
+	#superclass : #PPAbstractParseTest,
+	#category : #'PetitParser-Tests'
+}
+
+{ #category : #accessing }
+PPTokenTest >> identifier [
+	^ #word asParser plus token
+]
+
+{ #category : #utilities }
+PPTokenTest >> parse: aString using: aParser [
+	^ aParser parse: aString asParserStream
+]
+
+{ #category : #testing }
+PPTokenTest >> testCollection [
+	| input result |
+	input := 'foo    '.
+	result := self 
+		parse: input
+		using: self identifier.
+	self assert: (result collection = input).
+	self assert: (result collection == input)
+]
+
+{ #category : #testing }
+PPTokenTest >> testSize [
+	| result |
+	result := self 
+		parse: 'foo'
+		using: self identifier.
+	self assert: result size = 3
+]
+
+{ #category : #testing }
+PPTokenTest >> testStart [
+	| result |
+	result := self 
+		parse: 'foo'
+		using: self identifier.
+	self assert: result start = 1
+]
+
+{ #category : #testing }
+PPTokenTest >> testStop [
+	| result |
+	result := self 
+		parse: 'foo'
+		using: self identifier.
+	self assert: result stop = 3
+]
+
+{ #category : #testing }
+PPTokenTest >> testValue [
+	| input result |
+	input := 'foo'.
+	result := self 
+		parse: input
+		using: self identifier.
+	self assert: result value = input.
+	self deny: result value == input
+]
