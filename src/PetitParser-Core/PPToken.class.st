@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+PPToken class >> on: aSequenzeableCollection [
+	^ self on: aSequenzeableCollection start: 1 stop: aSequenzeableCollection size
+]
+
+{ #category : #'instance creation' }
 PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
 	^ self basicNew 
 		initializeOn: aSequenzeableCollection
