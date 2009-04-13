@@ -4,6 +4,11 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
+{ #category : #accessing }
+PPAbstractParseTest class >> packageNamesUnderTest [
+	^ #('PetitParser')
+]
+
 { #category : #utilities }
 PPAbstractParseTest >> assert: aParser fail: aCollection [
 	| stream result |
