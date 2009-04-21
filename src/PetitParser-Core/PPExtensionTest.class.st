@@ -74,7 +74,7 @@ PPExtensionTest >> testRange [
 PPExtensionTest >> testStream [
 	| stream |
 	stream := 'abc' readStream asParserStream.
-	self assert: (stream isKindOf: PPStream).
+	self assert: (stream class = PPStream).
 	self assert: (stream printString = '·abc').
 	self assert: (stream peek) = $a.
 	self assert: (stream next) = $a.
@@ -105,7 +105,7 @@ PPExtensionTest >> testSymbol [
 PPExtensionTest >> testText [
 	| stream |
 	stream := 'abc' asText asParserStream.
-	self assert: (stream isKindOf: PPStream)
+	self assert: stream class = PPStream
 ]
 
 { #category : #testing }

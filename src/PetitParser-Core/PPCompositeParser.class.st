@@ -6,15 +6,12 @@ Class {
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString [
-	^ self new parse: aString asParserStream
+	^ self new parse: aString
 ]
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString ifError: aBlock [
-	| result |
-	^ (result := self parse: aString) isFailure
-		ifTrue: [ aBlock value: result ]
-		ifFalse: [ result ]
+	^ self new parse: aString ifError: aBlock
 ]
 
 { #category : #initialization }
@@ -35,6 +32,20 @@ PPCompositeParser >> initialize [
 			ifTrue: [ 
 				(self instVarAt: assoc key) 
 					def: ((self perform: assoc value) name: assoc value) ] ]
+]
+
+{ #category : #parsing }
+PPCompositeParser >> parse: aStream [
+	^ super parse: aStream asParserStream
+]
+
+{ #category : #parsing }
+PPCompositeParser >> parse: aStream ifError: aBlock [
+	| result |
+	result := self parse: aStream.
+	^ result isFailure
+		ifTrue: [ aBlock value: result ]
+		ifFalse: [ result ]
 ]
 
 { #category : #accessing }

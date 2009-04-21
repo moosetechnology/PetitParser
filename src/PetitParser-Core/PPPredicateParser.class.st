@@ -125,7 +125,7 @@ PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBloc
 PPPredicateParser >> negate [
 	"Negate the receiving predicate parser."
 	
-	^ PPPredicateParser 
+	^ self class 
 		on: negated message: negatedMessage 
 		negated: predicate message: predicateMessage
 ]

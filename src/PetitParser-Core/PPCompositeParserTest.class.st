@@ -10,7 +10,7 @@ Class {
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |
-	result := self parseClass
+	result := parser
 		parse: aCollection asParserStream
 		ifError: [ :err | self error: err printString ].
 	self
