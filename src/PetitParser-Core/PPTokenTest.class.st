@@ -26,12 +26,25 @@ PPTokenTest >> testCollection [
 ]
 
 { #category : #testing }
+PPTokenTest >> testCopyFromTo [
+	| result other |
+	result := PPToken on: 'abc'.
+	other := result copyFrom: 2 to: 2.
+	
+	self assert: other size = 1.
+	self assert: other start = 2.
+	self assert: other stop = 2.
+	self assert: other collection = result collection
+]
+
+{ #category : #testing }
 PPTokenTest >> testSize [
 	| result |
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result size = 3
+	self assert: result size = 3.
+	self assert: result length = 3
 ]
 
 { #category : #testing }
@@ -40,7 +53,8 @@ PPTokenTest >> testStart [
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result start = 1
+	self assert: result start = 1.
+	self assert: result startPosition = 1
 ]
 
 { #category : #testing }
@@ -49,7 +63,22 @@ PPTokenTest >> testStop [
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result stop = 3
+	self assert: result stop = 3.
+	self assert: result stopPosition = 3
+]
+
+{ #category : #testing }
+PPTokenTest >> testTesting [
+	| result |
+	result := PPToken on: 'var'.
+	self deny: result isRBToken.
+	self deny: result isPatternVariable.
+	self assert: result printString = 'a PPToken(var)'.
+	
+	result := PPToken on: '`var'.
+	self deny: result isRBToken.
+	self assert: result isPatternVariable.
+	self assert: result printString = 'a PPToken(`var)'
 ]
 
 { #category : #testing }

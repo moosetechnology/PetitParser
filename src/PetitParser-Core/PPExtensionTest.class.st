@@ -54,6 +54,13 @@ PPExtensionTest >> testOrdered [
 ]
 
 { #category : #testing }
+PPExtensionTest >> testParser [
+	| parser |
+	parser := PPEpsilonParser new.
+	self assert: parser asParser = parser
+]
+
+{ #category : #testing }
 PPExtensionTest >> testRange [
 	| parser |
 	parser := $a - $c.

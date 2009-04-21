@@ -33,7 +33,7 @@ PPFailure >> isFailure [
 
 { #category : #accessing }
 PPFailure >> position [
-	^ position
+	^ position ifNil: [ 0 ]
 ]
 
 { #category : #accessing }

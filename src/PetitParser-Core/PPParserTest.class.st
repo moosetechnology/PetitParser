@@ -116,12 +116,39 @@ PPParserTest >> testEpsilon [
 
 { #category : #testing }
 PPParserTest >> testFailing [
-	| parser |
-	parser := PPFailingParser new.
+	| parser result |
+	parser := PPFailingParser message: 'Plonk'.
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
-	self assert: parser fail: 'aa'
+	self assert: parser fail: 'aa'.
+	
+	result := parser parse: 'a' asParserStream.
+	self assert: result reason = 'Plonk'.
+	self assert: result printString = 'Plonk at 0'
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testFailure [
+	| f1 f2 f3 |
+	f1 := PPFailure at: 1.
+	f2 := PPFailure reason: 'Fatal'.
+	f3 := PPFailure reason: 'Error' at: 3.
+	
+	self assert: f1 position = 1.
+	self assert: f1 reason isNil.
+	self assert: f1 isFailure.
+	
+	self assert: f2 position = 0.
+	self assert: f2 reason = 'Fatal'.
+	self assert: f2 isFailure.
+
+	self assert: f3 position = 3.
+	self assert: f3 reason = 'Error'.
+	self assert: f3 isFailure.
+
+	self deny: 4 isFailure.
+	self deny: 'foo' isFailure
 ]
 
 { #category : #testing }
@@ -365,7 +392,10 @@ PPParserTest >> testUnresolved [
 	self assert: parser isUnresolved.
 	self should: [ parser parse: '' ] raise: Error.
 	self should: [ parser parse: 'a' ] raise: Error.
-	self should: [ parser parse: 'ab' ] raise: Error
+	self should: [ parser parse: 'ab' ] raise: Error.
+	
+	parser := PPEpsilonParser new.
+	self deny: parser isUnresolved
 ]
 
 { #category : #testing }

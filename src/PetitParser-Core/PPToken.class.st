@@ -40,7 +40,7 @@ PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aSto
 
 { #category : #'accessing-compatibility' }
 PPToken >> isPatternVariable [
-	^ false
+	^ self size > 0 and: [ (self collection at: self start) = $` ]
 ]
 
 { #category : #'accessing-compatibility' }
