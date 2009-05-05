@@ -40,6 +40,11 @@ PPPredicateParser class >> control [
 ]
 
 { #category : #'factory-chars' }
+PPPredicateParser class >> cr [
+	^ self char: Character cr
+]
+
+{ #category : #'factory-chars' }
 PPPredicateParser class >> digit [
 	^ self 
 		on: [ :each | each isDigit ] message: 'digit expected'
@@ -75,6 +80,11 @@ PPPredicateParser class >> letter [
 	^ self 
 		on: [ :each | each isLetter ] message: 'letter expected'
 		negated: [ :each | each isLetter not ] message: 'no letter expected'
+]
+
+{ #category : #'factory-chars' }
+PPPredicateParser class >> lf [
+	^ self char: Character lf
 ]
 
 { #category : #'factory-chars' }
