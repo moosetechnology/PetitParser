@@ -38,19 +38,29 @@ PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aSto
 	stop := aStopInteger
 ]
 
-{ #category : #'accessing-compatibility' }
+{ #category : #compatibility }
 PPToken >> isPatternVariable [
 	^ self size > 0 and: [ (self collection at: self start) = $` ]
 ]
 
-{ #category : #'accessing-compatibility' }
+{ #category : #compatibility }
 PPToken >> isRBToken [
 	^ false
 ]
 
-{ #category : #'accessing-compatibility' }
+{ #category : #compatibility }
 PPToken >> length [
 	^ self size
+]
+
+{ #category : #compatibility }
+PPToken >> next [
+	^ nil
+]
+
+{ #category : #compatibility }
+PPToken >> previous [
+	^ nil
 ]
 
 { #category : #printing }
@@ -69,7 +79,7 @@ PPToken >> start [
 	^ start
 ]
 
-{ #category : #'accessing-compatibility' }
+{ #category : #compatibility }
 PPToken >> startPosition [
 	^ self start
 ]
@@ -79,7 +89,7 @@ PPToken >> stop [
 	^ stop
 ]
 
-{ #category : #'accessing-compatibility' }
+{ #category : #compatibility }
 PPToken >> stopPosition [
 	^ self stop
 ]
