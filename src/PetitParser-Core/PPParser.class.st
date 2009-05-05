@@ -58,6 +58,17 @@ PPParser >> asParser [
 	^ self
 ]
 
+{ #category : #private }
+PPParser >> currentTokenClass [
+	| context |
+	context := thisContext sender.
+	[ context notNil ] whileTrue: [
+		(context receiver respondsTo: #tokenClass)
+			ifTrue: [ ^ context receiver tokenClass ].
+		context := context sender ].
+	^ PPTokenParser
+]
+
 { #category : #operations }
 PPParser >> def: aParser [
 	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
@@ -236,7 +247,7 @@ PPParser >> star [
 PPParser >> token [
 	"Answer a new parser that answers a token."
 	
-	^ PPTokenParser on: self
+	^ self currentTokenClass on: self
 ]
 
 { #category : #utilities }
