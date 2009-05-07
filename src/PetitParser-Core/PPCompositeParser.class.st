@@ -54,10 +54,3 @@ PPCompositeParser >> start [
 	
 	self subclassResponsibility
 ]
-
-{ #category : #configuration }
-PPCompositeParser >> tokenParser [
-	"Answer a token parser for the receiver."
-	
-	^ PPTokenParser
-]
