@@ -59,12 +59,12 @@ PPParser >> asParser [
 ]
 
 { #category : #private }
-PPParser >> currentTokenClass [
+PPParser >> currentTokenParser [
 	| context |
 	context := thisContext sender.
 	[ context notNil ] whileTrue: [
-		(context receiver respondsTo: #tokenClass)
-			ifTrue: [ ^ context receiver tokenClass ].
+		(context receiver respondsTo: #tokenParser)
+			ifTrue: [ ^ context receiver tokenParser ].
 		context := context sender ].
 	^ PPTokenParser
 ]
@@ -245,9 +245,9 @@ PPParser >> star [
 
 { #category : #operations }
 PPParser >> token [
-	"Answer a new parser that answers a token."
+	"Answer a new parser that transforms the input to a token and consumes whitespaces."
 	
-	^ self currentTokenClass on: self
+	^ self currentTokenParser on: self
 ]
 
 { #category : #utilities }

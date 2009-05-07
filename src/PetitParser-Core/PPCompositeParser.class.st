@@ -56,8 +56,8 @@ PPCompositeParser >> start [
 ]
 
 { #category : #configuration }
-PPCompositeParser >> tokenClass [
-	"Answer the token class to be used for this parser."
+PPCompositeParser >> tokenParser [
+	"Answer a token parser for the receiver."
 	
-	^ PPToken
+	^ PPTokenParser
 ]
