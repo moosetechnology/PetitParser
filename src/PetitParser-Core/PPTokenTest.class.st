@@ -38,6 +38,14 @@ PPTokenTest >> testCopyFromTo [
 ]
 
 { #category : #testing }
+PPTokenTest >> testNextPrevious [
+	| token |
+	token := PPToken on: 'token'.
+	self assert: token previous isNil.
+	self assert: token next isNil
+]
+
+{ #category : #testing }
 PPTokenTest >> testSize [
 	| result |
 	result := self 

@@ -112,6 +112,11 @@ PPPredicateParser class >> space [
 ]
 
 { #category : #'factory-chars' }
+PPPredicateParser class >> tab [
+	^ self char: Character tab
+]
+
+{ #category : #'factory-chars' }
 PPPredicateParser class >> uppercase [
 	^ self lowercase negate
 ]

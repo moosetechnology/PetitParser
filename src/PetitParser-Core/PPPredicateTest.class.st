@@ -49,6 +49,13 @@ PPPredicateTest >> testControl [
 ]
 
 { #category : #testing }
+PPPredicateTest >> testCr [
+	| parser |
+	parser := #cr asParser.
+	self assert: parser parse: String cr to: Character cr
+]
+
+{ #category : #testing }
 PPPredicateTest >> testDigit [
 	| parser |
 	parser := #digit asParser.
@@ -103,6 +110,13 @@ PPPredicateTest >> testLetter [
 ]
 
 { #category : #testing }
+PPPredicateTest >> testLf [
+	| parser |
+	parser := #lf asParser.
+	self assert: parser parse: String lf to: String lf first
+]
+
+{ #category : #testing }
 PPPredicateTest >> testLowercase [
 	| parser |
 	parser := #lowercase asParser.
@@ -130,6 +144,13 @@ PPPredicateTest >> testSpace [
 	self assert: parser negate parse: '/' to: $/.
 	self assert: parser negate fail: ''.
 	self assert: parser negate fail: ' '
+]
+
+{ #category : #testing }
+PPPredicateTest >> testTab [
+	| parser |
+	parser := #tab asParser.
+	self assert: parser parse: String tab to: Character tab
 ]
 
 { #category : #testing }
