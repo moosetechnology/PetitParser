@@ -161,13 +161,17 @@ PPParserTest >> testFlatten [
 	self assert: parser parse: 'a	' to: 'a'.
 	self assert: parser parse: 'a  ' to: 'a'.
 	
+	self assert: parser parse: 'a' to: 'a'.
+	self assert: parser parse: ' a' to: 'a'.
+	self assert: parser parse: '	a' to: 'a'.
+	self assert: parser parse: '    a' to: 'a'.
+	
 	self assert: parser parse: 'a a' to: 'a' end: 2.
 	self assert: parser parse: 'a	a' to: 'a' end: 2.
 	self assert: parser parse: 'a  a' to: 'a' end: 3.
 	
 	self assert: parser fail: ''.
-	self assert: parser fail: 'b'.
-	self assert: parser fail: ' a'
+	self assert: parser fail: 'b'
 ]
 
 { #category : #'testing-utilities' }
@@ -375,13 +379,17 @@ PPParserTest >> testToken [
 	self assert: parser parse: 'a	' to: 'a'.
 	self assert: parser parse: 'a  ' to: 'a'.
 	
+	self assert: parser parse: 'a' to: 'a'.
+	self assert: parser parse: ' a' to: 'a'.
+	self assert: parser parse: '	a' to: 'a'.
+	self assert: parser parse: '    a' to: 'a'.
+	
 	self assert: parser parse: 'a a' to: 'a' end: 2.
 	self assert: parser parse: 'a	a' to: 'a' end: 2.
 	self assert: parser parse: 'a  a' to: 'a' end: 3.
 	
 	self assert: parser fail: ''.
-	self assert: parser fail: 'b'.
-	self assert: parser fail: ' a'
+	self assert: parser fail: 'b'
 ]
 
 { #category : #testing }

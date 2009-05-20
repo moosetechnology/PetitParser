@@ -14,6 +14,16 @@ PPFlattenParser >> consumeSpaces: aStream [
 ]
 
 { #category : #hooks }
+PPFlattenParser >> consumeSpacesAfter: aStream [
+	self consumeSpaces: aStream
+]
+
+{ #category : #hooks }
+PPFlattenParser >> consumeSpacesBefore: aStream [
+	self consumeSpaces: aStream
+]
+
+{ #category : #hooks }
 PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 	^ aCollection copyFrom: aStartInteger to: aStopInteger
 ]
@@ -21,10 +31,11 @@ PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 { #category : #parsing }
 PPFlattenParser >> parse: aStream [
 	| start element stop |
+	self consumeSpacesBefore: aStream.
 	start := aStream position.
 	element := super parse: aStream.
 	element isFailure ifTrue: [ ^ element ].
 	stop := aStream position.
-	self consumeSpaces: aStream.
+	self consumeSpacesAfter: aStream.
 	^ self create: aStream collection start: start + 1 stop: stop
 ]

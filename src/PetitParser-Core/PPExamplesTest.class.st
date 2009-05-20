@@ -53,7 +53,6 @@ PPExamplesTest >> testIdentifier [
 	self assert: self identifier parse: 'a1b*' to: 'a1b' end: 3.
 
 	self assert: self identifier fail: ''.
-	self assert: self identifier fail: ' '.
 	self assert: self identifier fail: '1'.
 	self assert: self identifier fail: '1a'
 ]
