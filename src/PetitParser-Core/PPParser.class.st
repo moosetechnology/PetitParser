@@ -230,7 +230,7 @@ PPParser >> printOn: aStream [
 PPParser >> separatedBy: aParser [
 	"Answer a parser that parses the receiver one or more times, separated by aParser."
 	
-	^ (self) , (aParser , self) star ==> [ :node |
+	^ (PPSequenceParser with: self with: (PPSequenceParser with: aParser with: self) star) ==> [ :node |
 		Array streamContents: [ :stream |
 			stream nextPut: node first.
 			node second do: [ :each | stream nextPutAll: each ] ] ]
