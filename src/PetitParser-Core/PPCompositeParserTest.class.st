@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
+{ #category : #testing }
+PPCompositeParserTest class >> isAbstract [
+	^ self name = #PPCompositeParserTest
+]
+
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |

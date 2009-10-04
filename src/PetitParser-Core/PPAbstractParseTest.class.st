@@ -4,6 +4,11 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
+{ #category : #testing }
+PPAbstractParseTest class >> isAbstract [
+	^ self name = #PPAbstractParseTest
+]
+
 { #category : #accessing }
 PPAbstractParseTest class >> packageNamesUnderTest [
 	^ #('PetitParser')
