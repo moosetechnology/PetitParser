@@ -14,13 +14,14 @@ PPChoiceParser >> / aRule [
 
 { #category : #parsing }
 PPChoiceParser >> parse: aStream [
-	| elements element |
-	elements := Array new: parsers size.
+	| failure element |
+	failure := nil.
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index)
 			parse: aStream.
 		element isFailure 
 			ifFalse: [ ^ element ].
-		elements at: index put: element ].
-	^ elements detectMax: [ :each | each position ]
+		(failure isNil or: [ failure position < element position ])
+			ifTrue: [ failure := element ] ].
+	^ failure
 ]
