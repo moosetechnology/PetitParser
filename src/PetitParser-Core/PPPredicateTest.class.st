@@ -36,8 +36,8 @@ PPPredicateTest >> testCharacter [
 PPPredicateTest >> testControl [
 	| parser |
 	parser := #control asParser.
-	self assert: parser parse: String cr to: Character cr.
-	self assert: parser parse: String tab to: Character tab.
+	self assert: parser parse: (String with: Character cr) to: Character cr.
+	self assert: parser parse: (String with: Character tab) to: Character tab.
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
 	self assert: parser fail: 'a'.
@@ -52,7 +52,7 @@ PPPredicateTest >> testControl [
 PPPredicateTest >> testCr [
 	| parser |
 	parser := #cr asParser.
-	self assert: parser parse: String cr to: Character cr
+	self assert: parser parse: (String with: Character cr) to: Character cr
 ]
 
 { #category : #testing }
@@ -73,8 +73,8 @@ PPPredicateTest >> testDigit [
 PPPredicateTest >> testEol [
 	| parser |
 	parser := PPPredicateParser eol.
-	self assert: parser parse: String cr to: Character cr.
-	self assert: parser parse: String lf to: Character lf.
+	self assert: parser parse: (String with: Character cr) to: Character cr.
+	self assert: parser parse: (String with: Character lf) to: Character lf.
 	self assert: parser fail: ' '
 ]
 
@@ -113,7 +113,7 @@ PPPredicateTest >> testLetter [
 PPPredicateTest >> testLf [
 	| parser |
 	parser := #lf asParser.
-	self assert: parser parse: String lf to: String lf first
+	self assert: parser parse: (String with: Character lf) to: Character lf
 ]
 
 { #category : #testing }
@@ -136,7 +136,7 @@ PPPredicateTest >> testLowercase [
 PPPredicateTest >> testSpace [
 	| parser |
 	parser := #space asParser.
-	self assert: parser parse: String tab to: Character tab.
+	self assert: parser parse: (String with: Character tab) to: Character tab.
 	self assert: parser parse: ' ' to: Character space.
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
@@ -150,7 +150,7 @@ PPPredicateTest >> testSpace [
 PPPredicateTest >> testTab [
 	| parser |
 	parser := #tab asParser.
-	self assert: parser parse: String tab to: Character tab
+	self assert: parser parse: (String with: Character tab) to: Character tab
 ]
 
 { #category : #testing }
