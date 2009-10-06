@@ -9,8 +9,5 @@ Collection >> flatten [
 
 { #category : #'*petitparser-core' }
 Collection >> flattenedDo: aBlock [
-	self do: [ :each |
-		(each isCollection and: [ each isString not ])
-			ifTrue: [ each flattenedDo: aBlock ]
-			ifFalse: [ aBlock value: each ] ]
+	self do: [ :each | each flattenedDo: aBlock ]
 ]
