@@ -45,6 +45,20 @@ PPAbstractParseTest >> assert: aParser parse: aParseObject to: aTargetObject end
 	result := aParser parse: stream.
 	aTargetObject isNil
 		ifTrue: [ self deny: result isFailure ]
-		ifFalse: [ self assert: result value = aTargetObject ].
+		ifFalse: [ self assert: result = aTargetObject ].
 	self assert: stream position = anInteger
+]
+
+{ #category : #utilities }
+PPAbstractParseTest >> assert: aParser parse: aParserObject toToken: from stop: to [
+	| token |
+	token := PPToken on: aParserObject start: from stop: to.
+	^ self assert: aParser parse: aParserObject to: token
+]
+
+{ #category : #utilities }
+PPAbstractParseTest >> assert: aParser parse: aParserObject toToken: from stop: to end: end [
+	| token |
+	token := PPToken on: aParserObject start: from stop: to.
+	^ self assert: aParser parse: aParserObject to: token end: end
 ]

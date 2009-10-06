@@ -22,6 +22,11 @@ PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInt
 ]
 
 { #category : #accessing }
+PPToken >> = anObject [
+	^self class = anObject class and: [self value = anObject value]
+]
+
+{ #category : #accessing }
 PPToken >> collection [
 	^ collection
 ]
@@ -29,6 +34,11 @@ PPToken >> collection [
 { #category : #copying }
 PPToken >> copyFrom: aStartInteger to: aStopInteger [
 	^ self class on: collection start: start + aStartInteger - 1 stop: stop + aStopInteger - 3
+]
+
+{ #category : #accessing }
+PPToken >> hash [
+	^self value hash
 ]
 
 { #category : #initialization }
