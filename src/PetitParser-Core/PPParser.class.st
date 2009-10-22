@@ -38,12 +38,33 @@ PPParser >> ==> aBlock [
 	^ PPActionParser on: self block: aBlock
 ]
 
-{ #category : #utilities }
-PPParser >> allFollowing [
-	"Answer a set of all parsers that could follow the receiver."
-	
-	^ Array streamContents: [ :stream | 
-		self walk: [ :parser | stream nextPut: parser ] ]
+{ #category : #enumerating }
+PPParser >> allNodes [
+	"Answer all the parse nodes of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self allNodesDo: [ :parser | result add: parser ].
+	^ result
+]
+
+{ #category : #enumerating }
+PPParser >> allNodesDo: aBlock [
+	"Iterate over all the parse nodes of the receiver."
+
+	self allNodesDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #enumerating }
+PPParser >> allNodesDo: aBlock seen: aSet [
+	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
+
+	(aSet includes: self)
+		ifTrue: [ ^ self ].
+	aSet add: self.
+	aBlock value: self.
+	self children
+		do: [ :each | each allNodesDo: aBlock seen: aSet ]
 ]
 
 { #category : #operations }
@@ -56,6 +77,13 @@ PPParser >> and [
 { #category : #converting }
 PPParser >> asParser [
 	^ self
+]
+
+{ #category : #accessing }
+PPParser >> children [
+	"Answer a set of child parsers that could follow the receiver."
+
+	^ #()
 ]
 
 { #category : #private }
@@ -91,6 +119,40 @@ PPParser >> end [
 	"Ensure the end of the input and return the result of the receiver."
 
 	^ PPEndOfInputParser on: self
+]
+
+{ #category : #querying }
+PPParser >> firstSet [
+	"Answer the first-set of the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #firstSets to calculate the first-sets at once."
+	
+	^ self firstSets at: self
+]
+
+{ #category : #querying }
+PPParser >> firstSets [
+	"Answer a dictionary with all the parsers reachable from the receiver as key and their first-set as value. The first-set of a parser is the list of terminal parsers that begin the parser derivable from that parser."
+	
+	| firstSets |
+	firstSets := IdentityDictionary new.
+	self allNodesDo: [ :each | 
+		firstSets at: each put: (each isTerminal
+			ifTrue: [ IdentitySet with: each ]
+			ifFalse: [ IdentitySet new ]) ].
+	[	| changed tally |
+		changed := false.
+		firstSets keysAndValuesDo: [ :parser :first |
+			tally := first size.
+			parser firstSets: firstSets into: first.
+			changed := changed or: [ tally ~= first size ] ].
+		changed ] whileTrue.
+	^ firstSets
+]
+
+{ #category : #querying }
+PPParser >> firstSets: aFirstDictionary into: aSet [
+	"PROTECTED: Try to add additional elements to the first-set aSet of the receiver, use the incomplete aFirstDictionary."
+
+	self children do: [ :parser | aSet addAll: (aFirstDictionary at: parser) ]
 ]
 
 { #category : #operations }
@@ -132,15 +194,67 @@ PPParser >> foldRight: aBlock [
 		args at: size ]
 ]
 
-{ #category : #utilities }
-PPParser >> following [
-	"Answer a set of immediate parsers that could follow the receiver."
+{ #category : #querying }
+PPParser >> followSet [
+	"Answer the follow-set of the receiver starting at the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #followSets to calculate the follow-sets at once."
 	
-	^ #()
+	^ self followSetIn: self
+]
+
+{ #category : #querying }
+PPParser >> followSetIn: aParser [
+	"Answer the follow-set of the receiver starting at aParser. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #followSets to calculate the follow-sets at once."
+	
+	^ aParser followSets at: self
+]
+
+{ #category : #querying }
+PPParser >> followSets [
+	"Answer a dictionary with all the parsers reachable from the receiver as key and their follow-set as value. The follow-set of a parser is the list of terminal parsers that can appear immediately to the right of that parser."
+	
+	| current previous continue firstSets followSets |
+	current := previous := 0.
+	firstSets := self firstSets.
+	followSets := IdentityDictionary new.
+	self allNodesDo: [ :each | followSets at: each put: IdentitySet new ].
+	(followSets at: self) add: PPEpsilonParser new.
+	[	followSets keysAndValuesDo: [ :parser :follow |
+			parser 
+				followSets: followSets
+				firstSets: firstSets
+				into: follow ].
+		current := followSets
+			inject: 0
+			into: [ :result :each | result + each size ].
+		continue := previous < current.
+		previous := current.
+		continue ] whileTrue.
+	^ followSets
+]
+
+{ #category : #querying }
+PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
+	"PROTECTED: Try to add additional elements to the follow-set aSet of the receiver, use the incomplete aFollowDictionary and the complete aFirstDictionary."
+	
+	self children do: [ :parser | (aFollowDictionary at: parser) addAll: aSet ]
 ]
 
 { #category : #initialization }
 PPParser >> initialize [
+]
+
+{ #category : #testing }
+PPParser >> isNullable [
+	"Answer true if the receiver is a nullable parser, it can successfully parse nothing."
+	
+	^ false
+]
+
+{ #category : #testing }
+PPParser >> isTerminal [
+	"Answer true if the receiver is a terminal parser, that means it does not delegate to any other parser."
+	
+	^ false
 ]
 
 { #category : #testing }
@@ -248,22 +362,6 @@ PPParser >> token [
 	"Answer a new parser that transforms the input to a token and consumes whitespaces."
 	
 	^ self currentTokenParser on: self
-]
-
-{ #category : #utilities }
-PPParser >> walk: aBlock [
-	"Walk over all the parsers that are possibly reachable from the receiver and evaluate aBlock on each of them."
-
-	self walk: aBlock seen: IdentitySet new
-]
-
-{ #category : #private }
-PPParser >> walk: aBlock seen: aCollection [
-	self following do: [ :each |
-		(aCollection includes: each) ifFalse: [ 
-			aBlock value: each.
-			aCollection add: each.
-			each walk: aBlock seen: aCollection ] ]
 ]
 
 { #category : #operations }

@@ -136,6 +136,11 @@ PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBloc
 	negatedMessage := aNegatedString
 ]
 
+{ #category : #testing }
+PPPredicateParser >> isTerminal [
+	^ true
+]
+
 { #category : #operators }
 PPPredicateParser >> negate [
 	"Negate the receiving predicate parser."

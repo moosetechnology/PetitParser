@@ -14,16 +14,15 @@ PPParserTest >> testAction [
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testAllFollowing [
+PPParserTest >> testAllNodes [
 	| p1 p2 p3 |
 	p1 := #lowercase asParser.
 	p2 := p1 ==> #asUppercase.
 	p3 := PPUnresolvedParser new.
 	p3 def: p2 / p3.
-	
-	self assert: p1 allFollowing isEmpty.
-	self assert: p2 allFollowing size = 1.
-	self assert: p3 allFollowing size = 3
+	self assert: p1 allNodes size = 1.
+	self assert: p2 allNodes size = 2.
+	self assert: p3 allNodes size = 3
 ]
 
 { #category : #testing }
@@ -181,10 +180,9 @@ PPParserTest >> testFollowing [
 	p2 := p1 ==> #asUppercase.
 	p3 := PPUnresolvedParser new.
 	p3 def: p2 / p3.
-	
-	self assert: p1 following isEmpty.
-	self assert: p2 following size = 1.
-	self assert: p3 following size = 2
+	self assert: p1 children isEmpty.
+	self assert: p2 children size = 1.
+	self assert: p3 children size = 2
 ]
 
 { #category : #testing }

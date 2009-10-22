@@ -9,16 +9,12 @@ PPStream >> asParserStream [
 	^ self
 ]
 
-{ #category : #accessing }
-PPStream >> next: anInteger [ 
-	"Answer up to anInteger elements of my collection.  overriden for efficiency"
-
-	| ans endPosition |
-	endPosition := position + anInteger  min:  readLimit.
-	ans := collection copyFrom: position+1 to: endPosition.
-	position := endPosition.
-	^ans
-
+{ #category : #initialization }
+PPStream >> on: aCollection from: firstIndex to: lastIndex [
+	self initialize.
+	collection := aCollection.
+	position := firstIndex.
+	readLimit := lastIndex
 ]
 
 { #category : #accessing }
@@ -32,6 +28,6 @@ PPStream >> peek [
 PPStream >> printOn: aStream [
 	aStream 
 		nextPutAll: (collection copyFrom: 1 to: position);
-		nextPutAll: '·';
+		nextPut: $·;
 		nextPutAll: (collection copyFrom: position + 1 to: readLimit)
 ]

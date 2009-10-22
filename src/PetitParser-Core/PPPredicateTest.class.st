@@ -44,8 +44,8 @@ PPPredicateTest >> testControl [
 	self assert: parser negate parse: '1' to: $1.
 	self assert: parser negate parse: 'a' to: $a.
 	self assert: parser negate fail: ''.
-	self assert: parser negate fail: (String with: Character cr).
-	self assert: parser negate fail: (String with: Character tab)
+	self assert: parser negate fail: String cr.
+	self assert: parser negate fail: String tab
 ]
 
 { #category : #testing }

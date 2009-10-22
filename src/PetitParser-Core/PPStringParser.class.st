@@ -15,6 +15,11 @@ PPStringParser class >> on: aString [
 	^ self new string: aString
 ]
 
+{ #category : #testing }
+PPStringParser >> isTerminal [
+	^ true
+]
+
 { #category : #parsing }
 PPStringParser >> parse: aStream [
 	| position result |

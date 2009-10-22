@@ -7,6 +7,16 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
+{ #category : #testing }
+PPEpsilonParser >> isNullable [
+	^ true
+]
+
+{ #category : #testing }
+PPEpsilonParser >> isTerminal [
+	^ true
+]
+
 { #category : #parsing }
 PPEpsilonParser >> parse: aStream [
 	^ nil

@@ -17,6 +17,11 @@ PPPluggableParser >> block: aBlock [
 	block := aBlock
 ]
 
+{ #category : #testing }
+PPPluggableParser >> isTerminal [
+	^ true
+]
+
 { #category : #parsing }
 PPPluggableParser >> parse: aStream [
 	| position result |

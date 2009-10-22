@@ -17,14 +17,14 @@ PPListParser class >> withAll: aCollection [
 	^ self basicNew initializeWithAll: aCollection asArray
 ]
 
+{ #category : #querying }
+PPListParser >> children [
+	^ parsers
+]
+
 { #category : #copying }
 PPListParser >> copyWith: aParser [
 	^ self species withAll: (parsers copyWith: aParser)
-]
-
-{ #category : #utilities }
-PPListParser >> following [
-	^ parsers
 ]
 
 { #category : #initialization }
