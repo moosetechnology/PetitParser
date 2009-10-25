@@ -337,6 +337,7 @@ PPParser >> plus [
 PPParser >> printOn: aStream [
 	super printOn: aStream.
 	self name isNil
+		ifTrue: [ aStream nextPut: $(; print: self hash; nextPut: $) ]
 		ifFalse: [ aStream nextPut: $(; nextPutAll: self name; nextPut: $) ]
 ]
 

@@ -38,6 +38,16 @@ PPTokenTest >> testCopyFromTo [
 ]
 
 { #category : #testing }
+PPTokenTest >> testEquality [
+	| token1 token2 |
+	token1 := self  parse: 'foo' using: self identifier.
+	token2 := self  parse: 'foo' using: self identifier.
+	self deny: token1 == token2.
+	self assert: token1 = token2.
+	self assert: token1 hash = token2 hash.
+]
+
+{ #category : #testing }
 PPTokenTest >> testNextPrevious [
 	| token |
 	token := PPToken on: 'token'.
