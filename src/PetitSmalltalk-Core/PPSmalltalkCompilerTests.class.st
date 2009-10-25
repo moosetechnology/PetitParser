@@ -6,14 +6,12 @@ Class {
 
 { #category : #private }
 PPSmalltalkCompilerTests >> assert: aNode format: aString [ 
-	aNode isCollection ifFalse: 
-		[ ^ self 
-			assert: (Array with: aNode)
-			format: (Array with: aString) ].
+	aNode isCollection 
+		ifFalse: [ ^ self assert: (Array with: aNode) format: (Array with: aString) ].
 	self assert: aNode size = aString size.
 	aNode 
 		with: aString
-		do: [ :node :string | self assert: node formattedCode = string ]
+		do: [ :node :string | self assert: node formattedCode withBlanksTrimmed = string ]
 ]
 
 { #category : #accessing }
@@ -89,7 +87,7 @@ PPSmalltalkCompilerTests >> testArrayLiteral11 [
 PPSmalltalkCompilerTests >> testArrayLiteral2 [
 	super testArrayLiteral2.
 	self assert: result isLiteral.
-	self assert: result value = #(1 )
+	self assert: result value = #(1)
 ]
 
 { #category : #'testing-literals' }

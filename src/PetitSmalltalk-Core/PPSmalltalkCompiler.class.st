@@ -16,52 +16,12 @@ PPSmalltalkCompiler >> array [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> arrayLiteral [
-	^ super arrayLiteral ==> [ :nodes | RBLiteralNode value: nodes second asArray ]
+	^ super arrayLiteral ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asArray ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> arrayLiteralArray [
-	^ super arrayLiteralArray ==> [ :nodes | nodes second asArray ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralByte [
-	^ super arrayLiteralByte ==> [ :nodes | nodes second asByteArray ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralChar [
-	^ super arrayLiteralChar ==> [ :token | token value second ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralFalse [
-	^ super arrayLiteralFalse ==> [ :token | false ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralNil [
-	^ super arrayLiteralNil ==> [ :token | nil ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralNumber [
-	^ super arrayLiteralNumber ==> [ :token | Number readFrom: token value ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralString [
-	^ super arrayLiteralString ==> [ :token | self buildString: token value ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralSymbol [
-	^ super arrayLiteralSymbol ==> [ :token | (self buildString: token value) asSymbol ]
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkCompiler >> arrayLiteralTrue [
-	^ super arrayLiteralTrue ==> [ :token | true ]
+	^ super arrayLiteralArray ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asArray ]
 ]
 
 { #category : #grammar }
@@ -171,18 +131,11 @@ PPSmalltalkCompiler >> build: aTempCollection sequence: aStatementCollection [
 ]
 
 { #category : #private }
-PPSmalltalkCompiler >> buildPragma: anArray [ 
-	^ Pragma 
-		keyword: (anArray first 
-			inject: String new
-			into: [ :result :each | result , each value ]) asSymbol
-		arguments: anArray second
-]
-
-{ #category : #private }
 PPSmalltalkCompiler >> buildString: aString [ 
-	(aString isEmpty not and: [ aString first = $# ]) ifTrue: [ ^ (self buildString: aString allButFirst) asSymbol ].
-	(aString isEmpty or: [ aString first ~= $' or: [ aString last ~= $' ] ]) ifTrue: [ ^ aString ].
+	(aString isEmpty not and: [ aString first = $# ]) 
+		ifTrue: [ ^ (self buildString: aString allButFirst) asSymbol ].
+	(aString isEmpty or: [ aString first ~= $' or: [ aString last ~= $' ] ])
+		ifTrue: [ ^ aString ].
 	^ (aString 
 		copyFrom: 2
 		to: aString size - 1) 
@@ -192,7 +145,12 @@ PPSmalltalkCompiler >> buildString: aString [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> byteLiteral [
-	^ super byteLiteral ==> [ :nodes | RBLiteralNode value: nodes second asByteArray ]
+	^ super byteLiteral ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asByteArray ]
+]
+
+{ #category : #'grammar-literals' }
+PPSmalltalkCompiler >> byteLiteralArray [
+	^ super byteLiteralArray ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asByteArray ]
 ]
 
 { #category : #'grammar-messages' }
@@ -206,11 +164,7 @@ PPSmalltalkCompiler >> cascadeExpression [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> charLiteral [
-	^ super charLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: token value second ]
+	^ super charLiteral ==> [ :token | RBLiteralNode value: token value second ]
 ]
 
 { #category : #grammar }
@@ -224,11 +178,7 @@ PPSmalltalkCompiler >> expression [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> falseLiteral [
-	^ super falseLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: false ]
+	^ super falseLiteral ==> [ :token | RBLiteralNode value: false ]
 ]
 
 { #category : #'grammar-messages' }
@@ -242,8 +192,7 @@ PPSmalltalkCompiler >> keywordExpression [
 
 { #category : #grammar }
 PPSmalltalkCompiler >> method [
-	^ super method map: 
-		[ :declaration :body | 
+	^ super method map: [ :declaration :body | 
 		declaration pragmas: body first.
 		declaration body: (self 
 				build: body second
@@ -262,20 +211,12 @@ PPSmalltalkCompiler >> methodDeclaration [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> nilLiteral [
-	^ super nilLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: nil ]
+	^ super nilLiteral ==> [ :token | RBLiteralNode value: nil ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> numberLiteral [
-	^ super numberLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: (Number readFrom: token value) ]
+	^ super numberLiteral ==> [ :token | RBLiteralNode value: (Number readFrom: token value) ]
 ]
 
 { #category : #grammar }
@@ -285,17 +226,7 @@ PPSmalltalkCompiler >> parens [
 
 { #category : #grammar }
 PPSmalltalkCompiler >> pragma [
-	^ super pragma ==> 
-		[ :nodes | 
-		| prag |
-		prag := self buildPragma: nodes second.
-		RBPragmaNode 
-			pragma: prag
-			spec: prag keyword
-			start: nodes first start
-			stop: nodes last stop
-			firstToken: nodes first
-			lastToken: nodes last ]
+	^ super pragma ==> [ :nodes | RBPragmaNode selectorParts: nodes second first arguments: nodes second second ]
 ]
 
 { #category : #grammar }
@@ -314,29 +245,22 @@ PPSmalltalkCompiler >> sequence [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> stringLiteral [
-	^ super stringLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: (self buildString: token value) ]
+	^ super stringLiteral ==> [ :token | RBLiteralNode value: (self buildString: token value) ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> symbolLiteral [
-	^ super symbolLiteral ==> 
-		[ :node | 
-		RBLiteralNode 
-			literalToken: node
-			value: (self buildString: node value) ]
+	^ super symbolLiteral ==> [ :token | RBLiteralNode value: (self buildString: token value) ]
+]
+
+{ #category : #'grammar-literals' }
+PPSmalltalkCompiler >> symbolLiteralArray [
+	^ super symbolLiteralArray ==> [ :token | RBLiteralNode value: (self buildString: token value) asSymbol ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> trueLiteral [
-	^ super trueLiteral ==> 
-		[ :token | 
-		RBLiteralNode 
-			literalToken: token
-			value: true ]
+	^ super trueLiteral ==> [ :token | RBLiteralNode value: true ]
 ]
 
 { #category : #'grammar-messages' }

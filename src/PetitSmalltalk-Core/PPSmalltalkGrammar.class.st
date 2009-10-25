@@ -5,15 +5,6 @@ Class {
 		'array',
 		'arrayLiteral',
 		'arrayLiteralArray',
-		'arrayLiteralByte',
-		'arrayLiteralChar',
-		'arrayLiteralElement',
-		'arrayLiteralFalse',
-		'arrayLiteralNil',
-		'arrayLiteralNumber',
-		'arrayLiteralString',
-		'arrayLiteralSymbol',
-		'arrayLiteralTrue',
 		'assignment',
 		'assignmentToken',
 		'binary',
@@ -80,7 +71,10 @@ Class {
 		'unaryMethod',
 		'unaryPragma',
 		'unaryToken',
-		'variable'
+		'variable',
+		'symbolLiteralArray',
+		'byteLiteralArray',
+		'arrayItem'
 	],
 	#category : #'PetitSmalltalk-Core'
 }
@@ -101,58 +95,18 @@ PPSmalltalkGrammar >> array [
 ]
 
 { #category : #'grammar-literals' }
+PPSmalltalkGrammar >> arrayItem [
+	^ literal / symbolLiteralArray / arrayLiteralArray / byteLiteralArray
+]
+
+{ #category : #'grammar-literals' }
 PPSmalltalkGrammar >> arrayLiteral [
-	^ '#(' asParser token , arrayLiteralElement star , $) asParser token
+	^ '#(' asParser token , arrayItem star , $) asParser token
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkGrammar >> arrayLiteralArray [
-	^ ($# asParser optional , $( asParser) token , arrayLiteralElement star , $) asParser token
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralByte [
-	^ ($# asParser optional , $[ asParser) token , arrayLiteralNumber star , $] asParser token
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralChar [
-	^ charToken
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralElement [
-	^ arrayLiteralTrue / arrayLiteralFalse / arrayLiteralNil / arrayLiteralNumber / arrayLiteralChar / arrayLiteralString / arrayLiteralSymbol / arrayLiteralArray / arrayLiteralByte
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralFalse [
-	^ falseToken
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralNil [
-	^ nilToken
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralNumber [
-	^ numberToken
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralString [
-	^ stringToken
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralSymbol [
-	^ ($# asParser optional , symbol) token
-]
-
-{ #category : #'grammar-literals' }
-PPSmalltalkGrammar >> arrayLiteralTrue [
-	^ trueToken
+	^ $( asParser token , arrayItem star , $) asParser token
 ]
 
 { #category : #grammar }
@@ -195,8 +149,7 @@ PPSmalltalkGrammar >> binaryMethod [
 
 { #category : #'grammar-pragmas' }
 PPSmalltalkGrammar >> binaryPragma [
-	^ (binaryToken , arrayLiteralElement) ==> 
-		[ :nodes | 
+	^ (binaryToken , arrayItem) ==> [ :nodes | 
 		Array 
 			with: (Array with: nodes first)
 			with: (Array with: nodes second) ]
@@ -244,7 +197,12 @@ PPSmalltalkGrammar >> blockSequenceEmpty [
 
 { #category : #'grammar-literals' }
 PPSmalltalkGrammar >> byteLiteral [
-	^ '#[' asParser token , arrayLiteralNumber star , $] asParser token
+	^ '#[' asParser token , numberLiteral star , $] asParser token
+]
+
+{ #category : #'grammar-literals' }
+PPSmalltalkGrammar >> byteLiteralArray [
+	^ $[ asParser token , numberLiteral star , $] asParser token
 ]
 
 { #category : #'grammar-messages' }
@@ -332,8 +290,7 @@ PPSmalltalkGrammar >> keywordMethod [
 
 { #category : #'grammar-pragmas' }
 PPSmalltalkGrammar >> keywordPragma [
-	^ (keywordToken , arrayLiteralElement) plus ==> 
-		[ :nodes | 
+	^ (keywordToken , arrayItem) plus ==> [ :nodes | 
 		Array 
 			with: (nodes collect: [ :each | each first ])
 			with: (nodes collect: [ :each | each second ]) ]
@@ -377,11 +334,6 @@ PPSmalltalkGrammar >> methodSequence [
 { #category : #primitives }
 PPSmalltalkGrammar >> multiword [
 	^ keyword plus
-]
-
-{ #category : #token }
-PPSmalltalkGrammar >> multiwordToken [
-	^ multiword token
 ]
 
 { #category : #'grammar-literals' }
@@ -487,8 +439,8 @@ PPSmalltalkGrammar >> symbolLiteral [
 	^ ($# asParser , symbol) token
 ]
 
-{ #category : #token }
-PPSmalltalkGrammar >> symbolToken [
+{ #category : #'grammar-literals' }
+PPSmalltalkGrammar >> symbolLiteralArray [
 	^ symbol token
 ]
 
@@ -546,11 +498,10 @@ PPSmalltalkGrammar >> unaryMethod [
 
 { #category : #'grammar-pragmas' }
 PPSmalltalkGrammar >> unaryPragma [
-	^ identifierToken ==> 
-		[ :node | 
+	^ identifierToken ==> [ :node | 
 		Array 
 			with: (Array with: node)
-			with: Array new ]
+			with: (Array new) ]
 ]
 
 { #category : #token }

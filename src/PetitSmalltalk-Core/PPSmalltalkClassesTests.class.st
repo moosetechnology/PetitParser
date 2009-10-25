@@ -1,0 +1,107 @@
+"
+Evalaute the following code to verify the complete image.
+
+PackageOrganizer default packages
+	inject: LAPackagesTests new
+	into: [ :test :package | 
+		[ test verifyPackage: package packageName ]
+			on: TestResult resumableFailure
+			do: [ :err | err resume ] ]
+"
+Class {
+	#name : #PPSmalltalkClassesTests,
+	#superclass : #PPGrammarTest,
+	#category : #'PetitSmalltalk-Tests'
+}
+
+{ #category : #private }
+PPSmalltalkClassesTests >> assert: aBoolean description: aString [ 
+	self 
+		assert: aBoolean
+		description: aString
+		resumable: true
+]
+
+{ #category : #accessing }
+PPSmalltalkClassesTests >> parserClass [
+	^ PPSmalltalkCompiler
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testCollection [
+	self verifyClass: Collection.
+	self verifyClass: Array.
+	self verifyClass: Set.
+	self verifyClass: Dictionary.
+	self verifyClass: Bag.
+	self verifyClass: OrderedCollection.
+	self verifyClass: SortedCollection
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testDateAndTime [
+	self verifyClass: DateAndTime.
+	self verifyClass: Duration
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testException [
+	self verifyClass: Exception.
+	self verifyClass: Notification.
+	self verifyClass: Warning.
+	self verifyClass: Error
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testFundamental [
+	self verifyClass: Object.
+	self verifyClass: Boolean.
+	self verifyClass: True.
+	self verifyClass: False.
+	self verifyClass: Character
+
+
+
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testMagnitude [
+	self verifyClass: Magnitude.
+	self verifyClass: Number.
+	self verifyClass: Integer.
+	self verifyClass: Float.
+	self verifyClass: Fraction
+]
+
+{ #category : #testing }
+PPSmalltalkClassesTests >> testStream [
+	self verifyClass: Stream.
+	self verifyClass: ReadStream.
+	self verifyClass: WriteStream
+]
+
+{ #category : #private }
+PPSmalltalkClassesTests >> verifyClass: aClass [ 
+	aClass selectors 
+		do: [ :selector | self verifyClass: aClass selector: selector ]
+		displayingProgress: aClass name.
+	aClass isMeta
+		ifFalse: [ self verifyClass: aClass class ]
+]
+
+{ #category : #private }
+PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [ 
+	"Verifies that the method aSelector in aClass parses the same using the standard refactoring parser and the language boxes parser. Methods that contain float literals are ignored, since they do not reproduce well. Furthermore methods with pragmas are not actually compared as they might pretty print differently."
+
+	| source original other |
+	source := aClass sourceCodeAt: aSelector.
+	source isNil ifTrue: [ ^ self ].
+	original := aClass parseTreeFor: aSelector.
+	original isNil ifTrue: [ ^ self ].
+	original nodesDo: [ :each | each comments: nil ].
+	other := self parser parse: source asParserStream.
+	source := aClass name , '>>#' , source.
+	other isFailure 
+		ifTrue: [ self assert: false description: source ]
+		ifFalse: [ self assert: original formattedCode = other formattedCode description: source ]
+]

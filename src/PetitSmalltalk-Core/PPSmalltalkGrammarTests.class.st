@@ -103,7 +103,7 @@ PPSmalltalkGrammarTests >> testArrayLiteral8 [
 { #category : #'testing-literals' }
 PPSmalltalkGrammarTests >> testArrayLiteral9 [
 	self 
-		parse: '#((1) 2))'
+		parse: '#((1) 2)'
 		rule: #arrayLiteral
 ]
 
