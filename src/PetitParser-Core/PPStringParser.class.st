@@ -12,7 +12,12 @@ Class {
 
 { #category : #'instance creation' }
 PPStringParser class >> on: aString [
-	^ self new string: aString
+	^ self new initializeOn: aString
+]
+
+{ #category : #initialization }
+PPStringParser >> initializeOn: aString [
+	string := aString
 ]
 
 { #category : #testing }
@@ -28,9 +33,4 @@ PPStringParser >> parse: aStream [
 	result = string ifTrue: [ ^ result ].
 	aStream position: position.
 	^ PPFailure reason: string , ' expected' at: position
-]
-
-{ #category : #accessing }
-PPStringParser >> string: aString [
-	string := aString
 ]

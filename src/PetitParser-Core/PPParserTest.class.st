@@ -196,7 +196,7 @@ PPParserTest >> testMax [
 	self assert: parser parse: 'aaa' to: #($a $a) end: 2.
 	self assert: parser parse: 'aaaa' to: #($a $a) end: 2.
 	
-	self assert: parser printString = 'a PPRepeatingParser [0, 2]'
+	self assert: (parser printString endsWith: '[0, 2]')
 ]
 
 { #category : #testing }
@@ -228,7 +228,7 @@ PPParserTest >> testMin [
 	self assert: parser parse: 'aaa' to: #($a $a $a).
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
 	
-	self assert: parser printString = 'a PPRepeatingParser [2, *]'
+	self assert: (parser printString endsWith: '[2, *]')
 ]
 
 { #category : #testing }
@@ -244,7 +244,7 @@ PPParserTest >> testMinMax [
 	self assert: parser parse: 'aaaaa' to: #($a $a $a $a) end: 4.
 	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4.
 	
-	self assert: parser printString = 'a PPRepeatingParser [2, 4]'
+	self assert: (parser printString endsWith: '[2, 4]')
 ]
 
 { #category : #'testing-accessing' }
@@ -310,10 +310,10 @@ PPParserTest >> testPlus [
 PPParserTest >> testPrint [
 	| parser |
 	parser := PPSequenceParser new.
-	self assert: parser printString = 'a PPSequenceParser'.
+	self assert: (parser printString beginsWith: 'a PPSequenceParser').
 	
 	parser := PPChoiceParser named: 'choice'.
-	self assert: parser printString = 'a PPChoiceParser(choice)'
+	self assert: (parser printString = 'a PPChoiceParser(choice)')
 ]
 
 { #category : #testing }
