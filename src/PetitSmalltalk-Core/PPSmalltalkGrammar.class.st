@@ -182,7 +182,9 @@ PPSmalltalkGrammar >> blockArgumentsEmpty [
 
 { #category : #'grammar-blocks' }
 PPSmalltalkGrammar >> blockBody [
-	^ (blockArguments , $| asParser token , blockSequence) / (blockArguments , epsilon , blockSequenceEmpty) / (blockArgumentsEmpty , epsilon , blockSequence)
+	^ (blockArguments , $| asParser token , blockSequence) 
+	/ (blockArguments , epsilon , blockSequenceEmpty) 
+	/ (blockArgumentsEmpty , epsilon , blockSequence)
 ]
 
 { #category : #'grammar-blocks' }
@@ -411,7 +413,13 @@ PPSmalltalkGrammar >> start [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> statements [
-	^ ((return , $. asParser token star) ==> [ :nodes | Array with: nodes first ]) / ((expression wrapped , $. asParser token plus , statements) ==> [ :nodes | nodes last copyWithFirst: nodes first ]) / ((expression wrapped , $. asParser token star) ==> [ :nodes | Array with: nodes first ]) / ($. asParser token star ==> [ :node | Array new ])
+	^ ((return , $. asParser token star)
+		==> [ :nodes | (Array with: nodes first) , nodes last ]) 
+	/ ((expression wrapped , $. asParser token plus , statements) 
+		==> [ :nodes | (Array with: nodes first) , nodes second , nodes last ])
+	/ ((expression wrapped , $. asParser token star) 
+		==> [ :nodes | (Array with: nodes first) , nodes second ]) 
+	/ ($. asParser token star)
 ]
 
 { #category : #primitives }
@@ -446,11 +454,7 @@ PPSmalltalkGrammar >> symbolLiteralArray [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> temporaries [
-	^ ($| asParser token , variable star , $| asParser token) optional ==> 
-		[ :nodes | 
-		nodes isNil 
-			ifTrue: [ Array new ]
-			ifFalse: [ nodes ] ]
+	^ ($| asParser token , variable star , $| asParser token) optional ==> [ :nodes | nodes ifNil: [ #() ] ]
 ]
 
 { #category : #accessing }

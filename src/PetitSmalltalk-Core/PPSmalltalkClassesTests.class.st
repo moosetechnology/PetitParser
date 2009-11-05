@@ -100,8 +100,13 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 	original isNil ifTrue: [ ^ self ].
 	original nodesDo: [ :each | each comments: nil ].
 	other := self parser parse: source asParserStream.
-	source := aClass name , '>>#' , source.
+	source := aClass name , '>>#' , original selector.
 	other isFailure 
 		ifTrue: [ self assert: false description: source ]
-		ifFalse: [ self assert: original formattedCode = other formattedCode description: source ]
+		ifFalse: [ self assert: original formattedCode = other formattedCode description: source ].
+	original nodesDo: [ :originalNode |
+		(originalNode isSequence or: [ originalNode isPragma or: [ originalNode parent notNil and: [ originalNode parent isCascade or: [ originalNode parent isPragma ] ] ] ]) ifFalse: [
+			| otherNode |
+			otherNode := other whichNodeIsContainedBy: originalNode sourceInterval.
+			self assert: (originalNode = otherNode or: [ originalNode = otherNode parent ]) ] ]
 ]

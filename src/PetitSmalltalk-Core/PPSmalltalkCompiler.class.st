@@ -6,41 +6,31 @@ Class {
 
 { #category : #grammar }
 PPSmalltalkCompiler >> array [
-	^ super array ==> 
-		[ :nodes | 
-		RBArrayNode 
-			leftBrace: nodes first
-			rightBrace: nodes last
-			statements: nodes second ]
+	^ super array ==> [ :nodes |
+		(RBArrayNode statements: nodes second)
+			left: nodes first start;
+			right: nodes last start;
+			yourself ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> arrayLiteral [
-	^ super arrayLiteral ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asArray ]
+	^ super arrayLiteral ==> [ :nodes | RBLiteralArrayNode startPosition: nodes first start contents: nodes second stopPosition: nodes last start isByteArray: false ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> arrayLiteralArray [
-	^ super arrayLiteralArray ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asArray ]
-]
-
-{ #category : #grammar }
-PPSmalltalkCompiler >> assignment [
-	^ super assignment ==> #first
+	^ super arrayLiteralArray ==> [ :nodes | RBLiteralArrayNode startPosition: nodes first start contents: nodes second stopPosition: nodes last start isByteArray: false ]
 ]
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> binaryExpression [
-	^ super binaryExpression map: 
-		[ :receiver :messages | 
-		self 
-			build: receiver
-			messages: messages ]
+	^ super binaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
 ]
 
 { #category : #'grammar-blocks' }
 PPSmalltalkCompiler >> block [
-	^ super block ==> #second
+	^ super block map: [ :left :block :right | block left: left start; right: right start ]
 ]
 
 { #category : #'grammar-blocks' }
@@ -50,18 +40,12 @@ PPSmalltalkCompiler >> blockArgument [
 
 { #category : #'grammar-blocks' }
 PPSmalltalkCompiler >> blockArgumentsEmpty [
-	^ super blockArgumentsEmpty ==> 
-		[ :nodes | 
-		#() ]
+	^ super blockArgumentsEmpty ==> [ :nodes | #() ]
 ]
 
 { #category : #'grammar-blocks' }
 PPSmalltalkCompiler >> blockBody [
-	^ super blockBody ==> 
-		[ :nodes | 
-		RBBlockNode 
-			arguments: nodes first
-			body: nodes last ]
+	^ super blockBody ==> [ :nodes | RBBlockNode arguments: nodes first body: nodes last ]
 ]
 
 { #category : #'grammar-blocks' }
@@ -70,17 +54,17 @@ PPSmalltalkCompiler >> blockSequenceEmpty [
 ]
 
 { #category : #private }
-PPSmalltalkCompiler >> build: aNode assignment: anArray [ 
-	^ anArray isEmpty 
+PPSmalltalkCompiler >> build: aNode assignment: anArray [
+	^ anArray isEmpty
 		ifTrue: [ aNode ]
-		ifFalse: 
-			[ anArray reverse 
+		ifFalse: [
+			anArray reverse 
 				inject: aNode
-				into: 
-					[ :result :each | 
+				into: [ :result :each |
 					RBAssignmentNode 
-						variable: each
-						value: result ] ]
+						variable: each first
+						value: result
+						position: each second start ] ]
 ]
 
 { #category : #private }
@@ -88,14 +72,13 @@ PPSmalltalkCompiler >> build: aNode cascade: anArray [
 	| messages |
 	^ (anArray isNil or: [ anArray isEmpty ]) 
 		ifTrue: [ aNode ]
-		ifFalse: 
-			[ messages := OrderedCollection new: anArray size + 1.
+		ifFalse: [
+			messages := OrderedCollection new: anArray size + 1.
 			messages addLast: aNode.
-			anArray do: 
-				[ :each | 
+			anArray do: [ :each | 
 				messages addLast: (self 
-						build: aNode receiver
-						messages: (Array with: each second)) ].
+					build: aNode receiver
+					messages: (Array with: each second)) ].
 			RBCascadeNode messages: messages ]
 ]
 
@@ -103,31 +86,36 @@ PPSmalltalkCompiler >> build: aNode cascade: anArray [
 PPSmalltalkCompiler >> build: aNode messages: anArray [ 
 	^ (anArray isNil or: [ anArray isEmpty ]) 
 		ifTrue: [ aNode ]
-		ifFalse: 
-			[ anArray 
+		ifFalse: [
+			anArray 
 				inject: aNode
-				into: 
-					[ :rec :msg | 
+				into: [ :rec :msg | 
 					msg isNil 
 						ifTrue: [ rec ]
-						ifFalse: 
-							[ RBMessageNode 
+						ifFalse: [
+							RBMessageNode 
 								receiver: rec
 								selectorParts: msg first
 								arguments: msg second ] ] ]
 ]
 
 { #category : #private }
-PPSmalltalkCompiler >> build: aTempCollection sequence: aStatementCollection [ 
-	^ (aTempCollection isEmpty 
-		ifTrue: [ RBSequenceNode new ]
-		ifFalse: 
-			[ RBSequenceNode 
-				leftBar: aTempCollection first
-				temporaries: aTempCollection second
-				rightBar: aTempCollection last ])
-		statements: aStatementCollection;
-		yourself
+PPSmalltalkCompiler >> build: aTempCollection sequence: aStatementCollection [
+	| nodes periods result |
+	nodes := OrderedCollection new.
+	periods := OrderedCollection new.
+	aStatementCollection do: [ :each |
+		(each isKindOf: RBProgramNode)
+			ifTrue: [ nodes add: each ]
+			ifFalse: [ periods add: each start ] ].
+	result := RBSequenceNode statements: nodes.
+	result periods: periods.
+	aTempCollection isEmpty ifFalse: [
+		result
+			leftBar: aTempCollection first start
+			temporaries: aTempCollection second
+			rightBar: aTempCollection last start ].
+	^ result
 ]
 
 { #category : #private }
@@ -145,49 +133,37 @@ PPSmalltalkCompiler >> buildString: aString [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> byteLiteral [
-	^ super byteLiteral ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asByteArray ]
+	^ super byteLiteral ==> [ :nodes | RBLiteralArrayNode startPosition: nodes first start contents: nodes second stopPosition: nodes last start isByteArray: true ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> byteLiteralArray [
-	^ super byteLiteralArray ==> [ :nodes | RBLiteralNode value: (nodes second collect: [ :each | each value ]) asByteArray ]
+	^ super byteLiteralArray ==> [ :nodes | RBLiteralArrayNode startPosition: nodes first start contents: nodes second stopPosition: nodes last start isByteArray: true ]
 ]
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> cascadeExpression [
-	^ super cascadeExpression map: 
-		[ :receiver :messages | 
-		self 
-			build: receiver
-			cascade: messages ]
+	^ super cascadeExpression map: [ :receiver :messages | self build: receiver cascade: messages ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> charLiteral [
-	^ super charLiteral ==> [ :token | RBLiteralNode value: token value second ]
+	^ super charLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: token value second start: token start stop: token stop) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> expression [
-	^ super expression map: 
-		[ :vars :expr | 
-		self 
-			build: expr
-			assignment: vars ]
+	^ super expression map: [ :vars :expr | self build: expr assignment: vars ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> falseLiteral [
-	^ super falseLiteral ==> [ :token | RBLiteralNode value: false ]
+	^ super falseLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: false start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> keywordExpression [
-	^ super keywordExpression map: 
-		[ :rec :msg | 
-		self 
-			build: rec
-			messages: (Array with: msg) ]
+	^ super keywordExpression map: [ :receiver :message | self build: receiver messages: (Array with: message) ]
 ]
 
 { #category : #grammar }
@@ -195,15 +171,14 @@ PPSmalltalkCompiler >> method [
 	^ super method map: [ :declaration :body | 
 		declaration pragmas: body first.
 		declaration body: (self 
-				build: body second
-				sequence: body third).
+			build: body second
+			sequence: body third).
 		declaration ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> methodDeclaration [
-	^ super methodDeclaration ==> 
-		[ :nodes | 
+	^ super methodDeclaration ==> [ :nodes | 
 		RBMethodNode 
 			selectorParts: nodes first
 			arguments: nodes second ]
@@ -211,65 +186,67 @@ PPSmalltalkCompiler >> methodDeclaration [
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> nilLiteral [
-	^ super nilLiteral ==> [ :token | RBLiteralNode value: nil ]
+	^ super nilLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: nil start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> numberLiteral [
-	^ super numberLiteral ==> [ :token | RBLiteralNode value: (Number readFrom: token value) ]
+	^ super numberLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBNumberLiteralToken value: (Number readFrom: token value) start: token start stop: token stop source: token value) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> parens [
-	^ super parens ==> #second
+	^ super parens map: [ :open :expr :close | expr addParenthesis: (open start to: close start) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> pragma [
-	^ super pragma ==> [ :nodes | RBPragmaNode selectorParts: nodes second first arguments: nodes second second ]
+	^ super pragma ==> [ :nodes | 
+		(RBPragmaNode selectorParts: nodes second first arguments: nodes second second)
+			left: nodes first start;
+			right: nodes last start;
+			yourself ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> return [
-	^ super return map: [ :token :expr | RBReturnNode value: expr ]
+	^ super return map: [ :token :expr | RBReturnNode return: token start value: expr ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> sequence [
-	^ super sequence map: 
-		[ :temps :stats | 
-		self 
-			build: temps
-			sequence: stats ]
+	^ super sequence map: [ :temps :stats | self build: temps sequence: stats ]
+]
+
+{ #category : #accessing }
+PPSmalltalkCompiler >> start [
+	^ ([ :stream | stream collection ] asParser and , super start)
+		map: [ :source :node | node source: source ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> stringLiteral [
-	^ super stringLiteral ==> [ :token | RBLiteralNode value: (self buildString: token value) ]
+	^ super stringLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: (self buildString: token value) start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> symbolLiteral [
-	^ super symbolLiteral ==> [ :token | RBLiteralNode value: (self buildString: token value) ]
+	^ super symbolLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: (self buildString: token value) start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> symbolLiteralArray [
-	^ super symbolLiteralArray ==> [ :token | RBLiteralNode value: (self buildString: token value) asSymbol ]
+	^ super symbolLiteralArray ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: (self buildString: token value) asSymbol start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkCompiler >> trueLiteral [
-	^ super trueLiteral ==> [ :token | RBLiteralNode value: true ]
+	^ super trueLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: true start: token start stop: token stop) ]
 ]
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> unaryExpression [
-	^ super unaryExpression map: 
-		[ :receiver :messages | 
-		self 
-			build: receiver
-			messages: messages ]
+	^ super unaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
 ]
 
 { #category : #grammar }
