@@ -6,8 +6,8 @@ Class {
 
 { #category : #grammar }
 PPSmalltalkCompiler >> array [
-	^ super array ==> [ :nodes |
-		(RBArrayNode statements: nodes second)
+	^ super array ==> [ :nodes | 
+		(self buildArray: nodes second)
 			left: nodes first start;
 			right: nodes last start;
 			yourself ]
@@ -115,6 +115,20 @@ PPSmalltalkCompiler >> build: aTempCollection sequence: aStatementCollection [
 			leftBar: aTempCollection first start
 			temporaries: aTempCollection second
 			rightBar: aTempCollection last start ].
+	^ result
+]
+
+{ #category : #private }
+PPSmalltalkCompiler >> buildArray: aStatementCollection [
+	| nodes periods result |
+	nodes := OrderedCollection new.
+	periods := OrderedCollection new.
+	aStatementCollection do: [ :each |
+		(each isKindOf: RBProgramNode)
+			ifTrue: [ nodes add: each ]
+			ifFalse: [ periods add: each start ] ].
+	result := RBArrayNode statements: nodes.
+	result periods: periods.
 	^ result
 ]
 
