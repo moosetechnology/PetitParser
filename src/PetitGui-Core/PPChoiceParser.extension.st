@@ -12,10 +12,10 @@ PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 				borderWidth: 0;
 				color: Color transparent;
 				layoutPolicy: TableLayout new;
+				cellPositioning: #leftCenter;
 				listDirection: #topToBottom;
-				wrapCentering: #center;
 				hResizing: #shrinkWrap;
-				vResizing: #shrinkWrap;
+				vResizing: #spaceFill;
 				layoutInset: 5;
 				cellInset: 5.
 			self children
