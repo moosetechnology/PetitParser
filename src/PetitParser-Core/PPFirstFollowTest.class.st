@@ -174,7 +174,7 @@ PPFirstFollowTest >> testIsNullable [
 	self assert: PPEpsilonParser new isNullable.
 
 	self deny: $a asParser plus isNullable.	
-	self deny: PPStringParser new isNullable.
+	self deny: PPLiteralSequenceParser new isNullable.
 	self deny: PPPredicateParser new isNullable.
 	self deny: PPChoiceParser new isNullable.
 	self deny: PPSequenceParser new isNullable.
@@ -187,8 +187,9 @@ PPFirstFollowTest >> testIsTerminal [
 	self assert: PPEpsilonParser new isTerminal.
 	self assert: PPFailingParser new isTerminal.
 	self assert: PPPluggableParser new isTerminal.
-	self assert: PPStringParser new isTerminal.
 	self assert: PPPredicateParser new isTerminal.
+	self assert: PPLiteralObjectParser new isTerminal.
+	self assert: PPLiteralSequenceParser new isTerminal.
 	
 	self deny: PPChoiceParser new isTerminal.
 	self deny: PPSequenceParser new isTerminal.
