@@ -254,7 +254,7 @@ PPSmalltalkGrammar >> falseToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> identifier [
-	^ #letter asParser , (#word asParser / '_' asParser) star
+	^ #letter asParser , #word asParser star
 ]
 
 { #category : #token }
