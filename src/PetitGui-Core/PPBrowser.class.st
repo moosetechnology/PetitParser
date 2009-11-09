@@ -45,8 +45,9 @@ PPBrowser >> browseGraphOn: aBrowser [
 
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
-	aBrowser title: 'PetitParser Browser'.
+	aBrowser title: 'PetitParser Browser'; color: Color purple lighter lighter.
 	aBrowser column: #parsers; column: #production span: 3.
+	
 	aBrowser showOn: #parsers; using: [ 
 		self browseParserOn: aBrowser ].
 	aBrowser showOn: #production; from: #parsers -> #selectionPath; using: [
@@ -86,14 +87,18 @@ PPBrowser >> browseTestOn: aBrowser [
 	| browser contents |
 	browser := aBrowser table.
 	browser title: 'Test'; row: #input; row: #output.
-
+	
+	contents := String new.
 	browser showOn: #input; using: [
 		browser text
 			display: [ :parsers | contents ];
-			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation | contents := presentation text copy ] ].
+			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation | 
+				contents := presentation text copy ] ].
 	browser showOn: #output; from: #outer -> #entity; from: #input; using: [
 		browser text
-			display: [ :parsers :input | parsers last parse: input asParserStream ] ]
+			useExplicitNotNil;
+			when: [ :parsers | parsers notNil ];
+			display: [ :parsers :value | parsers last parse: contents asParserStream ] ]
 ]
 
 { #category : #public }
