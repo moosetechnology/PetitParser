@@ -1,6 +1,11 @@
 Extension { #name : #PPSequenceParser }
 
 { #category : #'*petitgui-accessing' }
+PPSequenceParser >> exampleOn: aStream [
+	parsers do: [ :each | each exampleOn: aStream ]
+]
+
+{ #category : #'*petitgui-accessing' }
 PPSequenceParser >> morphicShapeSeen: aSet depth: anInteger [
 	| morph |
 	^ (anInteger < 1 or: [ aSet includes: self ])

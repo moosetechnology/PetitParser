@@ -18,6 +18,15 @@ PPParser >> displayName [
 ]
 
 { #category : #'*petitgui-accessing' }
+PPParser >> example [
+	^ String streamContents: [ :stream | self exampleOn: stream ] limitedTo: 1024
+]
+
+{ #category : #'*petitgui-accessing' }
+PPParser >> exampleOn: aStream [
+]
+
+{ #category : #'*petitgui-accessing' }
 PPParser >> morphicShape [
 	^ self morphicShapeSeen: IdentitySet new depth: 2
 ]

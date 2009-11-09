@@ -1,6 +1,12 @@
 Extension { #name : #PPRepeatingParser }
 
 { #category : #'*petitgui-accessing' }
+PPRepeatingParser >> exampleOn: aStream [
+	(min to: (max min: min + 5)) atRandom
+		timesRepeat: [ super exampleOn: aStream ]
+]
+
+{ #category : #'*petitgui-accessing' }
 PPRepeatingParser >> morphicShapeSeen: aSet depth: anInteger [
 	| morph |
 	^ (anInteger < 1 or: [ aSet includes: self ])

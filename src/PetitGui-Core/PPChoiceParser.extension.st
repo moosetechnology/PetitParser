@@ -1,6 +1,11 @@
 Extension { #name : #PPChoiceParser }
 
 { #category : #'*petitgui-accessing' }
+PPChoiceParser >> exampleOn: aStream [
+	parsers atRandom exampleOn: aStream
+]
+
+{ #category : #'*petitgui-accessing' }
 PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 	| morph |
 	^ (anInteger < 1 or: [ aSet includes: self ])
