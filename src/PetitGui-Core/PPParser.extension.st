@@ -45,8 +45,3 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger [
 		contents: self displayName;
 		yourself
 ]
-
-{ #category : #'*petitgui-accessing' }
-PPParser >> productions [
-	^ #()
-]
