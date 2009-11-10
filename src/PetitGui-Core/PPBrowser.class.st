@@ -65,7 +65,23 @@ PPBrowser >> browseParserOn: aBrowser [
 		format: [ :parser | parser displayName ];
 		children: [ :parser | 
 			parser productions
-				asSortedCollection: [ :a :b | a displayName < b displayName ] ]
+				asSortedCollection: [ :a :b | a displayName < b displayName ] ];
+		act: [ :node | 
+			StandardToolSet
+				browse: (self parserClassFor: node selectionPath)
+				selector: (self parserSelectorFor: node selectionPath) ]
+		on: $b entitled: 'browse (b)';
+		act: [ :node :parsers | 
+			| class selector |
+			class := self parserClassFor: node selectionPath.
+			selector := self parserSelectorFor: node selectionPath.
+			selector = #start
+				ifTrue: [ class removeFromSystem ]
+				ifFalse: [
+					(class allInstVarNames includes: selector asString)
+						ifTrue: [ class removeInstVarName: selector asString ].
+					class removeSelector: selector ] ]
+		on: $x entitled: 'remove (x)'
 ]
 
 { #category : #'browse-parts' }
@@ -73,13 +89,17 @@ PPBrowser >> browseSourceOn: aBrowser [
 	aBrowser text
 		title: 'Source';
 		display: [ :parsers | 
-			parsers first class
-				sourceCodeAt: (parsers size > 1
-					ifTrue: [ parsers last name asSymbol ]
-					ifFalse: [ #start ]) ];
-		act: [ :node :parsers | parsers first class compile: node text asString ] 
-			on: $s entitled: 'accept (s)';
-		forSmalltalk: [ :parsers | parsers first class ]
+			(self parserClassFor: parsers)
+				sourceCodeAt: (self parserSelectorFor: parsers) ];
+		forSmalltalk: [ :parsers | self parserClassFor: parsers ];
+		act: [ :node :parsers | 
+			| class selector |
+			class := self parserClassFor: parsers.
+			selector := class compile: node text asString.
+			(selector numArgs = 0 and: [ (class allInstVarNames includes: selector asString) not ])
+				ifTrue: [ class addInstVarName: selector asString ] ]
+		on: $s entitled: 'accept (s)'
+		
 ]
 
 { #category : #'browse-parts' }
@@ -108,4 +128,17 @@ PPBrowser >> open [
 	self browseOn: browser.
 	browser openOn: (PPCompositeParser allSubclasses
 		collect: [ :class | class named: class name ])
+]
+
+{ #category : #utilities }
+PPBrowser >> parserClassFor: anArray [
+	^ anArray isEmpty 
+		ifFalse: [ anArray first class ]
+]
+
+{ #category : #utilities }
+PPBrowser >> parserSelectorFor: anArray [
+	^ anArray size > 1
+		ifTrue: [ anArray second name asSymbol ]
+		ifFalse: [ #start ]
 ]
