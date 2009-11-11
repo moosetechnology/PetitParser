@@ -19,18 +19,19 @@ PPBrowser >> browseClassesOn: aBrowser [
 		format: [ :class | class name ];
 		children: [ :class | self subclassesOf: class ];
 		act: [
-			StandardToolSet browse: self selectedClass selector: nil ] 
-			on: $b entitled: 'browse (b)';
-		act: [
 			self selectedClass removeFromSystem.
 			aBrowser entity: self rootClass ]
-			on: $r entitled: 'remove (x)'
+			on: $r entitled: 'remove (x)';
+		act: [
+			StandardToolSet browse: self selectedClass selector: nil ] 
+			on: $b entitled: 'browse (b)'
 ]
 
 { #category : #'browse-parts' }
 PPBrowser >> browseExampleOn: aBrowser [
 	aBrowser text
 		title: 'Example';
+		useExplicitNotNil;
 		display: [ :parsers | self production example ]
 ]
 
@@ -38,6 +39,7 @@ PPBrowser >> browseExampleOn: aBrowser [
 PPBrowser >> browseFirstOn: aBrowser [
 	aBrowser list
 		title: 'First';
+		useExplicitNotNil;
 		format: [ :parser | parser displayName ];
 		display: [ :parsers | self production firstSet ]
 ]
@@ -46,6 +48,7 @@ PPBrowser >> browseFirstOn: aBrowser [
 PPBrowser >> browseFollowOn: aBrowser [
 	aBrowser list
 		title: 'Follow';
+		useExplicitNotNil;
 		format: [ :parser | parser displayName ];
 		display: [ :parsers | self production followSet ]
 ]
@@ -54,6 +57,7 @@ PPBrowser >> browseFollowOn: aBrowser [
 PPBrowser >> browseGraphOn: aBrowser [
 	aBrowser morph
 		title: 'Graph';
+		useExplicitNotNil;
 		display: [ :parsers |
 			| morph |
 			morph := ScrollPane new.
@@ -63,7 +67,7 @@ PPBrowser >> browseGraphOn: aBrowser [
 
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
-	aBrowser title: 'PetitParser Browser'; color: Color purple lighter lighter.
+	aBrowser title: 'PetitParser Browser'; color: Color yellow muchDarker.
 	aBrowser row: [ :row | row column: #classes; column: #selectors ].
 	aBrowser row: [ :row | row column: #actions span: 2 ] span: 2.
 	
@@ -113,8 +117,9 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 PPBrowser >> browseSourceOn: aBrowser [
 	aBrowser text
 		title: 'Source';
-		forSmalltalk: [ self selectedClass ];
+		useExplicitNotNil;
 		display: [ self sourceCode ];
+		forSmalltalk: [ self selectedClass ];
 		act: [ :node | 
 			| class selector |
 			class := self selectedClass.
@@ -129,18 +134,19 @@ PPBrowser >> browseSourceOn: aBrowser [
 
 { #category : #'browse-parts' }
 PPBrowser >> browseTestOn: aBrowser [
-	| browser contents |
-	browser := aBrowser table.
-	browser title: 'Test'; row: #input; row: #output.
+	| table contents |
+	table := aBrowser table.
+	table title: 'Test'; useExplicitNotNil.
+	table row: #input; row: #output.
 	
 	contents := String new.
-	browser showOn: #input; using: [
-		browser text
+	table showOn: #input; using: [
+		table text
 			display: [ :parsers | contents ];
 			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation | 
 				contents := presentation text copy ] ].
-	browser showOn: #output; from: #outer -> #entity; from: #input; using: [
-		browser text
+	table showOn: #output; from: #outer -> #entity; from: #input; using: [
+		table text
 			useExplicitNotNil;
 			when: [ :parsers | parsers notNil ];
 			display: [
@@ -199,7 +205,7 @@ PPBrowser >> selectedSelector: aSelector [
 
 { #category : #'accessing-view' }
 PPBrowser >> sourceCode [
-	^ self selectedClass 
+	^ (self selectedClass ifNil: [ ^ String new ]) 
 		sourceCodeAt: (self selectedSelector ifNil: [ #start ])
 		ifAbsent: [ String new ]
 ]
