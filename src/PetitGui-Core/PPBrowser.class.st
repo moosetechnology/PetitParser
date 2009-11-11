@@ -1,6 +1,9 @@
 Class {
 	#name : #PPBrowser,
 	#superclass : #Object,
+	#instVars : [
+		'browser'
+	],
 	#category : #'PetitGui-Core'
 }
 
@@ -10,10 +13,25 @@ PPBrowser class >> open [
 ]
 
 { #category : #'browse-parts' }
+PPBrowser >> browseClassesOn: aBrowser [
+	aBrowser tree
+		title: 'Classes';
+		format: [ :class | class name ];
+		children: [ :class | self subclassesOf: class ];
+		act: [ :node | 
+			StandardToolSet browse: node selection selector: nil ] 
+			on: $b entitled: 'browse (b)';
+		act: [ :node | 
+			node selection removeFromSystem.
+			aBrowser entity: self rootClass ]
+			on: $r entitled: 'remove (x)'
+]
+
+{ #category : #'browse-parts' }
 PPBrowser >> browseExampleOn: aBrowser [
 	aBrowser text
 		title: 'Example';
-		display: [ :parsers | (self productionFor: parsers) example ]
+		display: [ :parsers | self production example ]
 ]
 
 { #category : #'browse-parts' }
@@ -21,7 +39,7 @@ PPBrowser >> browseFirstOn: aBrowser [
 	aBrowser list
 		title: 'First';
 		format: [ :parser | parser displayName ];
-		display: [ :parsers | (self productionFor: parsers) firstSet ]
+		display: [ :parsers | self production firstSet ]
 ]
 
 { #category : #'browse-parts' }
@@ -29,7 +47,7 @@ PPBrowser >> browseFollowOn: aBrowser [
 	aBrowser list
 		title: 'Follow';
 		format: [ :parser | parser displayName ];
-		display: [ :parsers | (self productionFor: parsers) followSet ]
+		display: [ :parsers | self production followSet ]
 ]
 
 { #category : #'browse-parts' }
@@ -39,18 +57,22 @@ PPBrowser >> browseGraphOn: aBrowser [
 		display: [ :parsers |
 			| morph |
 			morph := ScrollPane new.
-			morph scroller addMorph: (self productionFor: parsers) morphicShape.
+			morph scroller addMorph: self production morphicShape.
 			morph ]
 ]
 
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
 	aBrowser title: 'PetitParser Browser'; color: Color purple lighter lighter.
-	aBrowser column: #parsers; column: #production span: 3.
+	aBrowser row: [ :row | row column: #classes; column: #selectors ].
+	aBrowser row: [ :row | row column: #actions span: 2 ] span: 2.
 	
-	aBrowser showOn: #parsers; using: [ 
-		self browseParserOn: aBrowser ].
-	aBrowser showOn: #production; from: #parsers -> #selectionPath; using: [
+	aBrowser showOn: #classes; using: [ 
+		self browseClassesOn: aBrowser ].
+	aBrowser showOn: #selectors; from: #classes; using: [
+		self browseSelectorsOn: aBrowser ].
+
+	aBrowser showOn: #actions; from: #classes; from: #selectors; using: [
 		self browseSourceOn: aBrowser.
 		self browseTestOn: aBrowser.
 		self browseGraphOn: aBrowser.
@@ -60,52 +82,49 @@ PPBrowser >> browseOn: aBrowser [
 ]
 
 { #category : #'browse-parts' }
-PPBrowser >> browseParserOn: aBrowser [
-	aBrowser tree
-		format: [ :value | value asString ];
-		children: [ :value | self childrenOf: value ];
+PPBrowser >> browseSelectorsOn: aBrowser [
+	aBrowser list
+		title: 'Selectors';
+		format: [ :class | class asString ];
+		display: [ :class | 
+			(((class allInstVarNames
+				copyWithoutAll: self rootClass allInstVarNames)
+				collect: [ :each | each asSymbol ])
+				select: [ :each | class includesSelector: each ])
+				asSortedCollection ];
 		act: [ :node | 
-			StandardToolSet
-				browse: (self classFor: node selectionPath)
-				selector: (self selectorFor: node selectionPath) ]
+			StandardToolSet 
+				browse: self selectedClass 
+				selector: self selectedSelector ] 
 			on: $b entitled: 'browse (b)';
-		act: [ :node :parsers | 
+		act: [ :node |
 			| class selector |
-			class := self classFor: node selectionPath.
-			selector := self selectorFor: node selectionPath.
-			selector = #start
-				ifTrue: [ class removeFromSystem ]
-				ifFalse: [
-					(class allInstVarNames includes: selector asString)
-						ifTrue: [ class removeInstVarName: selector asString ].
-					class removeSelector: selector ].
-			aBrowser entity: self model.
-			((aBrowser paneNamed: #parsers)
-				port: #selection) 
-					value: class ]
-			on: $x entitled: 'remove (x)'
+			class := self selectedClass.
+			selector := self selectedSelector.
+			(class instVarNames includes: selector)
+				ifTrue: [ class removeInstVarName: selector ].
+			class removeSelector: selector.
+			aBrowser entity: self rootModel.
+			self selectedClass: class ]
+			on: $r entitled: 'remove (x)'
 ]
 
 { #category : #'browse-parts' }
 PPBrowser >> browseSourceOn: aBrowser [
 	aBrowser text
 		title: 'Source';
-		display: [ :parsers | 
-			(self classFor: parsers)
-				sourceCodeAt: (self selectorFor: parsers) ];
-		forSmalltalk: [ :parsers | self classFor: parsers ];
-		act: [ :node :parsers | 
+		forSmalltalk: [ self selectedClass ];
+		display: [ self sourceCode ];
+		act: [ :node | 
 			| class selector |
-			class := self classFor: parsers.
+			class := self selectedClass.
 			selector := class compile: node text asString.
-			(selector numArgs = 0 and: [ (class allInstVarNames includes: selector asString) not ])
+			(selector numArgs = 0 and: [ (class allInstVarNames includes: selector) not ])
 				ifTrue: [ class addInstVarName: selector asString ].
-			aBrowser entity: self model.
-			((aBrowser paneNamed: #parsers) 
-				port: #selection)
-				value: selector ]
+			aBrowser entity: self rootModel.
+			self selectedClass: class.
+			self selectedSelector: selector ]
 		on: $s entitled: 'accept (s)'
-		
 ]
 
 { #category : #'browse-parts' }
@@ -124,73 +143,68 @@ PPBrowser >> browseTestOn: aBrowser [
 		browser text
 			useExplicitNotNil;
 			when: [ :parsers | parsers notNil ];
-			display: [ :parsers | 
-				(self productionFor: parsers)
-					parse: contents asParserStream ] ]
-]
-
-{ #category : #querying }
-PPBrowser >> childrenOf: aBehavior [
-	| variables |
-	aBehavior isBehavior
-		ifFalse: [ ^ Array new ].
-	variables := ((aBehavior allInstVarNames
-		copyWithoutAll: self root allInstVarNames)
-			collect: [ :each | each asSymbol ])
-				select: [ :each | aBehavior includesSelector: each ].
-	^ OrderedCollection new
-		addAll: (aBehavior subclasses asSortedCollection: [ :a :b | a name < b name ]);
-		addAll: (variables asSortedCollection);
-		yourself
-]
-
-{ #category : #querying }
-PPBrowser >> classFor: aSelectionPath [
-	aSelectionPath reverseDo: [ :each |
-		each isBehavior
-			ifTrue: [ ^ each ] ].
-	^ self root
-]
-
-{ #category : #accessing }
-PPBrowser >> model [
-	^ self childrenOf: self root
+			display: [
+				| result |
+				result := self production
+					parse: contents asParserStream.
+				result isFailure
+					ifTrue: [  ].
+				result ] ]
 ]
 
 { #category : #public }
 PPBrowser >> open [
-	| browser |
 	browser := GLMTableLayoutBrowser new.
 	self browseOn: browser.
-	browser openOn: self model
+	browser openOn: self rootModel
 ]
 
-{ #category : #querying }
-PPBrowser >> parserFor: aSelectionPath [
-	aSelectionPath reverseDo: [ :each |
-		each isBehavior
-			ifTrue: [ ^ each ] ].
-	^ self root
-]
-
-{ #category : #querying }
-PPBrowser >> productionFor: aSelectionPath [
+{ #category : #'accessing-view' }
+PPBrowser >> production [
 	| parser selector |
-	parser := (self classFor: aSelectionPath) new.
-	selector := self selectorFor: aSelectionPath.
-	^ selector = #start 
-		ifFalse: [ parser instVarNamed: selector ]
-		ifTrue: [ parser ]
+	parser := self selectedClass new.
+	selector := self selectedSelector ifNil: [ ^ parser ].
+	^ parser instVarNamed: selector asString
 ]
 
 { #category : #accessing }
-PPBrowser >> root [
+PPBrowser >> rootClass [
 	^ PPCompositeParser
 ]
 
+{ #category : #accessing }
+PPBrowser >> rootModel [
+	^ self subclassesOf: self rootClass
+]
+
+{ #category : #'accessing-view' }
+PPBrowser >> selectedClass [
+	^ ((browser paneNamed: #classes) port: #selection) value
+]
+
+{ #category : #'accessing-view' }
+PPBrowser >> selectedClass: aClass [
+	((browser paneNamed: #classes) port: #selection) value: aClass
+]
+
+{ #category : #'accessing-view' }
+PPBrowser >> selectedSelector [
+	^ ((browser paneNamed: #selectors) port: #selection) value
+]
+
+{ #category : #'accessing-view' }
+PPBrowser >> selectedSelector: aSelector [
+	((browser paneNamed: #selectors) port: #selection) value: aSelector
+]
+
+{ #category : #'accessing-view' }
+PPBrowser >> sourceCode [
+	^ self selectedClass 
+		sourceCodeAt: (self selectedSelector ifNil: [ #start ])
+		ifAbsent: [ String new ]
+]
+
 { #category : #querying }
-PPBrowser >> selectorFor: aSelectionPath [
-	^ (aSelectionPath isEmpty or: [ aSelectionPath last isBehavior ])
-		ifFalse: [ aSelectionPath last ]
-		ifTrue: [ #start ]
+PPBrowser >> subclassesOf: aBehavior [
+	^ aBehavior subclasses asSortedCollection: [ :a :b | a name < b name ]
 ]
