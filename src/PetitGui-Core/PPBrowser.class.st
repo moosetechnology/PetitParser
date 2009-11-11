@@ -18,11 +18,11 @@ PPBrowser >> browseClassesOn: aBrowser [
 		title: 'Classes';
 		format: [ :class | class name ];
 		children: [ :class | self subclassesOf: class ];
-		act: [ :node | 
-			StandardToolSet browse: node selection selector: nil ] 
+		act: [
+			StandardToolSet browse: self selectedClass selector: nil ] 
 			on: $b entitled: 'browse (b)';
-		act: [ :node | 
-			node selection removeFromSystem.
+		act: [
+			self selectedClass removeFromSystem.
 			aBrowser entity: self rootClass ]
 			on: $r entitled: 'remove (x)'
 ]
@@ -92,12 +92,12 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 				collect: [ :each | each asSymbol ])
 				select: [ :each | class includesSelector: each ])
 				asSortedCollection ];
-		act: [ :node | 
+		act: [
 			StandardToolSet 
 				browse: self selectedClass 
 				selector: self selectedSelector ] 
 			on: $b entitled: 'browse (b)';
-		act: [ :node |
+		act: [
 			| class selector |
 			class := self selectedClass.
 			selector := self selectedSelector.
