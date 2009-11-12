@@ -81,7 +81,7 @@ PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet
 
 { #category : #'*petitanalyzer-testing' }
 PPParser >> isNullable [
-	"Answer true if the receiver is a nullable parser, it can successfully parse nothing."
+	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
 ]
