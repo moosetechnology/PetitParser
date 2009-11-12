@@ -9,5 +9,5 @@ Character >> - aCharacter [
 
 { #category : #'*petitparser-converting' }
 Character >> asParser [
-	^ PPLiteralObjectParser on: self
+	^ PPPredicateParser char: self
 ]

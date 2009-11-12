@@ -20,11 +20,6 @@ PPStringParser >> initializeOn: aString [
 	string := aString
 ]
 
-{ #category : #testing }
-PPStringParser >> isTerminal [
-	^ true
-]
-
 { #category : #parsing }
 PPStringParser >> parse: aStream [
 	| position result |

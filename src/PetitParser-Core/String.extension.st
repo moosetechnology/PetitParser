@@ -2,7 +2,7 @@ Extension { #name : #String }
 
 { #category : #'*petitparser-core-converting' }
 String >> asParser [
-	^ PPLiteralSequenceParser on: self
+	^ PPStringParser on: self
 ]
 
 { #category : #'*petitparser-core' }

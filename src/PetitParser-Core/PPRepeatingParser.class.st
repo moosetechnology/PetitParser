@@ -31,11 +31,6 @@ PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
 	^ (self on: aParser) setMin: aMinInteger max: aMaxInteger
 ]
 
-{ #category : #testing }
-PPRepeatingParser >> isNullable [
-	^ min = 0
-]
-
 { #category : #parsing }
 PPRepeatingParser >> parse: aStream [
 	| start element elements |

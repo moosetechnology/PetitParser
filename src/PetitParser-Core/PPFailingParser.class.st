@@ -15,11 +15,6 @@ PPFailingParser class >> message: aString [
 	^ self new message: aString
 ]
 
-{ #category : #testing }
-PPFailingParser >> isTerminal [
-	^ true
-]
-
 { #category : #accessing }
 PPFailingParser >> message: aString [
 	message := aString
