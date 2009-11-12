@@ -27,9 +27,9 @@ PPParser >> firstSets [
 	^ firstSets
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*petitanalyzer-private' }
 PPParser >> firstSets: aFirstDictionary into: aSet [
-	"PROTECTED: Try to add additional elements to the first-set aSet of the receiver, use the incomplete aFirstDictionary."
+	"PRIVATE: Try to add additional elements to the first-set aSet of the receiver, use the incomplete aFirstDictionary."
 
 	self children do: [ :parser | aSet addAll: (aFirstDictionary at: parser) ]
 ]
@@ -37,15 +37,8 @@ PPParser >> firstSets: aFirstDictionary into: aSet [
 { #category : #'*petitanalyzer-querying' }
 PPParser >> followSet [
 	"Answer the follow-set of the receiver starting at the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #followSets to calculate the follow-sets at once."
-	
-	^ self followSetIn: self
-]
 
-{ #category : #'*petitanalyzer-querying' }
-PPParser >> followSetIn: aParser [
-	"Answer the follow-set of the receiver starting at aParser. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #followSets to calculate the follow-sets at once."
-	
-	^ aParser followSets at: self
+	^ self followSets at: self
 ]
 
 { #category : #'*petitanalyzer-querying' }
@@ -72,9 +65,9 @@ PPParser >> followSets [
 	^ followSets
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*petitanalyzer-private' }
 PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
-	"PROTECTED: Try to add additional elements to the follow-set aSet of the receiver, use the incomplete aFollowDictionary and the complete aFirstDictionary."
+	"PRIVATE: Try to add additional elements to the follow-set aSet of the receiver, use the incomplete aFollowDictionary and the complete aFirstDictionary."
 	
 	self children do: [ :parser | (aFollowDictionary at: parser) addAll: aSet ]
 ]
@@ -91,4 +84,30 @@ PPParser >> isTerminal [
 	"Answer true if the receiver is a terminal parser, that means it does not delegate to any other parser."
 	
 	^ false
+]
+
+{ #category : #'*petitanalyzer-querying' }
+PPParser >> leftRecursion [
+	"Answer an ordered collection with a left-recursive cycle starting at the receiver, or an empty collection if no such cycle could be detected."
+	
+	| result |
+	result := OrderedCollection new.
+	self leftRecursion: result firstSets: self firstSets answer: [ ^ result ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-private' }
+PPParser >> leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock [
+	"PRIVATE: Try to find a cycle, where anOrderedCollection contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If anOrderedCollection already contains the receiver, then we are in a cycle and need to return. If the receiver is the first element, we actually found a receiver we are interested in."
+
+	self isTerminal
+		ifTrue: [ ^ self ].
+	(anOrderedCollection includes: self) ifTrue: [
+		anOrderedCollection first = self
+			ifTrue: [ anAnswerBlock value ]
+			ifFalse: [ ^ self ] ].
+	anOrderedCollection addLast: self.
+	self children 
+		do: [ :each | each leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock ].
+	anOrderedCollection removeLast
 ]

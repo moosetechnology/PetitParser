@@ -1,6 +1,6 @@
 Extension { #name : #PPSequenceParser }
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*petitanalyzer-private' }
 PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 	| nullable |
 	parsers do: [ :parser |
@@ -14,7 +14,7 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 	aSet add: PPEpsilonParser new
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*petitanalyzer-private' }
 PPSequenceParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
 	parsers withIndexDo: [ :parser :index |
 		| followSet firstSet |
@@ -30,4 +30,20 @@ PPSequenceParser >> followSets: aFollowDictionary firstSets: aFirstDictionary in
 					ifTrue: [ followSet addAll: aSet ].
 				followSet addAll: (firstSet 
 					reject: [ :each | each isNullable ]) ] ]
+]
+
+{ #category : #'*petitanalyzer-private' }
+PPSequenceParser >> leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock [
+	(anOrderedCollection includes: self) ifTrue: [
+		anOrderedCollection first = self
+			ifTrue: [ anAnswerBlock value ]
+			ifFalse: [ ^ self ] ].
+	anOrderedCollection addLast: self.
+	parsers do: [ :parser |
+		| firstSet |
+		firstSet := aDictionary at: parser.
+		(firstSet isEmpty or: [ firstSet anySatisfy: [ :each | each isNullable ] ])
+			ifTrue: [ parser leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock ]
+			ifFalse: [ ^ anOrderedCollection removeLast ] ].
+	anOrderedCollection removeLast
 ]
