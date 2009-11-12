@@ -78,36 +78,22 @@ PPFirstFollowTest >> grammarC [
 	^ grammar
 ]
 
-{ #category : #'testing-firstset' }
-PPFirstFollowTest >> testFirstSetExampleA [
-	| grammar |
-	grammar := self grammarA.
-	self assert: (grammar at: #a) firstSet includes: 'a' epsilon: false.
-	self assert: (grammar at: #b) firstSet includes: 'b' epsilon: false.
-	self assert: (grammar at: #c) firstSet includes: 'c' epsilon: false.
-	self assert: (grammar at: #d) firstSet includes: 'd' epsilon: false.
-	self assert: (grammar at: #e) firstSet includes: '' epsilon: true.
-	self assert: (grammar at: #S) firstSet includes: 'abc' epsilon: false.
-	self assert: (grammar at: #A) firstSet includes: 'ab' epsilon: true.
-	self assert: (grammar at: #B) firstSet includes: 'b' epsilon: true
-]
+{ #category : #accessing }
+PPFirstFollowTest >> grammarD [
+	"A highly ambiguous grammar from: Saichaitanya Jampana. Exploring the problem of ambiguity in context-free grammars. Master?s thesis, Oklahoma State University, July 2005."
 
-{ #category : #'testing-firstset' }
-PPFirstFollowTest >> testFirstSetExampleB [
 	| grammar |
-	grammar := self grammarB.
-	self assert: (grammar at: #E) firstSet includes: '(i' epsilon: false.
-	self assert: (grammar at: #Ep) firstSet includes: '+' epsilon: true.
-	self assert: (grammar at: #T) firstSet includes: '(i' epsilon: false.
-	self assert: (grammar at: #Tp) firstSet includes: '*' epsilon: true.
-	self assert: (grammar at: #F) firstSet includes: '(i' epsilon: false
-]
-
-{ #category : #'testing-firstset' }
-PPFirstFollowTest >> testFirstSetExampleC [
-	| grammar |
-	grammar := self grammarC.
-	self assert: grammar firstSet includes: '1' epsilon: false
+	grammar := Dictionary new.
+	#(S A a B b)			do: [ :each | grammar at: each put: PPUnresolvedParser new ].
+	
+	(grammar at: #a)		def: $a asParser.
+	(grammar at: #b)		def: $b asParser.
+		
+	(grammar at: #S)		def: (grammar at: #A) , (grammar at: #B) / (grammar at: #a).
+	(grammar at: #A)		def: (grammar at: #S) , (grammar at: #B) / (grammar at: #b).
+	(grammar at: #B)		def: (grammar at: #B) , (grammar at: #A) / (grammar at: #a).
+		
+	^ grammar
 ]
 
 { #category : #'testing-firstset' }
@@ -123,6 +109,49 @@ PPFirstFollowTest >> testFirstSetExpression [
 	self assert: grammar power firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar primary firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar terms firstSet includes: '(-0123456789' epsilon: false
+]
+
+{ #category : #'testing-firstset' }
+PPFirstFollowTest >> testFirstSetGrammarA [
+	| grammar |
+	grammar := self grammarA.
+	self assert: (grammar at: #a) firstSet includes: 'a' epsilon: false.
+	self assert: (grammar at: #b) firstSet includes: 'b' epsilon: false.
+	self assert: (grammar at: #c) firstSet includes: 'c' epsilon: false.
+	self assert: (grammar at: #d) firstSet includes: 'd' epsilon: false.
+	self assert: (grammar at: #e) firstSet includes: '' epsilon: true.
+	self assert: (grammar at: #S) firstSet includes: 'abc' epsilon: false.
+	self assert: (grammar at: #A) firstSet includes: 'ab' epsilon: true.
+	self assert: (grammar at: #B) firstSet includes: 'b' epsilon: true
+]
+
+{ #category : #'testing-firstset' }
+PPFirstFollowTest >> testFirstSetGrammarB [
+	| grammar |
+	grammar := self grammarB.
+	self assert: (grammar at: #E) firstSet includes: '(i' epsilon: false.
+	self assert: (grammar at: #Ep) firstSet includes: '+' epsilon: true.
+	self assert: (grammar at: #T) firstSet includes: '(i' epsilon: false.
+	self assert: (grammar at: #Tp) firstSet includes: '*' epsilon: true.
+	self assert: (grammar at: #F) firstSet includes: '(i' epsilon: false
+]
+
+{ #category : #'testing-firstset' }
+PPFirstFollowTest >> testFirstSetGrammarC [
+	| grammar |
+	grammar := self grammarC.
+	self assert: grammar firstSet includes: '1' epsilon: false
+]
+
+{ #category : #'testing-firstset' }
+PPFirstFollowTest >> testFirstSetGrammarD [
+	| grammar |
+	grammar := self grammarD.
+	self assert: (grammar at: #S) firstSet includes: 'ab' epsilon: false.
+	self assert: (grammar at: #A) firstSet includes: 'ab' epsilon: false.
+	self assert: (grammar at: #B) firstSet includes: 'a' epsilon: false.
+	self assert: (grammar at: #a) firstSet includes: 'a' epsilon: false.
+	self assert: (grammar at: #b) firstSet includes: 'b' epsilon: false
 ]
 
 { #category : #'testing-firstset' }
@@ -166,6 +195,18 @@ PPFirstFollowTest >> testFollowSetExampleB [
 { #category : #'testing-followset' }
 PPFirstFollowTest >> testFollowSetExampleC [
 	self assert: self grammarC followSet includes: '+' epsilon: true
+]
+
+{ #category : #'testing-followset' }
+PPFirstFollowTest >> testFollowSetExampleD [
+	| grammar followSets |
+	grammar := self grammarD.
+	followSets := (grammar at: #S) followSets.
+	self assert: (followSets at: (grammar at: #S)) includes: 'a' epsilon: true.
+	self assert: (followSets at: (grammar at: #A)) includes: 'ab' epsilon: true.
+	self assert: (followSets at: (grammar at: #B)) includes: 'ab' epsilon: true.
+	self assert: (followSets at: (grammar at: #a)) includes: 'ab' epsilon: true.
+	self assert: (followSets at: (grammar at: #b)) includes: 'ab' epsilon: true
 ]
 
 { #category : #testing }
