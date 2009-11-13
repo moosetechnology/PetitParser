@@ -16,8 +16,3 @@ PPLiteralParser class >> on: aString [
 PPLiteralParser >> initializeOn: aLiteral [
 	literal := aLiteral
 ]
-
-{ #category : #testing }
-PPLiteralParser >> isTerminal [
-	^ true
-]

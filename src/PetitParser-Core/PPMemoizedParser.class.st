@@ -21,7 +21,7 @@ PPMemoizedParser >> memoized [
 { #category : #parsing }
 PPMemoizedParser >> parse: aStream [
 	| memento |
-	aStream == stream
+	stream == aStream
 		ifFalse: [ self reset: aStream ].
 	memento := (buffer at: stream position + 1)
 		ifNil: [ buffer at: stream position + 1 put: PPMemento new ].
