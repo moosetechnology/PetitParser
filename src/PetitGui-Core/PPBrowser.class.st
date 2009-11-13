@@ -133,28 +133,29 @@ PPBrowser >> browseSourceOn: aBrowser [
 
 { #category : #'browse-parts' }
 PPBrowser >> browseTestOn: aBrowser [
-	| table contents |
+	| table input output |
 	table := aBrowser table.
 	table title: 'Test'; useExplicitNotNil.
 	table row: #input; row: #output.
 	
-	contents := String new.
+	input := String new.
+	output := String new.
 	table showOn: #input; using: [
 		table text
-			display: [ :parsers | contents ];
-			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation | 
-				contents := presentation text copy ] ].
-	table showOn: #output; from: #outer -> #entity; from: #input; using: [
-		table text
 			useExplicitNotNil;
-			when: [ :parsers | parsers notNil ];
-			display: [
-				| result |
-				result := self production
-					parse: contents asParserStream.
-				result isFailure
-					ifTrue: [  ].
-				result ] ]
+			display: [ :parsers | input ];
+			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
+				input := presentation text copy.
+				output := self production end 
+					parse: input asParserStream ];
+			update: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
+				input := presentation text copy.
+				output := self production end
+					parse: input asParserStream.
+				output explore ] ].
+	table showOn: #output; from: #input; using: [ 
+		table text 
+			display: [ output ] ]
 ]
 
 { #category : #public }
