@@ -1,6 +1,6 @@
 Extension { #name : #PPLiteralParser }
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*petitgui-accessing' }
 PPLiteralParser >> displayName [
-	^ literal asString
+	^ literal printString
 ]

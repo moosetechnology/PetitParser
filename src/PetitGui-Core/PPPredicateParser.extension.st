@@ -1,6 +1,6 @@
 Extension { #name : #PPPredicateParser }
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*petitgui-accessing' }
 PPPredicateParser >> displayName [
 	^ predicateMessage
 ]
