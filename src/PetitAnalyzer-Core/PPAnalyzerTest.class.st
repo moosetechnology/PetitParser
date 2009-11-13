@@ -210,6 +210,21 @@ PPAnalyzerTest >> testFollowSetExampleD [
 ]
 
 { #category : #testing }
+PPAnalyzerTest >> testIsLeaf [
+	self assert: PPEpsilonParser new isLeaf.
+	self assert: PPFailingParser new isLeaf.
+	self assert: PPPluggableParser new isLeaf.
+	self assert: PPLiteralSequenceParser new isLeaf.
+	self assert: PPLiteralObjectParser new isLeaf.
+	self assert: PPPredicateParser new isLeaf.
+	
+	self deny: PPChoiceParser new isLeaf.
+	self deny: PPSequenceParser new isLeaf.
+	self deny: PPAndParser new isLeaf.
+	self deny: PPTokenParser new isLeaf
+]
+
+{ #category : #testing }
 PPAnalyzerTest >> testIsNullable [
 	self assert: $a asParser star isNullable.
 	self assert: PPEpsilonParser new isNullable.
@@ -222,21 +237,6 @@ PPAnalyzerTest >> testIsNullable [
 	self deny: PPSequenceParser new isNullable.
 	self deny: PPAndParser new isNullable.
 	self deny: PPTokenParser new isNullable
-]
-
-{ #category : #testing }
-PPAnalyzerTest >> testIsTerminal [
-	self assert: PPEpsilonParser new isTerminal.
-	self assert: PPFailingParser new isTerminal.
-	self assert: PPPluggableParser new isTerminal.
-	self assert: PPLiteralSequenceParser new isTerminal.
-	self assert: PPLiteralObjectParser new isTerminal.
-	self assert: PPPredicateParser new isTerminal.
-	
-	self deny: PPChoiceParser new isTerminal.
-	self deny: PPSequenceParser new isTerminal.
-	self deny: PPAndParser new isTerminal.
-	self deny: PPTokenParser new isTerminal
 ]
 
 { #category : #'testing-leftrecursion' }

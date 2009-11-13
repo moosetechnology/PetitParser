@@ -30,7 +30,7 @@ PPValidator >> validateFirstFirstConflict [
 	| reverseSets |
 	reverseSets := IdentityDictionary new.
 	firstSets keysAndValuesDo: [ :production :firstSet |
-		production isTerminal ifFalse: [ 
+		production isLeaf ifFalse: [ 
 			firstSet do: [ :other |
 				(reverseSets at: other ifAbsentPut: [ IdentitySet new ])
 					add: production ] ] ].

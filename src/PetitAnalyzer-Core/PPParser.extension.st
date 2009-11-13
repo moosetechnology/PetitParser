@@ -14,7 +14,7 @@ PPParser >> firstSets [
 	| firstSets |
 	firstSets := IdentityDictionary new.
 	self allNodesDo: [ :each | 
-		firstSets at: each put: (each isTerminal
+		firstSets at: each put: (each isLeaf
 			ifTrue: [ IdentitySet with: each ]
 			ifFalse: [ IdentitySet new ]) ].
 	[	| changed tally |
@@ -73,15 +73,15 @@ PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet
 ]
 
 { #category : #'*petitanalyzer-testing' }
-PPParser >> isNullable [
-	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
-	
+PPParser >> isLeaf [
+	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
+
 	^ false
 ]
 
 { #category : #'*petitanalyzer-testing' }
-PPParser >> isTerminal [
-	"Answer true if the receiver is a terminal parser, that means it does not delegate to any other parser."
+PPParser >> isNullable [
+	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
 ]
@@ -100,7 +100,7 @@ PPParser >> leftRecursion [
 PPParser >> leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock [
 	"PRIVATE: Try to find a cycle, where anOrderedCollection contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If anOrderedCollection already contains the receiver, then we are in a cycle and need to return. If the receiver is the first element, we actually found a receiver we are interested in."
 
-	self isTerminal
+	self isLeaf
 		ifTrue: [ ^ self ].
 	(anOrderedCollection includes: self) ifTrue: [
 		anOrderedCollection first = self

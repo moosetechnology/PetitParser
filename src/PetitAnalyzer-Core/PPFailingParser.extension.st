@@ -1,6 +1,6 @@
 Extension { #name : #PPFailingParser }
 
 { #category : #'*petitanalyzer-testing' }
-PPFailingParser >> isTerminal [
+PPFailingParser >> isLeaf [
 	^ true
 ]

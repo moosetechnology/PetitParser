@@ -1,6 +1,6 @@
 Extension { #name : #PPPredicateParser }
 
 { #category : #'*petitanalyzer-testing' }
-PPPredicateParser >> isTerminal [
+PPPredicateParser >> isLeaf [
 	^ true
 ]

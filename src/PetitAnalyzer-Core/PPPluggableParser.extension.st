@@ -1,6 +1,6 @@
 Extension { #name : #PPPluggableParser }
 
 { #category : #'*petitanalyzer-testing' }
-PPPluggableParser >> isTerminal [
+PPPluggableParser >> isLeaf [
 	^ true
 ]

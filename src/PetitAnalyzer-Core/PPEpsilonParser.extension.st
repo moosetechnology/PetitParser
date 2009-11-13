@@ -1,11 +1,11 @@
 Extension { #name : #PPEpsilonParser }
 
 { #category : #'*petitanalyzer-testing' }
-PPEpsilonParser >> isNullable [
+PPEpsilonParser >> isLeaf [
 	^ true
 ]
 
 { #category : #'*petitanalyzer-testing' }
-PPEpsilonParser >> isTerminal [
+PPEpsilonParser >> isNullable [
 	^ true
 ]
