@@ -20,7 +20,7 @@ PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 			cellInset: 5;
 			layoutInset: 0 @ 5;
 			vResizing: #shrinkWrap;
-			color: (self backgroundForDepth: anInteger).
+			color: Color transparent.
 		self children
 			do: [ :each | morph addMorphBack: (cc value: each) ].
 		morph ]
