@@ -39,7 +39,7 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger [
 		borderWidth: 1;	
 		borderColor: Color black;
 		backgroundColor: Color white;
-		textColor: (self isTerminal
+		textColor: (self isLeaf
 			ifTrue: [ Color purple ]
 			ifFalse: [ Color blue ]);
 		contents: self displayName;
