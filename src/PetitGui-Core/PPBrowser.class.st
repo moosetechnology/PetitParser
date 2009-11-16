@@ -134,7 +134,7 @@ PPBrowser >> browseSourceOn: aBrowser [
 { #category : #'browse-parts' }
 PPBrowser >> browseTestOn: aBrowser [
 	| table input output |
-	table := aBrowser table.
+	table := aBrowser tabulator.
 	table title: 'Test'; useExplicitNotNil.
 	table row: #input; row: #output.
 	
@@ -160,7 +160,7 @@ PPBrowser >> browseTestOn: aBrowser [
 
 { #category : #public }
 PPBrowser >> open [
-	browser := GLMTableLayoutBrowser new.
+	browser := GLMTabulator new.
 	self browseOn: browser.
 	browser openOn: self rootModel
 ]
