@@ -9,7 +9,7 @@ PPParser >> backgroundForDepth: anInteger [
 PPParser >> displayColor [
 	^ self isLeaf
 		ifTrue: [ Color purple ]
-		ifFalse: [ Color black ]
+		ifFalse: [ Color blue ]
 ]
 
 { #category : #'*petitgui-accessing' }
@@ -28,33 +28,52 @@ PPParser >> example [
 PPParser >> exampleOn: aStream [
 ]
 
-{ #category : #'*petitgui-accessing' }
-PPParser >> morphicShape [
-	^ self morphicShapeSeen: IdentitySet new depth: 0
-]
-
-{ #category : #'*petitgui-accessing' }
-PPParser >> morphicShapeDefault [
-	^ AlignmentMorph new
-		borderWidth: 1;
-		color: Color white;
-		borderColor: Color black;
-		addMorph: ((StringMorph contents: self displayName)
-			color: (self isLeaf 
-				ifTrue: [ Color purple ] 
-				ifFalse: [ Color blue ])
+{ #category : #'*petitgui-morphic' }
+PPParser >> morphicProduction [
+	^ self newRowMorph
+		addMorphBack: (self newRowMorph
+			layoutInset: 4;
+			addMorphBack: (StringMorph new
+				contents: self displayName;
+				emphasis: TextEmphasis bold emphasisCode;
+				yourself);
 			yourself);
-		vResizing: #shrinkWrap;
-		listCentering: #center;
+		addMorphBack: (self morphicShapeSeen: IdentitySet new depth: 0);
+		addMorphBack: (self newColumnMorph
+			addMorphBack: (self newSpacerMorph);
+			addMorphBack: (LineMorph from: 0 @ 0 to: 20 @ 0 color: Color black width: 1)	
+				makeForwardArrow;
+			yourself);
 		yourself
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*petitgui-morphic' }
+PPParser >> morphicShapeDefault [
+	^ self newRowMorph
+		addMorphBack: (self newColumnMorph
+			addMorphBack: (self newSpacerMorph);
+			addMorphBack: (LineMorph from: 0 @ 0 to: 20 @ 0 color: Color black width: 1)	
+				makeForwardArrow;
+			yourself);
+		addMorphBack: (self newRowMorph
+			borderWidth: 1;
+			layoutInset: 3;
+			color: Color white;
+			on: #click send: #value to: [ Transcript show: self; cr ];
+			addMorphBack: (StringMorph new
+				contents: self displayName;
+				color: self displayColor;
+				yourself);
+			yourself);
+		yourself
+]
+
+{ #category : #'*petitgui-morphic' }
 PPParser >> morphicShapeSeen: aSet depth: anInteger [
 	^ self morphicShapeDefault
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*petitgui-morphic' }
 PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 	" avoid recursion "
 	(aSet includes: self)
@@ -70,4 +89,37 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 		parser 
 			morphicShapeSeen: aSet 
 			depth: anInteger + 1 ]
+]
+
+{ #category : #'*petitgui-morphic-creational' }
+PPParser >> newColumnMorph [
+	^ AlignmentMorph newColumn
+		cellPositioning: #topLeft;
+		color: Color transparent;
+		listCentering: #topLeft;
+		vResizing: #shrinkWrap;
+		hResizing: #shrinkWrap;
+		layoutInset: 0;
+		yourself
+]
+
+{ #category : #'*petitgui-morphic-creational' }
+PPParser >> newRowMorph [
+	^ AlignmentMorph newRow
+		cellPositioning: #topLeft;
+		color: Color transparent;
+		listCentering: #topLeft;
+		vResizing: #shrinkWrap;
+		hResizing: #shrinkWrap;
+		layoutInset: 0;
+		yourself
+]
+
+{ #category : #'*petitgui-morphic-creational' }
+PPParser >> newSpacerMorph [
+	^ Morph new
+		color: Color transparent;
+		borderWidth: 0;
+		extent: 7 @ 7;
+		yourself
 ]

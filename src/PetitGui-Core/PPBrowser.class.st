@@ -62,7 +62,7 @@ PPBrowser >> browseGraphOn: aBrowser [
 			| morph |
 			morph := ScrollPane new.
 			morph color: Color white.
-			morph scroller addMorph: self production morphicShape.
+			morph scroller addMorph: self production morphicProduction.
 			morph ]
 ]
 
