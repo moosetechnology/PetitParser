@@ -1,6 +1,6 @@
 Extension { #name : #PPChoiceParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*petitgui-morphic' }
 PPChoiceParser >> exampleOn: aStream [
 	"If there is already a lot written, try to pick an empty possiblity."
 	
@@ -11,7 +11,7 @@ PPChoiceParser >> exampleOn: aStream [
 	parsers atRandom exampleOn: aStream
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*petitgui-morphic' }
 PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 	^ self morphicShapeSeen: aSet depth: anInteger do: [ :cc |
 		| morph |
@@ -21,9 +21,7 @@ PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 		self children do: [ :each | 
 			morph addMorphBack: (self newRowMorph
 				hResizing: #spaceFill;
-				addMorphBack: (each class = PPEpsilonParser 
-					ifTrue: [ self newSpacerMorph extent: 0 @ 0 ]
-					ifFalse: [ cc value: each ]);
+				addMorphBack: (cc value: each);
 				addMorphBack: (self newColumnMorph
 					hResizing: #spaceFill;
 					addMorphBack: (self newSpacerMorph height: 10);

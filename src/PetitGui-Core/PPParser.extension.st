@@ -31,6 +31,7 @@ PPParser >> exampleOn: aStream [
 { #category : #'*petitgui-morphic' }
 PPParser >> morphicProduction [
 	^ self newRowMorph
+		layoutInset: 4;
 		addMorphBack: (self newRowMorph
 			layoutInset: 4;
 			addMorphBack: (StringMorph new
