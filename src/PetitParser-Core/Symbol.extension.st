@@ -4,8 +4,3 @@ Extension { #name : #Symbol }
 Symbol >> asParser [
 	^ PPPredicateParser perform: self
 ]
-
-{ #category : #'*petitparser' }
-Symbol >> fixTemps [
-	^ self
-]
