@@ -130,9 +130,9 @@ PPPredicateParser class >> word [
 
 { #category : #initialization }
 PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
-	predicate := aBlock fixTemps.
+	predicate := aBlock.
 	predicateMessage := aString.
-	negated := aNegatedBlock fixTemps.
+	negated := aNegatedBlock.
 	negatedMessage := aNegatedString
 ]
 

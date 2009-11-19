@@ -17,7 +17,7 @@ PPActionParser class >> on: aParser block: aBlock [
 
 { #category : #accessing }
 PPActionParser >> block: aBlock [
-	block := aBlock fixTemps
+	block := aBlock
 ]
 
 { #category : #parsing }
