@@ -101,7 +101,7 @@ PPParser >> currentTokenParser [
 PPParser >> def: aParser [
 	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
 
-	^ self becomeForward: aParser
+	^ self becomeForward: (aParser name: self name)
 ]
 
 { #category : #'operations-conveniance' }
