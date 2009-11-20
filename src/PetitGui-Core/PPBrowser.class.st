@@ -28,6 +28,15 @@ PPBrowser >> browseClassesOn: aBrowser [
 ]
 
 { #category : #'browse-parts' }
+PPBrowser >> browseCyclesOn: aBrowser [
+	aBrowser list
+		title: 'Cycles';
+		useExplicitNotNil;
+		format: [ :parser | parser displayName ];
+		display: [ :parsers | self production cycleSet ]
+]
+
+{ #category : #'browse-parts' }
 PPBrowser >> browseExampleOn: aBrowser [
 	aBrowser text
 		title: 'Example';
@@ -82,6 +91,7 @@ PPBrowser >> browseOn: aBrowser [
 		self browseTestOn: aBrowser.
 		self browseGraphOn: aBrowser.
 		self browseExampleOn: aBrowser.
+		self browseCyclesOn: aBrowser.
 		self browseFirstOn: aBrowser.
 		self browseFollowOn: aBrowser ]
 ]
