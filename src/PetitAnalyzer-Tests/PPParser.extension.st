@@ -82,7 +82,7 @@ PPParser >> followSets [
 	firstSets := self firstSets.
 	followSets := IdentityDictionary new.
 	self allNodesDo: [ :each | followSets at: each put: IdentitySet new ].
-	(followSets at: self) add: PPEpsilonParser new.
+	(followSets at: self) add: nil asParser.
 	[	followSets keysAndValuesDo: [ :parser :follow |
 			parser 
 				followSets: followSets

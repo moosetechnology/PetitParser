@@ -42,7 +42,7 @@ PPAnalyzerTest >> grammarA [
 	grammar at: #b put: $b asParser.
 	grammar at: #c put: $c asParser.
 	grammar at: #d put: $d asParser.
-	grammar at: #e put: PPEpsilonParser new.
+	grammar at: #e put: nil asParser.
 	
 	" non terminals "
 	grammar at: #B put: (grammar at: #b) / (grammar at: #e).
@@ -185,7 +185,7 @@ PPAnalyzerTest >> testCycleSetInSequence [
 	self assert: (cycleSet includes: parser).
 	
 	parser := PPUnresolvedParser new.
-	parser def: PPEpsilonParser new , parser.
+	parser def: nil asParser , parser.
 	cycleSet := parser cycleSet.
 	self assert: (cycleSet size = 1).
 	self assert: (cycleSet includes: parser).
@@ -337,7 +337,7 @@ PPAnalyzerTest >> testIsLeaf [
 { #category : #testing }
 PPAnalyzerTest >> testIsNullable [
 	self assert: $a asParser star isNullable.
-	self assert: PPEpsilonParser new isNullable.
+	self assert: nil asParser isNullable.
 
 	self deny: $a asParser plus isNullable.	
 	self deny: PPLiteralSequenceParser new isNullable.

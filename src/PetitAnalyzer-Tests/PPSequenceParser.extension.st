@@ -21,7 +21,7 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 				ifFalse: [ aSet add: each ] ].
 		nullable
 			ifFalse: [ ^ self ] ].
-	aSet add: PPEpsilonParser new
+	aSet add: nil asParser
 ]
 
 { #category : #'*petitanalyzer-private' }
