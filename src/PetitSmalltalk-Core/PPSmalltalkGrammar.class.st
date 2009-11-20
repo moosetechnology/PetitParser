@@ -234,7 +234,7 @@ PPSmalltalkGrammar >> charToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> epsilon [
-	^ PPEpsilonParser new
+	^ nil asParser
 ]
 
 { #category : #grammar }
