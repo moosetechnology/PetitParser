@@ -410,11 +410,11 @@ PPSmalltalkGrammar >> start [
 { #category : #grammar }
 PPSmalltalkGrammar >> statements [
 	^ ((return , $. asParser token star)
-		==> [ :nodes | (Array with: nodes first) , nodes last ]) 
+		==> [ :nodes | (Array with: nodes first) , (nodes last) ]) 
 	/ ((expression wrapped , $. asParser token plus , statements) 
-		==> [ :nodes | (Array with: nodes first) , nodes second , nodes last ])
+		==> [ :nodes | (Array with: nodes first) , (nodes second) , (nodes last) ])
 	/ ((expression wrapped , $. asParser token star) 
-		==> [ :nodes | (Array with: nodes first) , nodes second ]) 
+		==> [ :nodes | (Array with: nodes first) , (nodes second) ]) 
 	/ ($. asParser token star)
 ]
 
