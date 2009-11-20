@@ -58,7 +58,7 @@ PPAnalyzerTest >> grammarB [
 
 	| grammar |
 	grammar := Dictionary new.
-	#(E Ep T Tp F) 		do: [ :each | grammar at: each put: PPUnresolvedParser new ].
+	#(E Ep T Tp F) 		do: [ :each | grammar at: each put: (PPUnresolvedParser named: each) ].
 		
 	(grammar at: #E)		def: (grammar at: #T) , (grammar at: #Ep).
 	(grammar at: #Ep)	def: ($+ asParser , (grammar at: #T) , (grammar at: #Ep)) optional.
@@ -89,7 +89,7 @@ PPAnalyzerTest >> grammarD [
 
 	| grammar |
 	grammar := Dictionary new.
-	#(S A a B b)			do: [ :each | grammar at: each put: PPUnresolvedParser new ].
+	#(S A a B b)			do: [ :each | grammar at: each put: (PPUnresolvedParser named: each) ].
 	
 	(grammar at: #a)		def: $a asParser.
 	(grammar at: #b)		def: $b asParser.
@@ -99,6 +99,101 @@ PPAnalyzerTest >> grammarD [
 	(grammar at: #B)		def: (grammar at: #B) , (grammar at: #A) / (grammar at: #a).
 		
 	^ grammar
+]
+
+{ #category : #accessing }
+PPAnalyzerTest >> grammarE [
+	"The most stupid parser, it just references itself and never consumes anything. All algorithms should survive such an attack."
+
+	| parser |
+	parser := PPDelegateParser new.
+	parser setParser: parser.
+	^ parser
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarA [
+	self grammarA do: [ :each | self assert: each cycleSet isEmpty ]
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarB [
+	self grammarB do: [ :each | self assert: each cycleSet isEmpty ]
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarC [
+	| grammar cycleSet |
+	grammar := self grammarC.
+	cycleSet := grammar cycleSet.
+	self assert: (cycleSet size = 2).
+	self assert: (cycleSet includes: grammar)
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarD [
+	| grammar cycleSet |
+	grammar := self grammarD.
+	
+	cycleSet := (grammar at: #S) cycleSet.
+	self assert: (cycleSet size = 4).
+	self assert: (cycleSet includes: (grammar at: #A)).
+	self assert: (cycleSet includes: (grammar at: #S)).
+	
+	cycleSet := (grammar at: #A) cycleSet.
+	self assert: (cycleSet size = 4).
+	self assert: (cycleSet includes: (grammar at: #A)).
+	self assert: (cycleSet includes: (grammar at: #S)).
+
+	cycleSet := (grammar at: #B) cycleSet.
+	self assert: (cycleSet size = 2).
+	self assert: (cycleSet includes: (grammar at: #B))
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarE [
+	| grammar cycleSet |
+	grammar := self grammarE.
+	cycleSet := grammar cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: grammar)
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetInChoice [
+	| parser cycleSet |
+	parser := PPUnresolvedParser new.
+	parser def: parser / $a asParser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: $a asParser / parser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetInSequence [
+	| parser cycleSet |
+	parser := PPUnresolvedParser new.
+	parser def: parser , $a asParser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: PPEpsilonParser new , parser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: $a asParser , parser.
+	cycleSet := parser cycleSet.
+	self assert: cycleSet isEmpty
 ]
 
 { #category : #'testing-firstset' }
@@ -160,6 +255,11 @@ PPAnalyzerTest >> testFirstSetGrammarD [
 ]
 
 { #category : #'testing-firstset' }
+PPAnalyzerTest >> testFirstSetGrammarE [
+	self assert: self grammarE firstSet includes: '' epsilon: false
+]
+
+{ #category : #'testing-firstset' }
 PPAnalyzerTest >> testFirstSetLambda [
 	| grammar |
 	grammar := PPLambdaParser new.
@@ -214,6 +314,11 @@ PPAnalyzerTest >> testFollowSetExampleD [
 	self assert: (followSets at: (grammar at: #b)) includes: 'ab' epsilon: true
 ]
 
+{ #category : #'testing-followset' }
+PPAnalyzerTest >> testFollowSetExampleE [
+	self assert: self grammarE followSet includes: '' epsilon: true
+]
+
 { #category : #testing }
 PPAnalyzerTest >> testIsLeaf [
 	self assert: PPEpsilonParser new isLeaf.
@@ -242,65 +347,4 @@ PPAnalyzerTest >> testIsNullable [
 	self deny: PPSequenceParser new isNullable.
 	self deny: PPAndParser new isNullable.
 	self deny: PPTokenParser new isNullable
-]
-
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionInChoice [
-	| parser cycle |
-	parser := PPUnresolvedParser new.
-	parser def: parser / $a asParser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
-	
-	parser := PPUnresolvedParser new.
-	parser def: $a asParser / parser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser
-]
-
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionInSequence [
-	| parser cycle |
-	parser := PPUnresolvedParser new.
-	parser def: parser , $a asParser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
-	
-	parser := PPUnresolvedParser new.
-	parser def: PPEpsilonParser new , parser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
-	
-	parser := PPUnresolvedParser new.
-	parser def: $a asParser , parser.
-	cycle := parser leftRecursion.
-	self assert: cycle isEmpty
-]
-
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionIndirect [
-	| p1 p2 p3 cycle |
-	p1 := PPUnresolvedParser new.
-	p2 := PPUnresolvedParser new.
-	p3 := PPUnresolvedParser new.
-	
-	p1 def: $a asParser / p2.
-	p2 def: $b asParser / p3.
-	p3 def: PPEpsilonParser new / p1.
-	
-	self assert: p1 leftRecursion size = 3.
-	self assert: p1 leftRecursion first = p1.
-	self assert: p1 leftRecursion last = p3.	
-	
-	self assert: p2 leftRecursion size = 3.
-	self assert: p2 leftRecursion first = p2.
-	self assert: p2 leftRecursion last = p1.	
-
-	self assert: p3 leftRecursion size = 3.
-	self assert: p3 leftRecursion first = p3.
-	self assert: p3 leftRecursion last = p2
 ]

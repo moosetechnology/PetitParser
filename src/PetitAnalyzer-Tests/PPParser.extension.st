@@ -1,6 +1,38 @@
 Extension { #name : #PPParser }
 
 { #category : #'*petitanalyzer-querying' }
+PPParser >> cycleSet [
+	"Answer a set of all nodes that are within one or more cycles of left-recursion. This is generally not a problem if at least one of the nodes is memoized, but it might make the grammar very inefficient and should be avoided if possible."
+	
+	| cycles |
+	cycles := IdentitySet new.
+	self cycleSet: OrderedCollection new firstSets: self firstSets into: cycles.
+	^ cycles
+]
+
+{ #category : #'*petitanalyzer-private' }
+PPParser >> cycleSet: aDictionary [
+	"PRIVATE: Answer the children that could be part of a cycle-set with the receiver, subclasses might restrict the number of children returned. aDictionary is pre-calcualted first-sets."
+
+	^ self children
+]
+
+{ #category : #'*petitanalyzer-private' }
+PPParser >> cycleSet: aStack firstSets: aDictionary into: aSet [
+	"PRIVATE: Try to find a cycle, where aStack contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If aStack already contains the receiver, then we are in a cycle. In this case we don't process the children further and add the nodes to aSet."
+
+	| index |
+	self isLeaf
+		ifTrue: [ ^ self ].	
+	(index := aStack indexOf: self) > 0
+		ifTrue: [ ^ aSet addAll: (aStack copyFrom: index to: aStack size) ].
+	aStack addLast: self.
+	(self cycleSet: aDictionary)
+		do: [ :each | each cycleSet: aStack firstSets: aDictionary into: aSet ].
+	aStack removeLast
+]
+
+{ #category : #'*petitanalyzer-querying' }
 PPParser >> firstSet [
 	"Answer the first-set of the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #firstSets to calculate the first-sets at once."
 	
@@ -84,30 +116,4 @@ PPParser >> isNullable [
 	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
-]
-
-{ #category : #'*petitanalyzer-querying' }
-PPParser >> leftRecursion [
-	"Answer an ordered collection with a left-recursive cycle starting at the receiver, or an empty collection if no such cycle could be detected."
-	
-	| result |
-	result := OrderedCollection new.
-	self leftRecursion: result firstSets: self firstSets answer: [ ^ result ].
-	^ result
-]
-
-{ #category : #'*petitanalyzer-private' }
-PPParser >> leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock [
-	"PRIVATE: Try to find a cycle, where anOrderedCollection contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If anOrderedCollection already contains the receiver, then we are in a cycle and need to return. If the receiver is the first element, we actually found a receiver we are interested in."
-
-	self isLeaf
-		ifTrue: [ ^ self ].
-	(anOrderedCollection includes: self) ifTrue: [
-		anOrderedCollection first = self
-			ifTrue: [ anAnswerBlock value ]
-			ifFalse: [ ^ self ] ].
-	anOrderedCollection addLast: self.
-	self children 
-		do: [ :each | each leftRecursion: anOrderedCollection firstSets: aDictionary answer: anAnswerBlock ].
-	anOrderedCollection removeLast
 ]
