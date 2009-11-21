@@ -352,10 +352,10 @@ PPAnalyzerTest >> testIsLeaf [
 	self assert: PPLiteralObjectParser new isLeaf.
 	self assert: PPPredicateParser new isLeaf.
 	
-	self deny: PPChoiceParser new isLeaf.
-	self deny: PPSequenceParser new isLeaf.
-	self deny: PPAndParser new isLeaf.
-	self deny: PPTokenParser new isLeaf
+	self deny: ($a asParser / $b asParser) isLeaf.
+	self deny: ($a asParser , $b asParser) isLeaf.
+	self deny: ($a asParser and) isLeaf.
+	self deny: ($a asParser not) isLeaf
 ]
 
 { #category : #testing }
