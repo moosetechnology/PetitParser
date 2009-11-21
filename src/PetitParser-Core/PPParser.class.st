@@ -38,35 +38,6 @@ PPParser >> ==> aBlock [
 	^ PPActionParser on: self block: aBlock
 ]
 
-{ #category : #enumerating }
-PPParser >> allNodes [
-	"Answer all the parse nodes of the receiver."
-
-	| result |
-	result := OrderedCollection new.
-	self allNodesDo: [ :parser | result add: parser ].
-	^ result
-]
-
-{ #category : #enumerating }
-PPParser >> allNodesDo: aBlock [
-	"Iterate over all the parse nodes of the receiver."
-
-	self allNodesDo: aBlock seen: IdentitySet new
-]
-
-{ #category : #enumerating }
-PPParser >> allNodesDo: aBlock seen: aSet [
-	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
-
-	(aSet includes: self)
-		ifTrue: [ ^ self ].
-	aSet add: self.
-	aBlock value: self.
-	self children
-		do: [ :each | each allNodesDo: aBlock seen: aSet ]
-]
-
 { #category : #operations }
 PPParser >> and [
 	"Answer a parser that succeeds whenever the receiver does, but consumes no input."

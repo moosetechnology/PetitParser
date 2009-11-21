@@ -13,18 +13,6 @@ PPParserTest >> testAction [
 	self assert: parser parse: 'b' to: $B
 ]
 
-{ #category : #'testing-utilities' }
-PPParserTest >> testAllNodes [
-	| p1 p2 p3 |
-	p1 := #lowercase asParser.
-	p2 := p1 ==> #asUppercase.
-	p3 := PPUnresolvedParser new.
-	p3 def: p2 / p3.
-	self assert: p1 allNodes size = 1.
-	self assert: p2 allNodes size = 2.
-	self assert: p3 allNodes size = 3
-]
-
 { #category : #testing }
 PPParserTest >> testAnd [
 	| parser |
