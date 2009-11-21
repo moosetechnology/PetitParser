@@ -111,6 +111,30 @@ PPAnalyzerTest >> grammarE [
 	^ parser
 ]
 
+{ #category : #testing }
+PPAnalyzerTest >> testAllLeafNodes [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	self assert: p1 allLeafNodes size = 1.
+	self assert: p2 allLeafNodes size = 1.
+	self assert: p3 allLeafNodes size = 1
+]
+
+{ #category : #testing }
+PPAnalyzerTest >> testAllNodes [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	self assert: p1 allNodes size = 1.
+	self assert: p2 allNodes size = 2.
+	self assert: p3 allNodes size = 3
+]
+
 { #category : #'testing-cycleset' }
 PPAnalyzerTest >> testCycleSetGrammarA [
 	self grammarA do: [ :each | self assert: each cycleSet isEmpty ]

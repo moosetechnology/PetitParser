@@ -1,5 +1,55 @@
 Extension { #name : #PPParser }
 
+{ #category : #'*petitanalyzer-enumerating' }
+PPParser >> allLeafNodes [
+	"Answer all the leaf nodes of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self allLeafNodesDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-enumerating' }
+PPParser >> allLeafNodesDo: aBlock [
+	"Iterate over all the leaf nodes of the receiver."
+
+	self 
+		allNodesDo: [ :each | 
+			each isLeaf
+				ifTrue: [ aBlock value: each ] ]
+		seen: IdentitySet new
+]
+
+{ #category : #'*petitanalyzer-enumerating' }
+PPParser >> allNodes [
+	"Answer all the parse nodes of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self allNodesDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-enumerating' }
+PPParser >> allNodesDo: aBlock [
+	"Iterate over all the parse nodes of the receiver."
+
+	self allNodesDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #'*petitanalyzer-enumerating' }
+PPParser >> allNodesDo: aBlock seen: aSet [
+	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
+
+	(aSet includes: self)
+		ifTrue: [ ^ self ].
+	aSet add: self.
+	aBlock value: self.
+	self children
+		do: [ :each | each allNodesDo: aBlock seen: aSet ]
+]
+
 { #category : #'*petitanalyzer-querying' }
 PPParser >> cycleSet [
 	"Answer a set of all nodes that are within one or more cycles of left-recursion. This is generally not a problem if at least one of the nodes is memoized, but it might make the grammar very inefficient and should be avoided if possible."
@@ -108,7 +158,7 @@ PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet
 PPParser >> isLeaf [
 	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
 
-	^ false
+	^ self children isEmpty
 ]
 
 { #category : #'*petitanalyzer-testing' }
