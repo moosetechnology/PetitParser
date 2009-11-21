@@ -130,7 +130,7 @@ PPComposedTest >> testPalindrome [
 	s0 def: ($a asParser , s1 , $a asParser)
 		/ ($b asParser , s1 , $b asParser)
 		/ ($c asParser , s1 , $c asParser).	
-	s1 def: s0 / PPEpsilonParser new.
+	s1 def: s0 / nil asParser.
 	parser := s0 flatten end.
 
 	self assert: parser parse: 'aa' to: 'aa'.
@@ -159,7 +159,7 @@ PPComposedTest >> testParseAaaBbb [
 	s0 := PPUnresolvedParser new.
 	s1 := PPUnresolvedParser new.
 	s0 def: $a asParser , s1 , $b asParser.
-	s1 def: s0 / PPEpsilonParser new.
+	s1 def: s0 / nil asParser.
 	parser := s0 flatten.
 
 	self assert: parser parse: 'ab' to: 'ab'.
@@ -185,7 +185,7 @@ PPComposedTest >> testParseAaaaaa [
 	| s0 s1 parser |
 	s0 := PPUnresolvedParser new.
 	s1 := $a asParser , $a asParser , s0.
-	s0 def: s1 / PPEpsilonParser new.
+	s0 def: s1 / nil asParser.
 	parser := s0 flatten.
 
 	self assert: parser parse: '' to: ''.

@@ -33,6 +33,13 @@ PPExtensionTest >> testClosure [
 ]
 
 { #category : #testing }
+PPExtensionTest >> testEpsilon [
+	| parser |
+	parser := nil asParser.
+	self assert: parser asParser = parser
+]
+
+{ #category : #testing }
 PPExtensionTest >> testFlatten [
 	self assert: #() flatten = #().
 	self assert: #(1 2) flatten = #(1 2).
@@ -56,7 +63,7 @@ PPExtensionTest >> testOrdered [
 { #category : #testing }
 PPExtensionTest >> testParser [
 	| parser |
-	parser := PPEpsilonParser new.
+	parser := $a asParser.
 	self assert: parser asParser = parser
 ]
 

@@ -105,7 +105,7 @@ PPParserTest >> testEndOfInputAfterMatch [
 { #category : #testing }
 PPParserTest >> testEpsilon [
 	| parser |
-	parser := PPEpsilonParser new.
+	parser := nil asParser.
 	
 	self assert: parser parse: '' to: nil.
 	
@@ -399,7 +399,7 @@ PPParserTest >> testUnresolved [
 	self should: [ parser parse: 'a' ] raise: Error.
 	self should: [ parser parse: 'ab' ] raise: Error.
 	
-	parser := PPEpsilonParser new.
+	parser := nil asParser.
 	self deny: parser isUnresolved
 ]
 

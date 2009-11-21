@@ -225,7 +225,7 @@ PPParser >> not [
 PPParser >> optional [
 	"Answer a new parser that parses the receiver, if possible."
 
-	^ self / PPEpsilonParser new
+	^ self / nil asParser
 ]
 
 { #category : #parsing }
