@@ -83,10 +83,10 @@ PPExamplesTest >> testNumber [
 { #category : #testing }
 PPExamplesTest >> testReturn [
 	| number spaces return |
-	number := #digit asParser plus flatten.
+	number := #digit asParser plus token.
 	spaces := #space asParser star.
-	return := (spaces , $^ asParser , spaces , number)
-		==> [ :nodes | { #return. nodes at: 4 } ].
+	return := (spaces , $^ asParser token , spaces , number)
+		==> [ :nodes | { #return. (nodes at: 4) value } ].
 
 	self assert: return parse: '^1' to: #(return '1').
 	self assert: return parse: ' ^12' to: #(return '12').

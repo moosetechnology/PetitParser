@@ -1,27 +1,11 @@
 "
-A parser that produces a token from the range my delegate parses.
+A parser that answers a flat copy of the range my delegate parses.
 "
 Class {
 	#name : #PPFlattenParser,
 	#superclass : #PPDelegateParser,
 	#category : #'PetitParser-Core'
 }
-
-{ #category : #hooks }
-PPFlattenParser >> consumeSpaces: aStream [
-	[ aStream atEnd not and: [ aStream peek isSeparator ] ]
-		whileTrue: [ aStream next ]
-]
-
-{ #category : #hooks }
-PPFlattenParser >> consumeSpacesAfter: aStream [
-	self consumeSpaces: aStream
-]
-
-{ #category : #hooks }
-PPFlattenParser >> consumeSpacesBefore: aStream [
-	self consumeSpaces: aStream
-]
 
 { #category : #hooks }
 PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
@@ -31,11 +15,21 @@ PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 { #category : #parsing }
 PPFlattenParser >> parse: aStream [
 	| start element stop |
-	self consumeSpacesBefore: aStream.
+	self parseBefore: aStream.
 	start := aStream position.
 	element := super parse: aStream.
 	element isFailure ifTrue: [ ^ element ].
 	stop := aStream position.
-	self consumeSpacesAfter: aStream.
+	self parseAfter: aStream.
 	^ self create: aStream collection start: start + 1 stop: stop
+]
+
+{ #category : #parsing }
+PPFlattenParser >> parseAfter: aStream [
+	"Consume input after the actual parse."
+]
+
+{ #category : #parsing }
+PPFlattenParser >> parseBefore: aStream [
+	"Consume input before the actual parse."
 ]

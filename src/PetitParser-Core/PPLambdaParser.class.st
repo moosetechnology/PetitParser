@@ -42,12 +42,12 @@ PPLambdaParser class >> true [
 
 { #category : #productions }
 PPLambdaParser >> abstraction [
-	^ $\ asParser flatten , variable , $. asParser flatten , expression ==> [ :node | Array with: node second with: node fourth ]
+	^ $\ asParser token , variable , $. asParser token , expression ==> [ :node | Array with: node second with: node fourth ]
 ]
 
 { #category : #productions }
 PPLambdaParser >> application [
-	^ $( asParser flatten , expression , expression , $) asParser flatten ==> [ :node | Array with: node second with: node third ]
+	^ $( asParser token , expression , expression , $) asParser token ==> [ :node | Array with: node second with: node third ]
 ]
 
 { #category : #productions }
@@ -62,5 +62,5 @@ PPLambdaParser >> start [
 
 { #category : #productions }
 PPLambdaParser >> variable [
-	^ (#letter asParser , #word asParser star) flatten
+	^ (#letter asParser , #word asParser star) token ==> [ :token | token value ]
 ]

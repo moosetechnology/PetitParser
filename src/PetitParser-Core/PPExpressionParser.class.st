@@ -16,8 +16,8 @@ Class {
 
 { #category : #grammar }
 PPExpressionParser >> addition [
-	^ (factors separatedBy: ($+ asParser / $- asParser) flatten) 
-		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
+	^ (factors separatedBy: ($+ asParser / $- asParser) token) 
+		foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]
 ]
 
 { #category : #grammar }
@@ -27,13 +27,13 @@ PPExpressionParser >> factors [
 
 { #category : #grammar }
 PPExpressionParser >> multiplication [
-	^ (power separatedBy: ($* asParser / $/ asParser) flatten)
-		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
+	^ (power separatedBy: ($* asParser / $/ asParser) token)
+		foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]
 ]
 
 { #category : #grammar }
 PPExpressionParser >> number [
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten ==> #asNumber
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token ==> [ :token | token value asNumber ]
 ]
 
 { #category : #grammar }
@@ -43,7 +43,7 @@ PPExpressionParser >> parentheses [
 
 { #category : #grammar }
 PPExpressionParser >> power [
-	^ (primary separatedBy: $^ asParser flatten) foldRight: [ :a :op :b | a raisedTo: b ]
+	^ (primary separatedBy: $^ asParser token) foldRight: [ :a :op :b | a raisedTo: b ]
 ]
 
 { #category : #grammar }

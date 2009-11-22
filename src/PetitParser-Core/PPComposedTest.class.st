@@ -68,8 +68,9 @@ PPComposedTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	
 	| number list parser |
-	number := #digit asParser plus flatten ==> #asInteger.
-	list := (number separatedBy: $, asParser flatten)
+	number := #digit asParser plus token 
+		==> [ :node | node value asInteger ].
+	list := (number separatedBy: $, asParser token)
 		==> [ :node | node select: [ :each | each isInteger ] ].
 	parser := list end.
 
