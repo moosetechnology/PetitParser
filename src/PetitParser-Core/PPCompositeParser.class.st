@@ -13,6 +13,8 @@ Class {
 
 { #category : #accessing }
 PPCompositeParser class >> allIgnoredInstVarNames [
+	"Answer a collection of instance-variables that should not be automatically initialized with productions, but that are used internally to the composite parser."
+
 	^ #(parser)
 ]
 
