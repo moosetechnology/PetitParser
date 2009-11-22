@@ -11,6 +11,11 @@ Class {
 	#category : #'PetitParser-Builder'
 }
 
+{ #category : #accessing }
+PPCompositeParser class >> allIgnoredInstVarNames [
+	^ #(parser)
+]
+
 { #category : #parsing }
 PPCompositeParser class >> parse: aString [
 	^ self new parse: aString
@@ -26,7 +31,7 @@ PPCompositeParser >> initialize [
 	| thisInstVarNames superInstVarNames instVarNames |
 	super initialize.
 	thisInstVarNames := self class allInstVarNames.
-	superInstVarNames := PPCompositeParser allInstVarNames.
+	superInstVarNames := self class allIgnoredInstVarNames.
 	instVarNames := ((1 to: self class instSize) 
 		collect: [ :index | index -> (thisInstVarNames at: index) asSymbol ])
 		reject: [ :assoc | superInstVarNames includes: assoc value ].
