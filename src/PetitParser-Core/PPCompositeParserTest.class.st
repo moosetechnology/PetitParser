@@ -15,9 +15,9 @@ PPCompositeParserTest class >> isAbstract [
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |
-	result := parser
-		parse: aCollection asParserStream
-		ifError: [ :err | self error: err printString ].
+	result := parser parse: aCollection asParserStream.
+	result isFailure
+		ifTrue: [ self error: result printString ].
 	self
 		assert: result = anObject
 		description: 'Got: ' , result printString , '; Expected: ' , anObject printString

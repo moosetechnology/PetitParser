@@ -20,12 +20,15 @@ PPCompositeParser class >> allIgnoredInstVarNames [
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString [
-	^ self new parse: aString
+	^ self new parse: aString asParserStream
 ]
 
 { #category : #parsing }
 PPCompositeParser class >> parse: aString ifError: aBlock [
-	^ self new parse: aString ifError: aBlock
+	| result |
+	^ (result := self parse: aString asParserStream) isFailure
+		ifTrue: [ aBlock value: result ]
+		ifFalse: [ result ]
 ]
 
 { #category : #initialization }
@@ -46,20 +49,6 @@ PPCompositeParser >> initialize [
 			ifTrue: [ 
 				(self instVarAt: assoc key) 
 					def: ((self perform: assoc value) name: assoc value) ] ]
-]
-
-{ #category : #parsing }
-PPCompositeParser >> parse: aStream [
-	^ super parse: aStream asParserStream
-]
-
-{ #category : #parsing }
-PPCompositeParser >> parse: aStream ifError: aBlock [
-	| result |
-	result := self parse: aStream.
-	^ result isFailure
-		ifTrue: [ aBlock value: result ]
-		ifFalse: [ result ]
 ]
 
 { #category : #accessing }
