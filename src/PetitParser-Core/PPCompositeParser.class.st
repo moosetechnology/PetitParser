@@ -33,22 +33,42 @@ PPCompositeParser class >> parse: aString ifError: aBlock [
 
 { #category : #initialization }
 PPCompositeParser >> initialize [
-	| thisInstVarNames superInstVarNames instVarNames |
+	| allVariableNames ignoredVariableNames productionIndexesAndNames |
 	super initialize.
-	thisInstVarNames := self class allInstVarNames.
-	superInstVarNames := self class allIgnoredInstVarNames.
-	instVarNames := ((1 to: self class instSize) 
-		collect: [ :index | index -> (thisInstVarNames at: index) asSymbol ])
-		reject: [ :assoc | superInstVarNames includes: assoc value ].
-	instVarNames do: [ :assoc |
-		self instVarAt: assoc key put: (PPUnresolvedParser new name: assoc value) ].
+	allVariableNames := self class allInstVarNames.
+	ignoredVariableNames := self class allIgnoredInstVarNames.
+	productionIndexesAndNames := ((1 to: self class instSize)
+		collect: [ :index | index -> (allVariableNames at: index) asSymbol ])
+		reject: [ :assoc | ignoredVariableNames includes: assoc value ].
+	productionIndexesAndNames do: [ :assoc |
+		self instVarAt: assoc key put: (PPUnresolvedParser named: assoc value) ].
 	parser := self start.
-	instVarNames do: [ :assoc |
+	productionIndexesAndNames do: [ :assoc |
 		(self respondsTo: assoc value)
 			ifFalse: [ self error: 'Unable to initialize ' , assoc value printString ]
-			ifTrue: [ 
-				(self instVarAt: assoc key) 
-					def: ((self perform: assoc value) name: assoc value) ] ]
+			ifTrue: [ (self instVarAt: assoc key) def: (self perform: assoc value) ] ]
+]
+
+{ #category : #querying }
+PPCompositeParser >> productionAt: aSymbol [
+	"Answer the prodution named aSymbol."
+	
+	^ self productionAt: aSymbol ifAbsent: [ nil ]
+]
+
+{ #category : #querying }
+PPCompositeParser >> productionAt: aSymbol ifAbsent: aBlock [
+	"Answer the prodution named aSymbol, if there is no such production answer the result of evaluating aBlock."
+	
+	| index |
+	(self class allIgnoredInstVarNames includes: aSymbol)
+		ifTrue: [ ^ aBlock value ].
+	(aSymbol = #start)
+		ifTrue: [ ^ parser ].
+	index := self class allInstVarNames
+		indexOf: aSymbol
+		ifAbsent: [ ^ aBlock value ].
+	^ self instVarAt: index
 ]
 
 { #category : #accessing }

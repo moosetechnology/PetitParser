@@ -34,3 +34,10 @@ PPCompositeParserTest >> setUp [
 	super setUp.
 	parser := self parseClass new
 ]
+
+{ #category : #testing }
+PPCompositeParserTest >> testProductionAt [
+	self assert: (parser productionAt: #foo) isNil.
+	self assert: (parser productionAt: #foo ifAbsent: [ true ])
+	
+]
