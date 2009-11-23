@@ -177,10 +177,10 @@ PPBrowser >> open [
 
 { #category : #'accessing-view' }
 PPBrowser >> production [
-	| parser selector |
-	parser := self selectedClass new.
-	selector := self selectedSelector ifNil: [ ^ parser ].
-	^ parser instVarNamed: selector asString
+	| parser |
+	^ (parser := self selectedClass new)
+		productionAt: (self selectedSelector
+			ifNil: [ ^ parser ])
 ]
 
 { #category : #accessing }
