@@ -223,7 +223,7 @@ PPAnalyzerTest >> testCycleSetInSequence [
 { #category : #'testing-firstset' }
 PPAnalyzerTest >> testFirstSetExpression [
 	| grammar |
-	grammar := PPExpressionParser new.
+	grammar := PPArithmeticParser new.
 	self assert: grammar start firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar addition firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar factors firstSet includes:  '(-0123456789' epsilon: false.
