@@ -23,13 +23,6 @@ PPGrammarTest class >> resources [
 ]
 
 { #category : #parsing }
-PPGrammarTest >> parse: aString [ 
-	self 
-		parse: aString
-		rule: #start
-]
-
-{ #category : #parsing }
 PPGrammarTest >> parse: aString rule: aSymbol [ 
 	| production |
 	production := self parser.

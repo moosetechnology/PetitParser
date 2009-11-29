@@ -91,7 +91,7 @@ PPSmalltalkClassesTests >> verifyClass: aClass [
 
 { #category : #private }
 PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [ 
-	"Verifies that the method aSelector in aClass parses the same using the standard refactoring parser and the language boxes parser. Methods that contain float literals are ignored, since they do not reproduce well. Furthermore methods with pragmas are not actually compared as they might pretty print differently."
+	"Verifies that the method aSelector in aClass parses the same using the standard refactoring parser and the petit smalltalk parser. Also make sure that the position information of all tokens is equal."
 
 	| source original other |
 	source := aClass sourceCodeAt: aSelector.
