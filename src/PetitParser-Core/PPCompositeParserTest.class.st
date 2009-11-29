@@ -25,19 +25,17 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 ]
 
 { #category : #accessing }
-PPCompositeParserTest >> parseClass [
+PPCompositeParserTest >> parserClass [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+PPCompositeParserTest >> parserInstance [
+	^ self parserClass new
 ]
 
 { #category : #running }
 PPCompositeParserTest >> setUp [
 	super setUp.
-	parser := self parseClass new
-]
-
-{ #category : #testing }
-PPCompositeParserTest >> testProductionAt [
-	self assert: (parser productionAt: #foo) isNil.
-	self assert: (parser productionAt: #foo ifAbsent: [ true ])
-	
+	parser := self parserInstance
 ]

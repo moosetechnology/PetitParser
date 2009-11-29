@@ -1,124 +1,61 @@
 Class {
 	#name : #PPExpressionParserTest,
-	#superclass : #PPCompositeParserTest,
+	#superclass : #PPArithmeticParserTest,
 	#category : #'PetitParser-Tests'
 }
 
 { #category : #accessing }
-PPExpressionParserTest >> parseClass [
-	^ PPExpressionParser
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testAdd [
-	self assert: '1 + 2' is: 3.
-	self assert: '2 + 1' is: 3.
-	self assert: '1 + 2.3' is: 3.3.
-	self assert: '2.3 + 1' is: 3.3.
-	self assert: '1 + -2' is: -1.
-	self assert: '-2 + 1' is: -1
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testAddMany [
-	self assert: '1' is: 1.
-	self assert: '1 + 2' is: 3.
-	self assert: '1 + 2 + 3' is: 6.
-	self assert: '1 + 2 + 3 + 4' is: 10.
-	self assert: '1 + 2 + 3 + 4 + 5' is: 15
-]
-
-{ #category : #'testing-expression' }
-PPExpressionParserTest >> testBrackets [
-	self assert: '(1)' is: 1.
-	self assert: '(1 + 2)' is: 3.
-	
-	self assert: '((1))' is: 1.
-	self assert: '((1 + 2))' is: 3.
-
-	self assert: '2 * (3 + 4)' is: 14.
-	self assert: '(2 + 3) * 4' is: 20.
-	self assert: '6 / (2 + 4)' is: 1.
-	self assert: '(2 + 6) / 2' is: 4
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testDiv [
-	self assert: '12 / 3' is: 4.
-	self assert: '-16 / -4' is: 4
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testDivMany [
-	self assert: '100 / 2' is: 50.
-	self assert: '100 / 2 / 2' is: 25.
-	self assert: '100 / 2 / 2 / 5' is: 5.
-	self assert: '100 / 2 / 2 / 5 / 5' is: 1
-	
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testMul [
-	self assert: '2 * 3' is: 6.
-	self assert: '2 * -4' is: -8
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testMulMany [
-	self assert: '1 * 2' is: 2.
-	self assert: '1 * 2 * 3' is: 6.
-	self assert: '1 * 2 * 3 * 4' is: 24.
-	self assert: '1 * 2 * 3 * 4 * 5' is: 120
+PPExpressionParserTest >> parserInstance [
+	| expression parens number |
+	expression := PPExpressionParser new.
+	parens := $( asParser token , expression , $) asParser token 
+		==> [ :nodes | nodes second ].
+	number := (#digit asParser plus , ($. asParser , #digit asParser plus) optional) token 
+		==> [ :token | token value asNumber ].
+	expression term: parens / number.
+	expression
+		group: [ :g |
+			g prefix: $- asParser token do: [ :op :a | a negated ] ];
+		group: [ :g |
+			g postfix: '++' asParser token do: [ :a :op | a + 1 ].
+			g postfix: '--' asParser token do: [ :a :op | a - 1 ] ];
+		group: [ :g |
+			g right: $^ asParser token do: [ :a :op :b | a raisedTo: b ] ];
+		group: [ :g |
+			g left: $* asParser token do: [ :a :op :b | a * b ].
+			g left: $/ asParser token do: [ :a :op :b | a / b ] ];
+		group: [ :g |
+			g left: $+ asParser token do: [ :a :op :b | a + b ].
+			g left: $- asParser token do: [ :a :op :b | a - b ] ].
+	^ expression end
 ]
 
 { #category : #testing }
-PPExpressionParserTest >> testNum [
-	self assert: '0' is: 0.
-	self assert: '0.0' is: 0.0.
+PPExpressionParserTest >> testPostfixAdd [
+	self assert: '0++' is: 1.
+	self assert: '0++++' is: 2.
+	self assert: '0++++++' is: 3.
+
+	self assert: '0+++1' is: 2.
+	self assert: '0+++++1' is: 3.
+	self assert: '0+++++++1' is: 4
+]
+
+{ #category : #testing }
+PPExpressionParserTest >> testPostfixSub [
+	self assert: '1--' is: 0.
+	self assert: '2----' is: 0.
+	self assert: '3------' is: 0.
+
+	self assert: '2---1' is: 0.
+	self assert: '3-----1' is: 0.
+	self assert: '4-------1' is: 0.
+]
+
+{ #category : #testing }
+PPExpressionParserTest >> testPrefixNegate [
 	self assert: '1' is: 1.
-	self assert: '1.2' is: 1.2.
-	self assert: '34' is: 34.
-	self assert: '56.78' is: 56.78.
-	self assert: '-9' is: -9.
-	self assert: '-9.9' is: -9.9
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testPow [
-	self assert: '2 ^ 3' is: 8.
-	self assert: '-2 ^ 3' is: -8.
-	self assert: '-2 ^ -3' is: -0.125
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testPowMany [
-	self assert: '4 ^ 3' is: 64.
-	self assert: '4 ^ 3 ^ 2' is: 262144.
-	self assert: '4 ^ 3 ^ 2 ^ 1' is: 262144.
-	self assert: '4 ^ 3 ^ 2 ^ 1 ^ 0' is: 262144
-]
-
-{ #category : #'testing-expression' }
-PPExpressionParserTest >> testPriority [
-	self assert: '2 * 3 + 4' is: 10.
-	self assert: '2 + 3 * 4' is: 14.
-	self assert: '6 / 3 + 4' is: 6.
-	self assert: '2 + 6 / 2' is: 5
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testSub [
-	self assert: '1 - 2' is: -1.
-	self assert: '1.3 - 2' is: -0.7.
-	self assert: '1 - -2' is: 3.
-	self assert: '-1 - -2' is: 1
-]
-
-{ #category : #'testing-operations' }
-PPExpressionParserTest >> testSubMany [
-	self assert: '1' is: 1.
-	self assert: '1 - 2' is: -1.
-	self assert: '1 - 2 - 3' is: -4.
-	self assert: '1 - 2 - 3 - 4' is: -8.
-	self assert: '1 - 2 - 3 - 4 - 5' is: -13
+	self assert: '-1' is: -1.
+	self assert: '--1' is: 1.
+	self assert: '---1' is: -1
 ]
