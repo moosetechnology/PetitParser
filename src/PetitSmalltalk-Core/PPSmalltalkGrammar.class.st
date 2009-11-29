@@ -1,3 +1,6 @@
+"
+A parser for Smalltalk methods and expressions.
+"
 Class {
 	#name : #PPSmalltalkGrammar,
 	#superclass : #PPCompositeParser,
