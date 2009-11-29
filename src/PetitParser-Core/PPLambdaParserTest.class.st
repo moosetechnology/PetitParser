@@ -48,6 +48,25 @@ PPLambdaParserTest >> testOr [
 	self assert: self parserClass or = #('p' ('q' (('p' 'p') 'q')))
 ]
 
+{ #category : #testing }
+PPLambdaParserTest >> testParseIfError [
+	| result beenHere |
+	result := self parserClass
+		parse: '\x.y'
+		ifError: [ :fail | self fail ].
+	self assert: result = #('x' 'y').
+	
+	beenHere := false.
+	result := self parserClass
+		parse: '\x.'
+		ifError: [ :fail | 
+			beenHere := true.
+			fail ].
+	self assert: beenHere.
+	self assert: result reason = 'letter expected'.
+	self assert: result position = 3
+]
+
 { #category : #'testing-utilities' }
 PPLambdaParserTest >> testProductionAt [
 	self assert: (parser productionAt: #foo) isNil.

@@ -85,8 +85,8 @@ PPExtensionTest >> testStream [
 	self assert: (stream printString = '·abc').
 	self assert: (stream peek) = $a.
 	self assert: (stream next) = $a.
-	self assert: (stream printString = 'a·bc')
-	
+	self assert: (stream printString = 'a·bc').
+	self assert: (stream asParserStream = stream)
 ]
 
 { #category : #testing }
