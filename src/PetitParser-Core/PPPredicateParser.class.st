@@ -21,13 +21,6 @@ PPPredicateParser class >> any [
 ]
 
 { #category : #'factory-objects' }
-PPPredicateParser class >> anyOf: anArray [
-	^ self
-		on: [ :each | anArray includes: each ] message: 'any of ' , anArray printString , ' expected'
-		negated: [ :each | (anArray includes: each) not ] message: 'none of ' , anArray printString ,  'expected'
-]
-
-{ #category : #'factory-objects' }
 PPPredicateParser class >> between: min and: max [
 	^ self
 		on: [ :each | each >= min and: [ each <= max ] ] message: min printString , '..' , max printString , ' expected'
@@ -42,8 +35,8 @@ PPPredicateParser class >> char: aCharacter [
 { #category : #'factory-chars' }
 PPPredicateParser class >> control [
 	^ self
-		on: [ :char | char asInteger < 32 ] message: 'control character expected'
-		negated: [ :char | char asInteger >= 32 ] message: 'no control character expected'
+		on: [ :each | each asInteger < 32 ] message: 'control character expected'
+		negated: [ :each | each asInteger >= 32 ] message: 'no control character expected'
 ]
 
 { #category : #'factory-chars' }
@@ -54,8 +47,15 @@ PPPredicateParser class >> cr [
 { #category : #'factory-chars' }
 PPPredicateParser class >> digit [
 	^ self 
-		on: [ :char | char isDigit ] message: 'digit expected'
-		negated: [ :char | char isDigit not ] message: 'no digit expected'
+		on: [ :each | each isDigit ] message: 'digit expected'
+		negated: [ :each | each isDigit not ] message: 'no digit expected'
+]
+
+{ #category : #'factory-chars' }
+PPPredicateParser class >> eol [
+	^ self
+		on: [ :each | each = Character cr or: [ each = Character lf ] ] message: 'newline expected'
+		negated: [ :each |  each ~= Character cr and: [ each ~= Character lf ] ] message: 'no newline expected'
 ]
 
 { #category : #'factory-objects' }
@@ -68,18 +68,18 @@ PPPredicateParser class >> expect: anObject [
 { #category : #'factory-chars' }
 PPPredicateParser class >> hex [
 	^ self 
-		on: [ :char | 
-			(char between: $0 and: $9) 
-				or: [ (char between: $a and: $f) 
-				or: [ (char between: $A and: $F) ] ] ] 
+		on: [ :each | 
+			(each between: $0 and: $9) 
+				or: [ (each between: $a and: $f) 
+				or: [ (each between: $A and: $F) ] ] ] 
 		message: 'hex digit expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateParser class >> letter [
 	^ self 
-		on: [ :char | char isLetter ] message: 'letter expected'
-		negated: [ :char | char isLetter not ] message: 'no letter expected'
+		on: [ :each | each isLetter ] message: 'letter expected'
+		negated: [ :each | each isLetter not ] message: 'no letter expected'
 ]
 
 { #category : #'factory-chars' }
@@ -90,13 +90,8 @@ PPPredicateParser class >> lf [
 { #category : #'factory-chars' }
 PPPredicateParser class >> lowercase [
 	^ self
-		on: [ :char | char isLowercase ] message: 'lowercase letter expected'
-		negated: [ :char | char isLowercase not ] message: 'no lowercase letter expected'
-]
-
-{ #category : #'factory-chars' }
-PPPredicateParser class >> newline [
-	^ self anyOf: (Array with: Character cr with: Character lf)
+		on: #isLowercase message: 'lowercase letter expected'
+		negated: #isUppercase message: 'uppercase letter expected'
 ]
 
 { #category : #'instance creation' }
@@ -112,8 +107,8 @@ PPPredicateParser class >> on: aBlock message: aString negated: aNegatedBlock me
 { #category : #'factory-chars' }
 PPPredicateParser class >> space [
 	^ self 
-		on: [ :char | char isSeparator ] message: 'separator expected'
-		negated: [ :char | char isSeparator not ] message: 'no separator expected'
+		on: [ :each | each isSeparator ] message: 'separator expected'
+		negated: [ :each | each isSeparator not ] message: 'no separator expected'
 ]
 
 { #category : #'factory-chars' }
@@ -123,10 +118,7 @@ PPPredicateParser class >> tab [
 
 { #category : #'factory-chars' }
 PPPredicateParser class >> uppercase [
-	^ self 
-		on: [ :char | char isUppercase ] message: 'uppercase letter expected'
-		negated: [ :char | char isUppercase not ] message: 'no uppercase letter expected'
-		
+	^ self lowercase negate
 ]
 
 { #category : #'factory-chars' }

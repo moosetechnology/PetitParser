@@ -15,12 +15,13 @@ PPAbstractParseTest class >> packageNamesUnderTest [
 ]
 
 { #category : #utilities }
-PPAbstractParseTest >> assert: aParser fail: aCollection [
+PPAbstractParseTest >> assert: aParser fail: aCollection at: anInteger [
 	| stream result |
 	stream := aCollection asParserStream.
 	result := aParser parse: stream.
 	self assert: result isFailure.
-	self assert: stream position = 0
+	self assert: stream position = 0.
+	self assert: result position = anInteger
 ]
 
 { #category : #utilities }

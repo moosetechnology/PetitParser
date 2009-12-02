@@ -19,7 +19,7 @@ PPParserTest >> testAnd [
 	parser := 'foo' asParser flatten , 'bar' asParser flatten and.
 	
 	self assert: parser parse: 'foobar' to: #('foo' 'bar') end: 3.
-	self assert: parser fail: 'foobaz'
+	self assert: parser fail: 'foobaz' at: 3
 ]
 
 { #category : #testing }
@@ -43,9 +43,9 @@ PPParserTest >> testChoice [
 	self assert: parser parse: 'ab' to: $a end: 1.
 	self assert: parser parse: 'ba' to: $b end: 1.
 
-	self assert: parser fail: ''.
-	self assert: parser fail: 'c'.
-	self assert: parser fail: 'ca'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'c' at: 0.
+	self assert: parser fail: 'ca' at: 0
 ]
 
 { #category : #testing }
@@ -66,19 +66,19 @@ PPParserTest >> testDelimitedBy [
 	self assert: parser parse: 'abac' to: #($a $b $a) end: 3.
 	self assert: parser parse: 'ababc' to: #($a $b $a $b) end: 4.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'b'.
-	self assert: parser fail: 'c'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'b' at: 0.
+	self assert: parser fail: 'c' at: 0
 ]
 
 { #category : #testing }
 PPParserTest >> testEndOfInput [
 	| parser |
-	parser := PPEndOfInputParser on: $a asParser.
+	parser := $a asParser end.
 	
 	self assert: parser parse: 'a' to: $a.
-	self assert: parser fail: ''.
-	self assert: parser fail: 'aa'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'aa' at: 1
 ]
 
 { #category : #testing }
@@ -86,8 +86,8 @@ PPParserTest >> testEndOfInputAfterMatch [
 	| parser |
 	parser := 'stuff' asParser end.
 	self assert: parser parse: 'stuff' to: 'stuff'.
-	self assert: parser fail: 'stufff'.
-	self assert: parser fail: 'fluff'
+	self assert: parser fail: 'stufff' at: 5.
+	self assert: parser fail: 'fluff' at: 0
 ]
 
 { #category : #testing }
@@ -106,12 +106,13 @@ PPParserTest >> testFailing [
 	| parser result |
 	parser := PPFailingParser message: 'Plonk'.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'a'.
-	self assert: parser fail: 'aa'.
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'a' at: 0.
+	self assert: parser fail: 'aa' at: 0.
 	
 	result := parser parse: 'a' asParserStream.
 	self assert: result reason = 'Plonk'.
+	self assert: result position = 0.
 	self assert: result printString = 'Plonk at 0'
 ]
 
@@ -146,8 +147,8 @@ PPParserTest >> testFlatten [
 	self assert: parser parse: 'a' to: 'a'.
 	self assert: parser parse: #($a) to: #($a).
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'b'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'b' at: 0
 ]
 
 { #category : #'testing-utilities' }
@@ -199,8 +200,8 @@ PPParserTest >> testMin [
 	| parser |
 	parser := $a asParser min: 2.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'a'.
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'a' at: 1.
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a $a).
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
@@ -213,8 +214,8 @@ PPParserTest >> testMinMax [
 	| parser |
 	parser := $a asParser min: 2 max: 4.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'a'.
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'a' at: 1.
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a $a).
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
@@ -243,10 +244,10 @@ PPParserTest >> testNot [
 	parser := 'foo' asParser flatten , 'bar' asParser flatten not.
 	
 	self assert: parser parse: 'foobaz' to: #('foo' nil) end: 3.
-	self assert: parser fail: 'foobar'.
+	self assert: parser fail: 'foobar' at: 3.
 	
 	parser := 'foo' asParser flatten , 'bar' asParser flatten not not.
-	self assert: parser fail: 'foobaz'.
+	self assert: parser fail: 'foobaz' at: 3.
 	self assert: parser parse: 'foobar'
 ]
 
@@ -278,9 +279,9 @@ PPParserTest >> testPlus [
 	self assert: parser parse: 'aab' to: #($a $a) end: 2.
 	self assert: parser parse: 'aaab' to: #($a $a $a) end: 3.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'b'.
-	self assert: parser fail: 'ba'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'b' at: 0.
+	self assert: parser fail: 'ba' at: 0
 ]
 
 { #category : #'testing-accessing' }
@@ -307,8 +308,8 @@ PPParserTest >> testSeparatedBy [
 	self assert: parser parse: 'ac' to: #($a) end: 1.
 	self assert: parser parse: 'abac' to: #($a $b $a) end: 3.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'c'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'c' at: 0
 ]
 
 { #category : #testing }
@@ -321,11 +322,11 @@ PPParserTest >> testSequence [
 	self assert: parser parse: 'aba' to: #($a $b) end: 2.
 	self assert: parser parse: 'abb' to: #($a $b) end: 2.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'a'.
-	self assert: parser fail: 'aa'.
-	self assert: parser fail: 'ba'.
-	self assert: parser fail: 'bab'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'a' at: 1.
+	self assert: parser fail: 'aa' at: 1.
+	self assert: parser fail: 'ba' at: 0.
+	self assert: parser fail: 'bab' at: 0
 ]
 
 { #category : #testing }
@@ -362,8 +363,8 @@ PPParserTest >> testToken [
 	self assert: parser parse: 'a	a' toToken: 1 stop: 1 end: 2.
 	self assert: parser parse: 'a  a' toToken: 1 stop: 1 end: 3.
 	
-	self assert: parser fail: ''.
-	self assert: parser fail: 'b'
+	self assert: parser fail: '' at: 0.
+	self assert: parser fail: 'b' at: 0
 ]
 
 { #category : #testing }
@@ -386,5 +387,5 @@ PPParserTest >> testWrapped [
 	parser := $a asParser wrapped.
 	
 	self assert: parser parse: 'a' to: $a.
-	self assert: parser fail: 'b'
+	self assert: parser fail: 'b' at: 0
 ]

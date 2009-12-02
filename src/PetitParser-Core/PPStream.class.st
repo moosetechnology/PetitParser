@@ -11,13 +11,13 @@ PPStream >> asParserStream [
 
 { #category : #accessing }
 PPStream >> next: anInteger [ 
-	"Answer up to anInteger elements of my collection. Overriden for efficiency."
+	"Answer up to anInteger elements of my collection.  overriden for efficiency"
 
-	| answer endPosition |
-	endPosition := position + anInteger min: readLimit.
-	answer := collection copyFrom: position + 1 to: endPosition.
+	| ans endPosition |
+	endPosition := position + anInteger  min:  readLimit.
+	ans := collection copyFrom: position+1 to: endPosition.
 	position := endPosition.
-	^ answer
+	^ans
 
 ]
 
