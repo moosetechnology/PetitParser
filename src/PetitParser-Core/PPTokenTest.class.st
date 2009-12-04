@@ -48,11 +48,10 @@ PPTokenTest >> testEquality [
 ]
 
 { #category : #testing }
-PPTokenTest >> testNextPrevious [
-	| token |
-	token := PPToken on: 'token'.
-	self assert: token previous isNil.
-	self assert: token next isNil
+PPTokenTest >> testPrinting [
+	| result |
+	result := PPToken on: 'var'.
+	self assert: result printString = 'a PPToken(var)'
 ]
 
 { #category : #testing }
@@ -61,8 +60,7 @@ PPTokenTest >> testSize [
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result size = 3.
-	self assert: result length = 3
+	self assert: result size = 3
 ]
 
 { #category : #testing }
@@ -71,8 +69,7 @@ PPTokenTest >> testStart [
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result start = 1.
-	self assert: result startPosition = 1
+	self assert: result start = 1
 ]
 
 { #category : #testing }
@@ -81,22 +78,7 @@ PPTokenTest >> testStop [
 	result := self 
 		parse: 'foo'
 		using: self identifier.
-	self assert: result stop = 3.
-	self assert: result stopPosition = 3
-]
-
-{ #category : #testing }
-PPTokenTest >> testTesting [
-	| result |
-	result := PPToken on: 'var'.
-	self deny: result isRBToken.
-	self deny: result isPatternVariable.
-	self assert: result printString = 'a PPToken(var)'.
-	
-	result := PPToken on: '`var'.
-	self deny: result isRBToken.
-	self assert: result isPatternVariable.
-	self assert: result printString = 'a PPToken(`var)'
+	self assert: result stop = 3
 ]
 
 { #category : #testing }

@@ -1,12 +1,9 @@
 "
-A parser accepts a squence of literal objects, such as a String. This is an optimization to avoid having to compose longer sequences from PPSequenceParser.
+A parser accepts a sequence of literal objects, such as a String. This is an optimization to avoid having to compose longer sequences from PPSequenceParser.
 "
 Class {
 	#name : #PPLiteralSequenceParser,
 	#superclass : #PPLiteralParser,
-	#instVars : [
-		'sequence'
-	],
 	#category : #'PetitParser-Core'
 }
 

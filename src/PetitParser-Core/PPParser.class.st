@@ -238,7 +238,7 @@ PPParser >> star [
 
 { #category : #operations }
 PPParser >> token [
-	"Answer a new parser that transforms the input to a token and consumes whitespaces."
+	"Answer a new parser that transforms the input to a token and consumes white spaces."
 	
 	^ self currentTokenParser on: self
 ]

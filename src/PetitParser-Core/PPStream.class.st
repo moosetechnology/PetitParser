@@ -11,7 +11,7 @@ PPStream >> asParserStream [
 
 { #category : #accessing }
 PPStream >> next: anInteger [ 
-	"Answer up to anInteger elements of my collection. Overriden for efficiency."
+	"Answer up to anInteger elements of my collection. Overridden for efficiency."
 
 	| answer endPosition |
 	endPosition := position + anInteger min: readLimit.

@@ -20,7 +20,7 @@ PPListParser class >> withAll: aCollection [
 	^ self basicNew initializeWithAll: aCollection asArray
 ]
 
-{ #category : #querying }
+{ #category : #accessing }
 PPListParser >> children [
 	^ parsers
 ]

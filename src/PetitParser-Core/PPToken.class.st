@@ -21,7 +21,7 @@ PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInt
 		start: aStartInteger stop: aStopInteger
 ]
 
-{ #category : #accessing }
+{ #category : #comparing }
 PPToken >> = anObject [
 	^ self class = anObject class and: [ self value = anObject value ]
 ]
@@ -36,7 +36,7 @@ PPToken >> copyFrom: aStartInteger to: aStopInteger [
 	^ self class on: collection start: start + aStartInteger - 1 stop: stop + aStopInteger - 3
 ]
 
-{ #category : #accessing }
+{ #category : #comparing }
 PPToken >> hash [
 	^ self value hash
 ]
@@ -46,31 +46,6 @@ PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aSto
 	collection := aSequenzeableCollection.
 	start := aStartInteger.
 	stop := aStopInteger
-]
-
-{ #category : #compatibility }
-PPToken >> isPatternVariable [
-	^ self size > 0 and: [ (self collection at: self start) = $` ]
-]
-
-{ #category : #compatibility }
-PPToken >> isRBToken [
-	^ false
-]
-
-{ #category : #compatibility }
-PPToken >> length [
-	^ self size
-]
-
-{ #category : #compatibility }
-PPToken >> next [
-	^ nil
-]
-
-{ #category : #compatibility }
-PPToken >> previous [
-	^ nil
 ]
 
 { #category : #printing }
@@ -89,19 +64,9 @@ PPToken >> start [
 	^ start
 ]
 
-{ #category : #compatibility }
-PPToken >> startPosition [
-	^ self start
-]
-
 { #category : #accessing }
 PPToken >> stop [
 	^ stop
-]
-
-{ #category : #compatibility }
-PPToken >> stopPosition [
-	^ self stop
 ]
 
 { #category : #accessing }

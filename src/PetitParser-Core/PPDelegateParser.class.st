@@ -15,7 +15,7 @@ PPDelegateParser class >> on: aParser [
 	^ self new setParser: aParser
 ]
 
-{ #category : #querying }
+{ #category : #accessing }
 PPDelegateParser >> children [
 	^ Array with: parser
 ]
