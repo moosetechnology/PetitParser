@@ -4,84 +4,126 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
-{ #category : #testing }
+{ #category : #utilities }
+PPPredicateTest >> assertCharacterSets: aParser [
+	"Assert the character set of aParser does not overlap with the character set with the negated parser, and that they both cover the complete character space."
+
+	| positives negatives |
+	positives := self parsedCharacterSet: aParser.
+	negatives := self parsedCharacterSet: aParser negate.
+	Character allCharacters do: [ :char | 
+		| positive negative |
+		positive := positives includes: char.
+		negative := negatives includes: char.
+		self 
+			assert: ((positive and: [ negative not ])
+				or: [ positive not and: [ negative ] ])
+			description: char printString , ' should be in exactly one set' ]
+]
+
+{ #category : #utilities }
+PPPredicateTest >> parsedCharacterSet: aParser [
+	| result stream |
+	result := WriteStream on: String new.
+	Character allCharacters do: [ :char |
+		stream := (String with: char)
+			asParserStream.
+		(aParser parse: stream) isFailure
+			ifFalse: [ result nextPut: char ] ].
+	^ result contents
+]
+
+{ #category : #'testing-objects' }
 PPPredicateTest >> testAny [
 	| parser |
 	parser := #any asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: ' ' to: $ .
 	self assert: parser parse: '1' to: $1.
 	self assert: parser parse: 'a' to: $a.
-	self assert: parser fail: '' at: 0.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: '1' at: 0.
-	self assert: parser negate fail: 'a' at: 0
+	self assert: parser fail: ''
 ]
 
-{ #category : #testing }
-PPPredicateTest >> testCharacter [
+{ #category : #'testing-objects' }
+PPPredicateTest >> testAnyOf [
+	| parser |
+	parser := PPPredicateParser anyOf: #($a $z).
+	self assertCharacterSets: parser.
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser parse: 'z' to: $z.
+	self assert: parser fail: 'x'
+]
+
+{ #category : #'testing-objects' }
+PPPredicateTest >> testBetweenAnd [
+	| parser |
+	parser := PPPredicateParser between: $b and: $d.
+	self assertCharacterSets: parser.
+	self assert: parser fail: 'a'.
+	self assert: parser parse: 'b' to: $b.
+	self assert: parser parse: 'c' to: $c.
+	self assert: parser parse: 'd' to: $d.
+	self assert: parser fail: 'e'
+]
+
+{ #category : #'testing-chars' }
+PPPredicateTest >> testChar [
 	| parser |
 	parser := $* asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: '*' to: $*.
 	self assert: parser parse: '**' to: $* end: 1.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: '1' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser negate parse: '1' to: $1.
-	self assert: parser negate parse: 'a' to: $a.
-	self assert: parser negate fail: '*' at: 0.
-	self assert: parser negate fail: '' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testControl [
 	| parser |
 	parser := #control asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: (String with: Character cr) to: Character cr.
 	self assert: parser parse: (String with: Character tab) to: Character tab.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: '1' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser negate parse: '1' to: $1.
-	self assert: parser negate parse: 'a' to: $a.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: (String with: Character cr) at: 0.
-	self assert: parser negate fail: (String with: Character tab) at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testCr [
 	| parser |
 	parser := #cr asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: (String with: Character cr) to: Character cr
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testDigit [
 	| parser |
 	parser := #digit asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: '0' to: $0.
 	self assert: parser parse: '9' to: $9.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser negate parse: ' ' to: $ .
-	self assert: parser negate parse: 'a' to: $a.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: '0' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'
 ]
 
-{ #category : #testing }
-PPPredicateTest >> testEol [
+{ #category : #'testing-objects' }
+PPPredicateTest >> testExpect [
 	| parser |
-	parser := PPPredicateParser eol.
-	self assert: parser parse: (String with: Character cr) to: Character cr.
-	self assert: parser parse: (String with: Character lf) to: Character lf.
-	self assert: parser fail: ' ' at: 0
+	parser := PPPredicateParser expect: $a.
+	self assertCharacterSets: parser.
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser fail: 'b'.
+	self assert: parser fail: ''
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testHex [
 	| parser |
 	parser := #hex asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: '0' to: $0.
 	self assert: parser parse: '5' to: $5.
 	self assert: parser parse: '9' to: $9.
@@ -91,95 +133,90 @@ PPPredicateTest >> testHex [
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'e' to: $e.
 	self assert: parser parse: 'f' to: $f.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'g' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'g'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testLetter [
 	| parser |
 	parser := #letter asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'Z' to: $Z.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: '0' at: 0.
-	self assert: parser negate parse: '1' to: $1.
-	self assert: parser negate parse: ' ' to: $ .
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: 'a' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: '0'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testLf [
 	| parser |
 	parser := #lf asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: (String with: Character lf) to: Character lf
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testLowercase [
 	| parser |
 	parser := #lowercase asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'z' to: $z.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'A' at: 0.
-	self assert: parser fail: '0' at: 0.
-	self assert: parser negate parse: 'A' to: $A.
-	self assert: parser negate parse: 'Z' to: $Z.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: 'a' at: 0.
-	self assert: parser negate fail: '0' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'A'.
+	self assert: parser fail: '0'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
+PPPredicateTest >> testNewline [
+	| parser |
+	parser := #newline asParser.
+	self assertCharacterSets: parser.
+	self assert: parser parse: (String with: Character cr) to: Character cr.
+	self assert: parser parse: (String with: Character lf) to: Character lf.
+	self assert: parser fail: ' '
+]
+
+{ #category : #'testing-chars' }
 PPPredicateTest >> testSpace [
 	| parser |
 	parser := #space asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: (String with: Character tab) to: Character tab.
 	self assert: parser parse: ' ' to: Character space.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser negate parse: 'a' to: $a.
-	self assert: parser negate parse: '/' to: $/.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: ' ' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testTab [
 	| parser |
 	parser := #tab asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: (String with: Character tab) to: Character tab
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testUppercase [
 	| parser |
 	parser := #uppercase asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: 'A' to: $A.
 	self assert: parser parse: 'Z' to: $Z.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser fail: '0' at: 0.
-	self assert: parser negate parse: 'a' to: $a.
-	self assert: parser negate parse: 'z' to: $z.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: 'A' at: 0.
-	self assert: parser negate fail: '0' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'.
+	self assert: parser fail: '0'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-chars' }
 PPPredicateTest >> testWord [
 	| parser |
 	parser := #word asParser.
+	self assertCharacterSets: parser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'A' to: $A.
 	self assert: parser parse: '0' to: $0.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: '-' at: 0.
-	self assert: parser negate parse: ' ' to: $ .
-	self assert: parser negate parse: '-' to: $-.
-	self assert: parser negate fail: '' at: 0.
-	self assert: parser negate fail: 'a' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: '-'
 ]

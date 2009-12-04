@@ -1,7 +1,10 @@
+"
+This is a temporary placeholder or forward reference to a parser that has not been defined yet. If everything goes well it will eventually be replaced with the real parser instance.
+"
 Class {
 	#name : #PPUnresolvedParser,
 	#superclass : #PPParser,
-	#category : #'PetitParser-Builder'
+	#category : #'PetitParser-Tools'
 }
 
 { #category : #testing }

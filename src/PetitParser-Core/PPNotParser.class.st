@@ -1,3 +1,6 @@
+"
+The npt-predicate, a parser that suceeds whenever its delegate does not, but consumes no input [Parr 1994, 1995].
+"
 Class {
 	#name : #PPNotParser,
 	#superclass : #PPAndParser,

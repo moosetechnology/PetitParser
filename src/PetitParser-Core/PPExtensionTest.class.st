@@ -9,7 +9,7 @@ PPExtensionTest >> testCharacter [
 	| parser |
 	parser := $a asParser.	
 	self assert: parser parse: 'a' to: $a.
-	self assert: parser fail: 'b' at: 0
+	self assert: parser fail: 'b'
 ]
 
 { #category : #testing }
@@ -26,9 +26,9 @@ PPExtensionTest >> testClosure [
 	self assert: parser parse: 'saa' to: '' end: 1.
 	
 	parser := [ :stream | stream upTo: $s. PPFailure new ] asParser.
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 's' at: 0.
-	self assert: parser fail: 'as' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 's'.
+	self assert: parser fail: 'as'
 	
 ]
 
@@ -54,10 +54,10 @@ PPExtensionTest >> testOrdered [
 	parser := #(1 2) asParser.
 	self assert: parser parse: #(1 2) to: #(1 2).
 	self assert: parser parse: #(1 2 3) to: #(1 2) end: 2.
-	self assert: parser fail: #() at: 0.
-	self assert: parser fail: #(1) at:  1.
-	self assert: parser fail: #(1 1) at: 1.
-	self assert: parser fail: #(1 1 2) at: 1 
+	self assert: parser fail: #().
+	self assert: parser fail: #(1).
+	self assert: parser fail: #(1 1).
+	self assert: parser fail: #(1 1 2)
 ]
 
 { #category : #testing }
@@ -74,7 +74,7 @@ PPExtensionTest >> testRange [
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'b' to: $b.
 	self assert: parser parse: 'c' to: $c.
-	self assert: parser fail: 'd' at: 0
+	self assert: parser fail: 'd'
 ]
 
 { #category : #testing }
@@ -85,8 +85,8 @@ PPExtensionTest >> testStream [
 	self assert: (stream printString = '·abc').
 	self assert: (stream peek) = $a.
 	self assert: (stream next) = $a.
-	self assert: (stream printString = 'a·bc')
-	
+	self assert: (stream printString = 'a·bc').
+	self assert: (stream asParserStream = stream)
 ]
 
 { #category : #testing }
@@ -96,9 +96,8 @@ PPExtensionTest >> testString [
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aba' to: 'ab' end: 2.
 	self assert: parser parse: 'abb' to: 'ab' end: 2.
-	self assert: parser fail: 'b' at: 0.
-	self assert: parser fail: 'a' at: 0.
-	self assert: parser fail: 'ac' at: 0
+	self assert: parser fail: 'a'.
+	self assert: parser fail: 'ac'
 ]
 
 { #category : #testing }
@@ -106,7 +105,7 @@ PPExtensionTest >> testSymbol [
 	| parser |
 	parser := #any asParser.
 	self assert: parser parse: 'a'.
-	self assert: parser fail: '' at: 0
+	self assert: parser fail: ''
 ]
 
 { #category : #testing }
@@ -124,6 +123,6 @@ PPExtensionTest >> testUnordered [
 	self assert: parser parse: #(2) to: 2.
 	self assert: parser parse: #(1 2) to: 1 end: 1.
 	self assert: parser parse: #(2 1) to: 2 end: 1.
-	self assert: parser fail: #() at: 0.
-	self assert: parser fail: #(3) at: 0
+	self assert: parser fail: #().
+	self assert: parser fail: #(3)
 ]

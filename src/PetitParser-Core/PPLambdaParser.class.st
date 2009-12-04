@@ -7,7 +7,7 @@ Class {
 		'application',
 		'variable'
 	],
-	#category : #'PetitParser-Builder'
+	#category : #'PetitParser-Tests'
 }
 
 { #category : #'curch-booleans' }

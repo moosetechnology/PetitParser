@@ -42,9 +42,9 @@ PPComposedTest >> testIfThenElse [
 	self assert: parser parse: 'if C then if C then X else X else if C then X'.
 	self assert: parser parse: 'if C then if C then X else X else if C then X else X'.
 	
-	self assert: parser fail: 'if C' at: 4.
-	self assert: parser fail: 'if C else X' at: 5.
-	self assert: parser fail: 'if C then if C' at: 14
+	self assert: parser fail: 'if C'.
+	self assert: parser fail: 'if C else X'.
+	self assert: parser fail: 'if C then if C'
 ]
 
 { #category : #testing }
@@ -92,10 +92,10 @@ PPComposedTest >> testListOfIntegers [
 	self assert: parser parse: '1 ,2 ,3 ,4' to: (1 to: 4) asArray.
 	self assert: parser parse: '1 ,2 ,3 ,4 ,5' to: (1 to: 5) asArray.
 	
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: ',' at: 0.
-	self assert: parser fail: '1,' at: 1.
-	self assert: parser fail: '1,,2' at: 1
+	self assert: parser fail: ''.
+	self assert: parser fail: ','.
+	self assert: parser fail: '1,'.
+	self assert: parser fail: '1,,2'
 ]
 
 { #category : #testing }
@@ -117,7 +117,7 @@ PPComposedTest >> testNestedComments [
 	
 	self assert: parser parse: '/*ab*/cd' end: 6.
 	self assert: parser parse: '/*a/*b*/c*/'.
-	self assert: parser fail: '/*a/*b*/c' at: 9
+	self assert: parser fail: '/*a/*b*/c'
 ]
 
 { #category : #testing }
@@ -145,10 +145,10 @@ PPComposedTest >> testPalindrome [
 	self assert: parser parse: 'abaaba' to: 'abaaba'.
 	self assert: parser parse: 'cbaabc' to: 'cbaabc'.
 
-	self assert: parser fail: 'a' at: 1.
-	self assert: parser fail: 'ab' at: 1.
-	self assert: parser fail: 'aab' at: 2.
-	self assert: parser fail: 'abccbb' at: 5
+	self assert: parser fail: 'a'.
+	self assert: parser fail: 'ab'.
+	self assert: parser fail: 'aab'.
+	self assert: parser fail: 'abccbb'
 ]
 
 { #category : #testing }
@@ -173,10 +173,10 @@ PPComposedTest >> testParseAaaBbb [
 	self assert: parser parse: 'aaabbbb' to: 'aaabbb' end: 6.
 	self assert: parser parse: 'aaaabbbbb' to: 'aaaabbbb' end: 8.
 
-	self assert: parser fail: 'a' at: 1.
-	self assert: parser fail: 'b' at: 0.
-	self assert: parser fail: 'aab' at: 3.
-	self assert: parser fail: 'aaabb' at: 5
+	self assert: parser fail: 'a'.
+	self assert: parser fail: 'b'.
+	self assert: parser fail: 'aab'.
+	self assert: parser fail: 'aaabb'
 ]
 
 { #category : #testing }
@@ -217,9 +217,9 @@ PPComposedTest >> testParseAbAbAb [
 	self assert: parser parse: 'abababb' to: 'ababab' end: 6.
 	self assert: parser parse: 'ababababa' to: 'abababab' end: 8.
 	
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'a' at: 1.
-	self assert: parser fail: 'bab' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'.
+	self assert: parser fail: 'bab'
 ]
 
 { #category : #testing }
@@ -247,6 +247,6 @@ PPComposedTest >> testParseAbabbb [
 	self assert: parser parse: 'abc' to: 'ab' end: 2.
 	self assert: parser parse: 'bac' to: 'ba' end: 2.
 	
-	self assert: parser fail: '' at: 0.
-	self assert: parser fail: 'c' at: 0
+	self assert: parser fail: ''.
+	self assert: parser fail: 'c'
 ]

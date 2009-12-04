@@ -1,5 +1,5 @@
 "
-The and-predicate, a parser that suceeds whenever its delegate does, but consumes no input [Parr 1994, 1995].
+The and-predicate, a parser that suceeds whenever its delegate does, but consumes the input stream [Parr 1994, 1995].
 "
 Class {
 	#name : #PPAndParser,

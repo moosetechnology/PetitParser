@@ -1,3 +1,6 @@
+"
+Abstract parser that parses a list of things in some way (to be specified by the subclasses).
+"
 Class {
 	#name : #PPListParser,
 	#superclass : #PPParser,

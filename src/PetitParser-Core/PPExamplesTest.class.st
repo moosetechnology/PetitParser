@@ -31,11 +31,11 @@ PPExamplesTest >> testComment [
 	self assert: self comment parse: '"ab"a' to: '"ab"' end: 4.
 	self assert: self comment parse: '"abc"a' to: '"abc"' end: 5.
 
-	self assert: self comment fail: '"' at: 1.
-	self assert: self comment fail: '"a' at: 2.
-	self assert: self comment fail: '"aa' at: 3.
-	self assert: self comment fail: 'a"' at: 0.
-	self assert: self comment fail: 'aa"' at: 0
+	self assert: self comment fail: '"'.
+	self assert: self comment fail: '"a'.
+	self assert: self comment fail: '"aa'.
+	self assert: self comment fail: 'a"'.
+	self assert: self comment fail: 'aa"'
 ]
 
 { #category : #testing }
@@ -52,9 +52,9 @@ PPExamplesTest >> testIdentifier [
 	self assert: self identifier parse: 'ab^' to: 'ab' end: 2.
 	self assert: self identifier parse: 'a1b*' to: 'a1b' end: 3.
 
-	self assert: self identifier fail: '' at: 0.
-	self assert: self identifier fail: '1' at: 0.
-	self assert: self identifier fail: '1a' at: 0
+	self assert: self identifier fail: ''.
+	self assert: self identifier fail: '1'.
+	self assert: self identifier fail: '1a'
 ]
 
 { #category : #testing }
@@ -74,10 +74,10 @@ PPExamplesTest >> testNumber [
 	self assert: self number parse: '-12.3' to: '-12.3'.
 	self assert: self number parse: '-12.34' to: '-12.34'.
 	
-	self assert: self number fail: '' at: 0.
-	self assert: self number fail: '-' at: 1.
-	self assert: self number fail: '.' at: 0.
-	self assert: self number fail: '.1' at: 0
+	self assert: self number fail: ''.
+	self assert: self number fail: '-'.
+	self assert: self number fail: '.'.
+	self assert: self number fail: '.1'
 ]
 
 { #category : #testing }
@@ -93,6 +93,6 @@ PPExamplesTest >> testReturn [
 	self assert: return parse: '^123 ' to: #(return '123').
 	self assert: return parse: '^ 1234' to: #(return '1234').
 	
-	self assert: return fail: '1' at: 0.
-	self assert: return fail: '^' at: 1
+	self assert: return fail: '1'.
+	self assert: return fail: '^'
 ]
