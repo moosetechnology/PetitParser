@@ -134,8 +134,7 @@ PPSmalltalkGrammar >> binaryExpression [
 
 { #category : #'grammar-messages' }
 PPSmalltalkGrammar >> binaryMessage [
-	^ (binaryToken , unaryExpression) ==> 
-		[ :nodes | 
+	^ (binaryToken , unaryExpression) ==> [ :nodes | 
 		Array 
 			with: (Array with: nodes first)
 			with: (Array with: nodes second) ]
@@ -143,8 +142,7 @@ PPSmalltalkGrammar >> binaryMessage [
 
 { #category : #'grammar-methods' }
 PPSmalltalkGrammar >> binaryMethod [
-	^ (binaryToken , variable) ==> 
-		[ :nodes | 
+	^ (binaryToken , variable) ==> [ :nodes | 
 		Array 
 			with: (Array with: nodes first)
 			with: (Array with: nodes second) ]
@@ -277,8 +275,7 @@ PPSmalltalkGrammar >> keywordExpression [
 
 { #category : #'grammar-messages' }
 PPSmalltalkGrammar >> keywordMessage [
-	^ (keywordToken , binaryExpression) plus ==> 
-		[ :nodes | 
+	^ (keywordToken , binaryExpression) plus ==> [ :nodes | 
 		Array 
 			with: (nodes collect: [ :each | each first ])
 			with: (nodes collect: [ :each | each second ]) ]
@@ -286,8 +283,7 @@ PPSmalltalkGrammar >> keywordMessage [
 
 { #category : #'grammar-methods' }
 PPSmalltalkGrammar >> keywordMethod [
-	^ (keywordToken , variable) plus ==> 
-		[ :nodes | 
+	^ (keywordToken , variable) plus ==> [ :nodes | 
 		Array 
 			with: (nodes collect: [ :each | each first ])
 			with: (nodes collect: [ :each | each second ]) ]
@@ -328,8 +324,7 @@ PPSmalltalkGrammar >> methodDeclaration [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> methodSequence [
-	^ ($. asParser token star , pragmas , temporaries , pragmas , statements) ==> 
-		[ :nodes | 
+	^ ($. asParser token star , pragmas , temporaries , pragmas , statements) ==> [ :nodes | 
 		Array 
 			with: nodes second , nodes fourth
 			with: nodes third
@@ -483,8 +478,7 @@ PPSmalltalkGrammar >> unaryExpression [
 
 { #category : #'grammar-messages' }
 PPSmalltalkGrammar >> unaryMessage [
-	^ unaryToken ==> 
-		[ :node | 
+	^ unaryToken ==> [ :node | 
 		Array 
 			with: (Array with: node)
 			with: Array new ]
@@ -492,8 +486,7 @@ PPSmalltalkGrammar >> unaryMessage [
 
 { #category : #'grammar-methods' }
 PPSmalltalkGrammar >> unaryMethod [
-	^ identifierToken ==> 
-		[ :node | 
+	^ identifierToken ==> [ :node | 
 		Array 
 			with: (Array with: node)
 			with: Array new ]

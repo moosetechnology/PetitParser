@@ -28,12 +28,12 @@ PPSmalltalkAstor >> arrayLiteralArray [
 
 { #category : #'grammar-messages' }
 PPSmalltalkAstor >> binaryExpression [
-	^ super binaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
+	^ super binaryExpression map: [ :receiverNode :messageNodes | self build: receiverNode messages: messageNodes ]
 ]
 
 { #category : #'grammar-blocks' }
 PPSmalltalkAstor >> block [
-	^ super block map: [ :left :block :right | block left: left start; right: right start ]
+	^ super block map: [ :leftToken :blockNode :rightToken | blockNode left: leftToken start; right: rightToken start ]
 ]
 
 { #category : #'grammar-blocks' }
@@ -160,7 +160,7 @@ PPSmalltalkAstor >> byteLiteralArray [
 
 { #category : #'grammar-messages' }
 PPSmalltalkAstor >> cascadeExpression [
-	^ super cascadeExpression map: [ :receiver :messages | self build: receiver cascade: messages ]
+	^ super cascadeExpression map: [ :receiverNode :messageNodes | self build: receiverNode cascade: messageNodes ]
 ]
 
 { #category : #'grammar-literals' }
@@ -170,7 +170,7 @@ PPSmalltalkAstor >> charLiteral [
 
 { #category : #grammar }
 PPSmalltalkAstor >> expression [
-	^ super expression map: [ :vars :expr | self build: expr assignment: vars ]
+	^ super expression map: [ :variableNodes :expressionNodes | self build: expressionNodes assignment: variableNodes ]
 ]
 
 { #category : #'grammar-literals' }
@@ -180,17 +180,17 @@ PPSmalltalkAstor >> falseLiteral [
 
 { #category : #'grammar-messages' }
 PPSmalltalkAstor >> keywordExpression [
-	^ super keywordExpression map: [ :receiver :message | self build: receiver messages: (Array with: message) ]
+	^ super keywordExpression map: [ :receiveNode :messageNode | self build: receiveNode messages: (Array with: messageNode) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkAstor >> method [
-	^ super method map: [ :declaration :body | 
-		declaration pragmas: body first.
-		declaration body: (self 
-			build: body second
-			sequence: body third).
-		declaration ]
+	^ super method map: [ :methodNode :bodyNode | 
+		methodNode pragmas: bodyNode first.
+		methodNode body: (self 
+			build: bodyNode second
+			sequence: bodyNode third).
+		methodNode ]
 ]
 
 { #category : #grammar }
@@ -213,7 +213,7 @@ PPSmalltalkAstor >> numberLiteral [
 
 { #category : #grammar }
 PPSmalltalkAstor >> parens [
-	^ super parens map: [ :open :expr :close | expr addParenthesis: (open start to: close start) ]
+	^ super parens map: [ :openToken :expressionNode :closeToken | expressionNode addParenthesis: (openToken start to: closeToken start) ]
 ]
 
 { #category : #grammar }
@@ -227,12 +227,12 @@ PPSmalltalkAstor >> pragma [
 
 { #category : #grammar }
 PPSmalltalkAstor >> return [
-	^ super return map: [ :token :expr | RBReturnNode return: token start value: expr ]
+	^ super return map: [ :token :expressionNode | RBReturnNode return: token start value: expressionNode ]
 ]
 
 { #category : #grammar }
 PPSmalltalkAstor >> sequence [
-	^ super sequence map: [ :temps :stats | self build: temps sequence: stats ]
+	^ super sequence map: [ :tempNodes :statementNodes | self build: tempNodes sequence: statementNodes ]
 ]
 
 { #category : #accessing }
@@ -263,7 +263,7 @@ PPSmalltalkAstor >> trueLiteral [
 
 { #category : #'grammar-messages' }
 PPSmalltalkAstor >> unaryExpression [
-	^ super unaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
+	^ super unaryExpression map: [ :receiverNode :messageNodes | self build: receiverNode messages: messageNodes ]
 ]
 
 { #category : #grammar }
