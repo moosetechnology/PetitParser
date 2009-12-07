@@ -48,23 +48,72 @@ PPLambdaParserTest >> testOr [
 	self assert: self parserClass or = #('p' ('q' (('p' 'p') 'q')))
 ]
 
-{ #category : #testing }
-PPLambdaParserTest >> testParseIfError [
+{ #category : #'testing-utilities' }
+PPLambdaParserTest >> testParseOnError [
 	| result beenHere |
 	result := self parserClass
 		parse: '\x.y'
-		ifError: [ :fail | self fail ].
+		onError: [ self fail ].
 	self assert: result = #('x' 'y').
 	
 	beenHere := false.
 	result := self parserClass
 		parse: '\x.'
-		ifError: [ :fail | 
-			beenHere := true.
-			fail ].
+		onError: [ beenHere := true ].
+	self assert: beenHere.
+	
+	beenHere := false.
+	result := self parserClass
+		parse: '\x.'
+		onError: [ :fail | beenHere := true. fail ].
 	self assert: beenHere.
 	self assert: result reason = 'letter expected'.
-	self assert: result position = 3
+	self assert: result position = 3.
+
+	beenHere := false.
+	result := self parserClass
+		parse: '\x.'
+		onError: [ :msg :pos | 
+			self assert: msg = 'letter expected'.
+			self assert: pos = 3.
+			beenHere := true ].
+	self assert: beenHere
+]
+
+{ #category : #'testing-utilities' }
+PPLambdaParserTest >> testParseStartingAtOnError [
+	| result beenHere |
+	result := self parserClass
+		parse: 'x'
+		startingAt: #variable
+		onError: [ self fail ].
+	self assert: result = 'x'.
+	
+	beenHere := false.
+	result := self parserClass
+		parse: '\'
+		startingAt: #variable
+		onError: [ beenHere := true ].
+	self assert: beenHere.
+	
+	beenHere := false.
+	result := self parserClass
+		parse: '\'
+		startingAt: #variable
+		onError: [ :fail | beenHere := true. fail ].
+	self assert: beenHere.
+	self assert: result reason = 'letter expected'.
+	self assert: result position = 0.
+
+	beenHere := false.
+	result := self parserClass
+		parse: '\'
+		startingAt: #variable
+		onError: [ :msg :pos | 
+			self assert: msg = 'letter expected'.
+			self assert: pos = 0.
+			beenHere := true ].
+	self assert: beenHere
 ]
 
 { #category : #'testing-utilities' }

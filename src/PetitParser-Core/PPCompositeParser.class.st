@@ -12,37 +12,83 @@ Class {
 }
 
 { #category : #accessing }
-PPCompositeParser class >> allIgnoredInstVarNames [
+PPCompositeParser class >> ignoredNames [
 	"Answer a collection of instance-variables that should not be automatically initialized with productions, but that are used internally to the composite parser."
 
 	^ #(parser)
 ]
 
-{ #category : #parsing }
-PPCompositeParser class >> parse: aString [
-	^ self new parse: aString asParserStream
+{ #category : #'instance creation' }
+PPCompositeParser class >> new [
+	"Answer a new parser starting at the default start symbol."
+
+	^ self newStartingAt: self startSymbol
+]
+
+{ #category : #'instance creation' }
+PPCompositeParser class >> newStartingAt: aSymbol [
+	"Answer a new parser starting at aSymbol."
+
+	^ self basicNew initializeStartingAt: aSymbol
 ]
 
 { #category : #parsing }
-PPCompositeParser class >> parse: aString ifError: aBlock [
-	| result |
-	^ (result := self parse: aString asParserStream) isFailure
-		ifTrue: [ aBlock value: result ]
-		ifFalse: [ result ]
+PPCompositeParser class >> parse: aString [
+	^ self parse: aString startingAt: self startSymbol
+]
+
+{ #category : #parsing }
+PPCompositeParser class >> parse: aString onError: aBlock [
+	^ self result: (self parse: aString) onError: aBlock
+]
+
+{ #category : #parsing }
+PPCompositeParser class >> parse: aString startingAt: aSymbol [
+	^ (self newStartingAt: aSymbol) parse: aString asParserStream
+]
+
+{ #category : #parsing }
+PPCompositeParser class >> parse: aString startingAt: aSymbol onError: aBlock [
+	^ self result: (self parse: aString startingAt: aSymbol) onError: aBlock
+]
+
+{ #category : #private }
+PPCompositeParser class >> result: anObject onError: aBlock [
+	anObject isFailure
+		ifFalse: [ ^ anObject ].
+	aBlock numArgs = 0
+		ifTrue: [ ^ aBlock value ].
+	aBlock numArgs = 1
+		ifTrue: [ ^ aBlock value: anObject ].
+	^ aBlock value: anObject reason value: anObject position
+]
+
+{ #category : #accessing }
+PPCompositeParser class >> startSymbol [
+	"Answer the method that represents the default start symbol."
+
+	^ #start
 ]
 
 { #category : #initialization }
-PPCompositeParser >> initialize [
+PPCompositeParser >> initializeStartingAt: aSymbol [
 	| allVariableNames ignoredVariableNames productionIndexesAndNames |
-	super initialize.
+	self initialize.
+	
+	"find all the produtions that need to be initialized"
 	allVariableNames := self class allInstVarNames.
-	ignoredVariableNames := self class allIgnoredInstVarNames.
+	ignoredVariableNames := self class ignoredNames.
 	productionIndexesAndNames := ((1 to: self class instSize)
 		collect: [ :index | index -> (allVariableNames at: index) asSymbol ])
 		reject: [ :assoc | ignoredVariableNames includes: assoc value ].
+		
+	"initialize productions with an undefined parser to be replaced later"
+	parser := PPUnresolvedParser named: aSymbol.
 	productionIndexesAndNames do: [ :assoc |
 		self instVarAt: assoc key put: (PPUnresolvedParser named: assoc value) ].
-	parser := self start.
+	parser := self perform: aSymbol.
+	
+	"resolve unresolved parsers with their actual implementation"
 	productionIndexesAndNames do: [ :assoc |
 		(self respondsTo: assoc value)
 			ifFalse: [ self error: 'Unable to initialize ' , assoc value printString ]
@@ -61,14 +107,13 @@ PPCompositeParser >> productionAt: aSymbol ifAbsent: aBlock [
 	"Answer the production named aSymbol, if there is no such production answer the result of evaluating aBlock."
 	
 	| index |
-	(self class allIgnoredInstVarNames includes: aSymbol)
+	(self class ignoredNames includes: aSymbol)
 		ifTrue: [ ^ aBlock value ].
-	(aSymbol = #start)
+	(self class startSymbol = aSymbol)
 		ifTrue: [ ^ parser ].
-	index := self class allInstVarNames
-		indexOf: aSymbol
-		ifAbsent: [ ^ aBlock value ].
-	^ self instVarAt: index
+	^ self instVarAt: (self class allInstVarNames
+		indexOf: aSymbol 
+		ifAbsent: [ ^ aBlock value ])
 ]
 
 { #category : #accessing }

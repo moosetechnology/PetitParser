@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
+{ #category : #operations }
+PPEndOfInputParser >> end [
+	^ self
+]
+
 { #category : #parsing }
 PPEndOfInputParser >> parse: aStream [
 	| position result |
