@@ -24,7 +24,7 @@ PPSmalltalkClassesTests >> assert: aBoolean description: aString [
 
 { #category : #accessing }
 PPSmalltalkClassesTests >> parserClass [
-	^ PPSmalltalkAstor
+	^ PPSmalltalkParser
 ]
 
 { #category : #testing }
@@ -71,6 +71,36 @@ PPSmalltalkClassesTests >> testMagnitude [
 	self verifyClass: Integer.
 	self verifyClass: Float.
 	self verifyClass: Fraction
+]
+
+{ #category : #'testing-protocol' }
+PPSmalltalkClassesTests >> testParseExpression [
+	result := self parserClass parseExpression: '1 + 2'.
+	self assert: result isMessage.
+	self assert: result source = '1 + 2'.
+	
+	result := self parserClass parseExpression: '| a | 1 + a'.
+	self assert: result isSequence.
+	self assert: result source =  '| a | 1 + a'.
+	
+	result := self parserClass parseExpression: '1 + 2. ^ 3'.
+	self assert: result isSequence.
+	self assert: result source = '1 + 2. ^ 3'.
+	
+	self 
+		should: [ self parserClass parseExpression: '1 + ' ] 
+		raise: Error
+]
+
+{ #category : #'testing-protocol' }
+PPSmalltalkClassesTests >> testParseMethod [
+	result := self parserClass parseMethod: 'do 1 + 2'.
+	self assert: result isMethod.
+	self assert: result source = 'do 1 + 2'.
+	
+	self 
+		should: [ self parserClass parseExpression: 'do 1 +' ]
+		raise: Error
 ]
 
 { #category : #testing }

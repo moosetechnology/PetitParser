@@ -28,7 +28,7 @@ PPGrammarTest >> parse: aString rule: aSymbol [
 	production := self parser.
 	aSymbol = #start 
 		ifFalse: [ production := production instVarNamed: aSymbol ].
-	result := production end 
+	result := production end
 		parse: aString asParserStream.
 	self 
 		deny: result isFailure

@@ -84,12 +84,22 @@ Class {
 
 { #category : #parsing }
 PPSmalltalkGrammar class >> parseExpression: aString [ 
-	^ self new expression parse: aString asParserStream
+	^ self parseExpression: aString onError: [ :msg :pos | self error: msg ]
+]
+
+{ #category : #parsing }
+PPSmalltalkGrammar class >> parseExpression: aString onError: aBlock [
+	^ self parse: aString startingAt: #startExpression onError: aBlock
 ]
 
 { #category : #parsing }
 PPSmalltalkGrammar class >> parseMethod: aString [ 
-	^ self new method parse: aString asParserStream
+	^ self parseMethod: aString onError: [ :msg :pos | self error: msg ]
+]
+
+{ #category : #parsing }
+PPSmalltalkGrammar class >> parseMethod: aString onError: aBlock [
+	^ self parse: aString onError: aBlock
 ]
 
 { #category : #grammar }
@@ -402,7 +412,12 @@ PPSmalltalkGrammar >> sequence [
 
 { #category : #accessing }
 PPSmalltalkGrammar >> start [
-	^ method
+	^ method end
+]
+
+{ #category : #accessing }
+PPSmalltalkGrammar >> startExpression [
+	^ sequence end
 ]
 
 { #category : #grammar }
