@@ -14,11 +14,14 @@ PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 
 { #category : #parsing }
 PPFlattenParser >> parse: aStream [
-	| start element stop |
+	| begin start element stop |
+	begin := aStream position.
 	self parseBefore: aStream.
 	start := aStream position.
 	element := super parse: aStream.
-	element isFailure ifTrue: [ ^ element ].
+	element isFailure ifTrue: [ 
+		aStream position: begin.
+		^ element ].
 	stop := aStream position.
 	self parseAfter: aStream.
 	^ self create: aStream collection start: start + 1 stop: stop

@@ -15,7 +15,7 @@ PPTokenParser >> consumeSpaces: aStream [
 
 { #category : #hooks }
 PPTokenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
-	^ PPToken on: aCollection start: aStartInteger stop: aStopInteger
+	^ self tokenClass on: aCollection start: aStartInteger stop: aStopInteger
 ]
 
 { #category : #parsing }
@@ -26,4 +26,9 @@ PPTokenParser >> parseAfter: aStream [
 { #category : #parsing }
 PPTokenParser >> parseBefore: aStream [
 	self consumeSpaces: aStream
+]
+
+{ #category : #accessing }
+PPTokenParser >> tokenClass [
+	^ PPToken
 ]
