@@ -10,7 +10,7 @@ PackageOrganizer default packages
 "
 Class {
 	#name : #PPSmalltalkClassesTests,
-	#superclass : #PPGrammarTest,
+	#superclass : #PPSmalltalkTest,
 	#category : #'PetitSmalltalk-Tests'
 }
 

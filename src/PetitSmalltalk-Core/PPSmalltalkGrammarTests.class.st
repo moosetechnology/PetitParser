@@ -1,6 +1,6 @@
 Class {
 	#name : #PPSmalltalkGrammarTests,
-	#superclass : #PPGrammarTest,
+	#superclass : #PPSmalltalkTest,
 	#category : #'PetitSmalltalk-Tests'
 }
 
