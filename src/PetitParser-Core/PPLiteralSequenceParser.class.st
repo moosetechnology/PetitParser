@@ -14,5 +14,5 @@ PPLiteralSequenceParser >> parse: aStream [
 	result := aStream next: literal size.
 	result = literal ifTrue: [ ^ result ].
 	aStream position: position.
-	^ PPFailure reason: literal asString , ' expected' at: position
+	^ PPFailure reason: failureMessage at: position
 ]

@@ -9,12 +9,14 @@ Class {
 
 { #category : #operator }
 PPLiteralObjectParser >> negate [
-	^ (PPPredicateParser expect: literal) negate
+	^ PPPredicateParser 
+		on: [ :each | each ~= literal ] message: 'no ' , failureMessage
+		negated: [ :each | each = literal ] message: failureMessage
 ]
 
 { #category : #parsing }
 PPLiteralObjectParser >> parse: aStream [
 	^ (aStream atEnd not and: [ aStream peek = literal ])
-		ifFalse: [ PPFailure reason: literal asString , ' expected' at: aStream position ]
+		ifFalse: [ PPFailure reason: failureMessage at: aStream position ]
 		ifTrue: [ aStream next ]
 ]

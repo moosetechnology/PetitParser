@@ -5,17 +5,24 @@ Class {
 	#name : #PPLiteralParser,
 	#superclass : #PPParser,
 	#instVars : [
-		'literal'
+		'literal',
+		'failureMessage'
 	],
 	#category : #'PetitParser-Core'
 }
 
 { #category : #'instance creation' }
-PPLiteralParser class >> on: aString [
-	^ self new initializeOn: aString
+PPLiteralParser class >> on: anObject [
+	^ self on: anObject message: anObject printString , ' expected'
+]
+
+{ #category : #'instance creation' }
+PPLiteralParser class >> on: anObject message: aString [
+	^ self new initializeOn: anObject message: aString
 ]
 
 { #category : #initialization }
-PPLiteralParser >> initializeOn: aLiteral [
-	literal := aLiteral
+PPLiteralParser >> initializeOn: anObject message: aString [
+	literal := anObject.
+	failureMessage := aString
 ]
