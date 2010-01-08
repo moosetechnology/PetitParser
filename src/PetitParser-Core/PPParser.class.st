@@ -45,6 +45,13 @@ PPParser >> and [
 	^ PPAndParser on: self
 ]
 
+{ #category : #'operations-mapping' }
+PPParser >> answer: anObject [
+	"Answer anObject from any successful parse of the receiver."
+
+	^ self ==> [ :nodes | anObject ]
+]
+
 { #category : #converting }
 PPParser >> asParser [
 	^ self
