@@ -15,6 +15,6 @@ PPNotParser >> not [
 { #category : #parsing }
 PPNotParser >> parse: aStream [
 	| element |
-	element := super parse: aStream.
-	^ element isFailure ifFalse: [ PPFailure at: aStream position ]
+	^ (element := super parse: aStream) isFailure 
+		ifFalse: [ PPFailure at: aStream position ]
 ]
