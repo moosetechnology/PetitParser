@@ -433,7 +433,7 @@ PPSmalltalkGrammar >> statements [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> string [
-	^ $' asParser , (($' asParser , $' asParser) / $' asParser negate) star , $' asParser
+	^ $' asParser , ('''''' asParser / $' asParser negate) star , $' asParser
 ]
 
 { #category : #'grammar-literals' }
