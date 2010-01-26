@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitGui-Core'
 }
 
+{ #category : #initialization }
+PPBrowser class >> initialize [
+	TheWorldMenu registerOpenCommand: { 'PetitParser'. { self. #open } }
+]
+
 { #category : #'instance-creation' }
 PPBrowser class >> open [
 	^ self new open
@@ -157,7 +162,10 @@ PPBrowser >> browseTestOn: aBrowser [
 			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
 				input := presentation text copy.
 				output := self production end 
-					parse: input asParserStream ];
+					parse: input asParserStream.
+				output isFailure
+					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position)].
+				output ];
 			update: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
 				input := presentation text copy.
 				output := self production end
