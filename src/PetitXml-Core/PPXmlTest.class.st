@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 PPXmlTest class >> isAbstract [
-	^ self name ~= #PPXmlGrammarTest
+	^ self name = #PPXmlTest
 ]
 
 { #category : #accessing }

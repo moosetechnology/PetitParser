@@ -1,7 +1,7 @@
 Class {
 	#name : #PPXmlTokenParser,
 	#superclass : #PPFlattenParser,
-	#category : #'PetitXml-Core'
+	#category : #'PetitXml-Support'
 }
 
 { #category : #hooks }

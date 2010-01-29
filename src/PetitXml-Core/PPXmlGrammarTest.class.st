@@ -10,6 +10,13 @@ PPXmlGrammarTest >> parserClass [
 ]
 
 { #category : #'as yet unclassified' }
+PPXmlGrammarTest >> testDoctype [
+	self parse: '<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE freaking <schema> [ <!-- schema --> ]  >
+	<schema></schema>'
+]
+
+{ #category : #'as yet unclassified' }
 PPXmlGrammarTest >> testParseAll [
 	self resource allXsdDefinitions 
 		do: [ :each | self parse: each ]
@@ -40,6 +47,11 @@ PPXmlGrammarTest >> testParseComplicated [
 { #category : #'as yet unclassified' }
 PPXmlGrammarTest >> testParseEmptyElement [
 	self parse: '<?xml version="1.0" encoding="UTF-8"?><schema/>' 
+]
+
+{ #category : #'as yet unclassified' }
+PPXmlGrammarTest >> testParseNamespace [
+	self parse: '<?xml version="1.0" encoding="UTF-8"?><xs:schema></xs:schema>' 
 ]
 
 { #category : #'as yet unclassified' }

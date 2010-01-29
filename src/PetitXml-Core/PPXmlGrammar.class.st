@@ -16,7 +16,9 @@ Class {
 		'attributes',
 		'content',
 		'characterData',
-		'attribute'
+		'attribute',
+		'doctype',
+		'attributeValue'
 	],
 	#category : #'PetitXml-Core'
 }
@@ -25,14 +27,22 @@ Class {
 PPXmlGrammar >> attribute [
 	"[41] 	Attribute	   ::=   	 Name Eq AttValue"
 
-	^ self parserForAttribute: nameToken value: $" asParser negate star token
+	^ self parserForAttribute: nameToken value: attributeValue
+]
+
+{ #category : #grammar }
+PPXmlGrammar >> attributeValue [
+	^ $" asParser negate star flatten
 ]
 
 { #category : #grammar }
 PPXmlGrammar >> attributes [
 	"[40]   	STag	   ::=   	'<' Name (S Attribute)* S? '>'	"
 
-	^ ((whitespace , attribute) ==> #second) star
+	^ ((whitespace , attribute) ==> #second) star ==> [ :nodes | 
+		nodes 
+			inject: Dictionary new
+			into: [ :dict :each | dict add: each; yourself ] ]
 ]
 
 { #category : #'grammar-character' }
@@ -53,21 +63,37 @@ PPXmlGrammar >> comment [
 PPXmlGrammar >> content [
 	"[43]   	content	   ::=   	 CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*"
 				
-	^ characterData optional , ((element / processing / comment) , characterData optional) star
+	^ characterData optional , ((element / processing / comment) , characterData optional) star ==> [ :nodes |
+		| result |
+		result := OrderedCollection new.
+		nodes first isNil
+			ifFalse: [ result addLast: nodes first ].
+		nodes second do:  [ :each |
+			each notNil
+				ifTrue: [ result addLast: each ] ].
+		result ]
+]
+
+{ #category : #'grammar-misc' }
+PPXmlGrammar >> doctype [
+	"[28]   	doctypedecl	   ::=   	'<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'"
+
+	^ '<!DOCTYPE' asParser ,  ($[ asParser not , #any asParser) star , $[ asParser , ($] asParser not , #any asParser) star , $] asParser , whitespace optional , $> asParser
 ]
 
 { #category : #grammar }
 PPXmlGrammar >> document [
 	"[1]   	document	   ::=   	 prolog element Misc*"
 
-	^ self parserForDocument: prolog element: element
+	^ self parserForDocument: prolog element: self parserForRootElement
 ]
 
 { #category : #grammar }
 PPXmlGrammar >> element [
 	"[39]   	element	   ::=   	 EmptyElemTag | STag content ETag"
-				
-	^ (self parserForTag: nameToken attributes: attributes) / (self parserForTag: nameToken attributes: attributes content: content)
+	
+	^ (self parserForTag: nameToken attributes: attributes) 
+	/ (self parserForTag: nameToken attributes: attributes content: content)
 ]
 
 { #category : #'grammar-character' }
@@ -123,8 +149,16 @@ PPXmlGrammar >> nmTokens [
 PPXmlGrammar >> parserForAttribute: aNameParser value: aValueParser [
 	"Answer a parser that can read an XML attribute."
 
-	^ aNameParser asParser token , whitespace optional , $= asParser , whitespace optional , $" asParser , aValueParser asParser , $" asParser
-		==> [ :nodes | Array with: nodes first with: nodes sixth ]
+	^ aNameParser asParser flatten , whitespace optional , $= asParser , whitespace optional , $" asParser , aValueParser asParser , $" asParser
+		==> [ :nodes | nodes first -> nodes sixth ]
+]
+
+{ #category : #'parsers-tags' }
+PPXmlGrammar >> parserForCloseTag: aNameParser [
+	"Answer a parser that parses an XML element named aNameParser close-tag. This parser answers the name of the tag."
+
+	^ '</' asParser , aNameParser asParser flatten , whitespace optional , $> asParser
+		==> #second
 ]
 
 { #category : #parsers }
@@ -133,6 +167,22 @@ PPXmlGrammar >> parserForDocument: aPrologParser element: anElementParser [
 
 	^ aPrologParser asParser , anElementParser asParser , misc
 		==> [ :nodes | Array with: nodes first with: nodes second ]
+]
+
+{ #category : #'parsers-tags' }
+PPXmlGrammar >> parserForEmptyTag: aNameParser attributes: anAttributeParser [
+	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
+
+	^ $< asParser , aNameParser asParser flatten , anAttributeParser asParser , whitespace optional , '/>' asParser
+		==> [ :nodes | PPXmlElement named: nodes second attributes: nodes third ]
+]
+
+{ #category : #'parsers-tags' }
+PPXmlGrammar >> parserForOpenTag: aNameParser attributes: anAttributeParser [
+	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
+
+	^ $< asParser , aNameParser asParser flatten , anAttributeParser asParser , whitespace optional , $> asParser
+		==> [ :nodes | PPXmlElement named: aNameParser attributes: nodes third ]
 ]
 
 { #category : #parsers }
@@ -144,27 +194,28 @@ PPXmlGrammar >> parserForProcessingInstruction: aTargetParser [
 ]
 
 { #category : #parsers }
+PPXmlGrammar >> parserForRootElement [
+	^ element
+]
+
+{ #category : #'parsers-tags' }
 PPXmlGrammar >> parserForTag: aNameParser attributes: anAttributeParser [
-	"Answer a parser that can read empty XML tags."
+	"Answer a parser that reads an empty XML tag. This parser answers instances of PPXmlElement."
 
 	^ self parserForTag: aNameParser attributes: anAttributeParser content: nil
 ]
 
-{ #category : #parsers }
+{ #category : #'parsers-tags' }
 PPXmlGrammar >> parserForTag: aNameParser attributes: anAttributeParser content: aContentParser [
 	"Answer a parser that can read the XML tags."
 
 	^ aContentParser isNil
-		ifTrue: [
-			$< asParser , aNameParser asParser token , anAttributeParser asParser , whitespace optional , '/>' asParser 
-				==> [ :nodes | Array with: nodes second with: nodes third with: nil ] ]
-		ifFalse: [
-			$< asParser , aNameParser asParser token , anAttributeParser asParser , whitespace optional , $> asParser , aContentParser asParser , 
-			[ :stream | stream position ] asParser , '</' asParser , aNameParser asParser token , whitespace optional , $> asParser
-				==> [ :nodes |
-					nodes second = nodes ninth
-						ifTrue: [ Array with: nodes second with: nodes third with: nodes sixth ]
-						ifFalse: [ PPFailure reason: 'Expected </' , nodes second value , '> but got </' , nodes ninth value , '>' at: nodes seventh ] ] ]
+		ifTrue: [ self parserForEmptyTag: aNameParser attributes: anAttributeParser ]
+		ifFalse: [ 
+			(self parserForOpenTag: aNameParser attributes: anAttributeParser) , (aContentParser asParser) , [ :stream | stream position ] asParser , (self parserForCloseTag: aNameParser) ==> [ :nodes | 
+				nodes first name = nodes last
+					ifTrue: [ nodes first contents: nodes second ]
+					ifFalse: [ PPFailure reason: 'Expected </' , nodes first name , '> but got </' , nodes last , '>' at: nodes third ] ] ]
 ]
 
 { #category : #'grammar-misc' }
@@ -179,7 +230,7 @@ PPXmlGrammar >> processing [
 PPXmlGrammar >> prolog [
 	"[22]   	prolog	   ::=   	 XMLDecl? Misc* (doctypedecl Misc*)?"
 				
-	^ (self parserForProcessingInstruction: 'xml') optional , misc
+	^ (self parserForProcessingInstruction: 'xml') optional , misc , (doctype , misc) optional
 		==> [ :nodes | nodes first ]
 ]
 
