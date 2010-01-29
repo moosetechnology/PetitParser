@@ -49,14 +49,15 @@ PPXmlGrammar >> attributes [
 PPXmlGrammar >> characterData [
 	"[14]   	CharData	   ::=   	[^<&]* - ([^<&]* ']]>' [^<&]*)"
 	
-	^ $< asParser negate plus token
+	^ $< asParser negate plus flatten ==> [ :nodes | PPXmlText data: nodes ]
 ]
 
 { #category : #'grammar-misc' }
 PPXmlGrammar >> comment [
 	"[15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'"
 
-	^ '<!--' asParser ,  ('-->' asParser not , #any asParser) star , '-->' asParser
+	^ '<!--' asParser ,  ('-->' asParser not , #any asParser) star flatten , '-->' asParser
+		==> [ :nodes | PPXmlComment data: nodes second ]
 ]
 
 { #category : #grammar }
@@ -69,8 +70,9 @@ PPXmlGrammar >> content [
 		nodes first isNil
 			ifFalse: [ result addLast: nodes first ].
 		nodes second do:  [ :each |
-			each notNil
-				ifTrue: [ result addLast: each ] ].
+			result addLast: each first.
+			each second isNil
+				ifFalse: [ result addLast: each second ] ].
 		result ]
 ]
 
@@ -157,40 +159,50 @@ PPXmlGrammar >> parserForAttribute: aNameParser value: aValueParser [
 PPXmlGrammar >> parserForCloseTag: aNameParser [
 	"Answer a parser that parses an XML element named aNameParser close-tag. This parser answers the name of the tag."
 
-	^ '</' asParser , aNameParser asParser flatten , whitespace optional , $> asParser
-		==> #second
+	^ '</' asParser , (PPXmlQualifiedParser local: aNameParser) , whitespace optional , $> asParser ==> #second
+]
+
+{ #category : #'parsers-tags' }
+PPXmlGrammar >> parserForContentTag: aNameParser attributes: anAttributeParser content: aContentParser [
+	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
+
+	^ (self parserForOpenTag: aNameParser attributes: anAttributeParser) , 
+		(aContentParser asParser) , [ :stream | stream position ] asParser , 
+		(self parserForCloseTag: aNameParser) ==> [ :nodes | 
+			nodes first tag = nodes last
+				ifTrue: [ nodes first contents: nodes second ]
+				ifFalse: [ PPFailure reason: 'Expected </' , nodes first tag , '> but got </' , nodes last , '>' at: nodes third ] ]
 ]
 
 { #category : #parsers }
 PPXmlGrammar >> parserForDocument: aPrologParser element: anElementParser [
 	"Answer a parser that can read an XML document."
 
-	^ aPrologParser asParser , anElementParser asParser , misc
-		==> [ :nodes | Array with: nodes first with: nodes second ]
+	^ aPrologParser asParser , anElementParser asParser , misc ==> #second
 ]
 
 { #category : #'parsers-tags' }
 PPXmlGrammar >> parserForEmptyTag: aNameParser attributes: anAttributeParser [
 	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
 
-	^ $< asParser , aNameParser asParser flatten , anAttributeParser asParser , whitespace optional , '/>' asParser
-		==> [ :nodes | PPXmlElement named: nodes second attributes: nodes third ]
+	^ $< asParser , (PPXmlQualifiedParser local: aNameParser) , (anAttributeParser asParser) , whitespace optional , '/>' asParser
+		==> [ :nodes | PPXmlElement tag: nodes second attributes: nodes third ]
 ]
 
 { #category : #'parsers-tags' }
 PPXmlGrammar >> parserForOpenTag: aNameParser attributes: anAttributeParser [
 	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
 
-	^ $< asParser , aNameParser asParser flatten , anAttributeParser asParser , whitespace optional , $> asParser
-		==> [ :nodes | PPXmlElement named: aNameParser attributes: nodes third ]
+	^ $< asParser , (PPXmlQualifiedParser local: aNameParser) , (anAttributeParser asParser) , whitespace optional , $> asParser
+		==> [ :nodes | PPXmlElement tag: nodes second attributes: nodes third ]
 ]
 
 { #category : #parsers }
 PPXmlGrammar >> parserForProcessingInstruction: aTargetParser [
 	"Answer a parser that can read an XML processing instruction."
 	
-	^ '<?' asParser , aTargetParser asParser token , (whitespace , ('?>' asParser not , #any asParser) star token) optional , '?>' asParser
-		==> [ :nodes | Array with: nodes second with: (nodes third ifNotNil: [ :inner | inner second ]) ]
+	^ '<?' asParser , aTargetParser asParser flatten , (whitespace , ('?>' asParser not , #any asParser) star token) optional flatten, '?>' asParser
+		==> [ :nodes | PPXmlProcessing target: nodes second data: nodes third ]
 ]
 
 { #category : #parsers }
@@ -211,11 +223,7 @@ PPXmlGrammar >> parserForTag: aNameParser attributes: anAttributeParser content:
 
 	^ aContentParser isNil
 		ifTrue: [ self parserForEmptyTag: aNameParser attributes: anAttributeParser ]
-		ifFalse: [ 
-			(self parserForOpenTag: aNameParser attributes: anAttributeParser) , (aContentParser asParser) , [ :stream | stream position ] asParser , (self parserForCloseTag: aNameParser) ==> [ :nodes | 
-				nodes first name = nodes last
-					ifTrue: [ nodes first contents: nodes second ]
-					ifFalse: [ PPFailure reason: 'Expected </' , nodes first name , '> but got </' , nodes last , '>' at: nodes third ] ] ]
+		ifFalse: [ self parserForContentTag: aNameParser attributes: anAttributeParser content: aContentParser ]
 ]
 
 { #category : #'grammar-misc' }
@@ -230,8 +238,7 @@ PPXmlGrammar >> processing [
 PPXmlGrammar >> prolog [
 	"[22]   	prolog	   ::=   	 XMLDecl? Misc* (doctypedecl Misc*)?"
 				
-	^ (self parserForProcessingInstruction: 'xml') optional , misc , (doctype , misc) optional
-		==> [ :nodes | nodes first ]
+	^ (self parserForProcessingInstruction: 'xml') optional , misc , (doctype , misc) optional ==> #first
 ]
 
 { #category : #accessing }

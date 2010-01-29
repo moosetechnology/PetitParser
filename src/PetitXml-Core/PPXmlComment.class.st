@@ -1,5 +1,10 @@
 Class {
 	#name : #PPXmlComment,
-	#superclass : #PPXmlNode,
+	#superclass : #PPXmlData,
 	#category : #'PetitXml-Core'
 }
+
+{ #category : #printing }
+PPXmlComment >> printXmlOn: aStream [
+	aStream nextPutAll: '<!--'; nextPutAll: data; nextPutAll: '-->'
+]

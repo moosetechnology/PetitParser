@@ -1,9 +1,10 @@
 Class {
 	#name : #PPXmlText,
-	#superclass : #PPXmlNode,
+	#superclass : #PPXmlData,
 	#category : #'PetitXml-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 PPXmlText >> printXmlOn: aStream [
+	aStream nextPutAll: data
 ]

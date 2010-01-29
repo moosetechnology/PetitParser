@@ -1,5 +1,5 @@
 Class {
 	#name : #PPXmlRegistry,
-	#superclass : #PPCompositeParser,
+	#superclass : #Object,
 	#category : #'PetitXml-Core'
 }

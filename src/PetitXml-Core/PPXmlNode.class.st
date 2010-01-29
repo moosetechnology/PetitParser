@@ -1,11 +1,6 @@
 Class {
 	#name : #PPXmlNode,
 	#superclass : #Object,
-	#instVars : [
-		'name',
-		'attributes',
-		'contents'
-	],
 	#category : #'PetitXml-Core'
 }
 

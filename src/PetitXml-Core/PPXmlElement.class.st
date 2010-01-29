@@ -1,44 +1,60 @@
 Class {
 	#name : #PPXmlElement,
 	#superclass : #PPXmlNode,
+	#instVars : [
+		'tag',
+		'attributes',
+		'contents'
+	],
 	#category : #'PetitXml-Core'
 }
 
-{ #category : #'as yet unclassified' }
-PPXmlElement class >> named: aString attributes: aDictionary [
+{ #category : #'instance creation' }
+PPXmlElement class >> tag: aString attributes: aDictionary [
+	^ self tag: aString attributes: aDictionary contents: nil
+]
+
+{ #category : #'instance creation' }
+PPXmlElement class >> tag: aString attributes: aDictionary contents: aCollection [
 	^ self basicNew
-		initializeNamed: aString attributes: aDictionary;
+		initializeTag: aString attributes: aDictionary contents: aCollection;
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPXmlElement >> attributes [
 	^ attributes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPXmlElement >> contents [
 	^ contents
 ]
 
-{ #category : #'as yet unclassified' }
-PPXmlElement >> initializeNamed: aString attributes: aDictionary [
-	name := aString.
-	attributes := aDictionary
+{ #category : #accessing }
+PPXmlElement >> contents: anArray [
+	contents := anArray
 ]
 
-{ #category : #'as yet unclassified' }
-PPXmlElement >> name [
-	^ name
+{ #category : #initialization }
+PPXmlElement >> initializeTag: aString attributes: aDictionary contents: aCollection [
+	tag := aString.
+	attributes := aDictionary.
+	contents := aCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 PPXmlElement >> printXmlOn: aStream [
-	aStream nextPut: $<; nextPutAll: name.
+	aStream nextPut: $<; nextPutAll: tag.
 	contents isNil
 		ifTrue: [ aStream nextPutAll: '/>' ]
 		ifFalse: [
 			aStream nextPut: $>.
 			contents do: [ :each | each printXmlOn: aStream ].
-			aStream nextPutAll: '</'; nextPutAll: name; nextPut: $> ]
+			aStream nextPutAll: '</'; nextPutAll: tag; nextPut: $> ]
+]
+
+{ #category : #accessing }
+PPXmlElement >> tag [
+	^ tag
 ]
