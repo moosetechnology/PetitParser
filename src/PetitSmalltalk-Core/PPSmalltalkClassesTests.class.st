@@ -121,22 +121,28 @@ PPSmalltalkClassesTests >> verifyClass: aClass [
 
 { #category : #private }
 PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [ 
-	"Verifies that the method aSelector in aClass parses the same using the standard refactoring parser and the petit smalltalk parser. Also make sure that the position information of all tokens is equal."
+	"Verifies that the method aSelector in aClass parses the same using the standard refactoring parser and the petit smalltalk parser. Also make sure that the position information of all tokens and comments is equal."
 
-	| source original other |
+	| source original other checker |
 	source := aClass sourceCodeAt: aSelector.
 	source isNil ifTrue: [ ^ self ].
 	original := aClass parseTreeFor: aSelector.
 	original isNil ifTrue: [ ^ self ].
-	original nodesDo: [ :each | each comments: nil ].
 	other := self parser parse: source asParserStream.
 	source := aClass name , '>>#' , original selector.
 	other isFailure 
-		ifTrue: [ self assert: false description: source ]
-		ifFalse: [ self assert: original formattedCode = other formattedCode description: source ].
-	original nodesDo: [ :originalNode |
-		(originalNode isSequence or: [ originalNode isPragma or: [ originalNode parent notNil and: [ originalNode parent isCascade or: [ originalNode parent isPragma ] ] ] ]) ifFalse: [
-			| otherNode |
-			otherNode := other whichNodeIsContainedBy: originalNode sourceInterval.
-			self assert: (originalNode = otherNode or: [ originalNode = otherNode parent ]) ] ]
+		ifTrue: [ self assert: false description: source ].
+	self 
+		assert: original = other
+		description: 'Code in ' , source.
+	checker := [ :node1 :node2 |
+		self 
+			assert: node1 sourceInterval = node2 sourceInterval 
+			description: 'Source intervals in ' , source.
+		node2 comments notEmpty ifTrue: [ 
+			self
+				assert: node1 comments = node2 comments
+				description: 'Comments in ' , source ].
+		node1 children with: node2 children do: checker ].
+	checker value: original value: other
 ]

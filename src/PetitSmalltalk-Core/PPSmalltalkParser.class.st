@@ -119,7 +119,10 @@ PPSmalltalkParser >> build: aTempCollection sequence: aStatementCollection [
 	aStatementCollection do: [ :each |
 		(each isKindOf: RBProgramNode)
 			ifTrue: [ nodes add: each ]
-			ifFalse: [ periods add: each start ] ].
+			ifFalse: [
+				nodes isEmpty
+					ifFalse: [ nodes last addComments: each comments ].
+				periods add: each start ] ].
 	result := RBSequenceNode statements: nodes.
 	result periods: periods.
 	aTempCollection isEmpty ifFalse: [
