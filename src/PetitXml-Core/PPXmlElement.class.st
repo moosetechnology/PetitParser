@@ -11,13 +11,8 @@ Class {
 
 { #category : #'instance creation' }
 PPXmlElement class >> tag: aString attributes: aDictionary [
-	^ self tag: aString attributes: aDictionary contents: nil
-]
-
-{ #category : #'instance creation' }
-PPXmlElement class >> tag: aString attributes: aDictionary contents: aCollection [
 	^ self basicNew
-		initializeTag: aString attributes: aDictionary contents: aCollection;
+		initializeTag: aString attributes: aDictionary;
 		yourself
 ]
 
@@ -33,14 +28,14 @@ PPXmlElement >> contents [
 
 { #category : #accessing }
 PPXmlElement >> contents: anArray [
+	anArray do: [ :each | each setParent: self ].
 	contents := anArray
 ]
 
 { #category : #initialization }
-PPXmlElement >> initializeTag: aString attributes: aDictionary contents: aCollection [
+PPXmlElement >> initializeTag: aString attributes: aDictionary [
 	tag := aString.
-	attributes := aDictionary.
-	contents := aCollection
+	attributes := aDictionary
 ]
 
 { #category : #printing }
