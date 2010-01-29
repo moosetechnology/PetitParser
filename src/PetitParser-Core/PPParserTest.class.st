@@ -86,6 +86,7 @@ PPParserTest >> testDelimitedBy [
 PPParserTest >> testEndOfInput [
 	| parser |
 	parser := PPEndOfInputParser on: $a asParser.
+	self assert: parser end = parser.
 	
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser fail: ''.
