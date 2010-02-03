@@ -15,6 +15,11 @@ PPXmlProcessing class >> target: aTargetString data: aString [
 		yourself
 ]
 
+{ #category : #comparing }
+PPXmlProcessing >> = anXmlNode [
+	^ super = anXmlNode and: [ self target = anXmlNode target ]
+]
+
 { #category : #printing }
 PPXmlProcessing >> printXmlOn: aStream [
 	aStream nextPutAll: '<?'; nextPutAll: target; nextPutAll: data; nextPutAll: '?>'

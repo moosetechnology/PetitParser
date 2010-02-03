@@ -22,9 +22,23 @@ PPXmlTest class >> resources [
 	^ Array with: PPXmlResource
 ]
 
+{ #category : #utilities }
+PPXmlTest >> assertInvariant: aString [
+	| dom string |
+	dom := self parse: aString.
+	self
+		deny: dom isFailure
+		description: dom printString.
+	string := String
+		streamContents: [ :out | dom printXmlOn: out ].
+	self
+		assert: (self parse: string) = dom
+		description: 'Invariant not satisfied'
+]
+
 { #category : #parsing }
 PPXmlTest >> parse: aString [
-	self parse: aString rule: #start
+	^ self parse: aString rule: #start
 ]
 
 { #category : #parsing }
@@ -33,11 +47,8 @@ PPXmlTest >> parse: aString rule: aSymbol [
 	production := self parser.
 	aSymbol = #start 
 		ifFalse: [ production := production instVarNamed: aSymbol ].
-	result := production end
-		parse: aString asParserStream.
-	self 
-		deny: result isFailure
-		description: 'Unable to parse ' , aString printString
+	^ production end
+		parse: aString asParserStream
 ]
 
 { #category : #accessing }

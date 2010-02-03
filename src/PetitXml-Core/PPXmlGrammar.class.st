@@ -11,7 +11,6 @@ Class {
 		'nmToken',
 		'misc',
 		'document',
-		'prolog',
 		'element',
 		'attributes',
 		'content',
@@ -41,7 +40,7 @@ PPXmlGrammar >> attributes [
 
 	^ ((whitespace , attribute) ==> #second) star ==> [ :nodes | 
 		nodes 
-			inject: Dictionary new
+			inject: PPXmlAttributes new
 			into: [ :dict :each | dict add: each; yourself ] ]
 ]
 
@@ -86,8 +85,9 @@ PPXmlGrammar >> doctype [
 { #category : #grammar }
 PPXmlGrammar >> document [
 	"[1]   	document	   ::=   	 prolog element Misc*"
+	"[22]   	prolog	   ::=   	 XMLDecl? Misc* (doctypedecl Misc*)?"
 
-	^ self parserForDocument: prolog element: self parserForRootElement
+	^ self parserForDocument: self parserForRootElement
 ]
 
 { #category : #grammar }
@@ -175,10 +175,16 @@ PPXmlGrammar >> parserForContentTag: aNameParser attributes: anAttributeParser c
 ]
 
 { #category : #parsers }
-PPXmlGrammar >> parserForDocument: aPrologParser element: anElementParser [
+PPXmlGrammar >> parserForDocument: anElementParser [
 	"Answer a parser that can read an XML document."
 
-	^ aPrologParser asParser , anElementParser asParser , misc ==> #second
+	^ (self parserForProcessingInstruction: 'xml') , misc , (doctype flatten , misc) optional , anElementParser asParser , misc ==> [ :nodes |
+		PPXmlDocument new
+			xmlDeclaration: nodes first;
+			documentType: (nodes third isNil
+				ifFalse: [ nodes third first ]);
+			rootElement: nodes fourth;
+			yourself ]
 ]
 
 { #category : #'parsers-tags' }
@@ -232,13 +238,6 @@ PPXmlGrammar >> processing [
 	[17]   	PITarget	   ::=   	 Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))"
 
 	^ self parserForProcessingInstruction: #letter asParser plus
-]
-
-{ #category : #grammar }
-PPXmlGrammar >> prolog [
-	"[22]   	prolog	   ::=   	 XMLDecl? Misc* (doctypedecl Misc*)?"
-				
-	^ (self parserForProcessingInstruction: 'xml') optional , misc , (doctype , misc) optional ==> #first
 ]
 
 { #category : #accessing }

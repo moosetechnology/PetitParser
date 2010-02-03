@@ -13,11 +13,6 @@ PPXmlQualifiedParser class >> local: aParser [
 	^ self basicNew local: aParser
 ]
 
-{ #category : #testing }
-PPXmlQualifiedParser >> isQualified [
-	^ prefix notNil
-]
-
 { #category : #accessing }
 PPXmlQualifiedParser >> local: aParser [
 	local := aParser asParser.
