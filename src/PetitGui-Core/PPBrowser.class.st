@@ -148,32 +148,57 @@ PPBrowser >> browseSourceOn: aBrowser [
 
 { #category : #'browse-parts' }
 PPBrowser >> browseTestOn: aBrowser [
-	| table input output |
+	| table input output stream |
 	table := aBrowser tabulator.
 	table title: 'Test'; useExplicitNotNil.
 	table row: #input; row: #output.
 	
 	input := String new.
 	output := String new.
+	stream := PPBrowserStream on: input.
+	
 	table showOn: #input; using: [
 		table text
 			useExplicitNotNil;
 			display: [ :parsers | input ];
 			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
-				input := presentation text copy.
+				input := presentation text asString.
+				stream := PPBrowserStream on: input.
 				output := self production end 
-					parse: input asParserStream.
+					parse: stream.
 				output isFailure
 					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position)].
 				output ];
 			update: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
 				input := presentation text copy.
+				stream := PPBrowserStream on: input.
 				output := self production end
-					parse: input asParserStream.
+					parse: stream.
 				output explore ] ].
-	table showOn: #output; from: #input; using: [ 
-		table text 
-			display: [ output ] ]
+	table showOn: #output; from: #input; using: [
+		table text
+			title: 'Result';
+			display: [ output ].
+		table table 
+			title: 'Count';
+			format: [ :each | each first displayName ];
+			column: 'Count' evaluated: [ :each | each second printString ];
+			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+			display: [ stream asFrequencyTable ].
+		table table 
+			title: 'Time';
+			format: [ :each | each first displayName ];
+			column: 'Time (ms)' evaluated: [ :each | each second printString ];
+			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+			display: [ stream asTimingTable ].
+		table morph 
+			title: 'Positions';
+			display: [
+				| morph |
+				morph := ScrollPane new.
+				morph color: Color white.
+				morph scroller addMorph: stream asPositionMorph.
+				morph ] ]
 ]
 
 { #category : #public }
