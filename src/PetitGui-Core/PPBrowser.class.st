@@ -20,7 +20,7 @@ PPBrowser class >> open [
 { #category : #'browse-parts' }
 PPBrowser >> browseClassesOn: aBrowser [
 	aBrowser tree
-		title: 'Classes';
+		title: 'Grammars';
 		format: [ :class | class name ];
 		children: [ :class | self subclassesOf: class ];
 		act: [
@@ -104,7 +104,7 @@ PPBrowser >> browseOn: aBrowser [
 { #category : #'browse-parts' }
 PPBrowser >> browseSelectorsOn: aBrowser [
 	aBrowser list
-		title: 'Selectors';
+		title: 'Productions';
 		format: [ :class | class asString ];
 		display: [ :class | 
 			(((class allInstVarNames
