@@ -19,6 +19,7 @@ PPEndOfInputParser >> parse: aStream [
 	result := super parse: aStream.
 	(result isFailure or: [ aStream atEnd ])
 		ifTrue: [ ^ result ].
+	result := PPFailure reason: 'end of input expected' at: aStream position.
 	aStream position: position.
-	^ PPFailure reason: 'end of input expected' at: aStream position
+	^ result
 ]
