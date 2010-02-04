@@ -23,17 +23,49 @@ PPXmlTest class >> resources [
 ]
 
 { #category : #utilities }
-PPXmlTest >> assertInvariant: aString [
-	| dom string |
-	dom := self parse: aString.
+PPXmlTest >> assertParseInvariant: aString [
+	"Assert that aString can be parsed, serialized and parsed again to the same tree."
+
+	| tree string |
+	tree := self parse: aString.
 	self
-		deny: dom isFailure
-		description: dom printString.
+		deny: tree isFailure
+		description: tree printString.
+	self assertTreeInvariant: tree.
 	string := String
-		streamContents: [ :out | dom printXmlOn: out ].
+		streamContents: [ :out | tree printXmlOn: out ].
 	self
-		assert: (self parse: string) = dom
-		description: 'Invariant not satisfied'
+		assert: (self parse: string) = tree
+		description: 'Parse invariant not satisifed'
+]
+
+{ #category : #utilities }
+PPXmlTest >> assertTreeInvariant: anXmlNode [
+	"Assert that anXmlNode is properly setup.."
+
+	anXmlNode nodesDo: [ :node |
+		| current children |
+		node isDocument
+			ifTrue: [ self assert: node parentNode isNil ]
+			ifFalse: [ self assert: node parentNode notNil ].
+		node childNodes 
+			do: [ :child | self assert: child parentNode == node ].
+
+		current := node firstChild.
+		children := OrderedCollection withAll: node childNodes.
+		[ current isNil ] whileFalse: [
+			self assert: children notEmpty.
+			self assert: children removeFirst == current.
+			current := current nextSibling ].
+		self assert: children isEmpty.
+		
+		current := node lastChild.
+		children := OrderedCollection withAll: node childNodes.
+		[ current isNil ] whileFalse: [
+			self assert: children notEmpty.
+			self assert: children removeLast == current.
+			current := current previousSibling ].
+		self assert: children isEmpty ]
 ]
 
 { #category : #parsing }

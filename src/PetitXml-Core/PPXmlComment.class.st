@@ -1,3 +1,6 @@
+"
+An XML comment node.
+"
 Class {
 	#name : #PPXmlComment,
 	#superclass : #PPXmlData,

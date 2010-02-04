@@ -170,7 +170,7 @@ PPXmlGrammar >> parserForContentTag: aNameParser attributes: anAttributeParser c
 		(aContentParser asParser) , [ :stream | stream position ] asParser , 
 		(self parserForCloseTag: aNameParser) ==> [ :nodes | 
 			nodes first tag = nodes last
-				ifTrue: [ nodes first contents: nodes second ]
+				ifTrue: [ nodes first setContents: nodes second ]
 				ifFalse: [ PPFailure reason: 'Expected </' , nodes first tag , '> but got </' , nodes last , '>' at: nodes third ] ]
 ]
 
@@ -180,10 +180,10 @@ PPXmlGrammar >> parserForDocument: anElementParser [
 
 	^ (self parserForProcessingInstruction: 'xml') , misc , (doctype flatten , misc) optional , anElementParser asParser , misc ==> [ :nodes |
 		PPXmlDocument new
-			xmlDeclaration: nodes first;
-			documentType: (nodes third isNil
+			setXmlDeclaration: nodes first;
+			setDocumentType: (nodes third isNil
 				ifFalse: [ nodes third first ]);
-			rootElement: nodes fourth;
+			setRootElement: nodes fourth;
 			yourself ]
 ]
 

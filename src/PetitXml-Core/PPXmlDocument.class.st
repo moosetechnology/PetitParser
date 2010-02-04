@@ -1,3 +1,6 @@
+"
+An XML root node.
+"
 Class {
 	#name : #PPXmlDocument,
 	#superclass : #PPXmlNode,
@@ -21,13 +24,25 @@ PPXmlDocument >> = anXmlNode [
 ]
 
 { #category : #accessing }
+PPXmlDocument >> childNodes [
+	^ Array with: self rootElement
+]
+
+{ #category : #accessing }
 PPXmlDocument >> documentType [
 	^ documentType
 ]
 
-{ #category : #accessing }
-PPXmlDocument >> documentType: aString [
-	documentType := aString
+{ #category : #testing }
+PPXmlDocument >> isDocument [
+	^ true
+]
+
+{ #category : #copying }
+PPXmlDocument >> postCopy [
+	super postCopy.
+	self setXmlDeclaration: self xmlDeclaration copy.
+	self setRootElement: self rootElement copy
 ]
 
 { #category : #printing }
@@ -44,17 +59,22 @@ PPXmlDocument >> rootElement [
 	^ rootElement
 ]
 
-{ #category : #accessing }
-PPXmlDocument >> rootElement: anElement [
-	rootElement := anElement
+{ #category : #initialization }
+PPXmlDocument >> setDocumentType: aString [
+	documentType := aString
+]
+
+{ #category : #initialization }
+PPXmlDocument >> setRootElement: anElement [
+	rootElement := anElement setParent: self
+]
+
+{ #category : #initialization }
+PPXmlDocument >> setXmlDeclaration: aProcessing [
+	xmlDeclaration := aProcessing
 ]
 
 { #category : #accessing }
 PPXmlDocument >> xmlDeclaration [
 	^ xmlDeclaration
-]
-
-{ #category : #accessing }
-PPXmlDocument >> xmlDeclaration: aProcessing [
-	xmlDeclaration := aProcessing
 ]

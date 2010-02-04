@@ -1,3 +1,6 @@
+"
+An XML text node.
+"
 Class {
 	#name : #PPXmlText,
 	#superclass : #PPXmlData,

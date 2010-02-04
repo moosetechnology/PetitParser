@@ -1,5 +1,5 @@
 "
-I am an implementation of a dictionary. Compared to other dictionaries I am very efficient for small sizes, speed- and space-wise. I also remember the order in which elements are added, some of my users might depend on that. Furthermore duplicated keys are possible. My implementation features some ideas from the RefactoringBrowser.
+Attributes of an XML node.
 "
 Class {
 	#name : #PPXmlAttributes,

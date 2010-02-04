@@ -4,12 +4,12 @@ Class {
 	#category : #'PetitXml-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPXmlXsdGrammarTest >> parserClass [
 	^ PPXmlXsdGrammar
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PPXmlXsdGrammarTest >> testParseAll [
 	self resource allXsdDefinitions 
 		do: [ :each | self parse: each ]

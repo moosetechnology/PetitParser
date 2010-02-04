@@ -1,3 +1,6 @@
+"
+An abstract XML data node.
+"
 Class {
 	#name : #PPXmlData,
 	#superclass : #PPXmlNode,

@@ -1,3 +1,6 @@
+"
+An XML processing instruction.
+"
 Class {
 	#name : #PPXmlProcessing,
 	#superclass : #PPXmlData,

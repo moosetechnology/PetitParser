@@ -4,37 +4,37 @@ Class {
 	#category : #'PetitXml-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPXmlGrammarTest >> parserClass [
 	^ PPXmlGrammar
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testDoctype [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?>
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE freaking <schema> [ <!-- schema --> ]  >
 	<schema></schema>'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PPXmlGrammarTest >> testParseAll [
 	self resource allXsdDefinitions 
-		do: [ :each | self assertInvariant: each ]
+		do: [ :each | self assertParseInvariant: each ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseComment [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- comment --></schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- comment --></schema>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseCommentWithXml [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- <foo></foo> --></schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- <foo></foo> --></schema>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseComplicated [
-	self assertInvariant: '<?xml foo?>
+	self assertParseInvariant: '<?xml foo?>
 <foo>
 	<bar a="fasdfasdf">
 		<zork/>
@@ -44,28 +44,29 @@ PPXmlGrammarTest >> testParseComplicated [
 </foo>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseEmptyElement [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema/>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema/>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseNamespace [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><xs:schema></xs:schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><xs:schema></xs:schema>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseSimple [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema></schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema></schema>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseSimpleAttribute [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema foo="bar"></schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema foo="bar"></schema>' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'testing-specific' }
 PPXmlGrammarTest >> testParseWithWhitsepaceAfterProlog [
-	self assertInvariant: '<?xml version="1.0" encoding="UTF-8"?>
-	<schema></schema>' 
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
+	<schema></schema>
+' 
 ]

@@ -1,3 +1,6 @@
+"
+An XML element node.
+"
 Class {
 	#name : #PPXmlElement,
 	#superclass : #PPXmlNode,
@@ -43,20 +46,27 @@ PPXmlElement >> attributes [
 ]
 
 { #category : #accessing }
+PPXmlElement >> childNodes [
+	^ contents ifNil: [ #() ]
+]
+
+{ #category : #accessing }
 PPXmlElement >> contents [
 	^ contents
 ]
 
-{ #category : #accessing }
-PPXmlElement >> contents: anArray [
-	anArray do: [ :each | each setParent: self ].
-	contents := anArray
+{ #category : #initialization }
+PPXmlElement >> initializeTag: aString attributes: aXmlAttributes [
+	self setTag: aString.
+	self setAttributes: aXmlAttributes
 ]
 
-{ #category : #initialization }
-PPXmlElement >> initializeTag: aString attributes: aDictionary [
-	tag := aString.
-	attributes := aDictionary
+{ #category : #copying }
+PPXmlElement >> postCopy [
+	super postCopy.
+	self setAttributes: self attributes copy.
+	self contents notNil
+		ifTrue: [ self setContents: self contents copy ]
 ]
 
 { #category : #printing }
@@ -69,6 +79,22 @@ PPXmlElement >> printXmlOn: aStream [
 			aStream nextPut: $>.
 			contents do: [ :each | each printXmlOn: aStream ].
 			aStream nextPutAll: '</'; nextPutAll: tag; nextPut: $> ]
+]
+
+{ #category : #initialization }
+PPXmlElement >> setAttributes: anXmlAttributes [
+	attributes := anXmlAttributes setParent: self
+]
+
+{ #category : #initialization }
+PPXmlElement >> setContents: anArray [
+	anArray do: [ :each | each setParent: self ].
+	contents := anArray
+]
+
+{ #category : #initialization }
+PPXmlElement >> setTag: aString [
+	tag := aString
 ]
 
 { #category : #accessing }

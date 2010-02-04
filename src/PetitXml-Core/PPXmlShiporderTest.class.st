@@ -48,5 +48,5 @@ PPXmlShiporderTest >> shiporderXsd [
 
 { #category : #'as yet unclassified' }
 PPXmlShiporderTest >> testParserGen [
-	self assertInvariant: self shiporderXsd
+	self assertParseInvariant: self shiporderXsd
 ]
