@@ -51,18 +51,13 @@ PPSmalltalkParser >> blockArgument [
 ]
 
 { #category : #'grammar-blocks' }
-PPSmalltalkParser >> blockArgumentsEmpty [
-	^ super blockArgumentsEmpty ==> [ :nodes | #() ]
-]
-
-{ #category : #'grammar-blocks' }
 PPSmalltalkParser >> blockBody [
-	^ super blockBody ==> [ :nodes | RBBlockNode arguments: nodes first body: nodes last ]
-]
-
-{ #category : #'grammar-blocks' }
-PPSmalltalkParser >> blockSequenceEmpty [
-	^ super blockSequenceEmpty ==> [ :nodes | RBSequenceNode statements: #() ]
+	^ super blockBody ==> [ :nodes | 
+		| result |
+		result := RBBlockNode arguments: nodes first first body: nodes last.
+		nodes first last isNil
+			ifFalse: [ result bar: nodes first last start ].
+		result ]
 ]
 
 { #category : #private }
