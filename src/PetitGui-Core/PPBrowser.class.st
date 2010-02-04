@@ -9,7 +9,12 @@ Class {
 
 { #category : #initialization }
 PPBrowser class >> initialize [
-	TheWorldMenu registerOpenCommand: { 'PetitParser'. { self. #open } }
+	TheWorldMenu registerOpenCommand: (Array with: self label with: (Array with: self with: #open))
+]
+
+{ #category : #accessing }
+PPBrowser class >> label [
+	^ 'PetitParser Browser'
 ]
 
 { #category : #'instance-creation' }
@@ -82,7 +87,7 @@ PPBrowser >> browseGraphOn: aBrowser [
 
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
-	aBrowser title: 'PetitParser Browser'; color: Color yellow muchDarker.
+	aBrowser title: self class label; color: Color yellow muchDarker.
 	aBrowser row: [ :row | row column: #classes; column: #selectors ].
 	aBrowser row: [ :row | row column: #actions span: 2 ] span: 2.
 	
