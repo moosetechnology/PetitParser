@@ -161,6 +161,25 @@ PPParser >> match: anObject [
 	^ (self parse: anObject) isPetitFailure not
 ]
 
+{ #category : #parsing }
+PPParser >> matches: anObject [
+	"Search anObject repeatedly for the matches of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self 
+		matches: anObject
+		do: [ :each | result addLast: each ].
+	^ result
+]
+
+{ #category : #parsing }
+PPParser >> matches: anObject do: aBlock [
+	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock for each match passing the matched parse-tree as the argument."
+
+	(self ==> aBlock / #any asParser) star parse: anObject
+]
+
 { #category : #operations }
 PPParser >> max: anInteger [
 	"Answer a new parser that parses the receiver at most anInteger times."
@@ -229,7 +248,7 @@ PPParser >> parse: anObject [
 
 { #category : #parsing }
 PPParser >> parse: anObject onError: aBlock [
-	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock on failure. Depending on the number of arguments the block accepts, simply evaluate, pass in the faiure object, or pass in the the message and position of the error."
+	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the faiure object, or eavaluated with the error message and position."
 	
 	| result |
 	result := self parseOn: anObject asPetitStream.
@@ -244,7 +263,7 @@ PPParser >> parse: anObject onError: aBlock [
 
 { #category : #parsing }
 PPParser >> parseOn: aStream [
-	"Parse aStream with the receiving parser and answer the parse-result or an instance of PPFailure. Override this method in subclasses to specify custom parse behavior."
+	"Parse aStream with the receiving parser and answer the parse-result or an instance of PPFailure. Override this method in subclasses to specify custom parse behavior. Do not call this method from outside, instead use #parse:."
 	
 	self subclassResponsibility
 ]

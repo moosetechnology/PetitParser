@@ -186,6 +186,39 @@ PPParserTest >> testMatch [
 	self deny: (parser match: 'b' readStream)
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testMatches [
+	| parser result |
+	parser := $a asParser.
+	
+	result := parser matches: 'abba'.
+	self assert: result size = 2.
+	self assert: result first = $a.
+	self assert: result last = $a.
+	
+	result := parser matches: 'baaah'.
+	self assert: result size = 3.
+	self assert: result first = $a.
+	self assert: result last = $a
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testMatchesDo [
+	| parser input stream counter |
+	parser := $a asParser.
+	input := 'barbara ann'.
+	stream := input asPetitStream.
+	counter := 0.
+	
+	parser 
+		matches: stream 
+		do: [ :each |
+			counter := counter + 1.
+			self assert: (each = $a).
+			self assert: (input at: stream position) = $a ].
+	self assert: (input occurrencesOf: $a) = counter
+]
+
 { #category : #testing }
 PPParserTest >> testMax [
 	| parser |
