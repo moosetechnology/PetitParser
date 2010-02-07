@@ -98,9 +98,10 @@ PPExpressionParser >> group: aOneArgumentBlock [
 	"Defines a priority group by evaluating aOneArgumentBlock."
 	
 	operators := Dictionary new.
-	parser := [ aOneArgumentBlock value: self.
-	  self buildOn: parser ]
-		ensure: [ operators := nil ]
+	parser := [ 
+		aOneArgumentBlock value: self.
+	 	self buildOn: parser ]
+			ensure: [ operators := nil ]
 ]
 
 { #category : #specifying }
@@ -117,7 +118,7 @@ PPExpressionParser >> operator: aSymbol parser: aParser do: aBlock [
 	operators isNil
 		ifTrue: [ ^ self error: 'Use #group: to define precedence groups in descending order.' ].
 	(operators at: aSymbol ifAbsentPut: [ OrderedCollection new ])
-		addLast: (Array with: aParser with: aBlock)
+		addLast: (Array with: aParser asParser with: aBlock)
 ]
 
 { #category : #specifying }

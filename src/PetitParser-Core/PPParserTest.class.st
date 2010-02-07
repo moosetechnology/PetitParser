@@ -204,19 +204,14 @@ PPParserTest >> testMatches [
 
 { #category : #'testing-utilities' }
 PPParserTest >> testMatchesDo [
-	| parser input stream counter |
-	parser := $a asParser.
-	input := 'barbara ann'.
-	stream := input asPetitStream.
-	counter := 0.
+	| parser output |
+	parser := ($a asParser , $n asParser not ==> #first) / $b asParser.
+	output := OrderedCollection new.
 	
 	parser 
-		matches: stream 
-		do: [ :each |
-			counter := counter + 1.
-			self assert: (each = $a).
-			self assert: (input at: stream position) = $a ].
-	self assert: (input occurrencesOf: $a) = counter
+		matches: 'barbara ann' 
+		do: [ :each | output add: each ].
+	self assert: output asArray = #($b $a $b $a $a)
 ]
 
 { #category : #testing }
@@ -356,7 +351,10 @@ PPParserTest >> testParse [
 PPParserTest >> testParseOnError0 [
 	| parser result seen |
 	parser := $a asParser.
-	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+
+	result := parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	self assert: result = $a.
+
 	result := parser parse: 'b' onError: [ seen := true ].
 	self assert: result.
 	self assert: seen
@@ -366,7 +364,10 @@ PPParserTest >> testParseOnError0 [
 PPParserTest >> testParseOnError1 [
 	| parser result seen |
 	parser := $a asParser.
-	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	
+	result := parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	self assert: result = $a.
+	
 	result := parser parse: 'b' onError: [ :failure | 
 		self assert: failure position = 0.
 		self assert: failure reason = '$a expected'.
@@ -379,7 +380,10 @@ PPParserTest >> testParseOnError1 [
 PPParserTest >> testParseOnError2 [
 	| parser result seen |
 	parser := $a asParser.
-	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	
+	result := parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	self assert: result = $a.
+
 	result := parser parse: 'b' onError: [ :msg :pos | 
 		self assert: msg = '$a expected'.
 		self assert: pos = 0.
