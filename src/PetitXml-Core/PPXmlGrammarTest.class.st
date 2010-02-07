@@ -9,16 +9,9 @@ PPXmlGrammarTest >> parserClass [
 	^ PPXmlGrammar
 ]
 
-{ #category : #'testing-specific' }
-PPXmlGrammarTest >> testDoctype [
-	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
-	<!DOCTYPE freaking <schema> [ <!-- schema --> ]  >
-	<schema></schema>'
-]
-
 { #category : #testing }
-PPXmlGrammarTest >> testParseAll [
-	self resource allXsdDefinitions 
+PPXmlGrammarTest >> testParseAllXml [
+	self resource allXmlDefinitions 
 		do: [ :each | self assertParseInvariant: each ]
 ]
 
@@ -42,6 +35,13 @@ PPXmlGrammarTest >> testParseComplicated [
 	</bar>
 	<!-- with comment -->
 </foo>' 
+]
+
+{ #category : #'testing-specific' }
+PPXmlGrammarTest >> testParseDoctype [
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE freaking <schema> [ <!-- schema --> ]  >
+	<schema></schema>'
 ]
 
 { #category : #'testing-specific' }

@@ -55,7 +55,7 @@ PPXmlGrammar >> characterData [
 PPXmlGrammar >> comment [
 	"[15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'"
 
-	^ '<!--' asParser ,  ('-->' asParser not , #any asParser) star flatten , '-->' asParser
+	^ '<!--' asParser ,  '-->' asParser negate star flatten , '-->' asParser
 		==> [ :nodes | PPXmlComment data: nodes second ]
 ]
 
@@ -63,23 +63,14 @@ PPXmlGrammar >> comment [
 PPXmlGrammar >> content [
 	"[43]   	content	   ::=   	 CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*"
 				
-	^ characterData optional , ((element / processing / comment) , characterData optional) star ==> [ :nodes |
-		| result |
-		result := OrderedCollection new.
-		nodes first isNil
-			ifFalse: [ result addLast: nodes first ].
-		nodes second do:  [ :each |
-			result addLast: each first.
-			each second isNil
-				ifFalse: [ result addLast: each second ] ].
-		result ]
+	^ self parserForElement: element
 ]
 
 { #category : #'grammar-misc' }
 PPXmlGrammar >> doctype [
 	"[28]   	doctypedecl	   ::=   	'<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'"
 
-	^ '<!DOCTYPE' asParser ,  ($[ asParser not , #any asParser) star , $[ asParser , ($] asParser not , #any asParser) star , $] asParser , whitespace optional , $> asParser
+	^ '<!DOCTYPE' asParser ,  $[ asParser negate star , $[ asParser , $] asParser negate star , $] asParser , whitespace optional , $> asParser
 ]
 
 { #category : #grammar }
@@ -187,6 +178,20 @@ PPXmlGrammar >> parserForDocument: anElementParser [
 			yourself ]
 ]
 
+{ #category : #parsers }
+PPXmlGrammar >> parserForElement: anElement [
+	^ characterData optional , ((anElement / processing / comment) , characterData optional) star ==> [ :nodes |
+		| result |
+		result := OrderedCollection new.
+		nodes first isNil
+			ifFalse: [ result addLast: nodes first ].
+		nodes second do:  [ :each |
+			result addLast: each first.
+			each second isNil
+				ifFalse: [ result addLast: each second ] ].
+		result ]
+]
+
 { #category : #'parsers-tags' }
 PPXmlGrammar >> parserForEmptyTag: aNameParser attributes: anAttributeParser [
 	"Answer a parser that parses an XML element named aNameParser with the attributes anAttributeParser (expected to answer a dictionary). This parser answers instances of PPXmlElement."
@@ -207,7 +212,7 @@ PPXmlGrammar >> parserForOpenTag: aNameParser attributes: anAttributeParser [
 PPXmlGrammar >> parserForProcessingInstruction: aTargetParser [
 	"Answer a parser that can read an XML processing instruction."
 	
-	^ '<?' asParser , aTargetParser asParser flatten , (whitespace , ('?>' asParser not , #any asParser) star token) optional flatten, '?>' asParser
+	^ '<?' asParser , aTargetParser asParser flatten , (whitespace , '?>' asParser negate star token) optional flatten, '?>' asParser
 		==> [ :nodes | PPXmlProcessing target: nodes second data: nodes third ]
 ]
 

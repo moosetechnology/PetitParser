@@ -57,8 +57,7 @@ PPXmlElement >> contents [
 
 { #category : #initialization }
 PPXmlElement >> initializeTag: aString attributes: aXmlAttributes [
-	self setTag: aString.
-	self setAttributes: aXmlAttributes
+	self setTag: aString; setAttributes: aXmlAttributes
 ]
 
 { #category : #copying }

@@ -11,6 +11,6 @@ PPXmlXsdGrammarTest >> parserClass [
 
 { #category : #testing }
 PPXmlXsdGrammarTest >> testParseAll [
-	self resource allXsdDefinitions 
-		do: [ :each | self parse: each ]
+	self resource allXsdDefinitions
+		do: [ :each | self assertParseInvariant: each ]
 ]

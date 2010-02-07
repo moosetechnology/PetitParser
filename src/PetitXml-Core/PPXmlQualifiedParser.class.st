@@ -28,7 +28,10 @@ PPXmlQualifiedParser >> prefix: aParser [
 { #category : #updating }
 PPXmlQualifiedParser >> update [
 	parser := prefix isNil
-		ifTrue: [ local ]
+		ifTrue: [  local ]
 		ifFalse: [ parser := prefix , $: asParser , local ].
-	parser := parser flatten
+	parser := parser flatten ==> [ :value | 
+		(value includes: $:) 
+			ifTrue: [ value copyAfterLast: $: ]
+			ifFalse: [ value ] ]
 ]

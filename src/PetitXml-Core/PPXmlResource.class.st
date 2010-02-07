@@ -8,13 +8,20 @@ Class {
 }
 
 { #category : #accessing }
+PPXmlResource >> allXmlDefinitions [
+	^ (Pragma allNamed: #xml: in: self class) collect: [ :each | self perform: each selector ]
+]
+
+{ #category : #accessing }
 PPXmlResource >> allXsdDefinitions [
-	^ (self class organization listAtCategoryNamed: #'accessing-xsd')
-		collect: [ :each | self perform: each ]
+	^ (Pragma allNamed: #xsd in: self class) collect: [ :each | self perform: each selector ]
 ]
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> elementFormXsd [
+	<xml: #xsdXsd>
+	<xsd>
+
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema
     xmlns="http://www.w3.org/2001/XMLSchema"
@@ -39,6 +46,9 @@ PPXmlResource >> elementFormXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> elementReferencesXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema
         xmlns="http://www.w3.org/2001/XMLSchema"
@@ -72,6 +82,9 @@ PPXmlResource >> elementReferencesXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> externalAttributesXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema
     xmlns="http://www.w3.org/2001/XMLSchema"
@@ -97,6 +110,9 @@ PPXmlResource >> externalAttributesXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> forwardRefXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * Copyright 2004,2005 The Apache Software Foundation.
@@ -208,6 +224,9 @@ PPXmlResource >> forwardRefXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> getBalanceXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <xsd:complexType name="cinfoct">
@@ -259,6 +278,9 @@ PPXmlResource >> getBalanceXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> groupXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -294,6 +316,9 @@ PPXmlResource >> groupXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> importAuxXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://soapinterop.org/xsd2"
         xmlns="http://www.w3.org/2001/XMLSchema"
@@ -313,6 +338,9 @@ PPXmlResource >> importAuxXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> importBaseXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://soapinterop.org/xsd"
         xmlns="http://www.w3.org/2001/XMLSchema"
@@ -328,6 +356,9 @@ PPXmlResource >> importBaseXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> includeWithNamespaceXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -343,6 +374,9 @@ PPXmlResource >> includeWithNamespaceXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> includeWithoutNamespaceXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -360,6 +394,9 @@ PPXmlResource >> includeWithoutNamespaceXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> listXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -383,6 +420,9 @@ PPXmlResource >> listXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> mixedContentXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://soapinterop.org/xsd"
         xmlns="http://www.w3.org/2001/XMLSchema"
@@ -404,6 +444,9 @@ PPXmlResource >> mixedContentXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> notationXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -449,6 +492,9 @@ PPXmlResource >> parserAt: aClass [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> restrictionXsd [
+	<xml: #xsdXsd>
+	<xsd>
+
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -484,8 +530,123 @@ PPXmlResource >> setUp [
 	parsers := Dictionary new
 ]
 
+{ #category : #'accessing-xml' }
+PPXmlResource >> shiporderXml [
+	<xml: #shiporderXsd>
+	
+	^ '<?xml version="1.0"?>
+<purchaseOrder orderDate="1999-10-20">
+   <shipTo country="US">
+      <name>Alice Smith</name>
+      <street>123 Maple Street</street>
+      <city>Mill Valley</city>
+      <state>CA</state>
+      <zip>90952</zip>
+   </shipTo>
+   <billTo country="US">
+      <name>Robert Smith</name>
+      <street>8 Oak Avenue</street>
+      <city>Old Town</city>
+      <state>PA</state>
+      <zip>95819</zip>
+   </billTo>
+   <comment>Hurry, my lawn is going wild!</comment>
+   <items>
+      <item partNum="872-AA">
+         <productName>Lawnmower</productName>
+         <quantity>1</quantity>
+         <USPrice>148.95</USPrice>
+         <comment>Confirm this is electric</comment>
+      </item>
+      <item partNum="926-AA">
+         <productName>Baby Monitor</productName>
+         <quantity>1</quantity>
+         <USPrice>39.98</USPrice>
+         <shipDate>1999-05-21</shipDate>
+      </item>
+   </items>
+</purchaseOrder>'
+]
+
+{ #category : #'accessing-xsd' }
+PPXmlResource >> shiporderXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
+	^ '<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+     Purchase order schema for Example.com.
+     Copyright 2000 Example.com. All rights reserved.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="purchaseOrder" type="PurchaseOrderType"/>
+
+  <xsd:element name="comment" type="xsd:string"/>
+
+  <xsd:complexType name="PurchaseOrderType">
+    <xsd:sequence>
+      <xsd:element name="shipTo" type="USAddress"/>
+      <xsd:element name="billTo" type="USAddress"/>
+      <xsd:element ref="comment" minOccurs="0"/>
+      <xsd:element name="items"  type="Items"/>
+    </xsd:sequence>
+    <xsd:attribute name="orderDate" type="xsd:date"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="USAddress">
+    <xsd:sequence>
+      <xsd:element name="name"   type="xsd:string"/>
+      <xsd:element name="street" type="xsd:string"/>
+      <xsd:element name="city"   type="xsd:string"/>
+      <xsd:element name="state"  type="xsd:string"/>
+      <xsd:element name="zip"    type="xsd:decimal"/>
+    </xsd:sequence>
+    <xsd:attribute name="country" type="xsd:NMTOKEN"
+                   fixed="US"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="Items">
+    <xsd:sequence>
+      <xsd:element name="item" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productName" type="xsd:string"/>
+            <xsd:element name="quantity">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:positiveInteger">
+                  <xsd:maxExclusive value="100"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="USPrice"  type="xsd:decimal"/>
+            <xsd:element ref="comment"   minOccurs="0"/>
+            <xsd:element name="shipDate" type="xsd:date" minOccurs="0"/>
+          </xsd:sequence>
+          <xsd:attribute name="partNum" type="SKU" use="required"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!-- Stock Keeping Unit, a code for identifying products -->
+  <xsd:simpleType name="SKU">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\d{3}-[A-Z]{2}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>'
+]
+
 { #category : #'accessing-xsd' }
 PPXmlResource >> simpleContentExtensionXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -511,6 +672,9 @@ PPXmlResource >> simpleContentExtensionXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> subgroupXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -536,6 +700,9 @@ PPXmlResource >> subgroupXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> unionXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -553,6 +720,9 @@ PPXmlResource >> unionXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> unqualifiedTypesXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://soapinterop.org/xsd"
         xmlns="http://www.w3.org/2001/XMLSchema"
@@ -574,6 +744,9 @@ PPXmlResource >> unqualifiedTypesXsd [
 
 { #category : #'accessing-xsd' }
 PPXmlResource >> xsdXsd [
+	<xml: #xsdXsd>
+	<xsd>
+	
 	^ '<?xml version=''1.0''?>
 
 <!DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd" [
