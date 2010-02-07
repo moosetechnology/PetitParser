@@ -171,7 +171,7 @@ PPBrowser >> browseTestOn: aBrowser [
 				stream := PPBrowserStream on: input.
 				output := self production end 
 					parse: stream.
-				output isFailure
+				output isPetitFailure
 					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position)].
 				output ];
 			update: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
