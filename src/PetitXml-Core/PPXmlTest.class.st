@@ -29,7 +29,7 @@ PPXmlTest >> assertParseInvariant: aString [
 	| tree string |
 	tree := self parse: aString.
 	self
-		deny: tree isFailure
+		deny: tree isPetitFailure
 		description: tree printString.
 	self assertTreeInvariant: tree.
 	string := String
@@ -79,8 +79,7 @@ PPXmlTest >> parse: aString rule: aSymbol [
 	production := self parser.
 	aSymbol = #start 
 		ifFalse: [ production := production instVarNamed: aSymbol ].
-	^ production end
-		parse: aString asParserStream
+	^ production end parse: aString
 ]
 
 { #category : #accessing }
