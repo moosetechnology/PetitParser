@@ -16,8 +16,8 @@ PPAnalyzerTest >> assert: aCollection includes: aString epsilon: aBoolean [
 		collect: [ :each | each end ].
 	checker := [ :string |
 		parsers anySatisfy: [ :parser |
-			(parser parse: string asParserStream)
-				isFailure not ] ].
+			(parser parse: string asPetitStream)
+				isPetitFailure not ] ].
 	stream := WriteStream on: String new.
 	32 to: 127 do: [ :index |
 		(checker value: (String with: (Character value: index)))
