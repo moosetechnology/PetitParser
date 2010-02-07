@@ -29,9 +29,9 @@ PPSmalltalkTest >> parse: aString rule: aSymbol [
 	aSymbol = #start 
 		ifFalse: [ production := production instVarNamed: aSymbol ].
 	result := production end
-		parse: aString asParserStream.
+		parse: aString asPetitStream.
 	self 
-		deny: result isFailure
+		deny: result isPetitFailure
 		description: 'Unable to parse ' , aString printString
 ]
 

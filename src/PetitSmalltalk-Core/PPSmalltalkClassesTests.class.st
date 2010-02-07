@@ -128,9 +128,9 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 	source isNil ifTrue: [ ^ self ].
 	original := aClass parseTreeFor: aSelector.
 	original isNil ifTrue: [ ^ self ].
-	other := self parser parse: source asParserStream.
+	other := self parser parse: source asPetitStream.
 	source := aClass name , '>>#' , original selector.
-	other isFailure 
+	other isPetitFailure 
 		ifTrue: [ self assert: false description: source ].
 	self 
 		assert: original = other

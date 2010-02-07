@@ -11,7 +11,7 @@ Class {
 PPSmalltalkParser class >> parseExpression: aString onError: aBlock [
 	| node |
 	node := super parseExpression: aString onError: aBlock.
-	^ (node isFailure not and: [ node statements size = 1 and: [ node temporaries isEmpty ] ])
+	^ (node isPetitFailure not and: [ node statements size = 1 and: [ node temporaries isEmpty ] ])
 		ifTrue: [ node statements first ]
 		ifFalse: [ node ]
 ]
