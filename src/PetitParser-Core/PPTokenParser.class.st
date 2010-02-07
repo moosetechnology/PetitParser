@@ -19,12 +19,12 @@ PPTokenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 ]
 
 { #category : #parsing }
-PPTokenParser >> parseAfter: aStream [
+PPTokenParser >> parseAfterOn: aStream [
 	self consumeSpaces: aStream
 ]
 
 { #category : #parsing }
-PPTokenParser >> parseBefore: aStream [
+PPTokenParser >> parseBeforeOn: aStream [
 	self consumeSpaces: aStream
 ]
 

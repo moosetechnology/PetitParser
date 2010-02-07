@@ -21,8 +21,8 @@ PPDelegateParser >> children [
 ]
 
 { #category : #parsing }
-PPDelegateParser >> parse: aStream [
-	^ parser parse: aStream
+PPDelegateParser >> parseOn: aStream [
+	^ parser parseOn: aStream
 ]
 
 { #category : #initialization }

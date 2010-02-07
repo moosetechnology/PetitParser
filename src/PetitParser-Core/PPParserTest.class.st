@@ -122,7 +122,7 @@ PPParserTest >> testFailing [
 	self assert: parser fail: 'a'.
 	self assert: parser fail: 'aa'.
 	
-	result := parser parse: 'a' asParserStream.
+	result := parser parse: 'a' asPetitStream.
 	self assert: result reason = 'Plonk'.
 	self assert: result printString = 'Plonk at 0'
 ]
@@ -136,18 +136,18 @@ PPParserTest >> testFailure [
 	
 	self assert: f1 position = 1.
 	self assert: f1 reason isNil.
-	self assert: f1 isFailure.
+	self assert: f1 isPetitFailure.
 	
 	self assert: f2 position = 0.
 	self assert: f2 reason = 'Fatal'.
-	self assert: f2 isFailure.
+	self assert: f2 isPetitFailure.
 
 	self assert: f3 position = 3.
 	self assert: f3 reason = 'Error'.
-	self assert: f3 isFailure.
+	self assert: f3 isPetitFailure.
 
-	self deny: 4 isFailure.
-	self deny: 'foo' isFailure
+	self deny: 4 isPetitFailure.
+	self deny: 'foo' isPetitFailure
 ]
 
 { #category : #testing }

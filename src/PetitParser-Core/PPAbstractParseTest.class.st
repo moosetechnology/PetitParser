@@ -17,9 +17,9 @@ PPAbstractParseTest class >> packageNamesUnderTest [
 { #category : #utilities }
 PPAbstractParseTest >> assert: aParser fail: aCollection [
 	| stream result |
-	stream := aCollection asParserStream.
+	stream := aCollection asPetitStream.
 	result := aParser parse: stream.
-	self assert: result isFailure.
+	self assert: result isPetitFailure.
 	self assert: stream position = 0
 ]
 
@@ -41,10 +41,10 @@ PPAbstractParseTest >> assert: aParser parse: aCollection to: anObject [
 { #category : #utilities }
 PPAbstractParseTest >> assert: aParser parse: aParseObject to: aTargetObject end: anInteger [
 	| stream result |
-	stream := aParseObject asParserStream.
+	stream := aParseObject asPetitStream.
 	result := aParser parse: stream.
 	aTargetObject isNil
-		ifTrue: [ self deny: result isFailure ]
+		ifTrue: [ self deny: result isPetitFailure ]
 		ifFalse: [ self assert: result = aTargetObject ].
 	self assert: stream position = anInteger
 ]

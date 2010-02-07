@@ -6,6 +6,6 @@ SequenceableCollection >> asParser [
 ]
 
 { #category : #'*petitparser-core-converting' }
-SequenceableCollection >> asParserStream [
+SequenceableCollection >> asPetitStream [
 	^ PPStream on: self
 ]

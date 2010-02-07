@@ -19,7 +19,7 @@ PPMemoizedParser >> memoized [
 ]
 
 { #category : #parsing }
-PPMemoizedParser >> parse: aStream [
+PPMemoizedParser >> parseOn: aStream [
 	| memento |
 	stream == aStream
 		ifFalse: [ self reset: aStream ].
@@ -29,7 +29,7 @@ PPMemoizedParser >> parse: aStream [
 		ifTrue: [
 			memento result: (stream size - stream position + 2 < memento count
 				ifTrue: [ PPFailure reason: 'overflow' at: stream position ]
-				ifFalse: [ memento increment. super parse: stream ]).
+				ifFalse: [ memento increment. super parseOn: stream ]).
 			memento position: stream position ]
 		ifFalse: [ stream position: memento position ].
 	^ memento result

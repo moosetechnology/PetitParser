@@ -1,7 +1,7 @@
 Extension { #name : #PositionableStream }
 
 { #category : #'*petitparser-core-converting' }
-PositionableStream >> asParserStream [
+PositionableStream >> asPetitStream [
 	^ PPStream on: collection from: position to: readLimit
 ]
 

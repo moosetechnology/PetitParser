@@ -8,6 +8,6 @@ Class {
 }
 
 { #category : #parsing }
-PPEpsilonParser >> parse: aStream [
+PPEpsilonParser >> parseOn: aStream [
 	^ nil
 ]

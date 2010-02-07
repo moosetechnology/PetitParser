@@ -18,14 +18,14 @@ PPSequenceParser >> map: aBlock [
 ]
 
 { #category : #parsing }
-PPSequenceParser >> parse: aStream [
+PPSequenceParser >> parseOn: aStream [
 	| start elements element |
 	start := aStream position.
 	elements := Array new: parsers size.
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index) 
-			parse: aStream.
-		element isFailure 
+			parseOn: aStream.
+		element isPetitFailure 
 			ifFalse: [ elements at: index put: element ]
 			ifTrue: [
 				aStream position: start.

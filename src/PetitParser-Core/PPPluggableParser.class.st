@@ -18,11 +18,11 @@ PPPluggableParser >> block: aBlock [
 ]
 
 { #category : #parsing }
-PPPluggableParser >> parse: aStream [
+PPPluggableParser >> parseOn: aStream [
 	| position result |
 	position := aStream position.
 	result := block value: aStream.
-	result isFailure
+	result isPetitFailure
 		ifTrue: [ aStream position: position ].
 	^ result
 ]

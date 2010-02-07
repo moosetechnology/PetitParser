@@ -21,6 +21,6 @@ PPFailingParser >> message: aString [
 ]
 
 { #category : #parsing }
-PPFailingParser >> parse: aStream [
+PPFailingParser >> parseOn: aStream [
 	^ PPFailure reason: message at: aStream position
 ]

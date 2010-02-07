@@ -71,13 +71,13 @@ PPExtensionTest >> testRange [
 { #category : #testing }
 PPExtensionTest >> testStream [
 	| stream |
-	stream := 'abc' readStream asParserStream.
+	stream := 'abc' readStream asPetitStream.
 	self assert: (stream class = PPStream).
 	self assert: (stream printString = '·abc').
 	self assert: (stream peek) = $a.
 	self assert: (stream next) = $a.
 	self assert: (stream printString = 'a·bc').
-	self assert: (stream asParserStream = stream)
+	self assert: (stream asPetitStream = stream)
 ]
 
 { #category : #testing }
@@ -102,7 +102,7 @@ PPExtensionTest >> testSymbol [
 { #category : #testing }
 PPExtensionTest >> testText [
 	| stream |
-	stream := 'abc' asText asParserStream.
+	stream := 'abc' asText asPetitStream.
 	self assert: stream class = PPStream
 ]
 

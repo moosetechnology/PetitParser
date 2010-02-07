@@ -13,6 +13,6 @@ PPUnresolvedParser >> isUnresolved [
 ]
 
 { #category : #parsing }
-PPUnresolvedParser >> parse: aStream [
+PPUnresolvedParser >> parseOn: aStream [
 	self error: self printString , ' need to be resolved before execution.'
 ]

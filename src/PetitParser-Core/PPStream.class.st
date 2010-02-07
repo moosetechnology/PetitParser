@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #converting }
-PPStream >> asParserStream [
+PPStream >> asPetitStream [
 	^ self
 ]
 

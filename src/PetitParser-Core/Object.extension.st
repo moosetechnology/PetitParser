@@ -6,6 +6,6 @@ Object >> asParser [
 ]
 
 { #category : #'*petitparser-core-testing' }
-Object >> isFailure [
+Object >> isPetitFailure [
 	^ false
 ]

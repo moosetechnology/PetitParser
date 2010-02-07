@@ -13,11 +13,11 @@ PPEndOfInputParser >> end [
 ]
 
 { #category : #parsing }
-PPEndOfInputParser >> parse: aStream [
+PPEndOfInputParser >> parseOn: aStream [
 	| position result |
 	position := aStream position.
-	result := super parse: aStream.
-	(result isFailure or: [ aStream atEnd ])
+	result := super parseOn: aStream.
+	(result isPetitFailure or: [ aStream atEnd ])
 		ifTrue: [ ^ result ].
 	result := PPFailure reason: 'end of input expected' at: aStream position.
 	aStream position: position.

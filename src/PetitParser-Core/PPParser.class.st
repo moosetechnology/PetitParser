@@ -154,6 +154,13 @@ PPParser >> map: aBlock [
 	^ self ==> aBlock
 ]
 
+{ #category : #parsing }
+PPParser >> match: anObject [
+	"Answer if anObject can be parsed by the receiver."
+	
+	^ (self parse: anObject) isPetitFailure not
+]
+
 { #category : #operations }
 PPParser >> max: anInteger [
 	"Answer a new parser that parses the receiver at most anInteger times."
@@ -214,7 +221,31 @@ PPParser >> optional [
 ]
 
 { #category : #parsing }
-PPParser >> parse: aStream [
+PPParser >> parse: anObject [
+	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
+	
+	^ self parseOn: anObject asPetitStream
+]
+
+{ #category : #parsing }
+PPParser >> parse: anObject onError: aBlock [
+	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock on failure. Depending on the number of arguments the block accepts, simply evaluate, pass in the faiure object, or pass in the the message and position of the error."
+	
+	| result |
+	result := self parseOn: anObject asPetitStream.
+	result isPetitFailure
+		ifFalse: [ ^ result ].
+	aBlock numArgs = 0
+		ifTrue: [ ^ aBlock value ].
+	aBlock numArgs = 1
+		ifTrue: [ ^ aBlock value: result ].
+	^ aBlock value: result reason value: result position
+]
+
+{ #category : #parsing }
+PPParser >> parseOn: aStream [
+	"Parse aStream with the receiving parser and answer the parse-result or an instance of PPFailure. Override this method in subclasses to specify custom parse behavior."
+	
 	self subclassResponsibility
 ]
 

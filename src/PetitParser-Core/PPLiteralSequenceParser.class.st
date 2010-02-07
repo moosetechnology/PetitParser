@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #parsing }
-PPLiteralSequenceParser >> parse: aStream [
+PPLiteralSequenceParser >> parseOn: aStream [
 	| position result |
 	position := aStream position.
 	result := aStream next: literal size.

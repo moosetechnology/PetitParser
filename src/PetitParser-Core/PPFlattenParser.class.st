@@ -13,26 +13,26 @@ PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 ]
 
 { #category : #parsing }
-PPFlattenParser >> parse: aStream [
-	| begin start element stop |
-	begin := aStream position.
-	self parseBefore: aStream.
-	start := aStream position.
-	element := super parse: aStream.
-	element isFailure ifTrue: [ 
-		aStream position: begin.
-		^ element ].
-	stop := aStream position.
-	self parseAfter: aStream.
-	^ self create: aStream collection start: start + 1 stop: stop
-]
-
-{ #category : #parsing }
-PPFlattenParser >> parseAfter: aStream [
+PPFlattenParser >> parseAfterOn: aStream [
 	"Consume input after the actual parse."
 ]
 
 { #category : #parsing }
-PPFlattenParser >> parseBefore: aStream [
+PPFlattenParser >> parseBeforeOn: aStream [
 	"Consume input before the actual parse."
+]
+
+{ #category : #parsing }
+PPFlattenParser >> parseOn: aStream [
+	| begin start element stop |
+	begin := aStream position.
+	self parseBeforeOn: aStream.
+	start := aStream position.
+	element := super parseOn: aStream.
+	element isPetitFailure ifTrue: [ 
+		aStream position: begin.
+		^ element ].
+	stop := aStream position.
+	self parseAfterOn: aStream.
+	^ self create: aStream collection start: start + 1 stop: stop
 ]

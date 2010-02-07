@@ -17,7 +17,7 @@ PPLiteralObjectParser >> negate [
 ]
 
 { #category : #parsing }
-PPLiteralObjectParser >> parse: aStream [
+PPLiteralObjectParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ aStream peek = literal ])
 		ifFalse: [ PPFailure reason: failureMessage at: aStream position ]
 		ifTrue: [ aStream next ]

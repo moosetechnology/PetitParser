@@ -154,7 +154,7 @@ PPPredicateParser >> negate [
 ]
 
 { #category : #parsing }
-PPPredicateParser >> parse: aStream [
+PPPredicateParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ predicate value: aStream peek ])
 		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
 		ifTrue: [ aStream next ]

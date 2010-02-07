@@ -13,8 +13,8 @@ PPNotParser >> not [
 ]
 
 { #category : #parsing }
-PPNotParser >> parse: aStream [
+PPNotParser >> parseOn: aStream [
 	| element |
-	^ (element := super parse: aStream) isFailure 
+	^ (element := super parseOn: aStream) isPetitFailure 
 		ifFalse: [ PPFailure at: aStream position ]
 ]

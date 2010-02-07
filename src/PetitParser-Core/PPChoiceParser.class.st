@@ -13,13 +13,13 @@ PPChoiceParser >> / aRule [
 ]
 
 { #category : #parsing }
-PPChoiceParser >> parse: aStream [
+PPChoiceParser >> parseOn: aStream [
 	| failure element |
 	failure := nil.
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index)
-			parse: aStream.
-		element isFailure 
+			parseOn: aStream.
+		element isPetitFailure 
 			ifFalse: [ ^ element ].
 		(failure isNil or: [ failure position < element position ])
 			ifTrue: [ failure := element ] ].

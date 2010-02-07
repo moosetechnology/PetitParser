@@ -77,6 +77,7 @@ PPLambdaParserTest >> testParseOnError [
 			self assert: msg = 'letter expected'.
 			self assert: pos = 3.
 			beenHere := true ].
+	self assert: result.
 	self assert: beenHere
 ]
 

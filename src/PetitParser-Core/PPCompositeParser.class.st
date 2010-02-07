@@ -33,34 +33,23 @@ PPCompositeParser class >> newStartingAt: aSymbol [
 ]
 
 { #category : #parsing }
-PPCompositeParser class >> parse: aString [
-	^ self parse: aString startingAt: self startSymbol
+PPCompositeParser class >> parse: anObject [
+	^ self parse: anObject startingAt: self startSymbol
 ]
 
 { #category : #parsing }
-PPCompositeParser class >> parse: aString onError: aBlock [
-	^ self result: (self parse: aString) onError: aBlock
+PPCompositeParser class >> parse: anObject onError: aBlock [
+	^ self parse: anObject startingAt: self startSymbol onError: aBlock
 ]
 
 { #category : #parsing }
-PPCompositeParser class >> parse: aString startingAt: aSymbol [
-	^ (self newStartingAt: aSymbol) parse: aString asParserStream
+PPCompositeParser class >> parse: anObject startingAt: aSymbol [
+	^ (self newStartingAt: aSymbol) parse: anObject
 ]
 
 { #category : #parsing }
-PPCompositeParser class >> parse: aString startingAt: aSymbol onError: aBlock [
-	^ self result: (self parse: aString startingAt: aSymbol) onError: aBlock
-]
-
-{ #category : #private }
-PPCompositeParser class >> result: anObject onError: aBlock [
-	anObject isFailure
-		ifFalse: [ ^ anObject ].
-	aBlock numArgs = 0
-		ifTrue: [ ^ aBlock value ].
-	aBlock numArgs = 1
-		ifTrue: [ ^ aBlock value: anObject ].
-	^ aBlock value: anObject reason value: anObject position
+PPCompositeParser class >> parse: anObject startingAt: aSymbol onError: aBlock [
+	^ (self newStartingAt: aSymbol) parse: anObject onError: aBlock
 ]
 
 { #category : #accessing }
