@@ -9,6 +9,8 @@ Class {
 
 { #category : #operator }
 PPLiteralObjectParser >> negate [
+	"Answer a parser that is the negation of the receiving literal parser."
+	
 	^ PPPredicateParser 
 		on: [ :each | each ~= literal ] message: 'no ' , failureMessage
 		negated: [ :each | each = literal ] message: failureMessage

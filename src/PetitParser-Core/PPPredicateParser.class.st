@@ -146,7 +146,7 @@ PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBloc
 
 { #category : #operators }
 PPPredicateParser >> negate [
-	"Negate the receiving predicate parser."
+	"Answer a parser that is the negation of the receiving predicate parser."
 	
 	^ self class 
 		on: negated message: negatedMessage 

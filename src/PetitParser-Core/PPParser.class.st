@@ -193,6 +193,13 @@ PPParser >> name: aString [
 ]
 
 { #category : #operations }
+PPParser >> negate [
+	"Answer a parser consumes any input token but the receiver."
+	
+	^ self not , #any asParser ==> #second
+]
+
+{ #category : #operations }
 PPParser >> not [
 	"Answer a parser that succeeds whenever the receiver fails."
 
