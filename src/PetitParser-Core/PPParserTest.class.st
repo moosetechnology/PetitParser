@@ -43,6 +43,18 @@ PPParserTest >> testBlock [
 	self assert: parser parse: '' to: nil
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testChildren [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	self assert: p1 children isEmpty.
+	self assert: p2 children size = 1.
+	self assert: p3 children size = 2
+]
+
 { #category : #testing }
 PPParserTest >> testChoice [
 	| parser |
@@ -163,15 +175,15 @@ PPParserTest >> testFlatten [
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testFollowing [
-	| p1 p2 p3 |
-	p1 := #lowercase asParser.
-	p2 := p1 ==> #asUppercase.
-	p3 := PPUnresolvedParser new.
-	p3 def: p2 / p3.
-	self assert: p1 children isEmpty.
-	self assert: p2 children size = 1.
-	self assert: p3 children size = 2
+PPParserTest >> testMatch [
+	| parser |
+	parser := $a asParser.
+	
+	self assert: (parser match: 'a').
+	self deny: (parser match: 'b').
+	
+	self assert: (parser match: 'a' readStream).
+	self deny: (parser match: 'b' readStream)
 ]
 
 { #category : #testing }
@@ -291,6 +303,58 @@ PPParserTest >> testOptional [
 	self assert: parser parse: 'ba' to: nil end: 0
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testParse [
+	| parser result |
+	parser := $a asParser.
+	
+	self assert: (parser parse: 'a') = $a.
+	self assert: (result := parser parse: 'b') isPetitFailure.
+	self assert: (result position = 0).
+	self assert: (result reason =  '$a expected').
+	
+	self assert: (parser parse: 'a' readStream) = $a.
+	self assert: (result := parser parse: 'b' readStream) isPetitFailure.
+	self assert: (result position = 0).
+	self assert: (result reason =  '$a expected')
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testParseOnError0 [
+	| parser result seen |
+	parser := $a asParser.
+	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	result := parser parse: 'b' onError: [ seen := true ].
+	self assert: result.
+	self assert: seen
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testParseOnError1 [
+	| parser result seen |
+	parser := $a asParser.
+	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	result := parser parse: 'b' onError: [ :failure | 
+		self assert: failure position = 0.
+		self assert: failure reason = '$a expected'.
+		seen := true ].
+	self assert: result.
+	self assert: seen
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testParseOnError2 [
+	| parser result seen |
+	parser := $a asParser.
+	parser parse: 'a' onError: [ self signalFailure: 'Not supposed to report an error' ].
+	result := parser parse: 'b' onError: [ :msg :pos | 
+		self assert: msg = '$a expected'.
+		self assert: pos = 0.
+		seen := true ].
+	self assert: result.
+	self assert: seen
+]
+
 { #category : #testing }
 PPParserTest >> testPermutation [
 	| parser |
@@ -369,6 +433,50 @@ PPParserTest >> testSequence [
 	self assert: parser fail: 'aa'.
 	self assert: parser fail: 'ba'.
 	self assert: parser fail: 'bab'
+]
+
+{ #category : #'testing-fixtures' }
+PPParserTest >> testSideEffectChoice [
+	"Adding another element to a choice should create a copy, otherwise we get unwanted side-effects."
+
+	| p1 p2 p3 |
+	p1 := $a asParser.
+	p2 := p1 / $b asParser.
+	p3 := p1 / $c asParser.
+	
+	self assert: p1 parse: 'a'.
+	self assert: p1 fail: 'b'.
+	self assert: p1 fail: 'c'.
+	
+	self assert: p2 parse: 'a'.
+	self assert: p2 parse: 'b'.
+	self assert: p2 fail: 'c'.
+	
+	self assert: p3 parse: 'a'.
+	self assert: p3 fail: 'b'.
+	self assert: p3 parse: 'c'
+]
+
+{ #category : #'testing-fixtures' }
+PPParserTest >> testSideEffectSequence [
+	"Adding another element to a choice should create a copy, otherwise we get unwanted side-effects."
+
+	| p1 p2 p3 |
+	p1 := $a asParser.
+	p2 := p1 , $b asParser.
+	p3 := p1 , $c asParser.
+	
+	self assert: p1 parse: 'a'.	
+	self assert: p1 parse: 'ab' end: 1.
+	self assert: p1 parse: 'ac' end: 1.
+	
+	self assert: p2 fail: 'a'.	
+	self assert: p2 parse: 'ab'.
+	self assert: p2 fail: 'ac'.
+
+	self assert: p3 fail: 'a'.	
+	self assert: p3 fail: 'ab'.
+	self assert: p3 parse: 'ac'
 ]
 
 { #category : #testing }
