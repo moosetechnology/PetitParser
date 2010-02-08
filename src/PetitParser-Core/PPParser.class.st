@@ -155,26 +155,26 @@ PPParser >> map: aBlock [
 ]
 
 { #category : #parsing }
-PPParser >> match: anObject [
+PPParser >> matches: anObject [
 	"Answer if anObject can be parsed by the receiver."
 	
 	^ (self parse: anObject) isPetitFailure not
 ]
 
 { #category : #parsing }
-PPParser >> matches: anObject [
+PPParser >> matchesIn: anObject [
 	"Search anObject repeatedly for the matches of the receiver."
 
 	| result |
 	result := OrderedCollection new.
 	self 
-		matches: anObject
+		matchesIn: anObject
 		do: [ :each | result addLast: each ].
 	^ result
 ]
 
 { #category : #parsing }
-PPParser >> matches: anObject do: aBlock [
+PPParser >> matchesIn: anObject do: aBlock [
 	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock for each match passing the matched parse-tree as the argument."
 
 	(self ==> aBlock / #any asParser) star parse: anObject

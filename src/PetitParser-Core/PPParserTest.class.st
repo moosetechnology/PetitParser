@@ -175,41 +175,41 @@ PPParserTest >> testFlatten [
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testMatch [
+PPParserTest >> testMatches [
 	| parser |
 	parser := $a asParser.
 	
-	self assert: (parser match: 'a').
-	self deny: (parser match: 'b').
+	self assert: (parser matches: 'a').
+	self deny: (parser matches: 'b').
 	
-	self assert: (parser match: 'a' readStream).
-	self deny: (parser match: 'b' readStream)
+	self assert: (parser matches: 'a' readStream).
+	self deny: (parser matches: 'b' readStream)
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testMatches [
+PPParserTest >> testMatchesIn [
 	| parser result |
 	parser := $a asParser.
 	
-	result := parser matches: 'abba'.
+	result := parser matchesIn: 'abba'.
 	self assert: result size = 2.
 	self assert: result first = $a.
 	self assert: result last = $a.
 	
-	result := parser matches: 'baaah'.
+	result := parser matchesIn: 'baaah'.
 	self assert: result size = 3.
 	self assert: result first = $a.
 	self assert: result last = $a
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testMatchesDo [
+PPParserTest >> testMatchesInDo [
 	| parser output |
 	parser := ($a asParser , $n asParser not ==> #first) / $b asParser.
 	output := OrderedCollection new.
 	
 	parser 
-		matches: 'barbara ann' 
+		matchesIn: 'barbara ann' 
 		do: [ :each | output add: each ].
 	self assert: output asArray = #($b $a $b $a $a)
 ]
