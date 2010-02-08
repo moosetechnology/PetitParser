@@ -26,10 +26,8 @@ PPPredicateTest >> parsedCharacterSet: aParser [
 	| result stream |
 	result := WriteStream on: String new.
 	Character allCharacters do: [ :char |
-		stream := (String with: char)
-			asPetitStream.
-		(aParser parse: stream) isPetitFailure
-			ifFalse: [ result nextPut: char ] ].
+		(aParser matches: (String with: char))
+			ifTrue: [ result nextPut: char ] ].
 	^ result contents
 ]
 

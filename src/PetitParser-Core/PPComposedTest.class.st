@@ -4,6 +4,40 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
+{ #category : #accessing }
+PPComposedTest >> comment [
+	^ ($" asParser , $" asParser negate star , $" asParser) flatten
+]
+
+{ #category : #accessing }
+PPComposedTest >> identifier [
+	^ (#letter asParser , #word asParser star) flatten
+]
+
+{ #category : #accessing }
+PPComposedTest >> number [
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten
+]
+
+{ #category : #'testing-examples' }
+PPComposedTest >> testComment [
+	self assert: self comment parse: '""' to: '""'.
+	self assert: self comment parse: '"a"' to: '"a"'.
+	self assert: self comment parse: '"ab"' to: '"ab"'.
+	self assert: self comment parse: '"abc"' to: '"abc"'.
+
+	self assert: self comment parse: '""a' to: '""' end: 2.
+	self assert: self comment parse: '"a"a' to: '"a"' end: 3.
+	self assert: self comment parse: '"ab"a' to: '"ab"' end: 4.
+	self assert: self comment parse: '"abc"a' to: '"abc"' end: 5.
+
+	self assert: self comment fail: '"'.
+	self assert: self comment fail: '"a'.
+	self assert: self comment fail: '"aa'.
+	self assert: self comment fail: 'a"'.
+	self assert: self comment fail: 'aa"'
+]
+
 { #category : #testing }
 PPComposedTest >> testDoubledString [
 	| parser |
@@ -15,6 +49,25 @@ PPComposedTest >> testDoubledString [
 	self assert: parser parse: '''ab''' to: 'ab'.
 	self assert: parser parse: '''a''''b''' to: 'a''b'.
 	self assert: parser parse: '''a''''''''b''' to: 'a''''b'
+]
+
+{ #category : #'testing-examples' }
+PPComposedTest >> testIdentifier [
+	self assert: self identifier parse: 'a' to: 'a'.
+	self assert: self identifier parse: 'a1' to: 'a1'.
+	self assert: self identifier parse: 'a12' to: 'a12'.
+	self assert: self identifier parse: 'ab' to: 'ab'.
+	self assert: self identifier parse: 'a1b' to: 'a1b'.
+
+	self assert: self identifier parse: 'a_' to: 'a' end: 1.
+	self assert: self identifier parse: 'a1-' to: 'a1' end: 2.
+	self assert: self identifier parse: 'a12+' to: 'a12' end: 3.
+	self assert: self identifier parse: 'ab^' to: 'ab' end: 2.
+	self assert: self identifier parse: 'a1b*' to: 'a1b' end: 3.
+
+	self assert: self identifier fail: ''.
+	self assert: self identifier fail: '1'.
+	self assert: self identifier fail: '1a'
 ]
 
 { #category : #testing }
@@ -118,6 +171,29 @@ PPComposedTest >> testNestedComments [
 	self assert: parser parse: '/*ab*/cd' end: 6.
 	self assert: parser parse: '/*a/*b*/c*/'.
 	self assert: parser fail: '/*a/*b*/c'
+]
+
+{ #category : #'testing-examples' }
+PPComposedTest >> testNumber [
+	self assert: self number parse: '1' to: '1'.
+	self assert: self number parse: '12' to: '12'.
+	self assert: self number parse: '12.3' to: '12.3'.
+	self assert: self number parse: '12.34' to: '12.34'.
+
+	self assert: self number parse: '1..' to: '1' end: 1.
+	self assert: self number parse: '12-' to: '12' end: 2.
+	self assert: self number parse: '12.3.' to: '12.3' end: 4.
+	self assert: self number parse: '12.34.' to: '12.34' end: 5.
+	
+	self assert: self number parse: '-1' to: '-1'.
+	self assert: self number parse: '-12' to: '-12'.
+	self assert: self number parse: '-12.3' to: '-12.3'.
+	self assert: self number parse: '-12.34' to: '-12.34'.
+	
+	self assert: self number fail: ''.
+	self assert: self number fail: '-'.
+	self assert: self number fail: '.'.
+	self assert: self number fail: '.1'
 ]
 
 { #category : #testing }
@@ -249,4 +325,58 @@ PPComposedTest >> testParseAbabbb [
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'c'
+]
+
+{ #category : #testing }
+PPComposedTest >> testParseAnBnCn [
+	"PEGs for a non context- free language: 
+		
+		a^n , b^n , c^n
+		
+	S <- &P1 P2 
+	P1 <- AB 'c' 
+	AB <- 'a' AB 'b' / epsilon
+	P2 <- 'a'* BC end
+	BC <- 'b' BC 'c' / epsilon"
+	
+	| s p1 ab p2 bc |
+	s := PPUnresolvedParser new.
+	p1 := PPUnresolvedParser new.
+	ab := PPUnresolvedParser new.
+	p2 := PPUnresolvedParser new.
+	bc := PPUnresolvedParser new.
+	
+	s def: (p1 and , p2 end) flatten.
+	p1 def: ab , $c asParser.
+	ab def: ($a asParser , ab , $b asParser) optional.
+	p2 def: $a asParser star , bc.
+	bc def: ($b asParser , bc , $c asParser) optional.
+	
+	self assert: s parse: 'abc' to: 'abc'.
+	self assert: s parse: 'aabbcc' to: 'aabbcc'.
+	self assert: s parse: 'aaabbbccc' to: 'aaabbbccc'.
+
+	self assert: s fail: 'bc'.
+	self assert: s fail: 'ac'.
+	self assert: s fail: 'ab'.
+	self assert: s fail: 'abbcc'.
+	self assert: s fail: 'aabcc'.
+	self assert: s fail: 'aabbc'
+]
+
+{ #category : #'testing-examples' }
+PPComposedTest >> testReturn [
+	| number spaces return |
+	number := #digit asParser plus token.
+	spaces := #space asParser star.
+	return := (spaces , $^ asParser token , spaces , number)
+		==> [ :nodes | { #return. (nodes at: 4) value } ].
+
+	self assert: return parse: '^1' to: #(return '1').
+	self assert: return parse: ' ^12' to: #(return '12').
+	self assert: return parse: '^123 ' to: #(return '123').
+	self assert: return parse: '^ 1234' to: #(return '1234').
+	
+	self assert: return fail: '1'.
+	self assert: return fail: '^'
 ]
