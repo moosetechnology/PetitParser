@@ -275,6 +275,20 @@ PPParser >> plus [
 	^ self min: 1
 ]
 
+{ #category : #operations }
+PPParser >> plusGreedy: aRestParser [
+	"Answer a new parser that parses the receiver one or more times until it reaches aRestParser. This is a greedy  non-blind implementation of the star operator."
+	
+	^ self , (self starGreedy: aRestParser) map: [ :first :rest | rest copyWithFirst: first ]
+]
+
+{ #category : #operations }
+PPParser >> plusLazy: aRestParser [
+	"Answer a new parser that parses the receiver one or more times until it reaches aRestParser. This is a lazy non-blind implementation of the star operator."
+	
+	^ self , (self starLazy: aRestParser) map: [ :first :rest | rest copyWithFirst: first ]
+]
+
 { #category : #printing }
 PPParser >> printOn: aStream [
 	super printOn: aStream.
@@ -295,9 +309,33 @@ PPParser >> separatedBy: aParser [
 
 { #category : #operations }
 PPParser >> star [
-	"Answer a new parser that parses the receiver zero or more times."
+	"Answer a new parser that parses the receiver zero or more times. This is a greedy and blind implementation that tries to consume as much input as possible and it does not consider what comes afterwards."
 
 	^ PPRepeatingParser on: self
+]
+
+{ #category : #operations }
+PPParser >> starGreedy: aRestParser [
+	"Answer a new parser that parses the receiver zero or more times until it reaches aRestParser. This is a greedy  non-blind implementation of the star operator."
+	
+	| parser |
+	parser := PPChoiceParser new.
+	parser initializeWithAll: (Array
+		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])
+		with: (aRestParser ==> [ :each | OrderedCollection with: each ])).
+	^ parser ==> [ :rest | rest asArray ]
+]
+
+{ #category : #operations }
+PPParser >> starLazy: aRestParser [
+	"Answer a new parser that parses the receiver zero or more times until it reaches aRestParser. This is a lazy non-blind implementation of the star operator."
+	
+	| parser |
+	parser := PPChoiceParser new.
+	parser initializeWithAll: (Array
+		with: (aRestParser ==> [ :each | OrderedCollection with: each ])
+		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])).
+	^ parser ==> [ :rest | rest asArray ]
 ]
 
 { #category : #operations }
