@@ -29,7 +29,9 @@ PPRegexParser >> atom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> beginOfLineAtom [
-	^ $^ asParser map: [ :char | [ :stream | stream position or: [ (stream skip: -1; next) = Character cr ] ] asParser ]
+	^ $^ asParser map: [ :char | [ :stream | 
+		(stream position = 0 or: [ (stream skip: -1; next) = Character cr ])
+			ifFalse: [ PPFailure at: stream position ] ] asParser ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -54,7 +56,9 @@ PPRegexParser >> characterGroup [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> endOfLineAtom [
-	^ $$ asParser map: [ :char | [ :stream | stream atEnd or: [ stream peek = Character cr ] ] asParser ]
+	^ $$ asParser map: [ :char | [ :stream | 
+		(stream atEnd or: [ stream peek = Character cr ])
+			ifFalse: [ PPFailure at: stream position ]  ] asParser ]
 ]
 
 { #category : #'grammar-atoms' }
