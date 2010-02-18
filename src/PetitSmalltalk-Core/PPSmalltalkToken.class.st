@@ -16,3 +16,8 @@ PPSmalltalkToken >> comments [
 PPSmalltalkToken >> comments: anArray [
 	comments := anArray
 ]
+
+{ #category : #compatiblity }
+PPSmalltalkToken >> length [
+	^ self size
+]
