@@ -7,15 +7,6 @@ Class {
 	#category : #'PetitSmalltalk-Core'
 }
 
-{ #category : #parsing }
-PPSmalltalkParser class >> parseExpression: aString onError: aBlock [
-	| node |
-	node := super parseExpression: aString onError: aBlock.
-	^ (node isPetitFailure not and: [ node statements size = 1 and: [ node temporaries isEmpty ] ])
-		ifTrue: [ node statements first ]
-		ifFalse: [ node ]
-]
-
 { #category : #grammar }
 PPSmalltalkParser >> array [
 	^ super array ==> [ :nodes | 
@@ -243,20 +234,23 @@ PPSmalltalkParser >> sequence [
 ]
 
 { #category : #accessing }
-PPSmalltalkParser >> start [
-	"Make sure the method node has the source code properly set."
-	
-	^ ([ :stream | stream collection ] asParser and , super start)
-		map: [ :source :node | node source: source ]
+PPSmalltalkParser >> startExpression [
+	"Make the sequence node has a method node as its parent and that the source is set."
+
+	^ ([ :stream | stream collection ] asParser and , super startExpression) map: [ :source :node | 
+		(RBMethodNode selector: #doIt body: node)
+			source: source.
+		(node statements size = 1 and: [ node temporaries isEmpty ])
+			ifTrue: [ node statements first ]
+			ifFalse: [ node ] ]
 ]
 
 { #category : #accessing }
-PPSmalltalkParser >> startExpression [
-	"Make the sequence node have a method node as its parent."
-
-	^ ([ :stream | stream collection ] asParser and , super startExpression) map: [ :source :node | 
-		(RBMethodNode selector: #noMethod body: node) source: source.
-		node ]
+PPSmalltalkParser >> startMethod [
+	"Make sure the method node has the source code properly set."
+	
+	^ ([ :stream | stream collection ] asParser and , super startMethod)
+		map: [ :source :node | node source: source ]
 ]
 
 { #category : #'grammar-literals' }

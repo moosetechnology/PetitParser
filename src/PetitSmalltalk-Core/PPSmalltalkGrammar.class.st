@@ -56,6 +56,8 @@ Class {
 		'return',
 		'sequence',
 		'statements',
+		'startMethod',
+		'startExpression',
 		'string',
 		'stringLiteral',
 		'stringToken',
@@ -80,24 +82,24 @@ Class {
 	#category : #'PetitSmalltalk-Core'
 }
 
-{ #category : #parsing }
-PPSmalltalkGrammar class >> parseExpression: aString [ 
-	^ self parseExpression: aString onError: [ :msg :pos | self error: msg ]
+{ #category : #accessing }
+PPSmalltalkGrammar class >> parseExpression: aString [
+	^ self new parseExpression: aString
 ]
 
-{ #category : #parsing }
+{ #category : #accessing }
 PPSmalltalkGrammar class >> parseExpression: aString onError: aBlock [
-	^ self parse: aString startingAt: #startExpression onError: aBlock
+	^ self new parseExpression: aString onError: aBlock
 ]
 
-{ #category : #parsing }
-PPSmalltalkGrammar class >> parseMethod: aString [ 
-	^ self parseMethod: aString onError: [ :msg :pos | self error: msg ]
+{ #category : #accessing }
+PPSmalltalkGrammar class >> parseMethod: aString [
+	^ self new parseMethod: aString
 ]
 
-{ #category : #parsing }
+{ #category : #accessing }
 PPSmalltalkGrammar class >> parseMethod: aString onError: aBlock [
-	^ self parse: aString onError: aBlock
+	^ self new parseMethod: aString onError: aBlock
 ]
 
 { #category : #grammar }
@@ -366,6 +368,26 @@ PPSmalltalkGrammar >> parens [
 	^ $( asParser token , expression , $) asParser token
 ]
 
+{ #category : #parsing }
+PPSmalltalkGrammar >> parseExpression: aString [ 
+	^ self parseExpression: aString onError: [ :msg :pos | self error: msg ]
+]
+
+{ #category : #parsing }
+PPSmalltalkGrammar >> parseExpression: aString onError: aBlock [
+	^ startExpression parse: aString onError: aBlock
+]
+
+{ #category : #parsing }
+PPSmalltalkGrammar >> parseMethod: aString [ 
+	^ self parseMethod: aString onError: [ :msg :pos | self error: msg ]
+]
+
+{ #category : #parsing }
+PPSmalltalkGrammar >> parseMethod: aString onError: aBlock [
+	^ startMethod parse: aString onError: aBlock
+]
+
 { #category : #grammar }
 PPSmalltalkGrammar >> pragma [
 	^ $< asParser token , pragmaMessage , $> asParser token
@@ -398,12 +420,23 @@ PPSmalltalkGrammar >> sequence [
 
 { #category : #accessing }
 PPSmalltalkGrammar >> start [
-	^ method end
+	"Default start production."
+
+	^ startMethod
 ]
 
 { #category : #accessing }
 PPSmalltalkGrammar >> startExpression [
+	"Start production for the expression."
+
 	^ sequence end
+]
+
+{ #category : #accessing }
+PPSmalltalkGrammar >> startMethod [
+	"Start production for the method."
+
+	^ method end
 ]
 
 { #category : #grammar }
