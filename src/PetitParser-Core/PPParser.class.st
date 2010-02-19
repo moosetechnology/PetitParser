@@ -33,21 +33,21 @@ PPParser >> / aParser [
 
 { #category : #operations }
 PPParser >> ==> aBlock [
-	"Assigns aBlock as a success action handler."
+	"Answer a new parser that performs aBlock as action handler on success."
 	
 	^ PPActionParser on: self block: aBlock
 ]
 
 { #category : #operations }
 PPParser >> and [
-	"Answer a parser that succeeds whenever the receiver does, but consumes no input."
+	"Answer a new parser that succeeds whenever the receiver does, but consumes no input."
 
 	^ PPAndParser on: self
 ]
 
 { #category : #'operations-mapping' }
 PPParser >> answer: anObject [
-	"Answer anObject from any successful parse of the receiver."
+	"Answer a new parser that always returns anObject from a successful parse."
 
 	^ self ==> [ :nodes | anObject ]
 ]
@@ -77,24 +77,24 @@ PPParser >> currentTokenParser [
 
 { #category : #operations }
 PPParser >> def: aParser [
-	"Defines the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
+	"Redefine the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
 
 	^ self becomeForward: (aParser name: self name)
 ]
 
 { #category : #'operations-conveniance' }
 PPParser >> delimitedBy: aParser [
-	"Answer a parser that parses the receiver one or more times, separated and possibly ended by aParser."
+	"Answer a new parser that parses the receiver one or more times, separated and possibly ended by aParser."
 	
 	^ (self separatedBy: aParser) , (aParser optional) ==> [ :node |
-		node second	isNil
+		node second isNil
 			ifTrue: [ node first ]
 			ifFalse: [ node first copyWith: node second ] ]
 ]
 
 { #category : #operations }
 PPParser >> end [
-	"Ensure the end of the input and return the result of the receiver."
+	"Answer a new parser that suceeds at the end of the input and return the result of the receiver."
 
 	^ PPEndOfInputParser on: self
 ]
@@ -108,7 +108,7 @@ PPParser >> flatten [
 
 { #category : #'operations-mapping' }
 PPParser >> foldLeft: aBlock [
-	"Fold the result of the receiver from left-to-right into aBlock. The argument aBlock must take two or more arguments."
+	"Answer a new parser that that folds the result of the receiver from left-to-right into aBlock. The argument aBlock must take two or more arguments."
 	
 	| size args |
 	size := aBlock numArgs.
@@ -124,7 +124,7 @@ PPParser >> foldLeft: aBlock [
 
 { #category : #'operations-mapping' }
 PPParser >> foldRight: aBlock [
-	"Fold the result of the receiver from right-to-left into aBlock. The argument aBlock must take two or more arguments."
+	"Answer a new parser that that folds the result of the receiver from right-to-left into aBlock. The argument aBlock must take two or more arguments."
 
 	| size args |
 	size := aBlock numArgs.
@@ -149,7 +149,7 @@ PPParser >> isUnresolved [
 
 { #category : #'operations-mapping' }
 PPParser >> map: aBlock [
-	"Map the result of the receiver to the arguments of aBlock."
+	"Answer a new parser that works on the receiving sequence an passes in each element as a block argument."
 	
 	^ self ==> aBlock
 ]
@@ -175,7 +175,7 @@ PPParser >> matchesIn: anObject [
 
 { #category : #parsing }
 PPParser >> matchesIn: anObject do: aBlock [
-	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock for each match passing the matched parse-tree as the argument."
+	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock for each match with the matched parse-tree as the argument."
 
 	(self ==> aBlock / #any asParser) star parse: anObject
 ]
@@ -189,7 +189,7 @@ PPParser >> max: anInteger [
 
 { #category : #operations }
 PPParser >> memoized [
-	"Answer a memoized parser, for refraining redundant computations. This ensures polynomial time O(n^4) for left-recursive grammars and O(n^3) for non left-recursive grammars in the worst case."
+	"Answer a new memoized parser, for refraining redundant computations. This ensures polynomial time O(n^4) for left-recursive grammars and O(n^3) for non left-recursive grammars in the worst case. Not necessary for most grammars that are carefully written and in O(1)."
 	
 	^ PPMemoizedParser on: self
 ]
@@ -220,14 +220,14 @@ PPParser >> name: aString [
 
 { #category : #operations }
 PPParser >> negate [
-	"Answer a parser consumes any input token but the receiver."
+	"Answer a new parser consumes any input token but the receiver."
 	
 	^ self not , #any asParser ==> #second
 ]
 
 { #category : #operations }
 PPParser >> not [
-	"Answer a parser that succeeds whenever the receiver fails."
+	"Answer a new parser that succeeds whenever the receiver fails."
 
 	^ PPNotParser on: self
 ]
@@ -248,7 +248,7 @@ PPParser >> parse: anObject [
 
 { #category : #parsing }
 PPParser >> parse: anObject onError: aBlock [
-	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the faiure object, or eavaluated with the error message and position."
+	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the failure object, or eavaluated with the error message and position."
 	
 	| result |
 	result := self parseOn: anObject asPetitStream.
@@ -276,17 +276,17 @@ PPParser >> plus [
 ]
 
 { #category : #operations }
-PPParser >> plusGreedy: aRestParser [
-	"Answer a new parser that parses the receiver one or more times until it reaches aRestParser. This is a greedy  non-blind implementation of the star operator."
+PPParser >> plusGreedy: aParser [
+	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator."
 	
-	^ self , (self starGreedy: aRestParser) map: [ :first :rest | rest copyWithFirst: first ]
+	^ self , (self starGreedy: aParser) map: [ :first :rest | rest copyWithFirst: first ]
 ]
 
 { #category : #operations }
-PPParser >> plusLazy: aRestParser [
-	"Answer a new parser that parses the receiver one or more times until it reaches aRestParser. This is a lazy non-blind implementation of the star operator."
+PPParser >> plusLazy: aParser [
+	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator."
 	
-	^ self , (self starLazy: aRestParser) map: [ :first :rest | rest copyWithFirst: first ]
+	^ self , (self starLazy: aParser) map: [ :first :rest | rest copyWithFirst: first ]
 ]
 
 { #category : #printing }
@@ -299,12 +299,15 @@ PPParser >> printOn: aStream [
 
 { #category : #'operations-conveniance' }
 PPParser >> separatedBy: aParser [
-	"Answer a parser that parses the receiver one or more times, separated by aParser."
+	"Answer a new parser that parses the receiver one or more times, separated by aParser."
 	
-	^ (PPSequenceParser with: self with: (PPSequenceParser with: aParser with: self) star) ==> [ :node |
-		Array streamContents: [ :stream |
-			stream nextPut: node first.
-			node second do: [ :each | stream nextPutAll: each ] ] ]
+	^ (PPSequenceParser with: self with: (PPSequenceParser with: aParser with: self) star) ==> [ :nodes |
+		| result |
+		result := Array new: 2 * nodes second size + 1.
+		result at: 1 put: nodes first.
+		nodes second 
+			keysAndValuesDo: [ :index :pair | result replaceFrom: 2 * index to: 2 * index + 1 with: pair startingAt: 1 ].
+		result ]
 ]
 
 { #category : #operations }
@@ -315,25 +318,25 @@ PPParser >> star [
 ]
 
 { #category : #operations }
-PPParser >> starGreedy: aRestParser [
-	"Answer a new parser that parses the receiver zero or more times until it reaches aRestParser. This is a greedy  non-blind implementation of the star operator."
+PPParser >> starGreedy: aParser [
+	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator."
 	
 	| parser |
 	parser := PPChoiceParser new.
 	parser initializeWithAll: (Array
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])
-		with: (aRestParser ==> [ :each | OrderedCollection with: each ])).
+		with: (aParser ==> [ :each | OrderedCollection with: each ])).
 	^ parser ==> [ :rest | rest asArray ]
 ]
 
 { #category : #operations }
-PPParser >> starLazy: aRestParser [
-	"Answer a new parser that parses the receiver zero or more times until it reaches aRestParser. This is a lazy non-blind implementation of the star operator."
+PPParser >> starLazy: aParser [
+	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator."
 	
 	| parser |
 	parser := PPChoiceParser new.
 	parser initializeWithAll: (Array
-		with: (aRestParser ==> [ :each | OrderedCollection with: each ])
+		with: (aParser ==> [ :each | OrderedCollection with: each ])
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])).
 	^ parser ==> [ :rest | rest asArray ]
 ]
