@@ -87,6 +87,9 @@ PPSmalltalkClassesTests >> testParseExpression [
 	self assert: result isSequence.
 	self assert: result source = '1 + 2. ^ 3'.
 	
+	result := self parserClass parseExpression: '1 + ' onError: [ :err | true ].
+	self assert: result.
+	
 	self 
 		should: [ self parserClass parseExpression: '1 + ' ] 
 		raise: Error
@@ -98,8 +101,11 @@ PPSmalltalkClassesTests >> testParseMethod [
 	self assert: result isMethod.
 	self assert: result source = 'do 1 + 2'.
 	
+	result := self parserClass parseMethod: 'do 1 +' onError: [ :err | true ].
+	self assert: result.
+	
 	self 
-		should: [ self parserClass parseExpression: 'do 1 +' ]
+		should: [ self parserClass parseMethod: 'do 1 +' ]
 		raise: Error
 ]
 
@@ -128,7 +134,7 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 	source isNil ifTrue: [ ^ self ].
 	original := aClass parseTreeFor: aSelector.
 	original isNil ifTrue: [ ^ self ].
-	other := self parser parse: source asPetitStream.
+	other := self parser parseMethod: source asPetitStream.
 	source := aClass name , '>>#' , original selector.
 	other isPetitFailure 
 		ifTrue: [ self assert: false description: source ].
