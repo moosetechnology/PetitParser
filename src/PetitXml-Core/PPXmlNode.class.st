@@ -88,8 +88,9 @@ PPXmlNode >> previousSibling [
 { #category : #printing }
 PPXmlNode >> printOn: aStream [
 	super printOn: aStream.
-	aStream nextPutAll: ' '.
-	self printXmlOn: aStream
+	aStream nextPutAll: ' ('.
+	self printXmlOn: aStream.
+	aStream nextPut: $)
 ]
 
 { #category : #printing }
