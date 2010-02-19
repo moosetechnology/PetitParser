@@ -14,8 +14,44 @@ Class {
 		'escapeAtom',
 		'characterGroup'
 	],
+	#classVars : [
+		'EscapeMap'
+	],
 	#category : #'PetitRegex-Core'
 }
+
+{ #category : #initialization }
+PPRegexParser class >> condition: aBlock [
+	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure new ] ] asParser
+]
+
+{ #category : #initialization }
+PPRegexParser class >> initialize [
+	EscapeMap := Dictionary new.
+	EscapeMap
+		"only at beginning of string"
+		at: $A put: (self condition: [ :stream | stream position = 0 ]);
+		"only at end of string"		
+		at: $Z put: (self condition: [ :stream | stream atEnd ]);
+		"newline"
+		at: $n put: Character lf asParser;
+		"carriage return"
+		at: $r put: Character cr asParser;
+		"tab"
+		at: $t put: Character tab asParser;
+		"digit"
+		at: $d put: #digit asParser;
+		"not digit"
+		at: $D put: #digit asParser negate;
+		"word"
+		at: $w put: #word asParser;
+		"not word"
+		at: $W put: #word asParser negate;
+		"whitespace"
+		at: $s put: #space asParser;
+		"not whitespace"
+		at: $S put: #space asParser negate
+]
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> anyAtom [
@@ -63,7 +99,7 @@ PPRegexParser >> endOfLineAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> escapeAtom [
-	^ $\ asParser , #any asParser map: [ :escape :char | char asParser ]
+	^ $\ asParser , #any asParser map: [ :escape :char | EscapeMap at: char ifAbsent: [ char asParser ] ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -94,9 +130,11 @@ PPRegexParser >> rangePieceSpec [
 	{n,}	at least n times
 	{n}	exactly n times"
 	
-	^ (number , $, asParser , number map: [ :n :op :m | PPRepeatingParser on: nil min: n max: m ])
-	/ (number , $, asParser map: [ :n :op | PPRepeatingParser on: nil min: n ])
-	/ (number map: [ :n  | PPRepeatingParser on: nil min: n max: n ])
+	^ number optional , $, asParser optional , number optional map: [ :n :op :m | 
+		PPRepeatingParser 
+			on: nil
+			min: (n ifNil: [ 0 ])
+			max: (m ifNil: [ SmallInteger maxVal ]) ]
 ]
 
 { #category : #grammar }

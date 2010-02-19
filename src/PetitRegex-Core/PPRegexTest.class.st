@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 PPRegexTest class >> packageNamesUnderTest [
-	^ #('VB-Regex')
+	^ #('PetitRegex')
 ]
 
 { #category : #utilties }
