@@ -166,7 +166,7 @@ PPBrowser >> browseTestOn: aBrowser [
 		table text
 			useExplicitNotNil;
 			display: [ :parsers | input ];
-			update: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
+			populate: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
 				input := presentation text asString.
 				stream := PPBrowserStream on: input.
 				output := self production end 
@@ -174,7 +174,7 @@ PPBrowser >> browseTestOn: aBrowser [
 				output isPetitFailure
 					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position)].
 				output ];
-			update: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
+			populate: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
 				input := presentation text copy.
 				stream := PPBrowserStream on: input.
 				output := self production end
