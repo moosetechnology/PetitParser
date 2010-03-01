@@ -37,9 +37,9 @@ PPRegexTest >> runMatcher: aParser with: aString expect: aBoolean withSubexpress
 	self 
 		assert: copy = aString
 		description: 'Copying: expected ' , aString printString , ', but got ' , copy printString."
-	got := aParser matches: aString.
+	got := aParser matchesIn: aString.
 	self
-		assert: got = aBoolean 
+		assert: got notEmpty = aBoolean 
 		description: 'Searching: expected ' , aBoolean printString , ', but got ' , got printString.
 	"(anArray isNil or: [ aParser supportsSubexpressions not ])
 		ifTrue: [ ^ self ].

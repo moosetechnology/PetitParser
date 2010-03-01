@@ -12,7 +12,8 @@ Class {
 		'number',
 		'groupAtom',
 		'escapeAtom',
-		'characterGroup'
+		'characterGroup',
+		'quantifier'
 	],
 	#classVars : [
 		'EscapeMap'
@@ -116,12 +117,20 @@ PPRegexParser >> number [
 PPRegexParser >> oneOrMorePiece [
 	"+	1 or more times"
 	
-	^ $+ asParser map: [ :op | PPRepeatingParser on: nil min: 1 ]
+	^ $+ asParser , quantifier map: [ :op :qu | qu on: nil min: 1 max: SmallInteger maxVal ]
+]
+
+{ #category : #'grammar-operators' }
+PPRegexParser >> quantifier [
+	^ ($+ asParser ==> [ :node | PPRepeatingParser ])
+	/ ($? asParser ==> [ :node | PPLazyQuantifierStub ])
+	/ (nil asParser ==> [ :node | PPGreedyQuantifierStub ])
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> rangePiece [
-	^ ${ asParser , rangePieceSpec ,  $} asParser ==> #second
+	^ ${ asParser , rangePieceSpec ,  $} asParser , quantifier 
+		map: [ :op :ra :cl :qu | qu on: nil min: ra first max: ra last ]
 ]
 
 { #category : #'grammar-operators' }
@@ -130,11 +139,8 @@ PPRegexParser >> rangePieceSpec [
 	{n,}	at least n times
 	{n}	exactly n times"
 	
-	^ number optional , $, asParser optional , number optional map: [ :n :op :m | 
-		PPRepeatingParser 
-			on: nil
-			min: (n ifNil: [ 0 ])
-			max: (m ifNil: [ SmallInteger maxVal ]) ]
+	^ number optional , $, asParser optional , number optional
+		map: [ :n :op :m | (n ifNil: [ 0 ]) to: (m ifNil: [ SmallInteger maxVal ]) ]
 ]
 
 { #category : #grammar }
@@ -142,32 +148,44 @@ PPRegexParser >> regex [
 	^ PPExpressionParser new
 		term: atom;
 		group: [ :g |.
-			g postfix: self zeroOrOnePiece do: [ :atom :op | op setParser: atom ].
-			g postfix: self zeroOrMorePiece do: [ :atom :op | op setParser: atom ].
-			g postfix: self oneOrMorePiece do: [ :atom :op | op setParser: atom ].
-			g postfix: self rangePiece do: [ :atom :op | op setParser: atom ] ];
+			g postfix: self zeroOrOnePiece do: [ :at :op | op setParser: at ].
+			g postfix: self zeroOrMorePiece do: [ :at :op | op setParser: at ].
+			g postfix: self oneOrMorePiece do: [ :at :op | op setParser: at ].
+			g postfix: self rangePiece do: [ :at :op | op setParser: at ] ];
 		group: [ :g |
-			g left: nil asParser do: [ :left :op :right | left , right ] ];
+			g left: nil do: [ :left :op :right | left , right ] ];
 		group: [ :g |
 			g left: $| do: [ :left :op :right | left / right ] ];
 		yourself
 ]
 
+{ #category : #private }
+PPRegexParser >> resolveStubs: aParser [
+	"In this post-processing step we need to fix the quantifiers."
+	
+	aParser followSets keysAndValuesDo: [ :each :set |
+		(each class = PPGreedyQuantifierStub or: [ each class = PPLazyQuantifierStub ]) ifTrue: [
+			each def: (each resolve: (set size = 1
+				ifTrue: [ set anyOne ]
+				ifFalse: [ PPChoiceParser withAll: set ])) ] ].
+	^ aParser
+]
+
 { #category : #accessing }
 PPRegexParser >> start [
-	^ regex end
+	^ regex end ==> [ :node | self resolveStubs: node ]
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> zeroOrMorePiece [
 	"*	0 or more times"
 		
-	^ $* asParser map: [ :op | PPRepeatingParser on: nil min: 0 ]
+	^ $* asParser ,  quantifier map: [ :op :qu | qu on: nil min: 0 max: SmallInteger maxVal ]
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> zeroOrOnePiece [
 	"?	0 or 1 times"
 
-	^ $? asParser map: [ :op | PPRepeatingParser on: nil min: 0 max: 1 ]
+	^ $? asParser ,  quantifier map: [ :op :qu | qu on: nil min: 0 max: 1 ]
 ]
