@@ -277,14 +277,14 @@ PPParser >> plus [
 
 { #category : #operations }
 PPParser >> plusGreedy: aParser [
-	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator."
+	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator. aParser is not consumed."
 	
 	^ self , (self starGreedy: aParser) map: [ :first :rest | rest copyWithFirst: first ]
 ]
 
 { #category : #operations }
 PPParser >> plusLazy: aParser [
-	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator."
+	"Answer a new parser that parses the receiver one or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator. aParser is not consumed."
 	
 	^ self , (self starLazy: aParser) map: [ :first :rest | rest copyWithFirst: first ]
 ]
@@ -319,24 +319,24 @@ PPParser >> star [
 
 { #category : #operations }
 PPParser >> starGreedy: aParser [
-	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator."
+	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a greedy  non-blind implementation of the star operator. aParser is not consumed."
 	
 	| parser |
 	parser := PPChoiceParser new.
 	parser initializeWithAll: (Array
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])
-		with: (aParser ==> [ :each | OrderedCollection with: each ])).
+		with: (aParser and ==> [ :each | OrderedCollection new ])).
 	^ parser ==> [ :rest | rest asArray ]
 ]
 
 { #category : #operations }
 PPParser >> starLazy: aParser [
-	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator."
+	"Answer a new parser that parses the receiver zero or more times until it reaches aParser. This is a lazy non-blind implementation of the star operator. aParser is not consumed."
 	
 	| parser |
 	parser := PPChoiceParser new.
 	parser initializeWithAll: (Array
-		with: (aParser ==> [ :each | OrderedCollection with: each ])
+		with: (aParser and ==> [ :each | OrderedCollection new ])
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])).
 	^ parser ==> [ :rest | rest asArray ]
 ]
