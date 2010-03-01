@@ -30,6 +30,34 @@ PPSmalltalkGrammarTests >> testArgumentsBlock3 [
 		rule: #block
 ]
 
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testArray1 [
+	self 
+		parse: '{}'
+		rule: #array
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testArray2 [
+	self 
+		parse: '{self foo}'
+		rule: #array
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testArray3 [
+	self 
+		parse: '{self foo. self bar}'
+		rule: #array
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testArray4 [
+	self 
+		parse: '{self foo. self bar.}'
+		rule: #array
+]
+
 { #category : #'testing-literals' }
 PPSmalltalkGrammarTests >> testArrayLiteral1 [
 	self 

@@ -58,6 +58,48 @@ PPSmalltalkParserTests >> testArgumentsBlock3 [
 	self assert: result body statements isEmpty
 ]
 
+{ #category : #testing }
+PPSmalltalkParserTests >> testArray1 [
+	super testArray1.
+	self assert: result isArray.
+	self assert: result statements isEmpty.
+	self assert: result periods isEmpty
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testArray2 [
+	super testArray2.
+	self assert: result isArray.
+	self assert: result periods isEmpty.
+	self assert: result statements size = 1.
+	self assert: result statements first isMessage.
+	self assert: result statements first selector = #foo
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testArray3 [
+	super testArray3.
+	self assert: result isArray.
+	self assert: result periods size = 1.
+	self assert: result statements size = 2.
+	self assert: result statements first isMessage.
+	self assert: result statements first selector = #foo.
+	self assert: result statements last isMessage.
+	self assert: result statements last selector = #bar
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testArray4 [
+	super testArray4.
+	self assert: result isArray.
+	self assert: result periods size = 2.
+	self assert: result statements size = 2.
+	self assert: result statements first isMessage.
+	self assert: result statements first selector = #foo.
+	self assert: result statements last isMessage.
+	self assert: result statements last selector = #bar
+]
+
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral1 [
 	super testArrayLiteral1.
