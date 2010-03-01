@@ -127,10 +127,30 @@ PPSmalltalkParser >> buildArray: aStatementCollection [
 	aStatementCollection do: [ :each |
 		(each isKindOf: RBProgramNode)
 			ifTrue: [ nodes add: each ]
-			ifFalse: [ periods add: each start ] ].
+			ifFalse: [
+				nodes isEmpty
+					ifFalse: [ nodes last addComments: each comments ].
+				periods add: each start ] ].
 	result := RBArrayNode statements: nodes.
 	result periods: periods.
 	^ result
+]
+
+{ #category : #private }
+PPSmalltalkParser >> buildMethod: aMethodNode [
+	aMethodNode selectorParts 
+		do: [ :each | aMethodNode addComments: each comments ].
+	aMethodNode arguments
+		do: [ :each | aMethodNode addComments: each token comments ].
+	aMethodNode pragmas do: [ :pragma |
+		aMethodNode addComments: pragma comments.
+		pragma selectorParts 
+			do: [ :each | aMethodNode addComments: each comments ].
+		pragma arguments do: [ :each | 
+			each isLiteralArray
+				ifFalse: [ aMethodNode addComments: each token comments ] ].
+		pragma comments: nil ].
+	^ aMethodNode
 ]
 
 { #category : #private }
@@ -188,12 +208,12 @@ PPSmalltalkParser >> method [
 		methodNode body: (self 
 			build: bodyNode second
 			sequence: bodyNode third).
-		methodNode ]
+		self buildMethod: methodNode ]
 ]
 
 { #category : #grammar }
 PPSmalltalkParser >> methodDeclaration [
-	^ super methodDeclaration ==> [ :nodes | 
+	^ super methodDeclaration ==> [ :nodes |
 		RBMethodNode 
 			selectorParts: nodes first
 			arguments: nodes second ]
@@ -218,6 +238,8 @@ PPSmalltalkParser >> parens [
 PPSmalltalkParser >> pragma [
 	^ super pragma ==> [ :nodes | 
 		(RBPragmaNode selectorParts: nodes second first arguments: nodes second second)
+			addComments: nodes first comments;
+			addComments: nodes last comments;
 			left: nodes first start;
 			right: nodes last start;
 			yourself ]

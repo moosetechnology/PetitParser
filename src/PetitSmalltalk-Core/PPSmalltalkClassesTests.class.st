@@ -145,10 +145,10 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 		self 
 			assert: node1 sourceInterval = node2 sourceInterval 
 			description: 'Source intervals in ' , source.
-		node2 comments notEmpty ifTrue: [ 
+		(node2 isArray or: [ node2 isSequence ]) ifTrue: [
 			self
-				assert: node1 comments = node2 comments
-				description: 'Comments in ' , source ].
+				assert: node1 periods = node2 periods
+				description: 'Periods in ' , source ].
 		node1 children with: node2 children do: checker ].
 	checker value: original value: other
 ]
