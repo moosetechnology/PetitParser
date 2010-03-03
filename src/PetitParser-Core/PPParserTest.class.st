@@ -203,15 +203,37 @@ PPParserTest >> testMatchesIn [
 ]
 
 { #category : #'testing-utilities' }
-PPParserTest >> testMatchesInDo [
-	| parser output |
-	parser := ($a asParser , $n asParser not ==> #first) / $b asParser.
-	output := OrderedCollection new.
+PPParserTest >> testMatchesInEmpty [
+	"Empty matches should properly advance and match at each position and at the end."
+
+	| parser result |
+	parser := [ :stream | stream position ] asParser.
 	
-	parser 
-		matchesIn: 'barbara ann' 
-		do: [ :each | output add: each ].
-	self assert: output asArray = #($b $a $b $a $a)
+	result := parser matchesIn: '123'.
+	self assert: result asArray = #(0 1 2 3)
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testMatchesInOverlapping [
+	"Matches that overlap should be properly reported."
+
+	| parser result |
+	parser := #digit asParser , #digit asParser.
+	
+	result := parser matchesIn: 'a123b'.
+	self assert: result size = 2.
+	self assert: result first = #($1 $2).
+	self assert: result last = #($2 $3)
+]
+
+{ #category : #'testing-utilities' }
+PPParserTest >> testMatchingRangesIn [
+	| input parser result |
+	input := 'a12b1'.
+	parser := #digit asParser plus.
+	result := parser matchingRangesIn: input.
+	self assert: result size = 3.
+	result do: [ :each | self assert: (parser matches: (input copyFrom: each first to: each last)) ]
 ]
 
 { #category : #testing }

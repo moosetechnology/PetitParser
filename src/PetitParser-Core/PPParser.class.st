@@ -180,6 +180,18 @@ PPParser >> matchesIn: anObject do: aBlock [
 	((self and ==> aBlock , #any asParser) / #any asParser) star parse: anObject
 ]
 
+{ #category : #parsing }
+PPParser >> matchingRangesIn: anObject [
+	"Search anObject repeatedly for the matches of the receiver.  Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
+	
+	| result |
+	result := OrderedCollection new.
+	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
+		matchesIn: anObject
+		do: [ :value | result addLast: (value first to: value last) ].
+	^ result
+]
+
 { #category : #operations }
 PPParser >> max: anInteger [
 	"Answer a new parser that parses the receiver at most anInteger times."
