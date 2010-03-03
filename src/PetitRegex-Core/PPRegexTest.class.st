@@ -117,7 +117,7 @@ PPRegexTest >> testCopyTranslatingMatches [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtBeginningOfLine [
 	| matcher |
-	matcher := self matcherClass forString: '^'.
+	matcher := self compileRegex: '^'.
 	self
 		assert: (matcher copy: 'foo1 bar1' , String cr , 'foo2 bar2' replacingMatchesWith: '*')
 			= ('*foo1 bar1' , String cr , '*foo2 bar2')
@@ -127,7 +127,7 @@ PPRegexTest >> testEmptyStringAtBeginningOfLine [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtBeginningOfWord [
 	| matcher |
-	matcher := self matcherClass forString: '\<'.
+	matcher := self compileRegex: '\<'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= '*foo *bar'
@@ -137,7 +137,7 @@ PPRegexTest >> testEmptyStringAtBeginningOfWord [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtEndOfLine [
 	| matcher |
-	matcher := self matcherClass forString: '$'.
+	matcher := self compileRegex: '$'.
 	self
 		assert: (matcher copy: 'foo1 bar1' , String cr , 'foo2 bar2' replacingMatchesWith: '*')
 			= ('foo1 bar1*', String cr , 'foo2 bar2*')
@@ -147,7 +147,7 @@ PPRegexTest >> testEmptyStringAtEndOfLine [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtEndOfWord [
 	| matcher |
-	matcher := self matcherClass forString: '\>'.
+	matcher := self compileRegex: '\>'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= 'foo* bar*'
@@ -157,7 +157,7 @@ PPRegexTest >> testEmptyStringAtEndOfWord [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtWordBoundary [
 	| matcher |
-	matcher := self matcherClass forString: '\b'.
+	matcher := self compileRegex: '\b'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= '*foo* *bar*'
@@ -167,7 +167,7 @@ PPRegexTest >> testEmptyStringAtWordBoundary [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringNotAtWordBoundary [
 	| matcher |
-	matcher := self matcherClass forString: '\B'.
+	matcher := self compileRegex: '\B'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= 'f*o*o b*a*r'
@@ -1051,7 +1051,7 @@ PPRegexTest >> testHenry137 [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatches [
 	| matcher |
-	matcher := self matcherClass forString: '\w+'.
+	matcher := self compileRegex: '\w+$'.
 	self assert: (matcher matches: 'now').
 	self deny: (matcher matches: 'now is')
 ]
@@ -1059,7 +1059,7 @@ PPRegexTest >> testMatches [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesIn [
 	| matcher |
-	matcher := self matcherClass forString: '\w+'.
+	matcher := self compileRegex: '\w+'.
 	self assert: (matcher matchesIn: 'now is the time') asArray 
 		= #('now' 'is' 'the' 'time')
 ]
@@ -1067,7 +1067,7 @@ PPRegexTest >> testMatchesIn [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesInCollect [
 	| matcher |
-	matcher := self matcherClass forString: '\w+'.
+	matcher := self compileRegex: '\w+'.
 	self assert: (matcher
 		matchesIn: 'now is the time'
 		collect: [ :each | each reverse ]) asArray
@@ -1077,7 +1077,7 @@ PPRegexTest >> testMatchesInCollect [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesInDo [
 	| matcher expected |
-	matcher := self matcherClass forString: '\w+'.
+	matcher := self compileRegex: '\w+'.
 	expected := #('now' 'is' 'the' 'time') asOrderedCollection.
 	matcher 
 		matchesIn: 'now is the time'
@@ -1086,46 +1086,9 @@ PPRegexTest >> testMatchesInDo [
 ]
 
 { #category : #'testing-protocol' }
-PPRegexTest >> testMatchesOnStream [
-	| matcher |
-	matcher := self matcherClass forString: '\w+'.
-	self assert: (matcher matchesOnStream: 'now is the time' readStream) asArray 
-		= #('now' 'is' 'the' 'time')
-]
-
-{ #category : #'testing-protocol' }
-PPRegexTest >> testMatchesOnStreamCollect [
-	| matcher |
-	matcher := self matcherClass forString: '\w+'.
-	self assert: (matcher 
-		matchesOnStream: 'now is the time' readStream 
-		collect: [ :each | each reverse ]) asArray
-			= #('won' 'si' 'eht' 'emit')
-]
-
-{ #category : #'testing-protocol' }
-PPRegexTest >> testMatchesOnStreamDo [
-	| matcher expected |
-	matcher := self matcherClass forString: '\w+'.
-	expected := #('now' 'is' 'the' 'time') asOrderedCollection.
-	matcher 
-		matchesOnStream: 'now is the time' readStream
-		do: [ :each | self assert: each = expected removeFirst ].
-	self assert: expected isEmpty
-]
-
-{ #category : #'testing-protocol' }
-PPRegexTest >> testMatchesStream [
-	| matcher |
-	matcher := self matcherClass forString: '\w+'.
-	self assert: (matcher matchesStream: 'now' readStream).
-	self deny: (matcher matchesStream: 'now is' readStream)
-]
-
-{ #category : #'testing-protocol' }
 PPRegexTest >> testMatchingRangesIn [
 	| matcher expected |
-	matcher := self matcherClass forString: '\w+'.
+	matcher := self compileRegex: '\w+'.
 	expected := #(1 3 5 6 8 10 12 15) asOrderedCollection.
 	(matcher matchingRangesIn: 'now is the time') do: [ :range |
 		self assert: range first = expected removeFirst.

@@ -11,5 +11,8 @@ PPLazyQuantifierStub >> resolve: aParser [
 		ifFalse: [ 
 			(min = 1 and: [ max = SmallInteger maxVal ])
 				ifTrue: [ parser plusLazy: aParser ]
-				ifFalse: [ self error: 'Invalid quantifier range' ] ]
+				ifFalse: [ 
+					(min = 0 and: [ max = 1])
+						ifTrue: [ parser optional ]
+						ifFalse: [ self error: 'Invalid quantifier range' ] ] ]
 ]
