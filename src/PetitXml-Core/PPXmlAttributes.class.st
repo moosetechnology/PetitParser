@@ -134,6 +134,11 @@ PPXmlAttributes >> grow [
 	values := newValues
 ]
 
+{ #category : #comparing }
+PPXmlAttributes >> hash [
+	^ self keys hash bitXor: self values hash
+]
+
 { #category : #testing }
 PPXmlAttributes >> includesKey: aKey [
 	"Answer whether the receiver has a key equal to aKey."

@@ -33,6 +33,11 @@ PPXmlDocument >> documentType [
 	^ documentType
 ]
 
+{ #category : #comparing }
+PPXmlDocument >> hash [
+	^ self rootElement hash
+]
+
 { #category : #testing }
 PPXmlDocument >> isDocument [
 	^ true

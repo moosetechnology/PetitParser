@@ -33,3 +33,8 @@ PPXmlData >> data [
 PPXmlData >> data: aString [
 	data := aString
 ]
+
+{ #category : #comparing }
+PPXmlData >> hash [
+	^ self data hash
+]

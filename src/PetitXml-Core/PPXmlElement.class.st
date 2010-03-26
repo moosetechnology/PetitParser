@@ -55,6 +55,11 @@ PPXmlElement >> contents [
 	^ contents
 ]
 
+{ #category : #comparing }
+PPXmlElement >> hash [
+	^ self tag hash
+]
+
 { #category : #initialization }
 PPXmlElement >> initializeTag: aString attributes: aXmlAttributes [
 	self setTag: aString; setAttributes: aXmlAttributes
