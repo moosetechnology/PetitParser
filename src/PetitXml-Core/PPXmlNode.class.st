@@ -7,14 +7,33 @@ Class {
 	#instVars : [
 		'parent'
 	],
-	#category : #'PetitXml-Core'
+	#category : #'PetitXml-Nodes'
 }
+
+{ #category : #'instance creation' }
+PPXmlNode class >> new [
+	self error: 'Use a constructor method to instantiate ' , self name
+]
 
 { #category : #'accessing-dom' }
 PPXmlNode >> childNodes [
-	"Answer a collection of child nodes."
+	"Answer the child nodes of the receiver or nil."
 
+	^ self children
+]
+
+{ #category : #accessing }
+PPXmlNode >> children [
+	"Answer the child nodes."
+	
 	^ #()
+]
+
+{ #category : #accessing }
+PPXmlNode >> document [
+	"Answer the document that contains this node, or nil if this node is not currently part of a document."
+	
+	^ parent isNil ifFalse: [ parent document ]
 ]
 
 { #category : #'accessing-dom' }
@@ -25,13 +44,38 @@ PPXmlNode >> firstChild [
 ]
 
 { #category : #testing }
+PPXmlNode >> isAttribute [
+	^ false
+]
+
+{ #category : #testing }
+PPXmlNode >> isComment [
+	^ false
+]
+
+{ #category : #testing }
 PPXmlNode >> isDocument [
+	^ false
+]
+
+{ #category : #testing }
+PPXmlNode >> isElement [
+	^ false
+]
+
+{ #category : #testing }
+PPXmlNode >> isProcessing [
+	^ false
+]
+
+{ #category : #testing }
+PPXmlNode >> isText [
 	^ false
 ]
 
 { #category : #'accessing-dom' }
 PPXmlNode >> lastChild [
-	"Answer the last child of the receiver or nil."
+	"Answer the first child of the receiver or nil."
 
 	^ self childNodes isEmpty ifFalse: [ self childNodes last ]
 ]
@@ -40,11 +84,11 @@ PPXmlNode >> lastChild [
 PPXmlNode >> nextSibling [
 	"Answer the next sibling of the receiver or nil."
 
-	| index parent |
+	| index children |
 	self parentNode isNil ifTrue: [ ^ nil ].
-	parent := self parentNode childNodes.
-	index := parent identityIndexOf: self ifAbsent: [ ^ nil ].
-	^ parent at: index + 1 ifAbsent: [ ^ nil ]
+	children := self parentNode childNodes.
+	index := children identityIndexOf: self ifAbsent: [ ^ nil ].
+	^ children at: index + 1 ifAbsent: [ nil ]
 ]
 
 { #category : #enumerating }
@@ -56,7 +100,7 @@ PPXmlNode >> nodesDo: aBlock [
 
 { #category : #accessing }
 PPXmlNode >> parent [
-	"Answer the parent node of the receiver."
+	"Answer the parent node of the receiver or nil if there is none."
 	
 	^ parent
 ]
@@ -65,7 +109,7 @@ PPXmlNode >> parent [
 PPXmlNode >> parentNode [
 	"Answer the parent node of the receiver or nil."
 
-	^ parent
+	^ self parent
 ]
 
 { #category : #copying }
@@ -78,11 +122,11 @@ PPXmlNode >> postCopy [
 PPXmlNode >> previousSibling [
 	"Answer the previous sibling of the receiver or nil."
 
-	| index parent |
+	| index children |
 	self parentNode isNil ifTrue: [ ^ nil ].
-	parent := self parentNode childNodes.
-	index := parent identityIndexOf: self ifAbsent: [ ^ nil ].
-	^ parent at: index - 1 ifAbsent: [ ^ nil ]
+	children := self parentNode childNodes.
+	index := children identityIndexOf: self ifAbsent: [ ^ nil ].
+	^ children at: index - 1 ifAbsent: [ nil ]
 ]
 
 { #category : #printing }
@@ -96,6 +140,15 @@ PPXmlNode >> printOn: aStream [
 { #category : #printing }
 PPXmlNode >> printXmlOn: aStream [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+PPXmlNode >> root [
+	"Answer the root of the subtree in which this node is found, whether that's a document or an element."
+	
+	^ parent isNil 
+		ifTrue: [ self ]
+		ifFalse: [ parent root ]
 ]
 
 { #category : #initialization }

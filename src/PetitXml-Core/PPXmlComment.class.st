@@ -4,8 +4,13 @@ An XML comment node.
 Class {
 	#name : #PPXmlComment,
 	#superclass : #PPXmlData,
-	#category : #'PetitXml-Core'
+	#category : #'PetitXml-Nodes'
 }
+
+{ #category : #testing }
+PPXmlComment >> isComment [
+	^ true
+]
 
 { #category : #printing }
 PPXmlComment >> printXmlOn: aStream [

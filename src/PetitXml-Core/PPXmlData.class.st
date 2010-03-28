@@ -7,12 +7,12 @@ Class {
 	#instVars : [
 		'data'
 	],
-	#category : #'PetitXml-Core'
+	#category : #'PetitXml-Nodes'
 }
 
 { #category : #'instance creation' }
 PPXmlData class >> data: aString [
-	^ self new data: aString
+	^ self basicNew setData: aString
 ]
 
 { #category : #comparing }
@@ -29,12 +29,12 @@ PPXmlData >> data [
 	^ data
 ]
 
-{ #category : #accessing }
-PPXmlData >> data: aString [
-	data := aString
-]
-
 { #category : #comparing }
 PPXmlData >> hash [
 	^ self data hash
+]
+
+{ #category : #initialization }
+PPXmlData >> setData: aString [
+	data := aString
 ]
