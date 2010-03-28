@@ -54,6 +54,11 @@ PPXmlNode >> isComment [
 ]
 
 { #category : #testing }
+PPXmlNode >> isDoctype [
+	^ false
+]
+
+{ #category : #testing }
 PPXmlNode >> isDocument [
 	^ false
 ]

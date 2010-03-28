@@ -4,22 +4,12 @@ An XML root node.
 Class {
 	#name : #PPXmlDocument,
 	#superclass : #PPXmlParent,
-	#instVars : [
-		'xmlDeclaration',
-		'documentType',
-		'rootElement'
-	],
 	#category : #'PetitXml-Nodes'
 }
 
 { #category : #accessing }
 PPXmlDocument >> document [
 	^ self
-]
-
-{ #category : #accessing }
-PPXmlDocument >> documentType [
-	^ documentType
 ]
 
 { #category : #testing }
@@ -29,10 +19,9 @@ PPXmlDocument >> isDocument [
 
 { #category : #accessing }
 PPXmlDocument >> rootElement [
-	^ rootElement
-]
-
-{ #category : #accessing }
-PPXmlDocument >> xmlDeclaration [
-	^ xmlDeclaration
+	"Answer the root element of the receiving document."
+	
+	^ self children 
+		detect: [ :each | each isElement ]
+		ifNone: [ nil ]
 ]
