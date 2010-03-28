@@ -85,3 +85,8 @@ PPXmlName >> qualifiedName [
 	self printXmlOn: stream.
 	^ stream contents
 ]
+
+{ #category : #accessing }
+PPXmlName >> uri [
+	^ uri
+]

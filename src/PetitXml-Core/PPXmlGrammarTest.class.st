@@ -1,9 +1,6 @@
 Class {
 	#name : #PPXmlGrammarTest,
 	#superclass : #TestCase,
-	#instVars : [
-		'result'
-	],
 	#category : #'PetitXml-Tests'
 }
 

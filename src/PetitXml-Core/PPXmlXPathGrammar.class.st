@@ -303,7 +303,7 @@ PPXmlXPathGrammar >> relativeLocationPath [
 	^ step / (relativeLocationPath , $/ , step) / abbreviatedRelativeLocationPath
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPXmlXPathGrammar >> start [
 	^ locationPath
 ]
