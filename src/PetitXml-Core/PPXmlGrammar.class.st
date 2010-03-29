@@ -82,7 +82,7 @@ PPXmlGrammar >> content [
 PPXmlGrammar >> doctype [
 	"[28]   	doctypedecl	   ::=   	'<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'"
 
-	^ $[ asParser negate star , ($[ asParser , $] asParser negate star , $] asParser) flatten , whitespace optional , $> asParser ==> #second
+	^ '<!DOCTYPE' asParser , whitespace optional , ($[ asParser negate star , $[ asParser , $] asParser negate star , $] asParser) flatten , whitespace optional , $> asParser ==> #third
 ]
 
 { #category : #grammar }
