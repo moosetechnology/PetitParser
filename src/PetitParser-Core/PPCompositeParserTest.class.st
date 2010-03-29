@@ -12,6 +12,11 @@ PPCompositeParserTest class >> isAbstract [
 	^ self name = #PPCompositeParserTest
 ]
 
+{ #category : #accessing }
+PPCompositeParserTest class >> resources [
+	^ Array with: PPParserResource
+]
+
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |
@@ -31,7 +36,7 @@ PPCompositeParserTest >> parserClass [
 
 { #category : #accessing }
 PPCompositeParserTest >> parserInstance [
-	^ self parserClass new
+	^ PPParserResource current parserAt: self parserClass
 ]
 
 { #category : #running }
