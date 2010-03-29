@@ -9,9 +9,9 @@ PPSmalltalkParserTests >> assert: aNode format: aString [
 	aNode isCollection 
 		ifFalse: [ ^ self assert: (Array with: aNode) format: (Array with: aString) ].
 	self assert: aNode size = aString size.
-	aNode 
+	aNode
 		with: aString
-		do: [ :node :string | self assert: node formattedCode withBlanksTrimmed = string ]
+		do: [ :node :string | self assert: (RBFormatter new format: node) withBlanksTrimmed = string ]
 ]
 
 { #category : #accessing }

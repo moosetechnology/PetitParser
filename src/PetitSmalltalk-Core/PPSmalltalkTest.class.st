@@ -19,28 +19,27 @@ PPSmalltalkTest class >> packageNamesUnderTest [
 
 { #category : #accessing }
 PPSmalltalkTest class >> resources [
-	^ Array with: PPSmalltalkResource
+	^ Array with: PPParserResource
 ]
 
 { #category : #parsing }
 PPSmalltalkTest >> parse: aString rule: aSymbol [ 
 	| production |
-	production := self parser.
-	aSymbol = #start 
-		ifFalse: [ production := production instVarNamed: aSymbol ].
-	result := production end
-		parse: aString asPetitStream.
-	self 
+	production := self parserInstance
+		productionAt: aSymbol.
+	result := production end 
+		parse: aString.
+	self
 		deny: result isPetitFailure
 		description: 'Unable to parse ' , aString printString
 ]
 
 { #category : #accessing }
-PPSmalltalkTest >> parser [
-	^ PPSmalltalkResource current parserAt: self parserClass
+PPSmalltalkTest >> parserClass [
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
-PPSmalltalkTest >> parserClass [
-	self subclassResponsibility
+PPSmalltalkTest >> parserInstance [
+	^ PPParserResource current parserAt: self parserClass
 ]
