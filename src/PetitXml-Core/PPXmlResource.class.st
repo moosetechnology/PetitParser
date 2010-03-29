@@ -1,9 +1,6 @@
 Class {
 	#name : #PPXmlResource,
-	#superclass : #TestResource,
-	#instVars : [
-		'parsers'
-	],
+	#superclass : #PPParserResource,
 	#category : #'PetitXml-Tests'
 }
 
@@ -483,13 +480,6 @@ PPXmlResource >> notationXsd [
 </schema>'
 ]
 
-{ #category : #accessing }
-PPXmlResource >> parserAt: aClass [ 
-	^ parsers 
-		at: aClass name
-		ifAbsentPut: [ aClass new ]
-]
-
 { #category : #'accessing-xsd' }
 PPXmlResource >> restrictionXsd [
 	<xml: #xsdXsd>
@@ -522,12 +512,6 @@ PPXmlResource >> restrictionXsd [
   </complexType>
 
 </schema>'
-]
-
-{ #category : #running }
-PPXmlResource >> setUp [
-	super setUp.
-	parsers := Dictionary new
 ]
 
 { #category : #'accessing-xml' }

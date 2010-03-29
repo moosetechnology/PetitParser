@@ -11,7 +11,7 @@ PPXmlGrammarTest class >> packageNamesUnderTest [
 
 { #category : #accessing }
 PPXmlGrammarTest class >> resources [
-	^ Array with: PPXmlGrammarResource
+	^ Array with: PPXmlResource
 ]
 
 { #category : #utilities }
@@ -152,7 +152,7 @@ PPXmlGrammarTest >> parserClass [
 
 { #category : #accessing }
 PPXmlGrammarTest >> resource [
-	^ PPXmlGrammarResource current
+	^ PPXmlResource current
 ]
 
 { #category : #testing }
