@@ -15,6 +15,13 @@ PPXmlNode class >> new [
 	self error: 'Use a constructor method to instantiate ' , self name
 ]
 
+{ #category : #accessing }
+PPXmlNode >> attributes [
+	"Answer the attribute nodes of the receiver."
+	
+	^ #()
+]
+
 { #category : #'accessing-dom' }
 PPXmlNode >> childNodes [
 	"Answer the child nodes of the receiver or nil."
@@ -24,7 +31,7 @@ PPXmlNode >> childNodes [
 
 { #category : #accessing }
 PPXmlNode >> children [
-	"Answer the child nodes."
+	"Answer the child nodes of the receiver."
 	
 	^ #()
 ]
@@ -98,8 +105,12 @@ PPXmlNode >> nextSibling [
 
 { #category : #enumerating }
 PPXmlNode >> nodesDo: aBlock [
+	"Recursively enumerate over the receiver, all arguments and children."
+
 	aBlock value: self.
-	self childNodes
+	self attributes
+		do: [ :each | each nodesDo: aBlock ].
+	self children
 		do: [ :each | each nodesDo: aBlock ]
 ]
 

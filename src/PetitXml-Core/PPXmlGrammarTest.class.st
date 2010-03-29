@@ -15,38 +15,45 @@ PPXmlGrammarTest class >> resources [
 ]
 
 { #category : #utilities }
-PPXmlGrammarTest >> assertParseInvariant: aString [
-	"Assert that aString can be parsed, serialized and parsed again to the same tree."
-
-	| tree string |
-	tree := self parse: aString.
-	self
-		deny: tree isPetitFailure
-		description: tree printString.
-	self assertTreeInvariant: tree.
-	string := String
-		streamContents: [ :out | tree printXmlOn: out ].
-	self
-		assert: (self parse: string) = tree
-		description: 'Parse invariant not satisifed'
+PPXmlGrammarTest >> assertCopyInvariant: aNode [
+	"Assert that the copy is equivalent to the original."
+	
+	| copy |
+	copy := aNode copy.
+	self deny: aNode == copy.
+	self assert: aNode = copy.
+	self assert: copy = aNode
 ]
 
 { #category : #utilities }
-PPXmlGrammarTest >> assertTreeInvariant: anXmlNode [
+PPXmlGrammarTest >> assertEquivalentInvariant: aNode [
+	"Assert that each node is equivalent to itself."
+	
+	aNode nodesDo: [ :node | 
+		self assert: node = node.
+		self assert: node hash = node hash ]
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertInvariants: aDocumentNode [
 	"Assert that anXmlNode is properly setup.."
+	
+	self assertCopyInvariant: aDocumentNode.
+	self assertEquivalentInvariant: aDocumentNode.
+	self assertRootInvariant: aDocumentNode.
+	self assertParentInvariant: aDocumentNode.
+	self assertNavigationInvariant: aDocumentNode.
+	self assertTypeInvariant: aDocumentNode
+]
 
-	anXmlNode nodesDo: [ :node |
-		| current children |
-		self assert: node root = anXmlNode.
-		anXmlNode isDocument
-			ifTrue: [ self assert: node document = anXmlNode ].
-			
-		node isDocument
-			ifTrue: [ self assert: node parentNode isNil ]
-			ifFalse: [ self assert: node parentNode notNil ].
-		node childNodes 
-			do: [ :child | self assert: child parentNode == node ].
+{ #category : #utilities }
+PPXmlGrammarTest >> assertNavigationInvariant: aXmlNode [
+	"Asswer that the firstChild, lastChild, previousSibling, nextSibling are properly setup."
 
+	| current children |
+	aXmlNode nodesDo: [ :node |
+
+		" forward "
 		current := node firstChild.
 		children := OrderedCollection withAll: node children.
 		[ current isNil ] whileFalse: [
@@ -55,6 +62,7 @@ PPXmlGrammarTest >> assertTreeInvariant: anXmlNode [
 			current := current nextSibling ].
 		self assert: children isEmpty.
 		
+		" backward "
 		current := node lastChild.
 		children := OrderedCollection withAll: node childNodes.
 		[ current isNil ] whileFalse: [
@@ -62,6 +70,60 @@ PPXmlGrammarTest >> assertTreeInvariant: anXmlNode [
 			self assert: children removeLast == current.
 			current := current previousSibling ].
 		self assert: children isEmpty ]
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertParentInvariant: anXmlNode [
+	"Assert that the children-parent relationship is properly set."
+	
+	anXmlNode nodesDo: [ :node |
+		node children 
+			do: [ :child | self assert: child parent == node ].
+		node isDocument 
+			ifTrue: [ self assert: node parent isNil ].
+		node isElement ifTrue: [ 
+			node attributes
+				do: [ :child | self assert: child parent == node ] ] ]
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertParseInvariant: aString [
+	"Assert that aString can be parsed, serialized and parsed again to the same tree."
+
+	| tree string |
+	tree := self parse: aString.
+	self
+		deny: tree isPetitFailure
+		description: tree printString.
+	self assertInvariants: tree.
+	string := String
+		streamContents: [ :out | tree printXmlOn: out ].
+	self
+		assert: (self parse: string) = tree
+		description: 'Parse invariant not satisifed'
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertRootInvariant: aDocumentNode [
+	"Assert that anXmlNode is the root of the tree."
+	
+	aDocumentNode nodesDo: [ :node |
+		self assert: node root == aDocumentNode.
+		aDocumentNode isDocument
+			ifTrue: [ self assert: node document == aDocumentNode ] ]
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertTypeInvariant: aNode [
+	"Assert that each node is one of the standard types."
+	
+	| types |
+	aNode nodesDo: [ :node |
+		types := Set new.
+		#(isAttribute isComment isDoctype isDocument isElement isProcessing isText) do: [ :each |
+			(node perform: each)
+				ifTrue: [ types add: each ] ].
+		self assert: types size = 1 ]
 ]
 
 { #category : #parsing }

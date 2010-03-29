@@ -143,13 +143,6 @@ PPXmlGrammar >> nameToken [
 	^ (nameStartChar , nameChar star) flatten
 ]
 
-{ #category : #token }
-PPXmlGrammar >> nameTokens [
-	"[6]   	Names	   ::=   	Name (#x20 Name)*"
-
-	^ (nameToken separatedBy: $ asParser) flatten
-]
-
 { #category : #grammar }
 PPXmlGrammar >> processing [
 	"[16]   	PI	   ::=   	'<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'

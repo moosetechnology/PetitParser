@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #testing }
-PPXmlDoctype >> isComment [
-	^ true
-]
-
-{ #category : #testing }
 PPXmlDoctype >> isDoctype [
 	^ true
 ]
