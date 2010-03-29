@@ -186,13 +186,13 @@ PPBrowser >> browseTestOn: aBrowser [
 			display: [ output ].
 		table table 
 			title: 'Count';
-			format: [ :each | each first displayName ];
+			column: 'Parser' evaluated: [ :each | each first displayName ];
 			column: 'Count' evaluated: [ :each | each second printString ];
 			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 			display: [ stream asFrequencyTable ].
 		table table 
 			title: 'Time';
-			format: [ :each | each first displayName ];
+			column: 'Parser' evaluated: [ :each | each first displayName ];
 			column: 'Time (ms)' evaluated: [ :each | each second printString ];
 			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 			display: [ stream asTimingTable ].
