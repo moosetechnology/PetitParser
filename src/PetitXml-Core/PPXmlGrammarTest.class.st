@@ -95,12 +95,12 @@ PPXmlGrammarTest >> assertParseInvariant: aString [
 	self
 		deny: tree isPetitFailure
 		description: tree printString.
-	self assertInvariants: tree.
 	string := String
 		streamContents: [ :out | tree printXmlOn: out ].
 	self
 		assert: (self parse: string) = tree
-		description: 'Parse invariant not satisifed'
+		description: 'Parse invariant not satisifed'.
+	self assertInvariants: tree
 ]
 
 { #category : #utilities }
