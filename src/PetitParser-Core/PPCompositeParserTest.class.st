@@ -20,7 +20,7 @@ PPCompositeParserTest class >> resources [
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |
-	result := parser parse: aCollection asPetitStream.
+	result := parser parse: aCollection.
 	result isPetitFailure
 		ifTrue: [ self error: result printString ].
 	self

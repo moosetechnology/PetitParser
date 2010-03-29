@@ -134,7 +134,7 @@ PPParserTest >> testFailing [
 	self assert: parser fail: 'a'.
 	self assert: parser fail: 'aa'.
 	
-	result := parser parse: 'a' asPetitStream.
+	result := parser parse: 'a'.
 	self assert: result reason = 'Plonk'.
 	self assert: result printString = 'Plonk at 0'
 ]

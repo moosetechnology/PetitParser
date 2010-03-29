@@ -11,7 +11,7 @@ PPTokenTest >> identifier [
 
 { #category : #utilities }
 PPTokenTest >> parse: aString using: aParser [
-	^ aParser parse: aString asPetitStream
+	^ aParser parse: aString
 ]
 
 { #category : #testing }
