@@ -17,9 +17,7 @@ Class {
 		'attribute',
 		'doctype',
 		'attributeValue',
-		'qualified',
-		'elementEmpty',
-		'elementContent'
+		'qualified'
 	],
 	#category : #'PetitXml-Core'
 }
@@ -98,21 +96,13 @@ PPXmlGrammar >> document [
 PPXmlGrammar >> element [
 	"[39]   	element	   ::=   	 EmptyElemTag | STag content ETag"
 	
-	^ elementEmpty / elementContent
-]
-
-{ #category : #grammar }
-PPXmlGrammar >> elementContent [
-	^ $< asParser , qualified , attributes , whitespace optional , $> asParser , content , [ :stream | stream position ] asParser , '</' asParser , qualified , whitespace optional , $> asParser ==> [ :nodes |
-		nodes second = nodes ninth
-			ifTrue: [ Array with: nodes second with: nodes third with: nodes sixth ]
-			ifFalse: [ PPFailure reason: 'Expected </' , nodes second qualifiedName , '> but got </' , nodes ninth qualifiedName , '>' at: nodes seventh ] ]
-]
-
-{ #category : #grammar }
-PPXmlGrammar >> elementEmpty [
-	^ $< asParser , qualified , attributes , whitespace optional , '/>' asParser
-		==> [ :nodes | Array with: nodes second with: nodes third with: #() ]
+	^ $< asParser , qualified , attributes , whitespace optional , ('/>' asParser / ($> asParser , content , [ :stream | stream position ] asParser , '</' asParser , qualified , whitespace optional , $> asParser)) ==> [ :nodes | 
+		nodes fifth = '/>'
+			ifTrue: [ Array with: nodes second with: nodes third with: #() ]
+			ifFalse: [
+				nodes second = nodes fifth fifth
+					ifTrue: [ Array with: nodes second with: nodes third with: nodes fifth second ]
+					ifFalse: [ PPFailure reason: 'Expected </' , nodes second qualifiedName , '>' ] ] ]
 ]
 
 { #category : #'grammar-character' }
