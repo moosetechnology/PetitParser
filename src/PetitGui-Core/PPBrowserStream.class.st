@@ -22,13 +22,15 @@ PPBrowserStream >> asFrequencyTable [
 
 { #category : #converting }
 PPBrowserStream >> asPositionMorph [
-	| canvas stream morph |
-	canvas := FormCanvas extent: self size + 1 @ self positions size.
+	| width height canvas stream morph |
+	width := self size + 1 min: 2048.
+	height := self positions size min: 2048.
+	canvas := FormCanvas extent: width @ height.
 	self contents keysAndValuesDo: [ :index :char |
 		char isSeparator 
-			ifFalse: [ canvas line: index @ 1 to: index @ canvas form height color: Color paleBlue ] ].
-	self positions keysAndValuesDo: [ :index :position |
-		canvas form colorAt: position @ index put: Color black ].
+			ifFalse: [ canvas line: index @ 1 to: index @ height color: Color paleBlue ] ].
+	1 to: height do: [ :index |
+		canvas form colorAt: (self positions at: index) @ index put: Color black ].
 	morph := canvas form asMorph.
 	morph 
 		on: #mouseDown
