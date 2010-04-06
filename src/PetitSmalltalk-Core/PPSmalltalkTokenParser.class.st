@@ -3,41 +3,42 @@ A parser that knows how to skip comments and whitespace in Smalltalk and how to 
 "
 Class {
 	#name : #PPSmalltalkTokenParser,
-	#superclass : #PPTokenParser,
-	#instVars : [
-		'comments'
-	],
+	#superclass : #PPDelegateParser,
 	#category : #'PetitSmalltalk-Core'
 }
 
-{ #category : #hooks }
-PPSmalltalkTokenParser >> consumeSpaces: aStream [
-	| start |
-	[ super consumeSpaces: aStream.
-	aStream peek = $" ] whileTrue: [ 
+{ #category : #parsing }
+PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
+	| start comments |
+	comments := anArray.
+	[ [ aStream atEnd not and: [ aStream peek isSeparator ] ]
+		whileTrue: [ aStream next ].
+	  aStream peek = $" ] whileTrue: [ 
 		aStream next.
 		start := aStream position.
 		[ aStream atEnd not and: [ aStream next = $" ] ] whileFalse.
-		comments := comments copyWith: (start to: aStream position) ]
+		comments := comments copyWith: (start to: aStream position) ].
+	^ comments
 ]
 
-{ #category : #hooks }
-PPSmalltalkTokenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
-	| token |
-	token := super create: aCollection start: aStartInteger stop: aStopInteger.
-	comments isEmpty ifFalse: [
-		token comments: comments.
-		comments := #() ].
-	^ token
-]
-
-{ #category : #initialization }
-PPSmalltalkTokenParser >> initialize [
-	super initialize.
-	comments := #()
-]
-
-{ #category : #accessing }
-PPSmalltalkTokenParser >> tokenClass [
+{ #category : #parsing }
+PPSmalltalkTokenParser >> parseOn: aStream [
+	| begin start comments element stop |
+	begin := aStream position.
+	comments := self 
+		parseComments: #() 
+		on: aStream.
+	start := aStream position.
+	element := super parseOn: aStream.
+	element isPetitFailure ifTrue: [
+		aStream position: begin.
+		^ element ].
+	stop := aStream position.
+	comments := self
+		parseComments: comments
+		on: aStream.
 	^ PPSmalltalkToken
+		on: aStream collection
+		start: start + 1 stop: stop
+		comments: comments
 ]

@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitSmalltalk-Core'
 }
 
+{ #category : #'instance creation' }
+PPSmalltalkToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInteger comments: anArray [
+	^ (self on: aSequenzeableCollection start: aStartInteger stop: aStopInteger) comments: anArray
+]
+
 { #category : #accessing }
 PPSmalltalkToken >> comments [
 	^ comments
