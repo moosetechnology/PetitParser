@@ -1,34 +1,37 @@
 "
-A parser that answers a token of the range my delegate parses. The receiver silently consumes spaces before and after the actual token.
+A parser that answers a token of the range my delegate parses.
 "
 Class {
 	#name : #PPTokenParser,
 	#superclass : #PPFlattenParser,
+	#instVars : [
+		'tokenClass'
+	],
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #hooks }
-PPTokenParser >> consumeSpaces: aStream [
-	[ aStream atEnd not and: [ aStream peek isSeparator ] ]
-		whileTrue: [ aStream next ]
-]
-
-{ #category : #hooks }
+{ #category : #private }
 PPTokenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 	^ self tokenClass on: aCollection start: aStartInteger stop: aStopInteger
 ]
 
-{ #category : #parsing }
-PPTokenParser >> parseAfterOn: aStream [
-	self consumeSpaces: aStream
+{ #category : #private }
+PPTokenParser >> defaultTokenClass [
+	^ PPToken
 ]
 
-{ #category : #parsing }
-PPTokenParser >> parseBeforeOn: aStream [
-	self consumeSpaces: aStream
+{ #category : #initialization }
+PPTokenParser >> initialize [
+	tokenClass := self defaultTokenClass
+	
 ]
 
 { #category : #accessing }
 PPTokenParser >> tokenClass [
-	^ PPToken
+	^ tokenClass
+]
+
+{ #category : #accessing }
+PPTokenParser >> tokenClass: aTokenClass [
+	tokenClass := aTokenClass
 ]

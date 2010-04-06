@@ -73,28 +73,23 @@ PPComposedTest >> testIdentifier [
 { #category : #testing }
 PPComposedTest >> testIfThenElse [
 	"S ::= if C then S else S | if C then S | X"
-	
+
 	| start if then else cond expr parser |
 	start := PPUnresolvedParser new.
-	if := 'if' asParser token.
-	then := 'then' asParser token.
-	else := 'else' asParser token.
-	cond := 'C' asParser token.
-	expr := 'X' asParser token.
-	start def: (if , cond , then , start , else , start)
-		/ (if , cond , then , start)
-		/ (expr).
+	if := 'if' asParser token trim.
+	then := 'then' asParser token trim.
+	else := 'else' asParser token trim.
+	cond := 'C' asParser token trim.
+	expr := 'X' asParser token trim.
+	start def: (if , cond , then , start , else , start) / (if , cond , then , start) / expr.
 	parser := start end.
-	
 	self assert: parser parse: 'X'.
 	self assert: parser parse: 'if C then X'.
 	self assert: parser parse: 'if C then X else X'.
-	
 	self assert: parser parse: 'if C then if C then X'.
 	self assert: parser parse: 'if C then if C then X else if C then X'.
 	self assert: parser parse: 'if C then if C then X else X else if C then X'.
 	self assert: parser parse: 'if C then if C then X else X else if C then X else X'.
-	
 	self assert: parser fail: 'if C'.
 	self assert: parser fail: 'if C else X'.
 	self assert: parser fail: 'if C then if C'
@@ -121,9 +116,9 @@ PPComposedTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	
 	| number list parser |
-	number := #digit asParser plus token 
+	number := #digit asParser plus token trim
 		==> [ :node | node value asInteger ].
-	list := (number separatedBy: $, asParser token)
+	list := (number separatedBy: $, asParser token trim)
 		==> [ :node | node select: [ :each | each isInteger ] ].
 	parser := list end.
 
@@ -373,9 +368,9 @@ PPComposedTest >> testReturn [
 		==> [ :nodes | { #return. (nodes at: 4) value } ].
 
 	self assert: return parse: '^1' to: #(return '1').
-	self assert: return parse: ' ^12' to: #(return '12').
-	self assert: return parse: '^123 ' to: #(return '123').
-	self assert: return parse: '^ 1234' to: #(return '1234').
+	self assert: return parse: '^12' to: #(return '12').
+	self assert: return parse: '^ 123' to: #(return '123').
+	self assert: return parse: '^  1234' to: #(return '1234').
 	
 	self assert: return fail: '1'.
 	self assert: return fail: '^'

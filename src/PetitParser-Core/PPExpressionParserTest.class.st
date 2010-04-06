@@ -4,29 +4,34 @@ Class {
 	#category : #'PetitParser-Tests'
 }
 
+{ #category : #testing }
+PPExpressionParserTest class >> shouldInheritSelectors [
+	^ true
+]
+
 { #category : #accessing }
 PPExpressionParserTest >> parserInstance [
 	| expression parens number |
 	expression := PPExpressionParser new.
-	parens := $( asParser token , expression , $) asParser token 
+	parens := $( asParser token trim , expression , $) asParser token trim
 		==> [ :nodes | nodes second ].
-	number := (#digit asParser plus , ($. asParser , #digit asParser plus) optional) token 
+	number := (#digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim
 		==> [ :token | token value asNumber ].
 	expression term: parens / number.
 	expression
 		group: [ :g |
-			g prefix: $- asParser token do: [ :op :a | a negated ] ];
+			g prefix: $- asParser token trim do: [ :op :a | a negated ] ];
 		group: [ :g |
-			g postfix: '++' asParser token do: [ :a :op | a + 1 ].
-			g postfix: '--' asParser token do: [ :a :op | a - 1 ] ];
+			g postfix: '++' asParser token trim do: [ :a :op | a + 1 ].
+			g postfix: '--' asParser token trim do: [ :a :op | a - 1 ] ];
 		group: [ :g |
-			g right: $^ asParser token do: [ :a :op :b | a raisedTo: b ] ];
+			g right: $^ asParser token trim do: [ :a :op :b | a raisedTo: b ] ];
 		group: [ :g |
-			g left: $* asParser token do: [ :a :op :b | a * b ].
-			g left: $/ asParser token do: [ :a :op :b | a / b ] ];
+			g left: $* asParser token trim do: [ :a :op :b | a * b ].
+			g left: $/ asParser token trim do: [ :a :op :b | a / b ] ];
 		group: [ :g |
-			g left: $+ asParser token do: [ :a :op :b | a + b ].
-			g left: $- asParser token do: [ :a :op :b | a - b ] ].
+			g left: $+ asParser token trim do: [ :a :op :b | a + b ].
+			g left: $- asParser token trim do: [ :a :op :b | a - b ] ].
 	^ expression end
 ]
 

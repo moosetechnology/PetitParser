@@ -99,7 +99,7 @@ PPParser >> end [
 	^ PPEndOfInputParser on: self
 ]
 
-{ #category : #operations }
+{ #category : #'operations-mapping' }
 PPParser >> flatten [
 	"Answer a new parser that flattens the underlying collection."
 	
@@ -353,11 +353,25 @@ PPParser >> starLazy: aParser [
 	^ parser ==> [ :rest | rest asArray ]
 ]
 
-{ #category : #operations }
+{ #category : #'operations-mapping' }
 PPParser >> token [
-	"Answer a new parser that transforms the input to a token and consumes white spaces."
+	"Answer a new parser that transforms the input to a token."
 	
 	^ self currentTokenParser on: self
+]
+
+{ #category : #'operations-mapping' }
+PPParser >> token: aTokenClass [
+	"Answer a new parser that transforms the input to a token of class aTokenClass."
+	
+	^ self token tokenClass: aTokenClass
+]
+
+{ #category : #'operations-mapping' }
+PPParser >> trim [
+	"Answer a new parser that consumes spaces before and after the receiving parser."
+	
+	^ PPTrimmingParser on: self
 ]
 
 { #category : #operations }
