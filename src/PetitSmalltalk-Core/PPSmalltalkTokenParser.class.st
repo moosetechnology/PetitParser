@@ -3,9 +3,14 @@ A parser that knows how to skip comments and whitespace in Smalltalk and how to 
 "
 Class {
 	#name : #PPSmalltalkTokenParser,
-	#superclass : #PPDelegateParser,
+	#superclass : #PPTokenParser,
 	#category : #'PetitSmalltalk-Core'
 }
+
+{ #category : #private }
+PPSmalltalkTokenParser >> defaultTokenClass [
+	^ PPSmalltalkToken
+]
 
 { #category : #parsing }
 PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
@@ -13,7 +18,7 @@ PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
 	comments := anArray.
 	[ [ aStream atEnd not and: [ aStream peek isSeparator ] ]
 		whileTrue: [ aStream next ].
-	  aStream peek = $" ] whileTrue: [ 
+	  aStream peek = $" ] whileTrue: [
 		aStream next.
 		start := aStream position.
 		[ aStream atEnd not and: [ aStream next = $" ] ] whileFalse.
@@ -23,22 +28,17 @@ PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
 
 { #category : #parsing }
 PPSmalltalkTokenParser >> parseOn: aStream [
-	| begin start comments element stop |
-	begin := aStream position.
-	comments := self 
-		parseComments: #() 
-		on: aStream.
+	| start comments token |
 	start := aStream position.
-	element := super parseOn: aStream.
-	element isPetitFailure ifTrue: [
-		aStream position: begin.
-		^ element ].
-	stop := aStream position.
+	comments := self
+		parseComments: #()
+		on: aStream.
+	token := super parseOn: aStream.
+	token isPetitFailure ifTrue: [
+		aStream position: start.
+		^ token ].
 	comments := self
 		parseComments: comments
 		on: aStream.
-	^ PPSmalltalkToken
-		on: aStream collection
-		start: start + 1 stop: stop
-		comments: comments
+	^ token comments: comments
 ]
