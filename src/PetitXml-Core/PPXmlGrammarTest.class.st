@@ -107,6 +107,7 @@ PPXmlGrammarTest >> assertParseInvariant: aString [
 PPXmlGrammarTest >> assertRootInvariant: aDocumentNode [
 	"Assert that anXmlNode is the root of the tree."
 	
+	self assert: (aDocumentNode childNodes includes: aDocumentNode rootElement).
 	aDocumentNode nodesDo: [ :node |
 		self assert: node root == aDocumentNode.
 		aDocumentNode isDocument
