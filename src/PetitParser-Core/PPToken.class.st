@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+PPToken class >> new [
+	self error: 'Token can only be created using a dedicated constructor.'
+]
+
+{ #category : #'instance creation' }
 PPToken class >> on: aSequenzeableCollection [
 	^ self on: aSequenzeableCollection start: 1 stop: aSequenzeableCollection size
 ]
