@@ -35,6 +35,12 @@ PPMemoizedParser >> parseOn: aStream [
 	^ memento result
 ]
 
+{ #category : #copying }
+PPMemoizedParser >> postCopy [
+	super postCopy.
+	stream := buffer := nil
+]
+
 { #category : #private }
 PPMemoizedParser >> reset: aStream [
 	stream := aStream.

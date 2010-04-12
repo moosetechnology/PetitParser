@@ -40,3 +40,9 @@ PPListParser >> initialize [
 PPListParser >> initializeWithAll: anArray [
 	parsers := anArray
 ]
+
+{ #category : #copying }
+PPListParser >> postCopy [
+	super postCopy.
+	parsers := parsers copy
+]
