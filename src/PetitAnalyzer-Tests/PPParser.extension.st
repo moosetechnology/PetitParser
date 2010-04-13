@@ -1,45 +1,45 @@
 Extension { #name : #PPParser }
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allLeafNodes [
+PPParser >> allLeafParsers [
 	"Answer all the leaf nodes of the receiver."
 
 	| result |
 	result := OrderedCollection new.
-	self allLeafNodesDo: [ :parser | result addLast: parser ].
+	self allLeafParsersDo: [ :parser | result addLast: parser ].
 	^ result
 ]
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allLeafNodesDo: aBlock [
+PPParser >> allLeafParsersDo: aBlock [
 	"Iterate over all the leaf nodes of the receiver."
 
 	self 
-		allNodesDo: [ :each | 
+		allParsersDo: [ :each | 
 			each isLeaf
 				ifTrue: [ aBlock value: each ] ]
 		seen: IdentitySet new
 ]
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allNodes [
+PPParser >> allParsers [
 	"Answer all the parse nodes of the receiver."
 
 	| result |
 	result := OrderedCollection new.
-	self allNodesDo: [ :parser | result addLast: parser ].
+	self allParsersDo: [ :parser | result addLast: parser ].
 	^ result
 ]
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allNodesDo: aBlock [
+PPParser >> allParsersDo: aBlock [
 	"Iterate over all the parse nodes of the receiver."
 
-	self allNodesDo: aBlock seen: IdentitySet new
+	self allParsersDo: aBlock seen: IdentitySet new
 ]
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allNodesDo: aBlock seen: aSet [
+PPParser >> allParsersDo: aBlock seen: aSet [
 	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
 
 	(aSet includes: self)
@@ -47,7 +47,7 @@ PPParser >> allNodesDo: aBlock seen: aSet [
 	aSet add: self.
 	aBlock value: self.
 	self children
-		do: [ :each | each allNodesDo: aBlock seen: aSet ]
+		do: [ :each | each allParsersDo: aBlock seen: aSet ]
 ]
 
 { #category : #'*petitanalyzer-querying' }
@@ -95,7 +95,7 @@ PPParser >> firstSets [
 	
 	| firstSets |
 	firstSets := IdentityDictionary new.
-	self allNodesDo: [ :each | 
+	self allParsersDo: [ :each | 
 		firstSets at: each put: (each isLeaf
 			ifTrue: [ IdentitySet with: each ]
 			ifFalse: [ IdentitySet new ]) ].
@@ -131,7 +131,7 @@ PPParser >> followSets [
 	current := previous := 0.
 	firstSets := self firstSets.
 	followSets := IdentityDictionary new.
-	self allNodesDo: [ :each | followSets at: each put: IdentitySet new ].
+	self allParsersDo: [ :each | followSets at: each put: IdentitySet new ].
 	(followSets at: self) add: nil asParser.
 	[	followSets keysAndValuesDo: [ :parser :follow |
 			parser 
@@ -166,4 +166,31 @@ PPParser >> isNullable [
 	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
+]
+
+{ #category : #'*petitanalyzer-transforming' }
+PPParser >> replace: aParser with: anotherParser [
+	"Replace the references of the receiver pointing to aParser with anotherParser."
+]
+
+{ #category : #'*petitanalyzer-transforming' }
+PPParser >> transform: aBlock [
+	"Transfrom all nodes reachable from the receiver using aBlock."
+
+	| mapping root |
+	mapping := IdentityDictionary new.
+	self allParsersDo: [ :each |
+		mapping
+			at: each
+			put: (aBlock value: each copy) ].
+	root := mapping at: self.
+	[	| changed |
+		changed := false.
+		root allParsersDo: [ :each |
+			each children do: [ :old |
+				mapping at: old ifPresent: [ :new |
+					each replace: old with: new.
+					changed := true ] ] ].
+		changed ] whileTrue.
+	^ root
 ]

@@ -112,27 +112,27 @@ PPAnalyzerTest >> grammarE [
 ]
 
 { #category : #testing }
-PPAnalyzerTest >> testAllLeafNodes [
+PPAnalyzerTest >> testAllLeafParsers [
 	| p1 p2 p3 |
 	p1 := #lowercase asParser.
 	p2 := p1 ==> #asUppercase.
 	p3 := PPUnresolvedParser new.
 	p3 def: p2 / p3.
-	self assert: p1 allLeafNodes size = 1.
-	self assert: p2 allLeafNodes size = 1.
-	self assert: p3 allLeafNodes size = 1
+	self assert: p1 allLeafParsers size = 1.
+	self assert: p2 allLeafParsers size = 1.
+	self assert: p3 allLeafParsers size = 1
 ]
 
 { #category : #testing }
-PPAnalyzerTest >> testAllNodes [
+PPAnalyzerTest >> testAllParsers [
 	| p1 p2 p3 |
 	p1 := #lowercase asParser.
 	p2 := p1 ==> #asUppercase.
 	p3 := PPUnresolvedParser new.
 	p3 def: p2 / p3.
-	self assert: p1 allNodes size = 1.
-	self assert: p2 allNodes size = 2.
-	self assert: p3 allNodes size = 3
+	self assert: p1 allParsers size = 1.
+	self assert: p2 allParsers size = 2.
+	self assert: p3 allParsers size = 3
 ]
 
 { #category : #'testing-cycleset' }
@@ -218,6 +218,24 @@ PPAnalyzerTest >> testCycleSetInSequence [
 	parser def: $a asParser , parser.
 	cycleSet := parser cycleSet.
 	self assert: cycleSet isEmpty
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testDelegateReplace [
+	| one other delegate |
+	one := $a asParser.
+	other := $b asParser.
+	delegate := one token.
+	self assert: delegate children first == one.
+	self deny: delegate children first == other.
+	
+	delegate replace: other with: one.
+	self assert: delegate children first == one.
+	self deny: delegate children first == other.
+	
+	delegate replace: one with: other.
+	self deny: delegate children first == one.
+	self assert: delegate children first == other
 ]
 
 { #category : #'testing-firstset' }
@@ -371,4 +389,106 @@ PPAnalyzerTest >> testIsNullable [
 	self deny: PPSequenceParser new isNullable.
 	self deny: PPAndParser new isNullable.
 	self deny: PPTokenParser new isNullable
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testListReplace [
+	| one other another list |
+	one := $a asParser.
+	other := $b asParser.
+	another := $c asParser.
+	list := one , another , one.
+	self assert: list children first == one.
+	self assert: list children second == another.
+	self assert: list children last == one.
+	
+	list replace: other with: one.
+	self assert: list children first == one.
+	self assert: list children second == another.
+	self assert: list children last == one.
+	
+	list replace: one with: other.
+	self assert: list children first == other.
+	self assert: list children second == another.
+	self assert: list children last == other.
+	
+	list replace: another with: one.
+	self assert: list children first == other.
+	self assert: list children second == one.
+	self assert: list children last == other
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformIdentityGrammarC [
+	| orig tran |
+	orig := self grammarC.
+	tran := orig transform: [ :each | each ].
+	self deny: orig == tran.
+	self deny: orig children first == tran children first.
+	self deny: orig children first children first == tran children first children first.
+	self deny: orig children first children last == tran children first children last.
+	self deny: orig children last == tran children last.
+	
+	self assert: orig class == PPChoiceParser.
+	self assert: orig children first class == PPSequenceParser.
+	self assert: orig children first children first == orig.
+	self assert: orig children first children last == orig.
+	self assert: orig children last class == PPLiteralObjectParser.
+
+	self assert: tran class == PPChoiceParser.
+	self assert: tran children first class == PPSequenceParser.
+	self assert: tran children first children first == tran.
+	self assert: tran children first children last == tran.
+	self assert: tran children last class == PPLiteralObjectParser
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformIdentityGrammarE [
+	| orig tran |
+	orig := self grammarE.
+	tran := orig transform: [ :each | each ].
+	self deny: orig == tran.
+	self deny: orig children first = tran children first.
+	
+	self assert: orig class == PPDelegateParser.
+	self assert: orig children first == orig.
+	
+	self assert: tran class == PPDelegateParser.
+	self assert: tran children first == tran
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformWrapGrammarC [
+	| orig tran |
+	orig := self grammarC.
+	tran := orig transform: [ :each | each memoized ].
+
+	self assert: orig class == PPChoiceParser.
+	self assert: orig children first class == PPSequenceParser.
+	self assert: orig children first children first == orig.
+	self assert: orig children first children last == orig.
+	self assert: orig children last class == PPLiteralObjectParser.
+	
+	self assert: tran class == PPMemoizedParser.
+	self assert: tran children first class == PPChoiceParser.
+	self assert: tran children first children first class == PPMemoizedParser.
+	self assert: tran children first children first children first class == PPSequenceParser.
+	self assert: tran children first children first children first children first == tran.
+	self assert: tran children first children first children first children last == tran.
+	self assert: tran children first children last class == PPMemoizedParser.
+	self assert: tran children first children last children first class == PPLiteralObjectParser
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformWrapGrammarE [
+	| orig tran |
+	orig := self grammarE.
+	tran := orig transform: [ :each | each memoized ].
+	
+	self assert: orig class == PPDelegateParser.
+	self assert: orig children first == orig.
+	
+	self assert: tran class == PPMemoizedParser.
+	self assert: tran children first class == PPDelegateParser.
+	self assert: tran children first children first == tran
 ]
