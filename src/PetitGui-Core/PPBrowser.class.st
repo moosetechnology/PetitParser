@@ -2,7 +2,10 @@ Class {
 	#name : #PPBrowser,
 	#superclass : #Object,
 	#instVars : [
-		'browser'
+		'browser',
+		'input',
+		'stream',
+		'output'
 	],
 	#category : #'PetitGui-Core'
 }
@@ -14,7 +17,7 @@ PPBrowser class >> initialize [
 
 { #category : #accessing }
 PPBrowser class >> label [
-	^ 'PetitParser Browser'
+	^ 'PetitParser'
 ]
 
 { #category : #'instance-creation' }
@@ -22,7 +25,7 @@ PPBrowser class >> open [
 	^ self new open
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #browse }
 PPBrowser >> browseClassesOn: aBrowser [
 	aBrowser tree
 		title: 'Grammars';
@@ -37,7 +40,7 @@ PPBrowser >> browseClassesOn: aBrowser [
 			on: $b entitled: 'browse (b)'
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-static' }
 PPBrowser >> browseCyclesOn: aBrowser [
 	aBrowser list
 		title: 'Cycles';
@@ -46,7 +49,41 @@ PPBrowser >> browseCyclesOn: aBrowser [
 		display: [ :parsers | self production cycleSet ]
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #browse }
+PPBrowser >> browseDynamicOn: aBrowser [
+	| tabulator |
+	aBrowser title: 'Dynamic'.
+	aBrowser useExplicitNotNil.
+	aBrowser composite: [ :aPane |
+		tabulator := aPane tabulator.
+		tabulator
+			useExplicitNotNil;
+			row: #input; row: #output.
+		tabulator transmit
+			to: #input; 
+			andShow: [ :anInnerPane | anInnerPane text ].
+		tabulator transmit
+			to: #output;
+			from: #input;
+			andShow: [ :anInnerPane | anInnerPane text ]
+		
+		]
+	
+	"self browseInputOn: aBrowser.
+	self browseOutputOn: aBrowser
+	"
+	"aBrowser tabulator in: [ :aPane |
+		aPane row: #input; row: #output.
+		aPane transmit
+			to: #input; 
+			andShow: [ :anInnerPane | self browseInputOn: anInnerPane ].
+		aPane transmit
+			to: #output;
+			from: #input;
+			andShow: [ :anInnerPane | self browseOutputOn: anInnerPane ] ]"
+]
+
+{ #category : #'browse-static' }
 PPBrowser >> browseExampleOn: aBrowser [
 	aBrowser text
 		title: 'Example';
@@ -54,7 +91,7 @@ PPBrowser >> browseExampleOn: aBrowser [
 		display: [ :parsers | self production example ]
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-static' }
 PPBrowser >> browseFirstOn: aBrowser [
 	aBrowser list
 		title: 'First';
@@ -63,7 +100,7 @@ PPBrowser >> browseFirstOn: aBrowser [
 		display: [ :parsers | self production firstSet ]
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-static' }
 PPBrowser >> browseFollowOn: aBrowser [
 	aBrowser list
 		title: 'Follow';
@@ -72,7 +109,7 @@ PPBrowser >> browseFollowOn: aBrowser [
 		display: [ :parsers | self production followSet ]
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-static' }
 PPBrowser >> browseGraphOn: aBrowser [
 	aBrowser morph
 		title: 'Graph';
@@ -85,28 +122,63 @@ PPBrowser >> browseGraphOn: aBrowser [
 			morph ]
 ]
 
+{ #category : #'browse-dynamic' }
+PPBrowser >> browseInputOn: aBrowser [
+	aBrowser text
+		useExplicitNotNil;
+		display: [ :class :selector | input ];
+		populate: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
+			input := presentation text asString.
+			stream := PPBrowserStream on: input.
+			output := self production end 
+				parse: stream.
+			output isPetitFailure
+				ifTrue: [ presentation selectionInterval: (output position + 1 to: output position) ].
+			output ];
+		populate: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
+			input := presentation text asString.
+			stream := PPBrowserStream on: input.
+			output := self production end
+				parse: stream.
+			output explore.
+			output ]
+]
+
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
 	aBrowser title: self class label; color: Color yellow muchDarker.
 	aBrowser row: [ :row | row column: #classes; column: #selectors ].
-	aBrowser row: [ :row | row column: #actions span: 2 ] span: 2.
-	
-	aBrowser showOn: #classes; using: [ 
-		self browseClassesOn: aBrowser ].
-	aBrowser showOn: #selectors; from: #classes; using: [
-		self browseSelectorsOn: aBrowser ].
-
-	aBrowser showOn: #actions; from: #classes; from: #selectors; using: [
-		self browseSourceOn: aBrowser.
-		self browseTestOn: aBrowser.
-		self browseGraphOn: aBrowser.
-		self browseExampleOn: aBrowser.
-		self browseCyclesOn: aBrowser.
-		self browseFirstOn: aBrowser.
-		self browseFollowOn: aBrowser ]
+	aBrowser row: [ :row | row column: #parts span: 2 ] span: 2.
+	aBrowser transmit 
+		to: #classes; 
+		andShow: [ :aPane | self browseClassesOn: aPane ].
+	aBrowser transmit 
+		to: #selectors; 
+		from: #classes; 
+		andShow: [ :aPane | self browseSelectorsOn: aPane ].
+	aBrowser transmit
+		to: #parts;
+		from: #classes;
+		from: #selectors;
+		andShow: [ :aPane | self browsePartsOn: aPane ]
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-dynamic' }
+PPBrowser >> browseOutputOn: aBrowser [
+	aBrowser text
+		useExplicitNotNil;
+		display: [ output ]
+]
+
+{ #category : #browse }
+PPBrowser >> browsePartsOn: aBrowser [
+	aBrowser useExplicitNotNil.
+	aBrowser tabbedArrangement.
+	aBrowser composite: [ :aPane | self browseStaticOn: aPane ].
+	aBrowser composite: [ :aPane | self browseDynamicOn: aPane ]	
+]
+
+{ #category : #browse }
 PPBrowser >> browseSelectorsOn: aBrowser [
 	aBrowser list
 		title: 'Productions';
@@ -134,7 +206,7 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 			on: $r entitled: 'remove (x)'
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #'browse-static' }
 PPBrowser >> browseSourceOn: aBrowser [
 	aBrowser text
 		title: 'Source';
@@ -151,8 +223,22 @@ PPBrowser >> browseSourceOn: aBrowser [
 		on: $s entitled: 'accept (s)'
 ]
 
-{ #category : #'browse-parts' }
+{ #category : #browse }
+PPBrowser >> browseStaticOn: aBrowser [
+	aBrowser title: 'Static'.
+	aBrowser useExplicitNotNil.
+	aBrowser tabbedArrangement.
+	self browseSourceOn: aBrowser.
+	self browseGraphOn: aBrowser.
+	self browseCyclesOn: aBrowser.
+	self browseFirstOn: aBrowser.
+	self browseFollowOn: aBrowser.
+	self browseExampleOn: aBrowser
+]
+
+{ #category : #'browse-dynamic' }
 PPBrowser >> browseTestOn: aBrowser [
+	
 	| table input output stream |
 	table := aBrowser tabulator.
 	table title: 'Test'; useExplicitNotNil.
@@ -204,6 +290,14 @@ PPBrowser >> browseTestOn: aBrowser [
 				morph color: Color white.
 				morph scroller addMorph: stream asPositionMorph.
 				morph ] ]
+]
+
+{ #category : #'initialize-release' }
+PPBrowser >> initialize [
+	super initialize.
+	input := String new.
+	output := String new.
+	stream := PPBrowserStream on: input
 ]
 
 { #category : #public }

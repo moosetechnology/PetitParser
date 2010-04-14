@@ -1,7 +1,7 @@
 Extension { #name : #PPTrimmingParser }
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*petitgui-accessing' }
 PPTrimmingParser >> exampleOn: aStream [
 	super exampleOn: aStream.
-	aStream space
+	aStream nextPut: Character space
 ]
