@@ -26,7 +26,7 @@ PPParser >> , aParser [
 
 { #category : #operations }
 PPParser >> / aParser [ 
-	"Answer a new parser that either parses the receiver or aParser."
+	"Answer a new parser that parses the receiver, if the receiver fails try with aParser (ordered-choice)."
 	
 	^ PPChoiceParser with: self with: aParser
 ]
@@ -379,4 +379,11 @@ PPParser >> wrapped [
 	"Answer a new parser that is simply wrapped."
 	
 	^ PPDelegateParser on: self
+]
+
+{ #category : #operations }
+PPParser >> | aParser [
+	"Answer a new parser that either parses the receiver or aParser. Fail if both pass or fail (exclusive choice, unordered choice)."
+
+	^ (aParser not , self) / (self not , aParser) ==> #second
 ]

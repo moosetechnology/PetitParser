@@ -560,7 +560,7 @@ PPParserTest >> testSideEffectChoice [
 
 { #category : #'testing-fixtures' }
 PPParserTest >> testSideEffectSequence [
-	"Adding another element to a choice should create a copy, otherwise we get unwanted side-effects."
+	"Adding another element to a sequence should create a copy, otherwise we get unwanted side-effects."
 
 	| p1 p2 p3 |
 	p1 := $a asParser.
@@ -701,4 +701,18 @@ PPParserTest >> testWrapped [
 	
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser fail: 'b'
+]
+
+{ #category : #testing }
+PPParserTest >> testXor [
+	| parser |
+	parser := ($a asParser / $b asParser)
+			|  ($b asParser / $c asParser).
+	
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser parse: 'c' to: $c.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'b'.
+	self assert: parser fail: 'd'
 ]

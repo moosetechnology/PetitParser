@@ -48,6 +48,12 @@ PPTokenTest >> testEquality [
 ]
 
 { #category : #testing }
+PPTokenTest >> testNew [
+	self should: [ PPToken new ] raise: Error.
+	
+]
+
+{ #category : #testing }
 PPTokenTest >> testPrinting [
 	| result |
 	result := PPToken on: 'var'.
