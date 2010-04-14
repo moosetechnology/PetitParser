@@ -385,5 +385,5 @@ PPParser >> wrapped [
 PPParser >> | aParser [
 	"Answer a new parser that either parses the receiver or aParser. Fail if both pass or fail (exclusive choice, unordered choice)."
 
-	^ (aParser not , self) / (self not , aParser) ==> #second
+	^ (self not , aParser) / (aParser not , self) ==> #second
 ]
