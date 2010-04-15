@@ -10,6 +10,21 @@ Class {
 }
 
 { #category : #converting }
+PPBrowserStream >> asExecutionTrace [
+	| trace |
+	trace := OrderedCollection new: parsers size.
+	1 to: parsers size do: [ :index |
+		| parser |
+		parser := parsers at: index.
+		parser name isNil ifFalse: [
+			| start stop |
+			start := positions at: index.
+			stop := positions at: index + 1 ifAbsent: [ self size ].
+			trace addLast: (Array with: parser with: start with: stop) ] ].
+	^ trace
+]
+
+{ #category : #converting }
 PPBrowserStream >> asFrequencyTable [
 	| bag total result |
 	bag := parsers asBag.

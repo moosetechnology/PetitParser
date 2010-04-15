@@ -153,20 +153,27 @@ PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser text
 		title: 'Result';
 		display: [ output ].
+	aBrowser list
+		title: 'Debugger';
+		format: [ :each | each first displayName ];
+		populate: #selection on: $s entitled: 'select (s)' with: [ :presentation |
+			(presentation pane browser paneNamed: #input) matchingPresentations 
+				do: [ :each | each selectionInterval: (presentation selection second to: presentation selection third) ] ];
+		display: [ stream asExecutionTrace ].
 	aBrowser table 
-		title: 'Count';
+		title: 'Tally';
 		column: 'Parser' evaluated: [ :each | each first displayName ];
 		column: 'Count' evaluated: [ :each | each second printString ];
 		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 		display: [ stream asFrequencyTable ].
 	aBrowser table 
-		title: 'Time';
+		title: 'Profile';
 		column: 'Parser' evaluated: [ :each | each first displayName ];
 		column: 'Time (ms)' evaluated: [ :each | each second printString ];
 		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 		display: [ stream asTimingTable ].
 	aBrowser morph 
-		title: 'Positions';
+		title: 'Progress';
 		display: [
 			| morph |
 			morph := ScrollPane new.
@@ -239,62 +246,6 @@ PPBrowser >> browseStaticOn: aBrowser [
 	self browseFirstOn: aBrowser.
 	self browseFollowOn: aBrowser.
 	self browseExampleOn: aBrowser
-]
-
-{ #category : #'browse-dynamic' }
-PPBrowser >> browseTestOn: aBrowser [
-	
-	| table input output stream |
-	table := aBrowser tabulator.
-	table title: 'Test'; useExplicitNotNil.
-	table row: #input; row: #output.
-	
-	input := String new.
-	output := String new.
-	stream := PPBrowserStream on: input.
-	
-	table showOn: #input; using: [
-		table text
-			useExplicitNotNil;
-			display: [ :parsers | input ];
-			populate: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
-				input := presentation text asString.
-				stream := PPBrowserStream on: input.
-				output := self production end 
-					parse: stream.
-				output isPetitFailure
-					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position)].
-				output ];
-			populate: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
-				input := presentation text copy.
-				stream := PPBrowserStream on: input.
-				output := self production end
-					parse: stream.
-				output explore ] ].
-	table showOn: #output; from: #input; using: [
-		table text
-			title: 'Result';
-			display: [ output ].
-		table table 
-			title: 'Count';
-			column: 'Parser' evaluated: [ :each | each first displayName ];
-			column: 'Count' evaluated: [ :each | each second printString ];
-			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
-			display: [ stream asFrequencyTable ].
-		table table 
-			title: 'Time';
-			column: 'Parser' evaluated: [ :each | each first displayName ];
-			column: 'Time (ms)' evaluated: [ :each | each second printString ];
-			column: 'Percentage (%)' evaluated: [ :each | each third printString ];
-			display: [ stream asTimingTable ].
-		table morph 
-			title: 'Positions';
-			display: [
-				| morph |
-				morph := ScrollPane new.
-				morph color: Color white.
-				morph scroller addMorph: stream asPositionMorph.
-				morph ] ]
 ]
 
 { #category : #'initialize-release' }
