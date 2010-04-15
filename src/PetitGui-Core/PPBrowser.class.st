@@ -52,13 +52,14 @@ PPBrowser >> browseCyclesOn: aBrowser [
 { #category : #browse }
 PPBrowser >> browseDynamicOn: aBrowser [
 	| tabulator |
-	aBrowser title: 'Dynamic'.
 	aBrowser useExplicitNotNil.
 	
 	tabulator := aBrowser tabulator.
 	tabulator
+		title: 'Dynamic';
 		useExplicitNotNil;
 		row: #input; row: #output.
+	tabulator transmit to: #input; andShow: [:a | a text ].
 	tabulator transmit
 		to: #input;
 		fromOutside: #class;
@@ -160,11 +161,11 @@ PPBrowser >> browseOutputOn: aBrowser [
 ]
 
 { #category : #browse }
-PPBrowser >> browsePartsOn: aBrowser [
-	aBrowser useExplicitNotNil.
-	aBrowser tabbedArrangement.
-	aBrowser composite: [ :aPane | self browseStaticOn: aPane ].
-	aBrowser composite: [ :aPane | self browseDynamicOn: aPane ]	
+PPBrowser >> browsePartsOn: aComposite [
+	aComposite useExplicitNotNil.
+	aComposite tabbedArrangement.
+	self browseStaticOn: aComposite.
+	self browseDynamicOn: aComposite	
 ]
 
 { #category : #browse }
@@ -215,7 +216,6 @@ PPBrowser >> browseSourceOn: aBrowser [
 
 { #category : #browse }
 PPBrowser >> browseStaticOn: aBrowser [
-	aBrowser title: 'Static'.
 	aBrowser useExplicitNotNil.
 	aBrowser tabbedArrangement.
 	self browseSourceOn: aBrowser.
