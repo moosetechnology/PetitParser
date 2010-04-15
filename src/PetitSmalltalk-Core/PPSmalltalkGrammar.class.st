@@ -441,12 +441,11 @@ PPSmalltalkGrammar >> startMethod [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> statements [
-	^ 	(expression wrapped , $. asParser token plus , statements
-			==> [ :nodes | (Array with: nodes first) , (nodes second) , (nodes last) ])
-	/	(expression wrapped , $. asParser token star
-			==> [ :nodes | (Array with: nodes first) , (nodes second) ]) 
+	^ 	(expression wrapped , (($. asParser token plus , statements ==> [ :nodes | nodes first , nodes last ])
+								/ $. asParser token star)
+			==> [ :nodes | (Array with: nodes first) , (nodes last) ])
 	/	(return , $. asParser token star
-			==> [ :nodes | (Array with: nodes first) , (nodes last) ]) 
+			==> [ :nodes | (Array with: nodes first) , (nodes last) ])
 	/	($. asParser token star)
 ]
 
