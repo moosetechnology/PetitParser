@@ -54,33 +54,22 @@ PPBrowser >> browseDynamicOn: aBrowser [
 	| tabulator |
 	aBrowser title: 'Dynamic'.
 	aBrowser useExplicitNotNil.
-	aBrowser composite: [ :aPane |
-		tabulator := aPane tabulator.
-		tabulator
-			useExplicitNotNil;
-			row: #input; row: #output.
-		tabulator transmit
-			to: #input; 
-			andShow: [ :anInnerPane | anInnerPane text ].
-		tabulator transmit
-			to: #output;
-			from: #input;
-			andShow: [ :anInnerPane | anInnerPane text ]
-		
-		]
 	
-	"self browseInputOn: aBrowser.
-	self browseOutputOn: aBrowser
-	"
-	"aBrowser tabulator in: [ :aPane |
-		aPane row: #input; row: #output.
-		aPane transmit
-			to: #input; 
-			andShow: [ :anInnerPane | self browseInputOn: anInnerPane ].
-		aPane transmit
-			to: #output;
-			from: #input;
-			andShow: [ :anInnerPane | self browseOutputOn: anInnerPane ] ]"
+	tabulator := aBrowser tabulator.
+	tabulator
+		useExplicitNotNil;
+		row: #input; row: #output.
+	tabulator transmit
+		to: #input;
+		fromOutside: #class;
+		fromOutside: #selector;
+		andShow: [ :a | a text title: 'Input' ].
+	tabulator transmit
+		to: #output;
+		from: #input;
+		fromOutside: #class;
+		fromOutside: #selector;
+		andShow: [ :a | a text  title: 'Output' ]
 ]
 
 { #category : #'browse-static' }
@@ -147,19 +136,19 @@ PPBrowser >> browseInputOn: aBrowser [
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
 	aBrowser title: self class label; color: Color yellow muchDarker.
-	aBrowser row: [ :row | row column: #classes; column: #selectors ].
-	aBrowser row: [ :row | row column: #parts span: 2 ] span: 2.
+	aBrowser row: [ :row | row column: #class; column: #selector ].
+	aBrowser row: [ :row | row column: #part span: 2 ] span: 2.
 	aBrowser transmit 
-		to: #classes; 
+		to: #class; 
 		andShow: [ :aPane | self browseClassesOn: aPane ].
 	aBrowser transmit 
-		to: #selectors; 
-		from: #classes; 
+		to: #selector; 
+		from: #class; 
 		andShow: [ :aPane | self browseSelectorsOn: aPane ].
 	aBrowser transmit
-		to: #parts;
-		from: #classes;
-		from: #selectors;
+		to: #part;
+		from: #class;
+		from: #selector;
 		andShow: [ :aPane | self browsePartsOn: aPane ]
 ]
 
@@ -184,7 +173,8 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 		title: 'Productions';
 		format: [ :class | class asString ];
 		display: [ :class | 
-			(((class allInstVarNames
+			((((class allInstVarNames
+				copyWithoutAll: class ignoredNames)
 				copyWithoutAll: self rootClass allInstVarNames)
 				collect: [ :each | each asSymbol ])
 				select: [ :each | class includesSelector: each ])
@@ -327,22 +317,22 @@ PPBrowser >> rootModel [
 
 { #category : #'accessing-view' }
 PPBrowser >> selectedClass [
-	^ ((browser paneNamed: #classes) port: #selection) value
+	^ ((browser paneNamed: #class) port: #selection) value
 ]
 
 { #category : #'accessing-view' }
 PPBrowser >> selectedClass: aClass [
-	((browser paneNamed: #classes) port: #selection) value: aClass
+	((browser paneNamed: #class) port: #selection) value: aClass
 ]
 
 { #category : #'accessing-view' }
 PPBrowser >> selectedSelector [
-	^ ((browser paneNamed: #selectors) port: #selection) value
+	^ ((browser paneNamed: #selector) port: #selection) value
 ]
 
 { #category : #'accessing-view' }
 PPBrowser >> selectedSelector: aSelector [
-	((browser paneNamed: #selectors) port: #selection) value: aSelector
+	((browser paneNamed: #selector) port: #selection) value: aSelector
 ]
 
 { #category : #'accessing-view' }
