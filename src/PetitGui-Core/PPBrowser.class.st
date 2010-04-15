@@ -59,18 +59,13 @@ PPBrowser >> browseDynamicOn: aBrowser [
 		title: 'Dynamic';
 		useExplicitNotNil;
 		row: #input; row: #output.
-	tabulator transmit to: #input; andShow: [:a | a text ].
 	tabulator transmit
 		to: #input;
-		fromOutside: #class;
-		fromOutside: #selector;
-		andShow: [ :a | a text title: 'Input' ].
+		andShow: [ :a | self browseInputOn: a ].
 	tabulator transmit
 		to: #output;
 		from: #input;
-		fromOutside: #class;
-		fromOutside: #selector;
-		andShow: [ :a | a text  title: 'Output' ]
+		andShow: [ :a | self browseOutputOn: a ]
 ]
 
 { #category : #'browse-static' }
@@ -156,8 +151,28 @@ PPBrowser >> browseOn: aBrowser [
 { #category : #'browse-dynamic' }
 PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser text
-		useExplicitNotNil;
-		display: [ output ]
+		title: 'Result';
+		display: [ output ].
+	aBrowser table 
+		title: 'Count';
+		column: 'Parser' evaluated: [ :each | each first displayName ];
+		column: 'Count' evaluated: [ :each | each second printString ];
+		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+		display: [ stream asFrequencyTable ].
+	aBrowser table 
+		title: 'Time';
+		column: 'Parser' evaluated: [ :each | each first displayName ];
+		column: 'Time (ms)' evaluated: [ :each | each second printString ];
+		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+		display: [ stream asTimingTable ].
+	aBrowser morph 
+		title: 'Positions';
+		display: [
+			| morph |
+			morph := ScrollPane new.
+			morph color: Color white.
+			morph scroller addMorph: stream asPositionMorph.
+			morph ]
 ]
 
 { #category : #browse }
