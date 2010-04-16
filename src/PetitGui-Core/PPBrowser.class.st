@@ -174,9 +174,9 @@ PPBrowser >> browseOutputOn: aBrowser [
 						(PPBrowserWrapper on: each)	
 							before: [ :s | 
 								depth := depth + 1. 
-								s position + 1 ];
+								trace addLast: (Array with: each with: s position + 1 with: s position with: depth with: Object new) ];
 							after: [ :s :p | 
-								trace addLast: (Array with: each with: p with: s position with: depth with: Object new).
+								p at: 3 put: s position.
 								depth := depth - 1 ];
 							yourself ]
 					ifFalse: [ each ] ])
