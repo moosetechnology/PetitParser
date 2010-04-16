@@ -65,7 +65,14 @@ PPBrowser >> browseDynamicOn: aBrowser [
 	tabulator transmit
 		to: #output;
 		from: #input;
-		andShow: [ :a | self browseOutputOn: a ]
+		andShow: [ :a | self browseOutputOn: a ].
+		
+	tabulator transmit
+		from: #output;
+		to: #input->#selectionInterval;
+		when: [ :selection | selection notNil ];
+		transformed: [ :selection | selection second to: selection third ]
+
 ]
 
 { #category : #'browse-static' }
@@ -153,13 +160,21 @@ PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser text
 		title: 'Result';
 		display: [ output ].
+
 	aBrowser list
 		title: 'Debugger';
 		format: [ :each | each first displayName ];
-		populate: #selection on: $s entitled: 'select (s)' with: [ :presentation |
-			(presentation pane browser paneNamed: #input) matchingPresentations 
-				do: [ :each | each selectionInterval: (presentation selection second to: presentation selection third) ] ];
-		display: [ stream asExecutionTrace ].
+		display: [ 
+			| trace parser |
+			trace := OrderedCollection new.
+			parser := self production end transform: [ :each |
+				each name notNil 
+					ifTrue: [ ([ :s | s position ] asParser , each , [ :s | s position ] asParser) ==> [ :nodes |
+						trace addLast: (Array with: each with: nodes first with: nodes last).
+						nodes second ] ]
+					ifFalse: [ each ] ].
+			parser parse: input.
+			trace ].
 	aBrowser table 
 		title: 'Tally';
 		column: 'Parser' evaluated: [ :each | each first displayName ];
