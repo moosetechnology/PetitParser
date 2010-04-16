@@ -163,17 +163,24 @@ PPBrowser >> browseOutputOn: aBrowser [
 
 	aBrowser list
 		title: 'Debugger';
-		format: [ :each | each first displayName ];
+		format: [ :each | (String new: 2 * each fourth withAll: $ ) , each first displayName ];
 		display: [ 
-			| trace parser |
+			| depth trace |
+			depth := -1.
 			trace := OrderedCollection new.
-			parser := self production end transform: [ :each |
+			(self production end transform: [ :each |
 				each name notNil 
-					ifTrue: [ ([ :s | s position ] asParser , each , [ :s | s position ] asParser) ==> [ :nodes |
-						trace addLast: (Array with: each with: nodes first with: nodes last with: Object new).
-						nodes second ] ]
-					ifFalse: [ each ] ].
-			parser parse: input.
+					ifTrue: [ 
+						(PPBrowserWrapper on: each)	
+							before: [ :s | 
+								depth := depth + 1. 
+								s position + 1 ];
+							after: [ :s :p | 
+								trace addLast: (Array with: each with: p with: s position with: depth with: Object new).
+								depth := depth - 1 ];
+							yourself ]
+					ifFalse: [ each ] ])
+				parse: input.
 			trace ].
 	aBrowser table 
 		title: 'Tally';
