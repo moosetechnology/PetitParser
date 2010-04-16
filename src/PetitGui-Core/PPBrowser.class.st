@@ -170,7 +170,7 @@ PPBrowser >> browseOutputOn: aBrowser [
 			parser := self production end transform: [ :each |
 				each name notNil 
 					ifTrue: [ ([ :s | s position ] asParser , each , [ :s | s position ] asParser) ==> [ :nodes |
-						trace addLast: (Array with: each with: nodes first with: nodes last).
+						trace addLast: (Array with: each with: nodes first with: nodes last with: Object new).
 						nodes second ] ]
 					ifFalse: [ each ] ].
 			parser parse: input.
