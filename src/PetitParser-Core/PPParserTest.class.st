@@ -494,11 +494,20 @@ PPParserTest >> testPlusLazy [
 { #category : #'testing-accessing' }
 PPParserTest >> testPrint [
 	| parser |
-	parser := PPSequenceParser new.
-	self assert: (parser printString beginsWith: 'a PPSequenceParser').
+	parser := PPParser new.
+	self assert: (parser printString beginsWith: 'a PPParser').
 	
-	parser := PPChoiceParser named: 'choice'.
-	self assert: (parser printString = 'a PPChoiceParser(choice)')
+	parser := PPParser named: 'choice'.
+	self assert: (parser printString beginsWith: 'a PPParser(choice').
+	
+	parser := PPLiteralObjectParser on: $a.
+	self assert: (parser printString includesSubString: '$a').
+	
+	parser := PPFailingParser message: 'error'.
+	self assert: (parser printString includesSubString: 'error').
+	
+	parser := PPPredicateParser on: [ :c | true ] message: 'error'.
+	self assert: (parser printString includesSubString: 'error')
 ]
 
 { #category : #testing }
