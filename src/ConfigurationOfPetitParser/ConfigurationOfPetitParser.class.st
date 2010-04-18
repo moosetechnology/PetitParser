@@ -1,6 +1,9 @@
 Class {
 	#name : #ConfigurationOfPetitParser,
 	#superclass : #Object,
+	#instVars : [
+		'project'
+	],
 	#category : #ConfigurationOfPetitParser
 }
 
@@ -42,9 +45,9 @@ ConfigurationOfPetitParser >> default: spec [
 		spec 
 			package: 'PetitParser';
 			package: 'PetitAnalyzer';
-			package: 'PetitGui-Core'.
+			package: 'PetitGui'.
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
-		spec group: 'Tests' with: #( 'SmallDude-Tests'	).
+		spec group: 'Tests' with: #( 'PetitParser'	).
 	]
 ]
 
