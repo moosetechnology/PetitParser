@@ -26,3 +26,9 @@ PPLiteralParser >> initializeOn: anObject message: aString [
 	literal := anObject.
 	failureMessage := aString
 ]
+
+{ #category : #printing }
+PPLiteralParser >> printNameOn: aStream [
+	super printNameOn: aStream.
+	aStream nextPutAll: ', '; print: literal
+]

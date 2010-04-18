@@ -24,3 +24,9 @@ PPFailingParser >> message: aString [
 PPFailingParser >> parseOn: aStream [
 	^ PPFailure reason: message at: aStream position
 ]
+
+{ #category : #printing }
+PPFailingParser >> printNameOn: aStream [
+	super printNameOn: aStream.
+	aStream nextPutAll: ', '; print: message
+]

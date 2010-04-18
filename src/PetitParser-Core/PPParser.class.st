@@ -302,11 +302,18 @@ PPParser >> plusLazy: aParser [
 ]
 
 { #category : #printing }
+PPParser >> printNameOn: aStream [
+	self name isNil
+		ifTrue: [ aStream print: self hash ]
+		ifFalse: [ aStream nextPutAll: self name ]
+]
+
+{ #category : #printing }
 PPParser >> printOn: aStream [
 	super printOn: aStream.
-	self name isNil
-		ifTrue: [ aStream nextPut: $(; print: self hash; nextPut: $) ]
-		ifFalse: [ aStream nextPut: $(; nextPutAll: self name; nextPut: $) ]
+	aStream nextPut: $(.
+	self printNameOn: aStream.
+	aStream nextPut: $)
 ]
 
 { #category : #'operations-conveniance' }

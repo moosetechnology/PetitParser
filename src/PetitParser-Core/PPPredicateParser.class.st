@@ -159,3 +159,9 @@ PPPredicateParser >> parseOn: aStream [
 		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
 		ifTrue: [ aStream next ]
 ]
+
+{ #category : #printing }
+PPPredicateParser >> printNameOn: aStream [
+	super printNameOn: aStream.
+	aStream nextPutAll: ', '; print: predicateMessage
+]
