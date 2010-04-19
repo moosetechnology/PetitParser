@@ -174,6 +174,15 @@ PPParserTest >> testFlatten [
 	self assert: parser fail: 'b'
 ]
 
+{ #category : #'testing-properties' }
+PPParserTest >> testHasProperty [
+	| parser |
+	parser := PPParser new.
+	self deny: (parser hasProperty: #foo).
+	parser propertyAt: #foo put: 123.
+	self assert: (parser hasProperty: #foo)
+]
+
 { #category : #'testing-utilities' }
 PPParserTest >> testMatches [
 	| parser |
@@ -491,6 +500,17 @@ PPParserTest >> testPlusLazy [
 	self assert: parser parse: 'abc123' to: #($a $b $c) end: 3
 ]
 
+{ #category : #'testing-properties' }
+PPParserTest >> testPostCopy [
+	| parser copy |
+	parser := PPParser new.
+	parser propertyAt: #foo put: true.
+	copy := parser copy.
+	copy propertyAt: #foo put: false.
+	self assert: (parser propertyAt: #foo).
+	self deny: (copy propertyAt: #foo)
+]
+
 { #category : #'testing-accessing' }
 PPParserTest >> testPrint [
 	| parser |
@@ -508,6 +528,50 @@ PPParserTest >> testPrint [
 	
 	parser := PPPredicateParser on: [ :c | true ] message: 'error'.
 	self assert: (parser printString includesSubString: 'error')
+]
+
+{ #category : #'testing-properties' }
+PPParserTest >> testPropertyAt [
+	| parser |
+	parser := PPParser new.
+	self should: [ parser propertyAt: #foo ] raise: Error.
+	parser propertyAt: #foo put: true.
+	self assert: (parser propertyAt: #foo)
+]
+
+{ #category : #'testing-properties' }
+PPParserTest >> testPropertyAtIfAbsent [
+	| parser |
+	parser := PPParser new.
+	self assert: (parser propertyAt: #foo ifAbsent: [ true ]).
+	parser propertyAt: #foo put: true.
+	self assert: (parser propertyAt: #foo ifAbsent: [ false ])
+]
+
+{ #category : #'testing-properties' }
+PPParserTest >> testPropertyAtIfAbsentPut [
+	| parser |
+	parser := PPParser new.
+	self assert: (parser propertyAt: #foo ifAbsentPut: [ true ]).
+	self assert: (parser propertyAt: #foo ifAbsentPut: [ false ])
+]
+
+{ #category : #'testing-properties' }
+PPParserTest >> testRemoveProperty [
+	| parser |
+	parser := PPParser new.
+	self should: [ parser removeProperty: #foo ] raise: Error.
+	parser propertyAt: #foo put: true.
+	self assert: (parser removeProperty: #foo)
+]
+
+{ #category : #'testing-properties' }
+PPParserTest >> testRemovePropertyIfAbsent [
+	| parser |
+	parser := PPParser new.
+	self assert: (parser removeProperty: #foo ifAbsent: [ true ]).
+	parser propertyAt: #foo put: true.
+	self assert: (parser removeProperty: #foo ifAbsent: [ false ])
 ]
 
 { #category : #testing }

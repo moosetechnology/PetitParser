@@ -2,7 +2,7 @@ Class {
 	#name : #PPParser,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'properties'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -138,6 +138,13 @@ PPParser >> foldRight: aBlock [
 		args at: size ]
 ]
 
+{ #category : #'accessing-properites' }
+PPParser >> hasProperty: aKey [
+	"Test if the property aKey is present."
+	
+	^ properties notNil and: [ properties includesKey: aKey ]
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 ]
@@ -222,12 +229,14 @@ PPParser >> min: aMinInteger max: aMaxInteger [
 
 { #category : #accessing }
 PPParser >> name [
-	^ name
+	"Answer the production name of the receiver."
+	
+	^ self propertyAt: #name ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
 PPParser >> name: aString [
-	name := aString
+	self propertyAt: #name put: aString
 ]
 
 { #category : #operations }
@@ -301,6 +310,12 @@ PPParser >> plusLazy: aParser [
 	^ self , (self starLazy: aParser) map: [ :first :rest | rest copyWithFirst: first ]
 ]
 
+{ #category : #copying }
+PPParser >> postCopy [
+	super postCopy.
+	properties := properties copy
+]
+
 { #category : #printing }
 PPParser >> printNameOn: aStream [
 	self name isNil
@@ -314,6 +329,55 @@ PPParser >> printOn: aStream [
 	aStream nextPut: $(.
 	self printNameOn: aStream.
 	aStream nextPut: $)
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> propertyAt: aKey [
+	"Answer the property value associated with aKey."
+	
+	^ self propertyAt: aKey ifAbsent: [ self error: 'Property not found' ]
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> propertyAt: aKey ifAbsent: aBlock [
+	"Answer the property value associated with aKey or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	^ properties isNil
+		ifTrue: [ aBlock value ]
+		ifFalse: [ properties at: aKey ifAbsent: aBlock ]
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> propertyAt: aKey ifAbsentPut: aBlock [
+	"Answer the property associated with aKey or, if aKey isn't found store the result of evaluating aBlock as new value."
+	
+	^ self propertyAt: aKey ifAbsent: [ self propertyAt: aKey put: aBlock value ]
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> propertyAt: aKey put: anObject [
+	"Set the property at aKey to be anObject. If aKey is not found, create a new entry for aKey and set is value to anObject. Answer anObject."
+
+	^ (properties ifNil: [ properties := Dictionary new: 1 ])
+		at: aKey put: anObject
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> removeProperty: aKey [
+	"Remove the property with aKey. Answer the property or raise an error if aKey isn't found."
+	
+	^ self removeProperty: aKey ifAbsent: [ self error: 'Property not found' ]
+]
+
+{ #category : #'accessing-properites' }
+PPParser >> removeProperty: aKey ifAbsent: aBlock [
+	"Remove the property with aKey. Answer the value or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	| answer |
+	properties isNil ifTrue: [ ^ aBlock value ].
+	answer := properties removeKey: aKey ifAbsent: aBlock.
+	properties isEmpty ifTrue: [ properties := nil ].
+	^ answer
 ]
 
 { #category : #'operations-conveniance' }
