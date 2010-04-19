@@ -735,6 +735,8 @@ PPParserTest >> testToken [
 PPParserTest >> testTrim [
 	| parser |
 	parser := $a asParser token trim.
+	self assert: parser trim = parser.
+	
 	self assert: parser parse: 'a' toToken: 1 stop: 1.
 	self assert: parser parse: 'a ' toToken: 1 stop: 1.
 	self assert: parser parse: 'a	' toToken: 1 stop: 1.

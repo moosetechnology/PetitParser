@@ -35,3 +35,10 @@ PPTrimmingParser >> parseOn: aStream [
 	self parseAfterOn: aStream.
 	^ element
 ]
+
+{ #category : #operations }
+PPTrimmingParser >> trim [
+	"Ther is no point in trimming more than once."
+
+	^ self
+]
