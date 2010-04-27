@@ -12,7 +12,7 @@ ConfigurationOfPetitParser class >> ensureMetacello [
 	Smalltalk at: #MetacelloProject ifAbsent: [
 		Gofer new
 				url: 'http://seaside.gemstone.com/ss/metacello';
-				addPackage: 'ConfigurationOfMetacello';
+				package: 'ConfigurationOfMetacello';
 				load.
 		(Smalltalk at: #ConfigurationOfMetacello) loadLatestVersion ]
 ]
@@ -44,10 +44,19 @@ ConfigurationOfPetitParser >> default: spec [
 		spec repository: 'http://source.lukas-renggli.ch/petit'.
 		spec 
 			package: 'PetitParser';
-			package: 'PetitAnalyzer';
-			package: 'PetitGui'.
+			package: 'PetitAnalyzer'.
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
 		spec group: 'Tests' with: #( 'PetitParser'	).
+		spec package: 'Shout' with: [spec repository: 'http://www.squeaksource.com/shout'].
+		spec package: 'PetitGui' with:[
+			spec repository: 'http://source.lukas-renggli.ch/petit'.
+			spec requires: 'Glamour for Petit'].
+		spec project: 'Glamour for Petit' with: [
+				spec
+					className: 'ConfigurationOfGlamour';
+					file: 'ConfigurationOfGlamour';
+					version: 'default';
+					repository: 'http://www.squeaksource.com/Glamour' ].
 	]
 ]
 
