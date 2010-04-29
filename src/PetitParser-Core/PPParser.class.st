@@ -406,7 +406,7 @@ PPParser >> starGreedy: aParser [
 	
 	| parser |
 	parser := PPChoiceParser new.
-	parser initializeWithAll: (Array
+	parser setParsers: (Array
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])
 		with: (aParser and ==> [ :each | OrderedCollection new ])).
 	^ parser ==> [ :rest | rest asArray ]
@@ -418,7 +418,7 @@ PPParser >> starLazy: aParser [
 	
 	| parser |
 	parser := PPChoiceParser new.
-	parser initializeWithAll: (Array
+	parser setParsers: (Array
 		with: (aParser and ==> [ :each | OrderedCollection new ])
 		with: (self , parser map: [ :each :rest | rest addFirst: each; yourself ])).
 	^ parser ==> [ :rest | rest asArray ]

@@ -17,7 +17,7 @@ PPListParser class >> with: aFirstParser with: aSecondParser [
 
 { #category : #'instance creation' }
 PPListParser class >> withAll: aCollection [
-	^ self basicNew initializeWithAll: aCollection asArray
+	^ self basicNew setParsers: aCollection
 ]
 
 { #category : #accessing }
@@ -33,10 +33,10 @@ PPListParser >> copyWith: aParser [
 { #category : #initialization }
 PPListParser >> initialize [
 	super initialize.
-	parsers := #()
+	self setParsers: #()
 ]
 
 { #category : #initialization }
-PPListParser >> initializeWithAll: anArray [
-	parsers := anArray
+PPListParser >> setParsers: aCollection [
+	parsers := aCollection asArray
 ]
