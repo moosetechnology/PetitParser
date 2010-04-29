@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+PPListParser class >> with: aParser [
+	^ self withAll: (Array with: aParser)
+]
+
+{ #category : #'instance creation' }
 PPListParser class >> with: aFirstParser with: aSecondParser [
 	^ self withAll: (Array with: aFirstParser with: aSecondParser)
 ]
