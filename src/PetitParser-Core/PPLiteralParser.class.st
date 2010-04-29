@@ -27,6 +27,11 @@ PPLiteralParser >> initializeOn: anObject message: aString [
 	failureMessage := aString
 ]
 
+{ #category : #accessing }
+PPLiteralParser >> literal [
+	^ literal
+]
+
 { #category : #printing }
 PPLiteralParser >> printNameOn: aStream [
 	super printNameOn: aStream.
