@@ -31,6 +31,20 @@ PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
 	^ (self on: aParser) setMin: aMinInteger max: aMaxInteger
 ]
 
+{ #category : #accessing }
+PPRepeatingParser >> max [
+	"Answer the maximum number of repetitions."
+
+	^ max
+]
+
+{ #category : #accessing }
+PPRepeatingParser >> min [
+	"Answer the minimum number of repetitions."
+	
+	^ min
+]
+
 { #category : #parsing }
 PPRepeatingParser >> parseOn: aStream [
 	| start element elements |

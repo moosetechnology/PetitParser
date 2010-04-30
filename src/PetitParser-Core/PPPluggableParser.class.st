@@ -13,6 +13,13 @@ PPPluggableParser class >> on: aBlock [
 ]
 
 { #category : #accessing }
+PPPluggableParser >> block [
+	"Answer the pluggable block."
+
+	^ block
+]
+
+{ #category : #accessing }
 PPPluggableParser >> block: aBlock [
 	block := aBlock
 ]

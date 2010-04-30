@@ -16,6 +16,13 @@ PPFailingParser class >> message: aString [
 ]
 
 { #category : #accessing }
+PPFailingParser >> message [
+	"Answer the error message of the receiving parser."
+
+	^ message
+]
+
+{ #category : #accessing }
 PPFailingParser >> message: aString [
 	message := aString
 ]

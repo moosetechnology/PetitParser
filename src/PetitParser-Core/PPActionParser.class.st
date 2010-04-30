@@ -16,6 +16,13 @@ PPActionParser class >> on: aParser block: aBlock [
 ]
 
 { #category : #accessing }
+PPActionParser >> block [
+	"Answer the action block of the receiver."
+
+	^ block
+]
+
+{ #category : #accessing }
 PPActionParser >> block: aBlock [
 	block := aBlock
 ]

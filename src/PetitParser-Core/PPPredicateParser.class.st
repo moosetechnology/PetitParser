@@ -160,6 +160,20 @@ PPPredicateParser >> parseOn: aStream [
 		ifTrue: [ aStream next ]
 ]
 
+{ #category : #accessing }
+PPPredicateParser >> predicate [
+	"Answer the predicate block used to match the receiver."
+
+	^ predicate
+]
+
+{ #category : #accessing }
+PPPredicateParser >> predicateMessage [
+	"Answer the message that is thrown when the predicate does not match."
+
+	^ predicateMessage
+]
+
 { #category : #printing }
 PPPredicateParser >> printNameOn: aStream [
 	super printNameOn: aStream.
