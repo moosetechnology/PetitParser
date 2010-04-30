@@ -38,7 +38,7 @@ PPTrimmingParser >> parseOn: aStream [
 
 { #category : #operations }
 PPTrimmingParser >> trim [
-	"Ther is no point in trimming more than once."
+	"There is no point in trimming more than once."
 
 	^ self
 ]

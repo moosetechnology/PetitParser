@@ -64,7 +64,7 @@ PPCompositeParser >> initializeStartingAt: aSymbol [
 	| allVariableNames ignoredVariableNames productionIndexesAndNames |
 	self initialize.
 	
-	"find all the produtions that need to be initialized"
+	"find all the productions that need to be initialized"
 	allVariableNames := self class allInstVarNames.
 	ignoredVariableNames := self class ignoredNames.
 	productionIndexesAndNames := ((1 to: self class instSize)

@@ -15,14 +15,14 @@ PPToken class >> new [
 ]
 
 { #category : #'instance creation' }
-PPToken class >> on: aSequenzeableCollection [
-	^ self on: aSequenzeableCollection start: 1 stop: aSequenzeableCollection size
+PPToken class >> on: aSequenceableCollection [
+	^ self on: aSequenceableCollection start: 1 stop: aSequenceableCollection size
 ]
 
 { #category : #'instance creation' }
-PPToken class >> on: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
+PPToken class >> on: aSequenceableCollection start: aStartInteger stop: aStopInteger [
 	^ self basicNew 
-		initializeOn: aSequenzeableCollection
+		initializeOn: aSequenceableCollection
 		start: aStartInteger stop: aStopInteger
 ]
 
@@ -47,8 +47,8 @@ PPToken >> hash [
 ]
 
 { #category : #initialization }
-PPToken >> initializeOn: aSequenzeableCollection start: aStartInteger stop: aStopInteger [
-	collection := aSequenzeableCollection.
+PPToken >> initializeOn: aSequenceableCollection start: aStartInteger stop: aStopInteger [
+	collection := aSequenceableCollection.
 	start := aStartInteger.
 	stop := aStopInteger
 ]

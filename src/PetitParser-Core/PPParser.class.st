@@ -82,7 +82,7 @@ PPParser >> def: aParser [
 	^ self becomeForward: (aParser name: self name)
 ]
 
-{ #category : #'operations-conveniance' }
+{ #category : #'operations-convenience' }
 PPParser >> delimitedBy: aParser [
 	"Answer a new parser that parses the receiver one or more times, separated and possibly ended by aParser."
 	
@@ -94,7 +94,7 @@ PPParser >> delimitedBy: aParser [
 
 { #category : #operations }
 PPParser >> end [
-	"Answer a new parser that suceeds at the end of the input and return the result of the receiver."
+	"Answer a new parser that succeeds at the end of the input and return the result of the receiver."
 
 	^ PPEndOfInputParser on: self
 ]
@@ -138,7 +138,7 @@ PPParser >> foldRight: aBlock [
 		args at: size ]
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> hasProperty: aKey [
 	"Test if the property aKey is present."
 	
@@ -269,7 +269,7 @@ PPParser >> parse: anObject [
 
 { #category : #parsing }
 PPParser >> parse: anObject onError: aBlock [
-	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the failure object, or eavaluated with the error message and position."
+	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the failure object, or evaluated with the error message and position."
 	
 	| result |
 	result := self parseOn: anObject asPetitStream.
@@ -331,14 +331,14 @@ PPParser >> printOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> propertyAt: aKey [
 	"Answer the property value associated with aKey."
 	
 	^ self propertyAt: aKey ifAbsent: [ self error: 'Property not found' ]
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> propertyAt: aKey ifAbsent: aBlock [
 	"Answer the property value associated with aKey or, if aKey isn't found, answer the result of evaluating aBlock."
 	
@@ -347,14 +347,14 @@ PPParser >> propertyAt: aKey ifAbsent: aBlock [
 		ifFalse: [ properties at: aKey ifAbsent: aBlock ]
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> propertyAt: aKey ifAbsentPut: aBlock [
 	"Answer the property associated with aKey or, if aKey isn't found store the result of evaluating aBlock as new value."
 	
 	^ self propertyAt: aKey ifAbsent: [ self propertyAt: aKey put: aBlock value ]
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> propertyAt: aKey put: anObject [
 	"Set the property at aKey to be anObject. If aKey is not found, create a new entry for aKey and set is value to anObject. Answer anObject."
 
@@ -362,14 +362,14 @@ PPParser >> propertyAt: aKey put: anObject [
 		at: aKey put: anObject
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> removeProperty: aKey [
 	"Remove the property with aKey. Answer the property or raise an error if aKey isn't found."
 	
 	^ self removeProperty: aKey ifAbsent: [ self error: 'Property not found' ]
 ]
 
-{ #category : #'accessing-properites' }
+{ #category : #'accessing-properties' }
 PPParser >> removeProperty: aKey ifAbsent: aBlock [
 	"Remove the property with aKey. Answer the value or, if aKey isn't found, answer the result of evaluating aBlock."
 	
@@ -380,7 +380,7 @@ PPParser >> removeProperty: aKey ifAbsent: aBlock [
 	^ answer
 ]
 
-{ #category : #'operations-conveniance' }
+{ #category : #'operations-convenience' }
 PPParser >> separatedBy: aParser [
 	"Answer a new parser that parses the receiver one or more times, separated by aParser."
 	
