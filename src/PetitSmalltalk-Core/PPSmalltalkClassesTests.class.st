@@ -119,8 +119,7 @@ PPSmalltalkClassesTests >> testStream [
 { #category : #private }
 PPSmalltalkClassesTests >> verifyClass: aClass [ 
 	aClass selectors 
-		do: [ :selector | self verifyClass: aClass selector: selector ]
-		displayingProgress: aClass name.
+		do: [ :selector | self verifyClass: aClass selector: selector ].
 	aClass isMeta
 		ifFalse: [ self verifyClass: aClass class ]
 ]
