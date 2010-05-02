@@ -12,7 +12,7 @@ Class {
 
 { #category : #'instance creation' }
 PPFailingParser class >> message: aString [
-	^ self new message: aString
+	^ self new setMessage: aString
 ]
 
 { #category : #accessing }
@@ -20,11 +20,6 @@ PPFailingParser >> message [
 	"Answer the error message of the receiving parser."
 
 	^ message
-]
-
-{ #category : #accessing }
-PPFailingParser >> message: aString [
-	message := aString
 ]
 
 { #category : #parsing }
@@ -36,4 +31,9 @@ PPFailingParser >> parseOn: aStream [
 PPFailingParser >> printNameOn: aStream [
 	super printNameOn: aStream.
 	aStream nextPutAll: ', '; print: message
+]
+
+{ #category : #initialization }
+PPFailingParser >> setMessage: aString [
+	message := aString
 ]

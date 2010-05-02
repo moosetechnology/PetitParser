@@ -19,10 +19,12 @@ PPParserTest >> testAction [
 PPParserTest >> testAnd [
 	| parser |
 	parser := 'foo' asParser flatten , 'bar' asParser flatten and.
-	self assert: parser children last and = parser children last.
 	
 	self assert: parser parse: 'foobar' to: #('foo' 'bar') end: 3.
-	self assert: parser fail: 'foobaz'
+	self assert: parser fail: 'foobaz'.
+	
+	parser := 'foo' asParser and.
+	self assert: parser and = parser
 ]
 
 { #category : #testing }
@@ -185,6 +187,34 @@ PPParserTest >> testHasProperty [
 	self deny: (parser hasProperty: #foo).
 	parser propertyAt: #foo put: 123.
 	self assert: (parser hasProperty: #foo)
+]
+
+{ #category : #testing }
+PPParserTest >> testLiteralObject [
+	| parser |
+	parser := PPLiteralObjectParser 
+		on: $a
+		message: 'letter "a" expected'.
+	self assert: parser literal = $a.
+	self assert: parser message = 'letter "a" expected'.
+	
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser fail: 'b'
+	
+]
+
+{ #category : #testing }
+PPParserTest >> testLiteralSequence [
+	| parser |
+	parser := PPLiteralSequenceParser 
+		on: 'abc'
+		message: 'sequence "abc" expected'.
+	self assert: parser literal = 'abc'.
+	self assert: parser message = 'sequence "abc" expected'.
+	
+	self assert: parser parse: 'abc' to: 'abc'.
+	self assert: parser fail: 'ab'.
+	self assert: parser fail: 'abd'
 ]
 
 { #category : #'testing-utilities' }
@@ -352,9 +382,8 @@ PPParserTest >> testNot [
 	self assert: parser parse: 'foobaz' to: #('foo' nil) end: 3.
 	self assert: parser fail: 'foobar'.
 	
-	parser := 'foo' asParser flatten , 'bar' asParser flatten not not.
-	self assert: parser fail: 'foobaz'.
-	self assert: parser parse: 'foobar'
+	parser := 'foo' asParser.
+	self assert: parser not not = parser
 ]
 
 { #category : #testing }

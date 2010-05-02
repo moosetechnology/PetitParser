@@ -11,7 +11,7 @@ Class {
 		'parentheses',
 		'number'
 	],
-	#category : #'PetitParser-Tests'
+	#category : #'PetitParser-Examples'
 }
 
 { #category : #grammar }

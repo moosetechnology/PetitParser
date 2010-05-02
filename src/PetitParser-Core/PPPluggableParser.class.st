@@ -12,7 +12,7 @@ Class {
 
 { #category : #'instance creation' }
 PPPluggableParser class >> on: aBlock [
-	^ self new block: aBlock
+	^ self new initializeOn: aBlock
 ]
 
 { #category : #accessing }
@@ -22,8 +22,8 @@ PPPluggableParser >> block [
 	^ block
 ]
 
-{ #category : #accessing }
-PPPluggableParser >> block: aBlock [
+{ #category : #initialization }
+PPPluggableParser >> initializeOn: aBlock [
 	block := aBlock
 ]
 

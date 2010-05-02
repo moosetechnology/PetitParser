@@ -12,7 +12,7 @@ Class {
 
 { #category : #'instance creation' }
 PPActionParser class >> on: aParser block: aBlock [
-	^ (self on: aParser) block: aBlock
+	^ (self on: aParser) setBlock: aBlock
 ]
 
 { #category : #accessing }
@@ -22,15 +22,15 @@ PPActionParser >> block [
 	^ block
 ]
 
-{ #category : #accessing }
-PPActionParser >> block: aBlock [
-	block := aBlock
-]
-
 { #category : #parsing }
 PPActionParser >> parseOn: aStream [
 	| element |
 	^ (element := super parseOn: aStream) isPetitFailure
 		ifFalse: [ block value: element ]
 		ifTrue: [ element ]
+]
+
+{ #category : #initialization }
+PPActionParser >> setBlock: aBlock [
+	block := aBlock
 ]
