@@ -96,7 +96,7 @@ PPPredicateParser class >> lowercase [
 
 { #category : #'factory-chars' }
 PPPredicateParser class >> newline [
-	^ self anyOf: (Array with: Character cr with: Character lf)
+	^ self anyOf: (String with: Character cr with: Character lf)
 ]
 
 { #category : #'instance creation' }
@@ -107,6 +107,11 @@ PPPredicateParser class >> on: aBlock message: aString [
 { #category : #'instance creation' }
 PPPredicateParser class >> on: aBlock message: aString negated: aNegatedBlock message: aNegatedString [
 	^ self new initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString
+]
+
+{ #category : #'factory-chars' }
+PPPredicateParser class >> punctuation [
+	^ self anyOf: '.,!?;:"''-()`'
 ]
 
 { #category : #'factory-chars' }

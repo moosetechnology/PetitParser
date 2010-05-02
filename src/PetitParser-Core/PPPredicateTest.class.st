@@ -193,6 +193,18 @@ PPPredicateTest >> testOnMessage [
 ]
 
 { #category : #'testing-chars' }
+PPPredicateTest >> testPunctuation [
+	| parser |
+	parser := #punctuation asParser.
+	self assertCharacterSets: parser.
+	self assert: parser parse: '.' to: $..
+	self assert: parser parse: ',' to: $,.
+	self assert: parser fail: ''.
+	self assert: parser fail: 'a'.
+	self assert: parser fail: '@'
+]
+
+{ #category : #'testing-chars' }
 PPPredicateTest >> testSpace [
 	| parser |
 	parser := #space asParser.
