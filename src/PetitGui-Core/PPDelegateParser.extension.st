@@ -1,11 +1,11 @@
 Extension { #name : #PPDelegateParser }
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*petitgui-accessing' }
 PPDelegateParser >> displayDescription [
 	^ nil
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*petitgui-accessing' }
 PPDelegateParser >> exampleOn: aStream [
 	parser exampleOn: aStream
 ]

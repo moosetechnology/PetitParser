@@ -11,7 +11,7 @@ PPPredicateParser >> exampleOn: aStream [
 
 	| valid normal |
 	valid := Character allCharacters
-		select: [ :char | predicate value: char ].
+		select: [ :char | self matches: (String with: char) ].
 	normal := valid
 		select: [ :char | char asInteger < 127 and: [ char isAlphaNumeric ] ].
 	aStream nextPut: (normal isEmpty

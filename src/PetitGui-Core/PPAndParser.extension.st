@@ -4,3 +4,7 @@ Extension { #name : #PPAndParser }
 PPAndParser >> displayDescription [
 	^ 'and'
 ]
+
+{ #category : #'*petitgui-accessing' }
+PPAndParser >> exampleOn: aStream [
+]
