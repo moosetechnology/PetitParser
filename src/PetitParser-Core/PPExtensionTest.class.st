@@ -7,7 +7,8 @@ Class {
 { #category : #testing }
 PPExtensionTest >> testCharacter [
 	| parser |
-	parser := $a asParser.	
+	parser := $a asParser.
+	self assert: parser literal = $a.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser fail: 'b'
 ]
@@ -84,6 +85,7 @@ PPExtensionTest >> testStream [
 PPExtensionTest >> testString [
 	| parser |
 	parser := 'ab' asParser.
+	self assert: parser literal = 'ab'.
 	self assert: parser parse: 'ab' to: 'ab'.
 	self assert: parser parse: 'aba' to: 'ab' end: 2.
 	self assert: parser parse: 'abb' to: 'ab' end: 2.

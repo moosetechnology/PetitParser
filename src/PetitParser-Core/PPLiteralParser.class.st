@@ -6,7 +6,7 @@ Class {
 	#superclass : #PPParser,
 	#instVars : [
 		'literal',
-		'failureMessage'
+		'message'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -24,12 +24,21 @@ PPLiteralParser class >> on: anObject message: aString [
 { #category : #initialization }
 PPLiteralParser >> initializeOn: anObject message: aString [
 	literal := anObject.
-	failureMessage := aString
+	message := aString
 ]
 
 { #category : #accessing }
 PPLiteralParser >> literal [
+	"Answer the parsed literal."
+
 	^ literal
+]
+
+{ #category : #accessing }
+PPLiteralParser >> message [
+	"Answer the failure message."
+	
+	^ message
 ]
 
 { #category : #printing }

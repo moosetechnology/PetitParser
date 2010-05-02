@@ -1,3 +1,6 @@
+"
+An abstract parser for all parsers in PetitParser. Subclasses implement #parseOn: to perform the actual recursive-descent parsing. All parsers support a variety of methods to perform an actual parse, see the methods in the #parsing protocol. Parsers are combined with a series of operators that can be found in the #operations protocol.
+"
 Class {
 	#name : #PPParser,
 	#superclass : #Object,
@@ -269,7 +272,7 @@ PPParser >> parse: anObject [
 
 { #category : #parsing }
 PPParser >> parse: anObject onError: aBlock [
-	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated,  evaluated with the failure object, or evaluated with the error message and position."
+	"Parse anObject with the receiving parser and answer the parse-result or answer the result of evaluating aBlock. Depending on the number of arguments of the block it is simply evaluated, evaluated with the failure object, or evaluated with the error message and position."
 	
 	| result |
 	result := self parseOn: anObject asPetitStream.

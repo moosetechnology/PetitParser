@@ -1,3 +1,6 @@
+"
+A pluggable parser that passes the parser stream into a block. This enables users to perform manual parsing or to embed other parser frameworks into PetitParser.
+"
 Class {
 	#name : #PPPluggableParser,
 	#superclass : #PPParser,

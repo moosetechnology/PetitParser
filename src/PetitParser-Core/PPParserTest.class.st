@@ -6,8 +6,10 @@ Class {
 
 { #category : #testing }
 PPParserTest >> testAction [
-	| parser |
-	parser := #any asParser ==> #asUppercase.
+	| block parser |
+	block := [ :char | char asUppercase ].
+	parser := #any asParser ==> block.
+	self assert: parser block = block.
 
 	self assert: parser parse: 'a' to: $A.
 	self assert: parser parse: 'b' to: $B
@@ -17,6 +19,7 @@ PPParserTest >> testAction [
 PPParserTest >> testAnd [
 	| parser |
 	parser := 'foo' asParser flatten , 'bar' asParser flatten and.
+	self assert: parser children last and = parser children last.
 	
 	self assert: parser parse: 'foobar' to: #('foo' 'bar') end: 3.
 	self assert: parser fail: 'foobaz'
@@ -129,6 +132,7 @@ PPParserTest >> testEpsilon [
 PPParserTest >> testFailing [
 	| parser result |
 	parser := PPFailingParser message: 'Plonk'.
+	self assert: parser message = 'Plonk'.
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
@@ -249,6 +253,8 @@ PPParserTest >> testMatchingRangesIn [
 PPParserTest >> testMax [
 	| parser |
 	parser := $a asParser max: 2.
+	self assert: parser min = 0.
+	self assert: parser max = 2.
 
 	self assert: parser parse: '' to: #().
 	self assert: parser parse: 'a' to: #($a).
@@ -281,6 +287,8 @@ PPParserTest >> testMemoized [
 PPParserTest >> testMin [
 	| parser |
 	parser := $a asParser min: 2.
+	self assert: parser min = 2.
+	self assert: parser max > parser min.
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
@@ -295,6 +303,8 @@ PPParserTest >> testMin [
 PPParserTest >> testMinMax [
 	| parser |
 	parser := $a asParser min: 2 max: 4.
+	self assert: parser min = 2.
+	self assert: parser max = 4.
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
@@ -441,9 +451,19 @@ PPParserTest >> testPermutation [
 ]
 
 { #category : #testing }
+PPParserTest >> testPluggable [
+	| block parser |
+	block := [ :stream | stream position ].
+	parser := block asParser.
+	self assert: parser block = block
+]
+
+{ #category : #testing }
 PPParserTest >> testPlus [
 	| parser |
 	parser := $a asParser plus.
+	self assert: parser min = 1.
+	self assert: parser max > parser min.
 	
 	self assert: parser parse: 'a' to: #($a).
 	self assert: parser parse: 'aa' to: #($a $a).
@@ -657,6 +677,8 @@ PPParserTest >> testSideEffectSequence [
 PPParserTest >> testStar [
 	| parser |
 	parser := $a asParser star.
+	self assert: parser min = 0.
+	self assert: parser max > parser min.
 	
 	self assert: parser parse: '' to: #().
 	self assert: parser parse: 'a' to: #($a).

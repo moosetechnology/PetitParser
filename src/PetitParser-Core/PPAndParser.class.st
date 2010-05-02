@@ -7,6 +7,11 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
+{ #category : #operations }
+PPAndParser >> and [
+	^ self
+]
+
 { #category : #parsing }
 PPAndParser >> parseOn: aStream [
 	| element position |

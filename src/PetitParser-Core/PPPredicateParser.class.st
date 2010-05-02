@@ -16,8 +16,8 @@ Class {
 { #category : #'factory-objects' }
 PPPredicateParser class >> any [
 	^ self
-		on: [ :each | true ] message: 'something expected'
-		negated: [ :each | false ] message: 'nothing expected'
+		on: [ :each | true ] message: 'input expected'
+		negated: [ :each | false ] message: 'no input expected'
 ]
 
 { #category : #'factory-objects' }
@@ -136,12 +136,26 @@ PPPredicateParser class >> word [
 		negated: [ :each | each isAlphaNumeric not ] message: 'no letter or digit expected'
 ]
 
+{ #category : #accessing }
+PPPredicateParser >> block [
+	"Answer the predicate block of the receiver."
+	
+	^ predicate
+]
+
 { #category : #initialization }
 PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
 	predicate := aBlock.
 	predicateMessage := aString.
 	negated := aNegatedBlock.
 	negatedMessage := aNegatedString
+]
+
+{ #category : #accessing }
+PPPredicateParser >> message [
+	"Answer the failure message."
+	
+	^ predicateMessage
 ]
 
 { #category : #operators }
@@ -158,20 +172,6 @@ PPPredicateParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ predicate value: aStream peek ])
 		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
 		ifTrue: [ aStream next ]
-]
-
-{ #category : #accessing }
-PPPredicateParser >> predicate [
-	"Answer the predicate block used to match the receiver."
-
-	^ predicate
-]
-
-{ #category : #accessing }
-PPPredicateParser >> predicateMessage [
-	"Answer the message that is thrown when the predicate does not match."
-
-	^ predicateMessage
 ]
 
 { #category : #printing }
