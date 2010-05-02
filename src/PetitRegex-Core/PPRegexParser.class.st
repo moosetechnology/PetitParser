@@ -13,13 +13,30 @@ Class {
 		'groupAtom',
 		'escapeAtom',
 		'characterGroup',
-		'quantifier'
+		'quantifier',
+		'characterClass'
 	],
 	#classVars : [
+		'ClassMap',
 		'EscapeMap'
 	],
 	#category : #'PetitRegex-Core'
 }
+
+{ #category : #private }
+PPRegexParser class >> atBeginOfWord: aStream [
+	^ (self isWordChar: (self lastCharIn: aStream)) not and: [ self isWordChar: aStream peek ]
+]
+
+{ #category : #private }
+PPRegexParser class >> atEndOfWord: aStream [
+	^ (self isWordChar: (self lastCharIn: aStream)) and: [ (self isWordChar: aStream peek) not ]
+]
+
+{ #category : #private }
+PPRegexParser class >> atWordBoundary: aStream [
+	^ (self isWordChar: (self lastCharIn: aStream)) xor: (self isWordChar: aStream peek)
+]
 
 { #category : #initialization }
 PPRegexParser class >> condition: aBlock [
@@ -28,12 +45,43 @@ PPRegexParser class >> condition: aBlock [
 
 { #category : #initialization }
 PPRegexParser class >> initialize [
+	self initializeClassMap.
+	self initializeEscapeMap
+]
+
+{ #category : #initialization }
+PPRegexParser class >> initializeClassMap [
+	ClassMap := Dictionary new.
+	ClassMap
+		at: 'alnum' put: #word asParser;
+		at: 'alpha' put: #letter asParser;
+		at: 'cntrl' put: #control asParser;
+		at: 'digit' put: #digit asParser;
+		at: 'graph' put: #control asParser negate;
+		at: 'lower' put: #lowercase asParser;
+		at: 'print' put: #control asParser negate;
+		at: 'punct' put: #punctuation asParser;
+		at: 'space' put: #space asParser;
+		at: 'upper' put: #uppercase asParser;
+		at: 'xdigit' put: #hex asParser
+]
+
+{ #category : #initialization }
+PPRegexParser class >> initializeEscapeMap [
 	EscapeMap := Dictionary new.
 	EscapeMap
 		"only at beginning of string"
 		at: $A put: (self condition: [ :stream | stream position = 0 ]);
 		"only at end of string"		
 		at: $Z put: (self condition: [ :stream | stream atEnd ]);
+		"an empty string at a word boundary"
+		at: $b put: (self condition: [ :stream | self atWordBoundary: stream ]);
+		"an empty string not at a word boundary"
+		at: $B put: (self condition: [ :stream | (self atWordBoundary: stream) not ]);
+		"an empty string at the beginning of a word"
+		at: $< put: (self condition: [ :stream | self atBeginOfWord: stream ]);
+		"an empty string at the end of a word"
+		at: $> put: (self condition: [ :stream | self atEndOfWord: stream ]);
 		"newline"
 		at: $n put: Character lf asParser;
 		"carriage return"
@@ -51,7 +99,19 @@ PPRegexParser class >> initialize [
 		"whitespace"
 		at: $s put: #space asParser;
 		"not whitespace"
-		at: $S put: #space asParser negate
+		at: $S put: #space asParser negate;
+		"backslash"
+		at: $\ put: $\ asParser
+]
+
+{ #category : #private }
+PPRegexParser class >> isWordChar: aCharacterOrNil [
+	^ aCharacterOrNil ~~ nil and: [ aCharacterOrNil isAlphaNumeric ]
+]
+
+{ #category : #private }
+PPRegexParser class >> lastCharIn: aStream [
+	^ aStream position = 0 ifFalse: [ aStream skip: -1; next ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -61,7 +121,7 @@ PPRegexParser >> anyAtom [
 
 { #category : #grammar }
 PPRegexParser >> atom [
-	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterGroup / groupAtom / characterAtom
+	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterClass / characterGroup / groupAtom / characterAtom
 ]
 
 { #category : #'grammar-atoms' }
@@ -74,6 +134,11 @@ PPRegexParser >> beginOfLineAtom [
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterAtom [
 	^ $) asParser negate map: [ :char | char asParser ]
+]
+
+{ #category : #'grammar-atoms' }
+PPRegexParser >> characterClass [
+	^ '[:' asParser , #word asParser star flatten , ':]' asParser map: [ :open :class :close | ClassMap at: class ifAbsent: [ self error: 'Invalid character class [:' , class , ':]' ] ]
 ]
 
 { #category : #'grammar-atoms' }
