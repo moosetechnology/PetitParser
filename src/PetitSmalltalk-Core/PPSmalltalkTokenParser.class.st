@@ -21,7 +21,7 @@ PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
 	  aStream peek = $" ] whileTrue: [
 		aStream next.
 		start := aStream position.
-		[ aStream atEnd not and: [ aStream next = $" ] ] whileFalse.
+		aStream upTo: $".
 		comments := comments copyWith: (start to: aStream position) ].
 	^ comments
 ]
