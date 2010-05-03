@@ -14,6 +14,8 @@ PPChoiceParser >> / aRule [
 
 { #category : #parsing }
 PPChoiceParser >> parseOn: aStream [
+	"When encountering failures while parsing a choice report the right most error."
+
 	| failure element |
 	failure := nil.
 	1 to: parsers size do: [ :index |

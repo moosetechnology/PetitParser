@@ -25,11 +25,10 @@ PPSequenceParser >> parseOn: aStream [
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index) 
 			parseOn: aStream.
-		element isPetitFailure 
-			ifFalse: [ elements at: index put: element ]
-			ifTrue: [
-				aStream position: start.
-				^ element ] ].
+		element isPetitFailure ifTrue: [
+			aStream position: start.
+			^ element ].
+		elements at: index put: element ].
 	^ elements
 ]
 

@@ -51,11 +51,10 @@ PPRepeatingParser >> parseOn: aStream [
 	start := aStream position.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [
-		(element := super parseOn: aStream) isPetitFailure
-			ifFalse: [ elements addLast: element ]
-			ifTrue: [
-				aStream position: start.
-				^ element ] ].
+		(element := super parseOn: aStream) isPetitFailure ifTrue: [
+			aStream position: start.
+			^ element ].
+		elements addLast: element ].
 	[ elements size < max ] whileTrue: [
 	 	(element := super parseOn: aStream) isPetitFailure
 			ifTrue: [ ^ elements asArray ].
