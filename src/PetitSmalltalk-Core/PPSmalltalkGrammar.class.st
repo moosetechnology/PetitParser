@@ -134,7 +134,8 @@ PPSmalltalkGrammar >> assignmentToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> binary [
-	^ $~ asParser / $- asParser / $! asParser / $@ asParser / $% asParser / $& asParser / $* asParser / $+ asParser / $= asParser / $\ asParser / $| asParser / $? asParser / $/ asParser / $> asParser / $< asParser / $, asParser , ($~ asParser / $! asParser / $@ asParser / $% asParser / $& asParser / $* asParser / $+ asParser / $= asParser / $\ asParser / $| asParser / $? asParser / $/ asParser / $> asParser / $< asParser / $, asParser) star
+	^ (PPPredicateParser anyOf: '!%&*+,-/<=>?@\|~') ,
+	  (PPPredicateParser anyOf: '!%&*+,/<=>?@\|~') star
 ]
 
 { #category : #'grammar-messages' }
@@ -302,7 +303,7 @@ PPSmalltalkGrammar >> keywordToken [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> literal [
-	^ charLiteral / numberLiteral / stringLiteral / symbolLiteral / arrayLiteral / byteLiteral / trueLiteral / falseLiteral / nilLiteral 
+	^ numberLiteral / stringLiteral / charLiteral / arrayLiteral / byteLiteral / symbolLiteral / nilLiteral / trueLiteral / falseLiteral
 ]
 
 { #category : #grammar }
@@ -405,7 +406,7 @@ PPSmalltalkGrammar >> pragmas [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> primary [
-	^ block / parens / array / literal / variable
+	^ literal / variable / block / parens / array
 ]
 
 { #category : #grammar }
