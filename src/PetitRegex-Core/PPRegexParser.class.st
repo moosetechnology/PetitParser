@@ -14,7 +14,11 @@ Class {
 		'escapeAtom',
 		'characterGroup',
 		'quantifier',
-		'characterClass'
+		'characterSet',
+		'characterSetClass',
+		'characterSetEscape',
+		'characterSetRange',
+		'characterSetCharacter'
 	],
 	#classVars : [
 		'ClassMap',
@@ -39,8 +43,8 @@ PPRegexParser class >> atWordBoundary: aStream [
 ]
 
 { #category : #initialization }
-PPRegexParser class >> condition: aBlock [
-	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure new ] ] asParser
+PPRegexParser class >> condition: aBlock message: aString [
+	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure message: aString at: stream position ] ] asParser
 ]
 
 { #category : #initialization }
@@ -71,17 +75,17 @@ PPRegexParser class >> initializeEscapeMap [
 	EscapeMap := Dictionary new.
 	EscapeMap
 		"only at beginning of string"
-		at: $A put: (self condition: [ :stream | stream position = 0 ]);
+		at: $A put: (self condition: [ :stream | stream position = 0 ] message: 'beginning of input expected');
 		"only at end of string"		
-		at: $Z put: (self condition: [ :stream | stream atEnd ]);
+		at: $Z put: (self condition: [ :stream | stream atEnd ] message: 'end of input expected');
 		"an empty string at a word boundary"
-		at: $b put: (self condition: [ :stream | self atWordBoundary: stream ]);
+		at: $b put: (self condition: [ :stream | self atWordBoundary: stream ] message: 'word boundary expected');
 		"an empty string not at a word boundary"
-		at: $B put: (self condition: [ :stream | (self atWordBoundary: stream) not ]);
+		at: $B put: (self condition: [ :stream | (self atWordBoundary: stream) not ] message: 'no word boundary expected');
 		"an empty string at the beginning of a word"
-		at: $< put: (self condition: [ :stream | self atBeginOfWord: stream ]);
+		at: $< put: (self condition: [ :stream | self atBeginOfWord: stream ] message: 'beginning of word expected');
 		"an empty string at the end of a word"
-		at: $> put: (self condition: [ :stream | self atEndOfWord: stream ]);
+		at: $> put: (self condition: [ :stream | self atEndOfWord: stream ] message: 'end of word expected');
 		"newline"
 		at: $n put: Character lf asParser;
 		"carriage return"
@@ -121,14 +125,14 @@ PPRegexParser >> anyAtom [
 
 { #category : #grammar }
 PPRegexParser >> atom [
-	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterClass / characterGroup / groupAtom / characterAtom
+	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterGroup / groupAtom / characterAtom
 ]
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> beginOfLineAtom [
 	^ $^ asParser map: [ :char | [ :stream | 
 		(stream position = 0 or: [ (stream skip: -1; next) = Character cr ])
-			ifFalse: [ PPFailure at: stream position ] ] asParser ]
+			ifFalse: [ PPFailure message: '^ not expected' at: stream position ] ] asParser ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -137,30 +141,50 @@ PPRegexParser >> characterAtom [
 ]
 
 { #category : #'grammar-atoms' }
-PPRegexParser >> characterClass [
+PPRegexParser >> characterGroup [
+	^ $[ asParser , $^ asParser optional , characterSet star , $] asParser map: [ :open :negate :parsers :close |
+		| result |
+		result := parsers
+			inject: PPChoiceParser new
+			into: [ :parser :each | parser / each ].
+		result children size = 1
+			ifTrue: [ result := result children first ].		
+		negate isNil
+			ifTrue: [ result ]
+			ifFalse: [ result negate ] ]
+]
+
+{ #category : #'grammar-characters' }
+PPRegexParser >> characterSet [
+	^ characterSetClass / characterSetEscape / characterSetRange / characterSetCharacter
+]
+
+{ #category : #'grammar-characters' }
+PPRegexParser >> characterSetCharacter [
+	^ $] asParser negate map: [ :char | char asParser ]
+]
+
+{ #category : #'grammar-characters' }
+PPRegexParser >> characterSetClass [
 	^ '[:' asParser , #word asParser star flatten , ':]' asParser map: [ :open :class :close | ClassMap at: class ifAbsent: [ self error: 'Invalid character class [:' , class , ':]' ] ]
 ]
 
-{ #category : #'grammar-atoms' }
-PPRegexParser >> characterGroup [
-	^ $[ asParser , $^ asParser optional , [ :stream |
-			| set |
-			set := OrderedCollection new.
-			[ stream atEnd or: [ stream peek = $] ] ] whileFalse: [
-				(stream peek = $- and: [ set notEmpty ])
-					ifTrue: [ set addAll: (set removeLast to: (stream next; next)) ]
-					ifFalse: [ set add: stream next ] ].
-			set ] asParser , $] asParser map: [ :open :negate :set :close |
-				negate isNil
-					ifTrue: [ (PPPredicateParser anyOf: set asSet)  ]
-					ifFalse: [ (PPPredicateParser anyOf: set asSet) negate ] ]
+{ #category : #'grammar-characters' }
+PPRegexParser >> characterSetEscape [
+	^ escapeAtom
+]
+
+{ #category : #'grammar-characters' }
+PPRegexParser >> characterSetRange [
+	^ #any asParser , $- asParser , $] asParser negate
+		map: [ :start :sep :stop | PPPredicateParser between: start and: stop ]
 ]
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> endOfLineAtom [
 	^ $$ asParser map: [ :char | [ :stream | 
 		(stream atEnd or: [ stream peek = Character cr ])
-			ifFalse: [ PPFailure at: stream position ]  ] asParser ]
+			ifFalse: [ PPFailure message: '$ not expected' at: stream position ] ] asParser ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -218,9 +242,8 @@ PPRegexParser >> regex [
 			g postfix: self oneOrMorePiece do: [ :at :op | op setParser: at ].
 			g postfix: self rangePiece do: [ :at :op | op setParser: at ] ];
 		group: [ :g |
+			g left: $| do: [ :left :op :right | left / right ].
 			g left: nil do: [ :left :op :right | left , right ] ];
-		group: [ :g |
-			g left: $| do: [ :left :op :right | left / right ] ];
 		yourself
 ]
 
