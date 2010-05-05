@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'tokenClass'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #private }

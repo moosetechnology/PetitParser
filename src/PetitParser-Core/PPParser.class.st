@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'properties'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'instance creation' }
@@ -282,7 +282,7 @@ PPParser >> parse: anObject onError: aBlock [
 		ifTrue: [ ^ aBlock value ].
 	aBlock numArgs = 1
 		ifTrue: [ ^ aBlock value: result ].
-	^ aBlock value: result reason value: result position
+	^ aBlock value: result message value: result position
 ]
 
 { #category : #parsing }

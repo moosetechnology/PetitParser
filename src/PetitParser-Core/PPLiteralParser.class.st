@@ -8,7 +8,7 @@ Class {
 		'literal',
 		'message'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'instance creation' }

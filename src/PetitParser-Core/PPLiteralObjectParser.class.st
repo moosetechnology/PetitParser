@@ -4,7 +4,7 @@ A parser that accepts a single literal object, such as a character. This is the 
 Class {
 	#name : #PPLiteralObjectParser,
 	#superclass : #PPLiteralParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #operator }
@@ -19,6 +19,6 @@ PPLiteralObjectParser >> negate [
 { #category : #parsing }
 PPLiteralObjectParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ aStream peek = literal ])
-		ifFalse: [ PPFailure reason: message at: aStream position ]
+		ifFalse: [ PPFailure message: message at: aStream position ]
 		ifTrue: [ aStream next ]
 ]

@@ -1,33 +1,25 @@
+"
+The failure object in PetitParser. It is the only class that responds to #isPetitFailure with true. It contains an error message and a position of the occurence of the failure.
+"
 Class {
 	#name : #PPFailure,
 	#superclass : #Object,
 	#instVars : [
-		'reason',
+		'message',
 		'position'
 	],
 	#category : #'PetitParser-Core'
 }
 
 { #category : #'instance creation' }
-PPFailure class >> at: anInteger [
-	^ self basicNew 
-		position: anInteger;
-		yourself
+PPFailure class >> message: aString at: anInteger [
+	^ self basicNew initializeMessage: aString at: anInteger
 ]
 
-{ #category : #'instance creation' }
-PPFailure class >> reason: aString [
-	^ self basicNew
-		reason: aString;
-		yourself
-]
-
-{ #category : #'instance creation' }
-PPFailure class >> reason: aString at: anInteger [
-	^ self basicNew
-		reason: aString;
-		position: anInteger;
-		yourself
+{ #category : #initialization }
+PPFailure >> initializeMessage: aString at: anInteger [
+	message := aString.
+	position := anInteger
 ]
 
 { #category : #testing }
@@ -38,30 +30,20 @@ PPFailure >> isPetitFailure [
 ]
 
 { #category : #accessing }
-PPFailure >> position [
-	^ position ifNil: [ 0 ]
+PPFailure >> message [
+	"Answer a human readable error message of this parse failure."
+	
+	^ message
 ]
 
 { #category : #accessing }
-PPFailure >> position: anInteger [
-	position := anInteger
+PPFailure >> position [
+	"Answer the position in the source string that caused this parse failure."
+
+	^ position
 ]
 
 { #category : #printing }
 PPFailure >> printOn: aStream [
-	reason isNil
-		ifTrue: [ super printOn: aStream ]
-		ifFalse: [ aStream nextPutAll: reason ].
-	position isNil
-		ifFalse: [ aStream nextPutAll: ' at '; print: position ]
-]
-
-{ #category : #accessing }
-PPFailure >> reason [
-	^ reason
-]
-
-{ #category : #accessing }
-PPFailure >> reason: aString [
-	reason := aString
+	aStream nextPutAll: self message; nextPutAll: ' at '; print: position
 ]

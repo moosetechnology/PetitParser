@@ -4,7 +4,7 @@ The npt-predicate, a parser that succeeds whenever its delegate does not, but co
 Class {
 	#name : #PPNotParser,
 	#superclass : #PPDelegateParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #operations }
@@ -19,5 +19,5 @@ PPNotParser >> parseOn: aStream [
 	element := super parseOn: aStream.
 	aStream position: position.
 	^ element isPetitFailure
-		ifFalse: [ PPFailure at: aStream position ]
+		ifFalse: [ PPFailure message: '' at: aStream position ]
 ]

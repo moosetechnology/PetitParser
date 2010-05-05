@@ -8,7 +8,7 @@ Class {
 		'stream',
 		'buffer'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #operations }
@@ -28,7 +28,7 @@ PPMemoizedParser >> parseOn: aStream [
 	memento position isNil
 		ifTrue: [
 			memento result: (stream size - stream position + 2 < memento count
-				ifTrue: [ PPFailure reason: 'overflow' at: stream position ]
+				ifTrue: [ PPFailure message: 'overflow' at: stream position ]
 				ifFalse: [ memento increment. super parseOn: stream ]).
 			memento position: stream position ]
 		ifFalse: [ stream position: memento position ].

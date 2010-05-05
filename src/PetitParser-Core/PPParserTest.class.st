@@ -141,28 +141,18 @@ PPParserTest >> testFailing [
 	self assert: parser fail: 'aa'.
 	
 	result := parser parse: 'a'.
-	self assert: result reason = 'Plonk'.
+	self assert: result message = 'Plonk'.
 	self assert: result printString = 'Plonk at 0'
 ]
 
 { #category : #'testing-utilities' }
 PPParserTest >> testFailure [
-	| f1 f2 f3 |
-	f1 := PPFailure at: 1.
-	f2 := PPFailure reason: 'Fatal'.
-	f3 := PPFailure reason: 'Error' at: 3.
+	| failure |
+	failure := PPFailure message: 'Error' at: 3.
 	
-	self assert: f1 position = 1.
-	self assert: f1 reason isNil.
-	self assert: f1 isPetitFailure.
-	
-	self assert: f2 position = 0.
-	self assert: f2 reason = 'Fatal'.
-	self assert: f2 isPetitFailure.
-
-	self assert: f3 position = 3.
-	self assert: f3 reason = 'Error'.
-	self assert: f3 isPetitFailure.
+	self assert: failure message = 'Error'.
+	self assert: failure position = 3.
+	self assert: failure isPetitFailure.
 
 	self deny: 4 isPetitFailure.
 	self deny: 'foo' isPetitFailure
@@ -409,12 +399,12 @@ PPParserTest >> testParse [
 	self assert: (parser parse: 'a') = $a.
 	self assert: (result := parser parse: 'b') isPetitFailure.
 	self assert: (result position = 0).
-	self assert: (result reason =  '$a expected').
+	self assert: (result message =  '$a expected').
 	
 	self assert: (parser parse: 'a' readStream) = $a.
 	self assert: (result := parser parse: 'b' readStream) isPetitFailure.
 	self assert: (result position = 0).
-	self assert: (result reason =  '$a expected')
+	self assert: (result message =  '$a expected')
 ]
 
 { #category : #'testing-utilities' }
@@ -440,7 +430,7 @@ PPParserTest >> testParseOnError1 [
 	
 	result := parser parse: 'b' onError: [ :failure | 
 		self assert: failure position = 0.
-		self assert: failure reason = '$a expected'.
+		self assert: failure message = '$a expected'.
 		seen := true ].
 	self assert: result.
 	self assert: seen

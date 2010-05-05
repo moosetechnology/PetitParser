@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'message'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'instance creation' }
@@ -24,7 +24,7 @@ PPFailingParser >> message [
 
 { #category : #parsing }
 PPFailingParser >> parseOn: aStream [
-	^ PPFailure reason: message at: aStream position
+	^ PPFailure message: message at: aStream position
 ]
 
 { #category : #printing }

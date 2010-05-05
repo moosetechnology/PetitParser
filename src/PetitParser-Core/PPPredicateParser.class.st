@@ -10,7 +10,7 @@ Class {
 		'negated',
 		'negatedMessage'
 	],
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'factory-objects' }
@@ -32,6 +32,11 @@ PPPredicateParser class >> between: min and: max [
 	^ self
 		on: [ :each | each >= min and: [ each <= max ] ] message: min printString , '..' , max printString , ' expected'
 		negated: [ :each | each < min or: [ each > max ] ] message: min printString , '..' , max printString , ' not expected'
+]
+
+{ #category : #'factory-chars' }
+PPPredicateParser class >> blank [
+	^ self anyOf: (String with: Character space with: Character tab)
 ]
 
 { #category : #'factory-chars' }
@@ -111,7 +116,7 @@ PPPredicateParser class >> on: aBlock message: aString negated: aNegatedBlock me
 
 { #category : #'factory-chars' }
 PPPredicateParser class >> punctuation [
-	^ self anyOf: '.,!?;:"''-()`'
+	^ self anyOf: '.,"''?!;:#$%&()*+-/<>=@[]\^_{}|~'
 ]
 
 { #category : #'factory-chars' }
@@ -175,7 +180,7 @@ PPPredicateParser >> negate [
 { #category : #parsing }
 PPPredicateParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ predicate value: aStream peek ])
-		ifFalse: [ PPFailure reason: predicateMessage at: aStream position ]
+		ifFalse: [ PPFailure message: predicateMessage at: aStream position ]
 		ifTrue: [ aStream next ]
 ]
 

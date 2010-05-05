@@ -4,7 +4,7 @@ A parser that answers a flat copy of the range my delegate parses.
 Class {
 	#name : #PPFlattenParser,
 	#superclass : #PPDelegateParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #hooks }

@@ -4,7 +4,7 @@ A parser accepts a sequence of literal objects, such as a String. This is an opt
 Class {
 	#name : #PPLiteralSequenceParser,
 	#superclass : #PPLiteralParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #parsing }
@@ -14,5 +14,5 @@ PPLiteralSequenceParser >> parseOn: aStream [
 	result := aStream next: literal size.
 	result = literal ifTrue: [ ^ result ].
 	aStream position: position.
-	^ PPFailure reason: message at: position
+	^ PPFailure message: message at: position
 ]

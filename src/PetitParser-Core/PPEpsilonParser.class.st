@@ -4,7 +4,7 @@ A parser that consumes nothing and always succeeds.
 Class {
 	#name : #PPEpsilonParser,
 	#superclass : #PPParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #parsing }

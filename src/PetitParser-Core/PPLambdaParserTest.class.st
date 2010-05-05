@@ -67,7 +67,7 @@ PPLambdaParserTest >> testParseOnError [
 		parse: '\x.'
 		onError: [ :fail | beenHere := true. fail ].
 	self assert: beenHere.
-	self assert: result reason = 'letter expected'.
+	self assert: result message = 'letter expected'.
 	self assert: result position = 3.
 
 	beenHere := false.
@@ -103,7 +103,7 @@ PPLambdaParserTest >> testParseStartingAtOnError [
 		startingAt: #variable
 		onError: [ :fail | beenHere := true. fail ].
 	self assert: beenHere.
-	self assert: result reason = 'letter expected'.
+	self assert: result message = 'letter expected'.
 	self assert: result position = 0.
 
 	beenHere := false.

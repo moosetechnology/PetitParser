@@ -4,7 +4,7 @@ A parser that uses the first parser that succeeds.
 Class {
 	#name : #PPChoiceParser,
 	#superclass : #PPListParser,
-	#category : #'PetitParser-Core'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #operations }
