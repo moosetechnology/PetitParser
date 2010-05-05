@@ -102,7 +102,7 @@ PPXmlGrammar >> element [
 			ifFalse: [
 				nodes second = nodes fifth fifth
 					ifTrue: [ Array with: nodes second with: nodes third with: nodes fifth second ]
-					ifFalse: [ PPFailure reason: 'Expected </' , nodes second qualifiedName , '>' ] ] ]
+					ifFalse: [ PPFailure message: 'Expected </' , nodes second qualifiedName , '>' at: nodes fifth third ] ] ]
 ]
 
 { #category : #'grammar-character' }
