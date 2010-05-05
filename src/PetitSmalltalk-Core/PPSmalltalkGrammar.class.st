@@ -350,7 +350,7 @@ PPSmalltalkGrammar >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) and , [ :stream | 
 		[ Number readFrom: stream ] 
 			on: Error
-			do: [ :err | PPFailure reason: err messageText at: stream position ] ] 
+			do: [ :err | PPFailure message: err messageText at: stream position ] ] 
 				asParser
 ]
 
