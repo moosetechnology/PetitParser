@@ -218,7 +218,7 @@ PPRegexParser >> quantifier [
 
 { #category : #'grammar-operators' }
 PPRegexParser >> rangePiece [
-	^ ${ asParser , rangePieceSpec ,  $} asParser , quantifier 
+	^ ${ asParser , rangePieceSpec , $} asParser , quantifier 
 		map: [ :op :ra :cl :qu | qu on: nil min: ra first max: ra last ]
 ]
 
@@ -268,12 +268,12 @@ PPRegexParser >> start [
 PPRegexParser >> zeroOrMorePiece [
 	"*	0 or more times"
 		
-	^ $* asParser ,  quantifier map: [ :op :qu | qu on: nil min: 0 max: SmallInteger maxVal ]
+	^ $* asParser , quantifier map: [ :op :qu | qu on: nil min: 0 max: SmallInteger maxVal ]
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> zeroOrOnePiece [
 	"?	0 or 1 times"
 
-	^ $? asParser ,  quantifier map: [ :op :qu | qu on: nil min: 0 max: 1 ]
+	^ $? asParser , quantifier map: [ :op :qu | qu on: nil min: 0 max: 1 ]
 ]

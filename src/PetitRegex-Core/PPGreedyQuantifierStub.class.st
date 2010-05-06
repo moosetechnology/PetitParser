@@ -12,7 +12,7 @@ PPGreedyQuantifierStub >> resolve: aParser [
 			(min = 1 and: [ max = SmallInteger maxVal ])
 				ifTrue: [ parser plusGreedy: aParser ]
 				ifFalse: [ 
-					(min = 0 and: [ max = 1])
-						ifTrue: [ parser optional ]
+					(min = 0 and: [ max = 1 ])
+						ifTrue: [ parser / aParser and ]
 						ifFalse: [ self error: 'Invalid quantifier range' ] ] ]
 ]
