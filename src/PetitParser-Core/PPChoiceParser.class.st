@@ -14,7 +14,7 @@ PPChoiceParser >> / aRule [
 
 { #category : #parsing }
 PPChoiceParser >> parseOn: aStream [
-	"When encountering failures while parsing a choice report the right most error."
+	"This is optimized code that avoids unnecessary block activations, do not change. When encountering failures while parsing a choice report the right most error."
 
 	| failure element |
 	failure := nil.

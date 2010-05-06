@@ -19,6 +19,8 @@ PPSequenceParser >> map: aBlock [
 
 { #category : #parsing }
 PPSequenceParser >> parseOn: aStream [
+	"This is optimized code that avoids unnecessary block activations, do not change."
+	
 	| start elements element |
 	start := aStream position.
 	elements := Array new: parsers size.
