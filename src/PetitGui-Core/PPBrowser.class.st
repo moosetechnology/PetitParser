@@ -12,12 +12,23 @@ Class {
 
 { #category : #initialization }
 PPBrowser class >> initialize [
-	TheWorldMenu registerOpenCommand: (Array with: self label with: (Array with: self with: #open))
+	((TheWorldMenu respondsTo: #registerOpenCommand:)
+		and: [((TheWorldMenu class >>#registerOpenCommand:) sendsSelector: #deprecated:) not])
+       ifTrue: [TheWorldMenu registerOpenCommand: (Array with: self label with: (Array with: self with: #open))]
 ]
 
 { #category : #accessing }
 PPBrowser class >> label [
 	^ 'PetitParser'
+]
+
+{ #category : #initialization }
+PPBrowser class >> menuCommandOn: aBuilder [
+	<worldMenu>
+
+	(aBuilder item: self label)
+		parent: #Tools;
+		action: [ self new open ]
 ]
 
 { #category : #'instance-creation' }
