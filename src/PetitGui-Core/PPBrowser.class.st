@@ -12,9 +12,10 @@ Class {
 
 { #category : #initialization }
 PPBrowser class >> initialize [
-	((TheWorldMenu respondsTo: #registerOpenCommand:)
-		and: [((TheWorldMenu class >>#registerOpenCommand:) sendsSelector: #deprecated:) not])
-       ifTrue: [TheWorldMenu registerOpenCommand: (Array with: self label with: (Array with: self with: #open))]
+	Smalltalk at: #TheWorldMenu ifPresent: [ :class |
+		class class methodDict at: #registerOpenCommand: ifPresent: [ :method |
+			(method sendsSelector: #deprecated:) 
+				ifFalse: [ TheWorldMenu registerOpenCommand: (Array with: self label with: (Array with: self with: #open)) ] ] ]
 ]
 
 { #category : #accessing }
@@ -22,7 +23,7 @@ PPBrowser class >> label [
 	^ 'PetitParser'
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 PPBrowser class >> menuCommandOn: aBuilder [
 	<worldMenu>
 
@@ -34,6 +35,14 @@ PPBrowser class >> menuCommandOn: aBuilder [
 { #category : #'instance-creation' }
 PPBrowser class >> open [
 	^ self new open
+]
+
+{ #category : #initialization }
+PPBrowser class >> unload [
+	Smalltalk at: #TheWorldMenu ifPresent: [ :class |
+		class class methodDict at: #unregisterOpenCommandWithReceiver: ifPresent: [ :method |
+			(method sendsSelector: #deprecated:) 
+				ifFalse: [ class unregisterOpenCommandWithReceiver: self ] ] ]
 ]
 
 { #category : #browse }
