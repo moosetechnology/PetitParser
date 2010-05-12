@@ -34,11 +34,18 @@ PPParser >> / aParser [
 	^ PPChoiceParser with: self with: aParser
 ]
 
-{ #category : #operations }
+{ #category : #'operations-mapping' }
 PPParser >> ==> aBlock [
 	"Answer a new parser that performs aBlock as action handler on success."
-	
+
 	^ PPActionParser on: self block: aBlock
+]
+
+{ #category : #'operations-mapping' }
+PPParser >> >=> aBlock [
+	"Answer a new parser that wraps the receiving parser with a two argument block. The first argument is the parsed stream, the second argument a continuation block on the delgate parser."
+
+	^ PPWrappingParser on: self block: aBlock
 ]
 
 { #category : #operations }

@@ -1,5 +1,5 @@
 "
-A parser that performs an action on the delegate.
+A parser that performs an action block with the successful parse result of the delegate.
 "
 Class {
 	#name : #PPActionParser,
