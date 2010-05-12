@@ -174,7 +174,7 @@ PPBrowser >> browseOutputOn: aBrowser [
 
 	aBrowser list
 		title: 'Debugger';
-		format: [ :each | (String new: 2 * each fourth withAll: $ ) , each first displayName ];
+		format: [ :each | (String new: 2 * each fourth withAll: $ ) asText , each first ];
 		display: [ 
 			| depth trace |
 			depth := -1.
@@ -182,14 +182,16 @@ PPBrowser >> browseOutputOn: aBrowser [
 			(self production end transform: [ :each |
 				each name notNil 
 					ifTrue: [ 
-						(PPBrowserWrapper on: each)	
-							before: [ :s | 
-								depth := depth + 1. 
-								trace addLast: (Array with: each with: s position + 1 with: s position with: depth with: Object new) ];
-							after: [ :s :p | 
-								p at: 3 put: s position.
-								depth := depth - 1 ];
-							yourself ]
+						each >=> [ :s :cc |
+							| t r |
+							depth := depth + 1. 
+							trace addLast: (t := Array with: each name with: s position + 1 with: s position with: depth with: Object new).
+							r := cc value.
+							t at: 3 put: s position.
+							r isPetitFailure
+								ifFalse: [ t at: 1 put: (t at: 1) asText allBold ].
+							depth := depth - 1.
+							r ] ]
 					ifFalse: [ each ] ])
 				parse: input.
 			trace ].
