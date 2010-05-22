@@ -1,27 +1,6 @@
 Extension { #name : #PPParser }
 
 { #category : #'*petitanalyzer-enumerating' }
-PPParser >> allLeafParsers [
-	"Answer all the leaf nodes of the receiver."
-
-	| result |
-	result := OrderedCollection new.
-	self allLeafParsersDo: [ :parser | result addLast: parser ].
-	^ result
-]
-
-{ #category : #'*petitanalyzer-enumerating' }
-PPParser >> allLeafParsersDo: aBlock [
-	"Iterate over all the leaf nodes of the receiver."
-
-	self 
-		allParsersDo: [ :each | 
-			each isLeaf
-				ifTrue: [ aBlock value: each ] ]
-		seen: IdentitySet new
-]
-
-{ #category : #'*petitanalyzer-enumerating' }
 PPParser >> allParsers [
 	"Answer all the parse nodes of the receiver."
 
@@ -72,7 +51,7 @@ PPParser >> cycleSet: aStack firstSets: aDictionary into: aSet [
 	"PRIVATE: Try to find a cycle, where aStack contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If aStack already contains the receiver, then we are in a cycle. In this case we don't process the children further and add the nodes to aSet."
 
 	| index |
-	self isLeaf
+	self isTerminal
 		ifTrue: [ ^ self ].	
 	(index := aStack indexOf: self) > 0
 		ifTrue: [ ^ aSet addAll: (aStack copyFrom: index to: aStack size) ].
@@ -96,7 +75,7 @@ PPParser >> firstSets [
 	| firstSets |
 	firstSets := IdentityDictionary new.
 	self allParsersDo: [ :each | 
-		firstSets at: each put: (each isLeaf
+		firstSets at: each put: (each isTerminal
 			ifTrue: [ IdentitySet with: each ]
 			ifFalse: [ IdentitySet new ]) ].
 	[	| changed tally |
@@ -155,17 +134,17 @@ PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet
 ]
 
 { #category : #'*petitanalyzer-testing' }
-PPParser >> isLeaf [
-	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
-
-	^ self children isEmpty
-]
-
-{ #category : #'*petitanalyzer-testing' }
 PPParser >> isNullable [
 	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
+]
+
+{ #category : #'*petitanalyzer-testing' }
+PPParser >> isTerminal [
+	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
+
+	^ self children isEmpty
 ]
 
 { #category : #'*petitanalyzer-transforming' }
@@ -175,7 +154,7 @@ PPParser >> replace: aParser with: anotherParser [
 
 { #category : #'*petitanalyzer-transforming' }
 PPParser >> transform: aBlock [
-	"Transfrom all nodes reachable from the receiver using aBlock."
+	"Answer a copy all parsers reachable from the receiver transformed using aBlock."
 
 	| mapping root |
 	mapping := IdentityDictionary new.

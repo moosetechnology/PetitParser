@@ -112,18 +112,6 @@ PPAnalyzerTest >> grammarE [
 ]
 
 { #category : #testing }
-PPAnalyzerTest >> testAllLeafParsers [
-	| p1 p2 p3 |
-	p1 := #lowercase asParser.
-	p2 := p1 ==> #asUppercase.
-	p3 := PPUnresolvedParser new.
-	p3 def: p2 / p3.
-	self assert: p1 allLeafParsers size = 1.
-	self assert: p2 allLeafParsers size = 1.
-	self assert: p3 allLeafParsers size = 1
-]
-
-{ #category : #testing }
 PPAnalyzerTest >> testAllParsers [
 	| p1 p2 p3 |
 	p1 := #lowercase asParser.
@@ -362,21 +350,6 @@ PPAnalyzerTest >> testFollowSetExampleE [
 ]
 
 { #category : #testing }
-PPAnalyzerTest >> testIsLeaf [
-	self assert: PPEpsilonParser new isLeaf.
-	self assert: PPFailingParser new isLeaf.
-	self assert: PPPluggableParser new isLeaf.
-	self assert: PPLiteralSequenceParser new isLeaf.
-	self assert: PPLiteralObjectParser new isLeaf.
-	self assert: PPPredicateParser new isLeaf.
-	
-	self deny: ($a asParser / $b asParser) isLeaf.
-	self deny: ($a asParser , $b asParser) isLeaf.
-	self deny: ($a asParser and) isLeaf.
-	self deny: ($a asParser not) isLeaf
-]
-
-{ #category : #testing }
 PPAnalyzerTest >> testIsNullable [
 	self assert: $a asParser star isNullable.
 	self assert: nil asParser isNullable.
@@ -389,6 +362,21 @@ PPAnalyzerTest >> testIsNullable [
 	self deny: PPSequenceParser new isNullable.
 	self deny: PPAndParser new isNullable.
 	self deny: PPTokenParser new isNullable
+]
+
+{ #category : #testing }
+PPAnalyzerTest >> testIsTerminal [
+	self assert: PPEpsilonParser new isTerminal.
+	self assert: PPFailingParser new isTerminal.
+	self assert: PPPluggableParser new isTerminal.
+	self assert: PPLiteralSequenceParser new isTerminal.
+	self assert: PPLiteralObjectParser new isTerminal.
+	self assert: PPPredicateParser new isTerminal.
+	
+	self deny: ($a asParser / $b asParser) isTerminal.
+	self deny: ($a asParser , $b asParser) isTerminal.
+	self deny: ($a asParser and) isTerminal.
+	self deny: ($a asParser not) isTerminal
 ]
 
 { #category : #'testing-transform' }

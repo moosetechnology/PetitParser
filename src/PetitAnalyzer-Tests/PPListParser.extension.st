@@ -3,8 +3,7 @@ Extension { #name : #PPListParser }
 { #category : #'*petitanalyzer-transforming' }
 PPListParser >> replace: aParser with: anotherParser [
 	super replace: aParser with: anotherParser.
-	parsers := parsers collect: [ :each | 
-		each == aParser
-			ifTrue: [ anotherParser ]
-			ifFalse: [ each ] ]
+	parsers keysAndValuesDo: [ :index :parser |
+		parser == aParser
+			ifTrue: [ parsers at: index put: anotherParser ] ]
 ]
