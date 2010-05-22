@@ -14,16 +14,13 @@ PPChoiceParser >> / aRule [
 
 { #category : #parsing }
 PPChoiceParser >> parseOn: aStream [
-	"This is optimized code that avoids unnecessary block activations, do not change. When encountering failures while parsing a choice report the right most error."
+	"This is optimized code that avoids unnecessary block activations, do not change. When all choices fail, the last failure is answered."
 
-	| failure element |
-	failure := nil.
+	| element |
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index)
 			parseOn: aStream.
-		element isPetitFailure 
-			ifFalse: [ ^ element ].
-		(failure isNil or: [ failure position < element position ])
-			ifTrue: [ failure := element ] ].
-	^ failure
+		element isPetitFailure
+			ifFalse: [ ^ element ] ].
+	^ element
 ]

@@ -67,15 +67,15 @@ PPLambdaParserTest >> testParseOnError [
 		parse: '\x.'
 		onError: [ :fail | beenHere := true. fail ].
 	self assert: beenHere.
-	self assert: result message = 'letter expected'.
-	self assert: result position = 3.
+	self assert: result message = '$( expected'.
+	self assert: result position = 0.
 
 	beenHere := false.
 	result := self parserClass
 		parse: '\x.'
 		onError: [ :msg :pos | 
-			self assert: msg = 'letter expected'.
-			self assert: pos = 3.
+			self assert: msg = '$( expected'.
+			self assert: pos = 0.
 			beenHere := true ].
 	self assert: result.
 	self assert: beenHere
