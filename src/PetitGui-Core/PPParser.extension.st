@@ -7,7 +7,7 @@ PPParser >> backgroundForDepth: anInteger [
 
 { #category : #'*petitgui-accessing' }
 PPParser >> displayColor [
-	^ self isLeaf
+	^ self isTerminal
 		ifTrue: [ Color purple ]
 		ifFalse: [ Color blue ]
 ]
