@@ -36,6 +36,12 @@ PPListParser >> initialize [
 	self setParsers: #()
 ]
 
+{ #category : #copying }
+PPListParser >> postCopy [
+	super postCopy.
+	parsers := parsers copy
+]
+
 { #category : #initialization }
 PPListParser >> setParsers: aCollection [
 	parsers := aCollection asArray
