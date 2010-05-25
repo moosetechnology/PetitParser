@@ -83,35 +83,33 @@ Class {
 }
 
 { #category : #benchmarking }
-PPSmalltalkGrammar class >> benchmark [
+PPSmalltalkGrammar class >> benchmark: aParser [
+	"self benchmark: PPSmalltalkGrammar new"
+	"self benchmark: PPSmalltalkParser new"
+	"self benchmark: RBParser"
+	
 	<ignoreForCoverage>
 	| sources |
 	sources := OrderedCollection new.
 	SequenceableCollection withAllSubclassesDo: [ :class |
 		class selectors do: [ :selector |
 			sources add: (class sourceCodeAt: selector) ] ].
-	^ self benchmarkSources: sources asArray
+	^ self benchmark: aParser sources: sources asArray
 ]
 
 { #category : #benchmarking }
-PPSmalltalkGrammar class >> benchmarkSources: aCollection [
+PPSmalltalkGrammar class >> benchmark: aParser sources: aCollection [
 	<ignoreForCoverage>
-	| parser start count end total |
-	parser := self new.
+	| start count end |
 	start := Time millisecondClockValue.
 	end := start + 10000.
 	count := 0.
-	[  aCollection do: [ :each | parser parse: each ].
+	[  aCollection do: [ :each | aParser parseMethod: each ].
 		count := count + 1.
 		Time millisecondClockValue < end ] whileTrue.
 	end := Time millisecondClockValue.
-	total := (end - start) / count asFloat.
-	Transcript 
-		show: (1000 * aCollection size / total) truncated;
-		show: ' methods/sec'; cr.
-	Transcript
-		show: ((1000 * (aCollection detectSum: [ :each | each size ]) / total / 1024) roundTo: 0.001);
-		show: ' kbytes/sec'; cr.
+	^ (1000 * count * (aCollection detectSum: [ :each | each size ]) 
+		/ (end - start)) asInteger asString , ' characters/sec'
 ]
 
 { #category : #accessing }
