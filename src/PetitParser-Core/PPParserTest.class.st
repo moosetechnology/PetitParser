@@ -179,6 +179,18 @@ PPParserTest >> testHasProperty [
 	self assert: (parser hasProperty: #foo)
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testListConstructor [
+	| p1 p2 p3 |
+	p1 := PPChoiceParser with: $a asParser.
+	p2 := PPChoiceParser with: $a asParser with: $b asParser.
+	p3 := PPChoiceParser withAll: (Array with: $a asParser with: $b asParser with: $c asParser).
+	
+	self assert: p1 children size = 1.
+	self assert: p2 children size = 2.
+	self assert: p3 children size = 3
+]
+
 { #category : #testing }
 PPParserTest >> testLiteralObject [
 	| parser |
@@ -668,6 +680,18 @@ PPParserTest >> testSideEffectChoice [
 	self assert: p3 parse: 'a'.
 	self assert: p3 fail: 'b'.
 	self assert: p3 parse: 'c'
+]
+
+{ #category : #'testing-fixtures' }
+PPParserTest >> testSideEffectListCopy [
+	| old new |
+	old := $a asParser , $b asParser.
+	new := old copy.
+	
+	self deny: old == new.
+	self deny: old children == new children.
+	self assert: old children first == new children first.
+	self assert: old children last == new children last
 ]
 
 { #category : #'testing-fixtures' }
