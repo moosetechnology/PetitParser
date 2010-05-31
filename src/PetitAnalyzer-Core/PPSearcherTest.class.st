@@ -36,9 +36,39 @@ PPSearcherTest >> testAnyPattern [
 ]
 
 { #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchAction [
+	| old new |
+	old := $a asParser ==> [ :token | $b ].
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
 PPSearcherTest >> testCopyMatchDelegate [
 	| old new |
 	old := $a asParser token trim.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchEpsilon [
+	| old new |
+	old := PPEpsilonParser new.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchFailure [
+	| old new |
+	old := PPFailingParser message: 'problem'.
 	new := old copyInContext: Dictionary new.
 	self assert: (old match: old inContext: Dictionary new).
 	self assert: (old match: new inContext: Dictionary new).
@@ -59,6 +89,26 @@ PPSearcherTest >> testCopyMatchList [
 PPSearcherTest >> testCopyMatchLiteral [
 	| old new |
 	old := $a asParser.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchPluggable [
+	| old new |
+	old := [ :stream | ] asParser.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchPredicate [
+	| old new |
+	old := #word asParser.
 	new := old copyInContext: Dictionary new.
 	self assert: (old match: old inContext: Dictionary new).
 	self assert: (old match: new inContext: Dictionary new).
