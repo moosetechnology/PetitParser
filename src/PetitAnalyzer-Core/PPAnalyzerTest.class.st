@@ -4,6 +4,11 @@ Class {
 	#category : #'PetitAnalyzer-Tests'
 }
 
+{ #category : #accessing }
+PPAnalyzerTest class >> packageNamesUnderTest [
+	^ #('PetitAnalyzer')
+]
+
 { #category : #utilities }
 PPAnalyzerTest >> assert: aCollection includes: aString epsilon: aBoolean [
 	| parsers checker stream |
@@ -11,8 +16,8 @@ PPAnalyzerTest >> assert: aCollection includes: aString epsilon: aBoolean [
 		collect: [ :each | each end ].
 	checker := [ :string |
 		parsers anySatisfy: [ :parser |
-			(parser parse: string asParserStream)
-				isFailure not ] ].
+			(parser parse: string asPetitStream)
+				isPetitFailure not ] ].
 	stream := WriteStream on: String new.
 	32 to: 127 do: [ :index |
 		(checker value: (String with: (Character value: index)))
@@ -37,7 +42,7 @@ PPAnalyzerTest >> grammarA [
 	grammar at: #b put: $b asParser.
 	grammar at: #c put: $c asParser.
 	grammar at: #d put: $d asParser.
-	grammar at: #e put: PPEpsilonParser new.
+	grammar at: #e put: nil asParser.
 	
 	" non terminals "
 	grammar at: #B put: (grammar at: #b) / (grammar at: #e).
@@ -53,7 +58,7 @@ PPAnalyzerTest >> grammarB [
 
 	| grammar |
 	grammar := Dictionary new.
-	#(E Ep T Tp F) 		do: [ :each | grammar at: each put: PPUnresolvedParser new ].
+	#(E Ep T Tp F) 		do: [ :each | grammar at: each put: (PPUnresolvedParser named: each) ].
 		
 	(grammar at: #E)		def: (grammar at: #T) , (grammar at: #Ep).
 	(grammar at: #Ep)	def: ($+ asParser , (grammar at: #T) , (grammar at: #Ep)) optional.
@@ -84,7 +89,7 @@ PPAnalyzerTest >> grammarD [
 
 	| grammar |
 	grammar := Dictionary new.
-	#(S A a B b)			do: [ :each | grammar at: each put: PPUnresolvedParser new ].
+	#(S A a B b)			do: [ :each | grammar at: each put: (PPUnresolvedParser named: each) ].
 	
 	(grammar at: #a)		def: $a asParser.
 	(grammar at: #b)		def: $b asParser.
@@ -96,10 +101,135 @@ PPAnalyzerTest >> grammarD [
 	^ grammar
 ]
 
+{ #category : #accessing }
+PPAnalyzerTest >> grammarE [
+	"The most stupid parser, it just references itself and never consumes anything. All algorithms should survive such an attack."
+
+	| parser |
+	parser := PPDelegateParser new.
+	parser setParser: parser.
+	^ parser
+]
+
+{ #category : #testing }
+PPAnalyzerTest >> testAllParsers [
+	| p1 p2 p3 |
+	p1 := #lowercase asParser.
+	p2 := p1 ==> #asUppercase.
+	p3 := PPUnresolvedParser new.
+	p3 def: p2 / p3.
+	self assert: p1 allParsers size = 1.
+	self assert: p2 allParsers size = 2.
+	self assert: p3 allParsers size = 3
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarA [
+	self grammarA do: [ :each | self assert: each cycleSet isEmpty ]
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarB [
+	self grammarB do: [ :each | self assert: each cycleSet isEmpty ]
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarC [
+	| grammar cycleSet |
+	grammar := self grammarC.
+	cycleSet := grammar cycleSet.
+	self assert: (cycleSet size = 2).
+	self assert: (cycleSet includes: grammar)
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarD [
+	| grammar cycleSet |
+	grammar := self grammarD.
+	
+	cycleSet := (grammar at: #S) cycleSet.
+	self assert: (cycleSet size = 4).
+	self assert: (cycleSet includes: (grammar at: #A)).
+	self assert: (cycleSet includes: (grammar at: #S)).
+	
+	cycleSet := (grammar at: #A) cycleSet.
+	self assert: (cycleSet size = 4).
+	self assert: (cycleSet includes: (grammar at: #A)).
+	self assert: (cycleSet includes: (grammar at: #S)).
+
+	cycleSet := (grammar at: #B) cycleSet.
+	self assert: (cycleSet size = 2).
+	self assert: (cycleSet includes: (grammar at: #B))
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetGrammarE [
+	| grammar cycleSet |
+	grammar := self grammarE.
+	cycleSet := grammar cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: grammar)
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetInChoice [
+	| parser cycleSet |
+	parser := PPUnresolvedParser new.
+	parser def: parser / $a asParser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: $a asParser / parser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+]
+
+{ #category : #'testing-cycleset' }
+PPAnalyzerTest >> testCycleSetInSequence [
+	| parser cycleSet |
+	parser := PPUnresolvedParser new.
+	parser def: parser , $a asParser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: nil asParser , parser.
+	cycleSet := parser cycleSet.
+	self assert: (cycleSet size = 1).
+	self assert: (cycleSet includes: parser).
+	
+	parser := PPUnresolvedParser new.
+	parser def: $a asParser , parser.
+	cycleSet := parser cycleSet.
+	self assert: cycleSet isEmpty
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testDelegateReplace [
+	| one other delegate |
+	one := $a asParser.
+	other := $b asParser.
+	delegate := one token.
+	self assert: delegate children first == one.
+	self deny: delegate children first == other.
+	
+	delegate replace: other with: one.
+	self assert: delegate children first == one.
+	self deny: delegate children first == other.
+	
+	delegate replace: one with: other.
+	self deny: delegate children first == one.
+	self assert: delegate children first == other
+]
+
 { #category : #'testing-firstset' }
 PPAnalyzerTest >> testFirstSetExpression [
 	| grammar |
-	grammar := PPExpressionParser new.
+	grammar := PPArithmeticParser new.
 	self assert: grammar start firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar addition firstSet includes: '(-0123456789' epsilon: false.
 	self assert: grammar factors firstSet includes:  '(-0123456789' epsilon: false.
@@ -152,6 +282,11 @@ PPAnalyzerTest >> testFirstSetGrammarD [
 	self assert: (grammar at: #B) firstSet includes: 'a' epsilon: false.
 	self assert: (grammar at: #a) firstSet includes: 'a' epsilon: false.
 	self assert: (grammar at: #b) firstSet includes: 'b' epsilon: false
+]
+
+{ #category : #'testing-firstset' }
+PPAnalyzerTest >> testFirstSetGrammarE [
+	self assert: self grammarE firstSet includes: '' epsilon: false
 ]
 
 { #category : #'testing-firstset' }
@@ -209,25 +344,15 @@ PPAnalyzerTest >> testFollowSetExampleD [
 	self assert: (followSets at: (grammar at: #b)) includes: 'ab' epsilon: true
 ]
 
-{ #category : #testing }
-PPAnalyzerTest >> testIsLeaf [
-	self assert: PPEpsilonParser new isLeaf.
-	self assert: PPFailingParser new isLeaf.
-	self assert: PPPluggableParser new isLeaf.
-	self assert: PPLiteralSequenceParser new isLeaf.
-	self assert: PPLiteralObjectParser new isLeaf.
-	self assert: PPPredicateParser new isLeaf.
-	
-	self deny: PPChoiceParser new isLeaf.
-	self deny: PPSequenceParser new isLeaf.
-	self deny: PPAndParser new isLeaf.
-	self deny: PPTokenParser new isLeaf
+{ #category : #'testing-followset' }
+PPAnalyzerTest >> testFollowSetExampleE [
+	self assert: self grammarE followSet includes: '' epsilon: true
 ]
 
 { #category : #testing }
 PPAnalyzerTest >> testIsNullable [
 	self assert: $a asParser star isNullable.
-	self assert: PPEpsilonParser new isNullable.
+	self assert: nil asParser isNullable.
 
 	self deny: $a asParser plus isNullable.	
 	self deny: PPLiteralSequenceParser new isNullable.
@@ -239,54 +364,119 @@ PPAnalyzerTest >> testIsNullable [
 	self deny: PPTokenParser new isNullable
 ]
 
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionInChoice [
-	| parser cycle |
-	parser := PPUnresolvedParser new.
-	parser def: parser / $a asParser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
+{ #category : #testing }
+PPAnalyzerTest >> testIsTerminal [
+	self assert: PPEpsilonParser new isTerminal.
+	self assert: PPFailingParser new isTerminal.
+	self assert: PPPluggableParser new isTerminal.
+	self assert: PPLiteralSequenceParser new isTerminal.
+	self assert: PPLiteralObjectParser new isTerminal.
+	self assert: PPPredicateParser new isTerminal.
 	
-	parser := PPUnresolvedParser new.
-	parser def: $a asParser / parser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser
+	self deny: ($a asParser / $b asParser) isTerminal.
+	self deny: ($a asParser , $b asParser) isTerminal.
+	self deny: ($a asParser and) isTerminal.
+	self deny: ($a asParser not) isTerminal
 ]
 
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionInSequence [
-	| parser cycle |
-	parser := PPUnresolvedParser new.
-	parser def: parser , $a asParser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testListReplace [
+	| one other another list |
+	one := $a asParser.
+	other := $b asParser.
+	another := $c asParser.
+	list := one , another , one.
+	self assert: list children first == one.
+	self assert: list children second == another.
+	self assert: list children last == one.
 	
-	parser := PPUnresolvedParser new.
-	parser def: PPEpsilonParser new , parser.
-	cycle := parser leftRecursion.
-	self assert: cycle size = 1.
-	self assert: cycle first = parser.
+	list replace: other with: one.
+	self assert: list children first == one.
+	self assert: list children second == another.
+	self assert: list children last == one.
 	
-	parser := PPUnresolvedParser new.
-	parser def: $a asParser , parser.
-	cycle := parser leftRecursion.
-	self assert: cycle isEmpty
+	list replace: one with: other.
+	self assert: list children first == other.
+	self assert: list children second == another.
+	self assert: list children last == other.
+	
+	list replace: another with: one.
+	self assert: list children first == other.
+	self assert: list children second == one.
+	self assert: list children last == other
 ]
 
-{ #category : #'testing-leftrecursion' }
-PPAnalyzerTest >> testLeftRecursionIndirect [
-	| p1 p2 p3 cycle |
-	p1 := PPUnresolvedParser new.
-	p2 := PPUnresolvedParser new.
-	p3 := PPUnresolvedParser new.
-	p1 def: p2 / $a asParser.
-	p2 def: p3 / $b asParser.
-	p3 def: p1 / PPEpsilonParser new.
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformIdentityGrammarC [
+	| orig tran |
+	orig := self grammarC.
+	tran := orig transform: [ :each | each ].
+	self deny: orig == tran.
+	self deny: orig children first == tran children first.
+	self deny: orig children first children first == tran children first children first.
+	self deny: orig children first children last == tran children first children last.
+	self deny: orig children last == tran children last.
 	
-	self assert: p1 leftRecursion size = 3.
-	self assert: p2 leftRecursion size = 3.
-	self assert: p3 leftRecursion size = 3
+	self assert: orig class == PPChoiceParser.
+	self assert: orig children first class == PPSequenceParser.
+	self assert: orig children first children first == orig.
+	self assert: orig children first children last == orig.
+	self assert: orig children last class == PPLiteralObjectParser.
+
+	self assert: tran class == PPChoiceParser.
+	self assert: tran children first class == PPSequenceParser.
+	self assert: tran children first children first == tran.
+	self assert: tran children first children last == tran.
+	self assert: tran children last class == PPLiteralObjectParser
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformIdentityGrammarE [
+	| orig tran |
+	orig := self grammarE.
+	tran := orig transform: [ :each | each ].
+	self deny: orig == tran.
+	self deny: orig children first = tran children first.
+	
+	self assert: orig class == PPDelegateParser.
+	self assert: orig children first == orig.
+	
+	self assert: tran class == PPDelegateParser.
+	self assert: tran children first == tran
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformWrapGrammarC [
+	| orig tran |
+	orig := self grammarC.
+	tran := orig transform: [ :each | each memoized ].
+
+	self assert: orig class == PPChoiceParser.
+	self assert: orig children first class == PPSequenceParser.
+	self assert: orig children first children first == orig.
+	self assert: orig children first children last == orig.
+	self assert: orig children last class == PPLiteralObjectParser.
+	
+	self assert: tran class == PPMemoizedParser.
+	self assert: tran children first class == PPChoiceParser.
+	self assert: tran children first children first class == PPMemoizedParser.
+	self assert: tran children first children first children first class == PPSequenceParser.
+	self assert: tran children first children first children first children first == tran.
+	self assert: tran children first children first children first children last == tran.
+	self assert: tran children first children last class == PPMemoizedParser.
+	self assert: tran children first children last children first class == PPLiteralObjectParser
+]
+
+{ #category : #'testing-transform' }
+PPAnalyzerTest >> testTransformWrapGrammarE [
+	| orig tran |
+	orig := self grammarE.
+	tran := orig transform: [ :each | each memoized ].
+	
+	self assert: orig class == PPDelegateParser.
+	self assert: orig children first == orig.
+	
+	self assert: tran class == PPMemoizedParser.
+	self assert: tran children first class == PPDelegateParser.
+	self assert: tran children first children first == tran
 ]
