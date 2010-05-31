@@ -53,7 +53,7 @@ PPParser >> >=> aBlock [
 
 { #category : #operations }
 PPParser >> and [
-	"Answer a new parser that succeeds whenever the receiver does, but consumes no input."
+	"Answer a new parser (logical and-predicate) that succeeds whenever the receiver does, but never consumes input."
 
 	^ PPAndParser on: self
 ]
@@ -261,7 +261,7 @@ PPParser >> negate [
 
 { #category : #operations }
 PPParser >> not [
-	"Answer a new parser that succeeds whenever the receiver fails."
+	"Answer a new parser (logical not-predicate) that succeeds whenever the receiver fails, but never consumes input."
 
 	^ PPNotParser on: self
 ]
