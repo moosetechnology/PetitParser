@@ -1,7 +1,5 @@
 "
 A positional stream implementation used for parsing. It overrides some methods for optimization reasons.
-
-Note: The class side contains some parser constructor methods intended for fast stream operations.
 "
 Class {
 	#name : #PPStream,
