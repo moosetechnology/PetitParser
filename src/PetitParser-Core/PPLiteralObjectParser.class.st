@@ -7,7 +7,14 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operator }
+{ #category : #operators }
+PPLiteralObjectParser >> caseInsensitive [
+	"Answer a parser that can parse the receiver case-insensitive."
+	
+	^ PPPredicateParser on: [ :value | literal sameAs: value ] message: message
+]
+
+{ #category : #operators }
 PPLiteralObjectParser >> negate [
 	"Answer a parser that is the negation of the receiving literal parser."
 	

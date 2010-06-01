@@ -26,6 +26,13 @@ PPLiteralParser class >> on: anObject message: aString [
 	^ self new initializeOn: anObject message: aString
 ]
 
+{ #category : #operators }
+PPLiteralParser >> caseInsensitive [
+	"Answer a parser that can parse the receiver case-insensitive."
+	
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 PPLiteralParser >> initializeOn: anObject message: aString [
 	literal := anObject.

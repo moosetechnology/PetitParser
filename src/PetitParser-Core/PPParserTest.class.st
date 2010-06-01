@@ -206,6 +206,20 @@ PPParserTest >> testLiteralObject [
 ]
 
 { #category : #testing }
+PPParserTest >> testLiteralObjectCaseInsensitive [
+	| parser |
+	parser := $a asParser caseInsensitive.
+	
+	self assert: parser parse: 'a' to: $a.
+	self assert: parser parse: 'A' to: $A.
+
+	self assert: parser fail: ''.
+	self assert: parser fail: 'b'.
+	self assert: parser fail: 'B'
+	
+]
+
+{ #category : #testing }
 PPParserTest >> testLiteralSequence [
 	| parser |
 	parser := PPLiteralSequenceParser 
@@ -215,6 +229,20 @@ PPParserTest >> testLiteralSequence [
 	self assert: parser message = 'sequence "abc" expected'.
 	
 	self assert: parser parse: 'abc' to: 'abc'.
+	self assert: parser fail: 'ab'.
+	self assert: parser fail: 'abd'
+]
+
+{ #category : #testing }
+PPParserTest >> testLiteralSequenceCaseInsensitive [
+	| parser |
+	parser := 'abc' asParser caseInsensitive.
+	
+	self assert: parser parse: 'abc' to: 'abc'.
+	self assert: parser parse: 'ABC' to: 'ABC'.
+	self assert: parser parse: 'abC' to: 'abC'.
+	self assert: parser parse: 'AbC' to: 'AbC'.
+	
 	self assert: parser fail: 'ab'.
 	self assert: parser fail: 'abd'
 ]
