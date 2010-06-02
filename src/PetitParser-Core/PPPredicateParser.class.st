@@ -160,7 +160,7 @@ PPPredicateParser >> block [
 ]
 
 { #category : #initialization }
-PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [ 
+PPPredicateParser >> initializeOn: aBlock message: aString negated: aNegatedBlock message: aNegatedString [
 	predicate := aBlock.
 	predicateMessage := aString.
 	negated := aNegatedBlock.
