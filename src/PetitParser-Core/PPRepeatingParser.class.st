@@ -70,7 +70,7 @@ PPRepeatingParser >> parseOn: aStream [
 PPRepeatingParser >> printOn: aStream [
 	super printOn: aStream.
 	aStream nextPutAll: ' ['; print: min; nextPutAll: ', '; nextPutAll: (max = SmallInteger maxVal
-		ifTrue: [ '*' ] ifFalse: [ max asString ]); nextPut: $]
+		ifTrue: [ '*' ] ifFalse: [ max printString ]); nextPut: $]
 ]
 
 { #category : #initialization }
