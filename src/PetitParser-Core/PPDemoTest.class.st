@@ -15,7 +15,7 @@ PPDemoTest >> addMulInterpreter [
 	add := PPUnresolvedParser new.
 	mul := PPUnresolvedParser new.
 	prim := PPUnresolvedParser new.
-	dec := ($0 - $9)									==> [ :token | token asciiValue - $0 asciiValue ].
+	dec := ($0 - $9)									==> [ :token | token codePoint - $0 codePoint ].
 	add def: ((mul , $+ asParser , add) 				==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
 		/ mul.
 	mul def: ((prim , $* asParser , mul) 			==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
