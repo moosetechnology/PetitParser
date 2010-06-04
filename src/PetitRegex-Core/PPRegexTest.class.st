@@ -30,7 +30,7 @@ PPRegexTest >> parserClass [
 
 { #category : #utilties }
 PPRegexTest >> runMatcher: aParser with: aString expect: aBoolean withSubexpressions: anArray [
-	| copy got |
+	| got |
 	"copy := aParser
 		copy: aString
 		translatingMatchesUsing: [ :each | each ].
