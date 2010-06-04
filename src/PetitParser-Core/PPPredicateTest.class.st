@@ -23,7 +23,7 @@ PPPredicateTest >> assertCharacterSets: aParser [
 
 { #category : #utilities }
 PPPredicateTest >> parsedCharacterSet: aParser [
-	| result stream |
+	| result |
 	result := WriteStream on: String new.
 	Character allCharacters do: [ :char |
 		(aParser matches: (String with: char))
