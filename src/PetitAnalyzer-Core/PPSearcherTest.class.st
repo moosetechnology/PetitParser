@@ -164,7 +164,7 @@ PPSearcherTest >> testKindPattern [
 
 { #category : #'testing-lists' }
 PPSearcherTest >> testListInfix [
-	| pattern result |
+	| result |
 	searcher
 		matches: PPListPattern any , $a asParser , PPListPattern any
 		do: [ :parser :answer | true ].
@@ -232,7 +232,7 @@ PPSearcherTest >> testListInfix [
 
 { #category : #'testing-lists' }
 PPSearcherTest >> testListPostfix [
-	| pattern result |
+	| result |
 	searcher
 		matches: PPListPattern any , $b asParser
 		do: [ :parser :answer | true ].
@@ -300,7 +300,7 @@ PPSearcherTest >> testListPostfix [
 
 { #category : #'testing-lists' }
 PPSearcherTest >> testListPrefix [
-	| pattern result |
+	| result |
 	searcher
 		matches: $a asParser , PPListPattern any
 		do: [ :parser :answer | true ].
