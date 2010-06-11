@@ -17,13 +17,14 @@ PPCommaSeparatedParser >> cell [
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> endOfLine [
-	^ (#cr asParser , #lf asParser optional) / #lf asParser
+	^ #newline asParser
+	"(#cr asParser , #lf asParser optional) / #lf asParser"
 ]
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> row [
-	^ cell,  ($, asParser token, cell ==> [:tokens | tokens last ]) star
-		==> [:tokens | (Array withAll: tokens last) copyWithFirst: tokens first ]
+	^ cell ,  ($, asParser token , cell ==> [:tokens | tokens last ]) star
+		==> [ :tokens | (Array withAll: tokens last) copyWithFirst: tokens first ]
 ]
 
 { #category : #'as yet unclassified' }
