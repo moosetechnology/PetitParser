@@ -3,7 +3,9 @@ Class {
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'row',
-		'cell'
+		'cell',
+		'rows',
+		'endOfLine'
 	],
 	#category : #PetitCSV
 }
@@ -14,11 +16,23 @@ PPCommaSeparatedParser >> cell [
 ]
 
 { #category : #'as yet unclassified' }
+PPCommaSeparatedParser >> endOfLine [
+	^ (#cr asParser , #lf asParser optional) / #lf asParser
+]
+
+{ #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> row [
-	^ cell,  ($, asParser token, cell ==> [:tokens | tokens last ]) star ==> [:tokens | (OrderedCollection with: tokens first) addAll: tokens last ]
+	^ cell,  ($, asParser token, cell ==> [:tokens | tokens last ]) star
+		==> [:tokens | (Array withAll: tokens last) copyWithFirst: tokens first ]
+]
+
+{ #category : #'as yet unclassified' }
+PPCommaSeparatedParser >> rows [
+	^ row , (endOfLine , row ==> [:tokens | tokens last ]) star 
+		==> [:tokens | (Array withAll: tokens last) copyWithFirst: tokens first ]
 ]
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> start [
-	^ row end
+	^ rows end
 ]
