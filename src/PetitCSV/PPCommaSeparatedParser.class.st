@@ -40,5 +40,5 @@ PPCommaSeparatedParser >> start [
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> whitespace [
-	^ PPPredicateParser anyOf: (Array with: Character space with: Character tab)
+	^ PPPredicateObjectParser anyOf: (Array with: Character space with: Character tab)
 ]
