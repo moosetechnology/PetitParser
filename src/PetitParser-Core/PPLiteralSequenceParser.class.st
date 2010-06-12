@@ -14,11 +14,7 @@ Class {
 PPLiteralSequenceParser >> caseInsensitive [
 	"Answer a parser that can parse the receiver case-insensitive."
 	
-	^ [ :stream |
-		| result |
-		(literal sameAs: (result := stream next: size))
-			ifFalse: [ PPFailure message: message at: stream position ]
-			ifTrue: [ result ] ] asParser
+	^ PPPredicateSequenceParser on: [ :value | literal sameAs: value ] message: message size: size
 ]
 
 { #category : #initialization }
@@ -34,5 +30,5 @@ PPLiteralSequenceParser >> parseOn: aStream [
 	result := aStream next: size.
 	result = literal ifTrue: [ ^ result ].
 	aStream position: position.
-	^ PPFailure message: message at: position
+	^ PPFailure message: message at: aStream position
 ]

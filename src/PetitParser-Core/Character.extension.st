@@ -4,7 +4,7 @@ Extension { #name : #Character }
 Character >> - aCharacter [
 	"Create a range of characters between the receiver and the argument."
 	
-	^ PPPredicateParser between: self and: aCharacter
+	^ PPPredicateObjectParser between: self and: aCharacter
 ]
 
 { #category : #'*petitparser-converting' }
