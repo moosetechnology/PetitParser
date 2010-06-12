@@ -164,8 +164,8 @@ PPSmalltalkGrammar >> assignmentToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> binary [
-	^ (PPPredicateParser anyOf: '!%&*+,-/<=>?@\|~') ,
-	  (PPPredicateParser anyOf: '!%&*+,/<=>?@\|~') star
+	^ (PPPredicateObjectParser anyOf: '!%&*+,-/<=>?@\|~') ,
+	  (PPPredicateObjectParser anyOf: '!%&*+,/<=>?@\|~') star
 ]
 
 { #category : #'grammar-messages' }
