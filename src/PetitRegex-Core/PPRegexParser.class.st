@@ -177,7 +177,7 @@ PPRegexParser >> characterSetEscape [
 { #category : #'grammar-characters' }
 PPRegexParser >> characterSetRange [
 	^ #any asParser , $- asParser , $] asParser negate
-		map: [ :start :sep :stop | PPPredicateParser between: start and: stop ]
+		map: [ :start :sep :stop | PPPredicateObjectParser between: start and: stop ]
 ]
 
 { #category : #'grammar-atoms' }
