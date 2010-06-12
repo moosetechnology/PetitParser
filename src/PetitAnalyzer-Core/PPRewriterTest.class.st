@@ -82,7 +82,7 @@ PPRewriterTest >> testPatternReplacement [
 	
 	result := rewriter execute: #any asParser.
 	self deny: rewriter hasChanged.
-	self assert: result class = PPPredicateParser
+	self assert: result class = PPPredicateObjectParser
 ]
 
 { #category : #testing }
