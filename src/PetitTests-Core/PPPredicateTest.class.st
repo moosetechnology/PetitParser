@@ -50,7 +50,7 @@ PPPredicateTest >> testAny [
 { #category : #'testing-objects' }
 PPPredicateTest >> testAnyOf [
 	| parser |
-	parser := PPPredicateParser anyOf: #($a $z).
+	parser := PPPredicateObjectParser anyOf: #($a $z).
 	self assertCharacterSets: parser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'z' to: $z.
@@ -60,7 +60,7 @@ PPPredicateTest >> testAnyOf [
 { #category : #'testing-objects' }
 PPPredicateTest >> testBetweenAnd [
 	| parser |
-	parser := PPPredicateParser between: $b and: $d.
+	parser := PPPredicateObjectParser between: $b and: $d.
 	self assertCharacterSets: parser.
 	self assert: parser fail: 'a'.
 	self assert: parser parse: 'b' to: $b.
@@ -127,7 +127,7 @@ PPPredicateTest >> testDigit [
 { #category : #'testing-objects' }
 PPPredicateTest >> testExpect [
 	| parser |
-	parser := PPPredicateParser expect: $a.
+	parser := PPPredicateObjectParser expect: $a.
 	self assertCharacterSets: parser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser fail: 'b'.
@@ -197,7 +197,7 @@ PPPredicateTest >> testNewline [
 PPPredicateTest >> testOnMessage [
 	| block parser |
 	block := [ :char | char = $* ].
-	parser := PPPredicateParser on: block message: 'starlet'.
+	parser := PPPredicateObjectParser on: block message: 'starlet'.
 	self assert: parser block = block.
 	self assert: parser message = 'starlet'.
 	
@@ -219,6 +219,31 @@ PPPredicateTest >> testPunctuation [
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
 	self assert: parser fail: '1'
+]
+
+{ #category : #'testing-sequence' }
+PPPredicateTest >> testSequenceParser [
+	| parser |
+	parser := PPPredicateSequenceParser 
+		on: [ :value | value first isUppercase ] 
+		message: 'uppercase 3 letter words'
+		size: 3.
+	self assert: parser size = 3.
+	self assert: parser parse: 'Abc'.
+	self assert: parser parse: 'ABc'.
+	self assert: parser parse: 'ABC'.
+	self assert: parser fail: 'abc'.
+	self assert: parser fail: 'aBC'.
+	self assert: parser fail: 'Ab'.
+	
+	parser := parser negate.
+	self assert: parser size = 3.
+	self assert: parser fail: 'Abc'.
+	self assert: parser fail: 'ABc'.
+	self assert: parser fail: 'ABC'.
+	self assert: parser parse: 'abc'.
+	self assert: parser parse: 'aBC'.
+	self assert: parser fail: 'Ab'
 ]
 
 { #category : #'testing-chars' }

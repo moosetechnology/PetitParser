@@ -605,7 +605,7 @@ PPParserTest >> testPrint [
 	parser := PPFailingParser message: 'error'.
 	self assert: (parser printString includesSubString: 'error').
 	
-	parser := PPPredicateParser on: [ :c | true ] message: 'error'.
+	parser := PPPredicateObjectParser on: [ :c | true ] message: 'error'.
 	self assert: (parser printString includesSubString: 'error')
 ]
 
