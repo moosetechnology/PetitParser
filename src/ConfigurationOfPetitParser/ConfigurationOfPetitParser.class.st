@@ -44,9 +44,10 @@ ConfigurationOfPetitParser >> default: spec [
 		spec repository: 'http://source.lukas-renggli.ch/petit'.
 		spec 
 			package: 'PetitParser';
-			package: 'PetitAnalyzer'.
+			package: 'PetitTests';
+			package: 'PetitAnalyzer' with: [spec requires: 'PetitTests'].
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
-		spec group: 'Tests' with: #( 'PetitParser'	).
+		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ).
 		spec package: 'Shout' with: [spec repository: 'http://www.squeaksource.com/shout'].
 		spec package: 'PetitGui' with:[
 			spec repository: 'http://source.lukas-renggli.ch/petit'.
