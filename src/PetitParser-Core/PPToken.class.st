@@ -41,7 +41,21 @@ PPToken >> = anObject [
 
 { #category : #accessing }
 PPToken >> collection [
+	"Answer the underlying collection of this token."
+
 	^ collection
+]
+
+{ #category : #accessing }
+PPToken >> column [
+	"Answer the column number of this token in the underlying collection."
+	
+	| last stream |
+	last := 0.
+	stream := collection readStream.
+	[ stream nextLine isNil or: [ start <= stream position ] ]
+		whileFalse: [ last := stream position ].
+	^ start - last
 ]
 
 { #category : #copying }
@@ -61,6 +75,18 @@ PPToken >> initializeOn: aSequenceableCollection start: aStartInteger stop: aSto
 	stop := aStopInteger
 ]
 
+{ #category : #accessing }
+PPToken >> line [
+	"Answer the line number of this token in the underlying collection."
+	
+	| line stream |
+	line := 1.
+	stream := collection readStream.
+	[ stream nextLine isNil or: [ start <= stream position ] ]
+		whileFalse: [ line := line + 1 ].
+	^ line
+]
+
 { #category : #printing }
 PPToken >> printOn: aStream [
 	super printOn: aStream.
@@ -69,20 +95,28 @@ PPToken >> printOn: aStream [
 
 { #category : #accessing }
 PPToken >> size [
-	^ self stop - self start + 1
+	"Answer the size of this token."
+
+	^ stop - start + 1
 ]
 
 { #category : #accessing }
 PPToken >> start [
+	"Answer the start position of this token in the underlying collection."
+
 	^ start
 ]
 
 { #category : #accessing }
 PPToken >> stop [
+	"Answer the stop position of this token in the underlying collection."
+	
 	^ stop
 ]
 
 { #category : #accessing }
 PPToken >> value [
+	"Answer the contents of this token."
+
 	^ collection copyFrom: start to: stop
 ]
