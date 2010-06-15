@@ -26,6 +26,17 @@ PPTokenTest >> testCollection [
 ]
 
 { #category : #testing }
+PPTokenTest >> testColumn [
+	| input parser result |
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr) , '123'.
+	parser := #any asParser token star.
+	result := parser parse: input.
+	result 
+		with: #(1 2 1 2 3 1 2 3) 
+		do: [ :token :line | self assert: token column = line ]
+]
+
+{ #category : #testing }
 PPTokenTest >> testCopyFromTo [
 	| result other |
 	result := PPToken on: 'abc'.
@@ -45,6 +56,17 @@ PPTokenTest >> testEquality [
 	self deny: token1 == token2.
 	self assert: token1 = token2.
 	self assert: token1 hash = token2 hash.
+]
+
+{ #category : #testing }
+PPTokenTest >> testLine [
+	| input parser result |
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr) , '123'.
+	parser := #any asParser token star.
+	result := parser parse: input.
+	result 
+		with: #(1 1 2 2 2 3 3 3) 
+		do: [ :token :line | self assert: token line = line ]
 ]
 
 { #category : #testing }
