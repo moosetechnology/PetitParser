@@ -46,16 +46,19 @@ PPToken >> collection [
 	^ collection
 ]
 
-{ #category : #accessing }
+{ #category : #querying }
 PPToken >> column [
 	"Answer the column number of this token in the underlying collection."
 	
-	| last stream |
-	last := 0.
-	stream := collection readStream.
-	[ stream nextLine isNil or: [ start <= stream position ] ]
-		whileFalse: [ last := stream position ].
-	^ start - last
+	| position |
+	position := 0.
+	(self newline , [ :stream |
+		start <= stream position
+			ifTrue: [ ^ start - position ].
+		position := stream position ] asParser
+		/ #any asParser) star
+			parse: collection.
+	 ^ start - position
 ]
 
 { #category : #copying }
@@ -75,16 +78,27 @@ PPToken >> initializeOn: aSequenceableCollection start: aStartInteger stop: aSto
 	stop := aStopInteger
 ]
 
-{ #category : #accessing }
+{ #category : #querying }
 PPToken >> line [
 	"Answer the line number of this token in the underlying collection."
 	
-	| line stream |
+	| line |
 	line := 1.
-	stream := collection readStream.
-	[ stream nextLine isNil or: [ start <= stream position ] ]
-		whileFalse: [ line := line + 1 ].
+	(self newline , [ :stream |
+		start <= stream position
+			ifTrue: [ ^ line ].
+		line := line + 1 ] asParser
+		/ #any asParser) star
+			parse: collection.
 	^ line
+]
+
+{ #category : #private }
+PPToken >> newline [
+	"Parser a platform independent newline sequence. LF: Unix, CR+LF: Windows, and CR: Apple."
+
+	^ (Character lf asParser)
+	/ (Character cr asParser , Character lf asParser optional)
 ]
 
 { #category : #printing }
