@@ -25,18 +25,18 @@ PPTokenTest >> testCollection [
 	self assert: (result collection == input)
 ]
 
-{ #category : #testing }
+{ #category : #'testing-querying' }
 PPTokenTest >> testColumn [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr) , '123'.
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123' , (String with: Character lf) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.
 	result 
-		with: #(1 2 1 2 3 1 2 3) 
+		with:  #(1 2 1 2 3 4 1 2 3 4 1 2 3 4)
 		do: [ :token :line | self assert: token column = line ]
 ]
 
-{ #category : #testing }
+{ #category : #'testing-copying' }
 PPTokenTest >> testCopyFromTo [
 	| result other |
 	result := PPToken on: 'abc'.
@@ -48,7 +48,7 @@ PPTokenTest >> testCopyFromTo [
 	self assert: other collection = result collection
 ]
 
-{ #category : #testing }
+{ #category : #'testing-comparing' }
 PPTokenTest >> testEquality [
 	| token1 token2 |
 	token1 := self  parse: 'foo' using: self identifier.
@@ -58,14 +58,14 @@ PPTokenTest >> testEquality [
 	self assert: token1 hash = token2 hash.
 ]
 
-{ #category : #testing }
+{ #category : #'testing-querying' }
 PPTokenTest >> testLine [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr) , '123'.
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123' , (String with: Character lf) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.
 	result 
-		with: #(1 1 2 2 2 3 3 3) 
+		with: #(1 1 2 2 2 2 3 3 3 3 4 4 4 4) 
 		do: [ :token :line | self assert: token line = line ]
 ]
 
