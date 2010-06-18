@@ -4,8 +4,3 @@ Extension { #name : #PPEpsilonParser }
 PPEpsilonParser >> isNullable [
 	^ true
 ]
-
-{ #category : #'*petitanalyzer-matching' }
-PPEpsilonParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
-	^ self class = aParser class
-]

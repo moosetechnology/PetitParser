@@ -163,13 +163,13 @@ PPParser >> match: aParser inContext: aDictionary [
 ]
 
 { #category : #'*petitanalyzer-matching' }
-PPParser >> match: aParser inContext: aDictionary seen: aSet [
+PPParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
 	"This is the default implementation to match two parsers. This code can properly handle recursion. This is code is supposed to be overridden in subclasses that add new state."
 
-	(self == aParser or: [ aSet includes: self ])
+	(self == aParser or: [ anIdentitySet includes: self ])
 		ifTrue: [ ^ true ].
-	aSet add: self.
-	^ self class = aParser class and: [ self matchList: self children against: aParser children inContext: aDictionary seen: aSet ]
+	anIdentitySet add: self.
+	^ self class = aParser class and: [ self matchList: self children against: aParser children inContext: aDictionary seen: anIdentitySet ]
 ]
 
 { #category : #'*petitanalyzer-matching' }

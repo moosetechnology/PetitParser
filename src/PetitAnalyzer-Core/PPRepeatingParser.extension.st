@@ -6,6 +6,6 @@ PPRepeatingParser >> isNullable [
 ]
 
 { #category : #'*petitanalyzer-matching' }
-PPRepeatingParser >> match: aParser inContext: aDictionary seen: aSet [
-	^ (super match: aParser inContext: aDictionary seen: aSet) and: [ self min = aParser min and: [ self max = aParser max ] ]
+PPRepeatingParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
+	^ (super match: aParser inContext: aDictionary seen: anIdentitySet) and: [ self min = aParser min and: [ self max = aParser max ] ]
 ]

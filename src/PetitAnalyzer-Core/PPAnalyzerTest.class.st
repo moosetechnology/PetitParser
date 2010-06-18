@@ -85,7 +85,7 @@ PPAnalyzerTest >> grammarC [
 
 { #category : #accessing }
 PPAnalyzerTest >> grammarD [
-	"A highly ambiguous grammar from: Saichaitanya Jampana. Exploring the problem of ambiguity in context-free grammars. Master?s thesis, Oklahoma State University, July 2005."
+	"A highly ambiguous grammar from: Saichaitanya Jampana. Exploring the problem of ambiguity in context-free grammars. Master’s thesis, Oklahoma State University, July 2005."
 
 	| grammar |
 	grammar := Dictionary new.
