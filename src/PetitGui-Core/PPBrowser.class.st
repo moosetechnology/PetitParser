@@ -118,7 +118,12 @@ PPBrowser >> browseFollowOn: aBrowser [
 		title: 'Follow';
 		useExplicitNotNil;
 		format: [ :parser | parser displayName ];
-		display: [ :parsers | self production followSet ]
+		display: [ :parsers | 
+			| parser |
+			parser := self selectedClass new.
+			parser followSets
+				at: (parser productionAt: self selectedSelector)
+				ifAbsent: [ Array with: nil asParser ] ]
 ]
 
 { #category : #'browse-static' }
