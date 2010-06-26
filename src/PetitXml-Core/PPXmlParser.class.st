@@ -17,6 +17,11 @@ PPXmlParser >> attributes [
 			into: [ :result :each | result addLast: each; yourself ] ]
 ]
 
+{ #category : #'grammar-character' }
+PPXmlParser >> characterData [
+	^ super characterData ==> [ :nodes | PPXmlText data: nodes ]
+]
+
 { #category : #grammar }
 PPXmlParser >> comment [
 	"[15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'"

@@ -50,7 +50,7 @@ PPXmlGrammar >> attributes [
 PPXmlGrammar >> characterData [
 	"[14]   	CharData	   ::=   	[^<&]* - ([^<&]* ']]>' [^<&]*)"
 	
-	^ $< asParser negate plus flatten ==> [ :nodes | PPXmlText data: nodes ]
+	^ $< asParser negate plus flatten
 ]
 
 { #category : #grammar }
