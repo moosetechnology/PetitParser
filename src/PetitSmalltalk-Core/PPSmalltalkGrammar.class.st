@@ -515,11 +515,6 @@ PPSmalltalkGrammar >> temporaries [
 	^ ($| asParser smalltalkToken , variable star , $| asParser smalltalkToken) optional ==> [ :nodes | nodes ifNil: [ #() ] ]
 ]
 
-{ #category : #accessing }
-PPSmalltalkGrammar >> tokenParser [
-	^ PPSmalltalkTokenParser
-]
-
 { #category : #'grammar-literals' }
 PPSmalltalkGrammar >> trueLiteral [
 	^ trueToken
