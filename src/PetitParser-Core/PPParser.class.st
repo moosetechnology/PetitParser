@@ -77,17 +77,6 @@ PPParser >> children [
 	^ #()
 ]
 
-{ #category : #private }
-PPParser >> currentTokenParser [
-	| context |
-	context := thisContext sender.
-	[ context notNil ] whileTrue: [
-		(context receiver respondsTo: #tokenParser)
-			ifTrue: [ ^ context receiver tokenParser ].
-		context := context sender ].
-	^ PPTokenParser
-]
-
 { #category : #operations }
 PPParser >> def: aParser [
 	"Redefine the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPParser and later redefine it with another one."
@@ -441,7 +430,7 @@ PPParser >> starLazy: aParser [
 PPParser >> token [
 	"Answer a new parser that transforms the input to a token."
 	
-	^ self currentTokenParser on: self
+	^ PPTokenParser on: self
 ]
 
 { #category : #'operations-mapping' }
