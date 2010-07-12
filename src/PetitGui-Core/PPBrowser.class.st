@@ -184,7 +184,8 @@ PPBrowser >> browseOn: aBrowser [
 PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser text
 		title: 'Result';
-		display: [ output ].
+		display: [ output ];
+		act: [:text | output inspect ] entitled: 'Inspect'.
 
 	aBrowser list
 		title: 'Debugger';
