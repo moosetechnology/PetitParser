@@ -11,5 +11,10 @@ PPManifestMfParserTest >> parserClass [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParserTest >> testSinglePair [
-	self assert: 'Header: value' is: {'header'->'value'}
+	self assert: 'Header: value' is: {'Header'->'value'}
+]
+
+{ #category : #'as yet unclassified' }
+PPManifestMfParserTest >> testSinglePairWithCollection [
+	self assert: 'Header: value1, value2' is: {'Header'->#('value1' 'value2')}
 ]
