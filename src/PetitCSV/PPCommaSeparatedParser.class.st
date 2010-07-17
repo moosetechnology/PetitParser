@@ -6,21 +6,33 @@ Class {
 		'cell',
 		'rows',
 		'endOfLine',
-		'whitespace'
+		'whitespace',
+		'nonComma'
 	],
 	#category : #PetitCSV
 }
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> cell [
-	^ whitespace star , ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token , whitespace star
-		==> [ :nodes | nodes second value asNumber ]
+	^ whitespace star , nonComma star flatten , whitespace star
+		==> [ :nodes | nodes second value ]
 ]
 
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> endOfLine [
 	^ #newline asParser token
 	"(#cr asParser , #lf asParser optional) / #lf asParser"
+]
+
+{ #category : #'as yet unclassified' }
+PPCommaSeparatedParser >> nonComma [
+	^ PPPredicateObjectParser anyExceptAnyOf: {Character space . Character tab . Character cr . Character lf . $, }
+]
+
+{ #category : #'as yet unclassified' }
+PPCommaSeparatedParser >> number [ 
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token
+		==> [ :nodes | nodes first value asNumber ]
 ]
 
 { #category : #'as yet unclassified' }
