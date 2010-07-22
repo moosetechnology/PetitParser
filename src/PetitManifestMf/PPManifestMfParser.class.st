@@ -5,20 +5,12 @@ Class {
 		'pairs',
 		'pair',
 		'label',
-		'value',
-		'basicValue',
-		'oneLinerBasicValue'
+		'oneLinerBasicValue',
+		'pairValue',
+		'valueSeparator'
 	],
 	#category : #PetitManifestMf
 }
-
-{ #category : #'as yet unclassified' }
-PPManifestMfParser >> basicValue [
-	^ oneLinerBasicValue , ((#newline asParser , #space asParser) , oneLinerBasicValue ==> #second) star
-	
-	==> [:token | 
-		((OrderedCollection with: token first) addAll: token last; yourself) asArray ]
-]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> label [
@@ -27,19 +19,23 @@ PPManifestMfParser >> label [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> oneLinerBasicValue [
-	| aCollectionOfChars |
-	aCollectionOfChars := {$: . $, . Character cr . Character lf}.
-	parser := PPPredicateObjectParser
-		on: [:each | (aCollectionOfChars includes: each) not ]
-		message: 'any except ' , aCollectionOfChars printString , ' expected'.
-	^ parser star flatten 
-		
-		"anyExceptAnyOf: #($: $, )) star flatten"
+	^ (PPPredicateObjectParser anyExceptAnyOf: {$: . $, . Character cr . Character lf . Character space})
+		star flatten
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pair [
-	^label , $: asParser token trim, value ==> [:token | (token at: 1)->(token at: 3)]
+	^label , $: asParser token trim, pairValue ==> [:token | (token at: 1)->(token at: 3)]
+]
+
+{ #category : #'as yet unclassified' }
+PPManifestMfParser >> pairValue [
+	^ oneLinerBasicValue , ((valueSeparator , oneLinerBasicValue) ==> [:token | token last] ) trim star 
+	
+	==> [:token | 
+		token last isEmpty 
+			ifTrue: [token first] 
+			ifFalse: [((OrderedCollection with: token first) addAll: token last; yourself) asArray  ]]
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,16 +48,11 @@ PPManifestMfParser >> pairs [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> start [
-	^ pairs end
+	^ pairs end 
 ]
 
 { #category : #'as yet unclassified' }
-PPManifestMfParser >> value [
-	^ basicValue , 
-	(($, asParser trim token , basicValue) ==> [:token | token second] ) trim star 
+PPManifestMfParser >> valueSeparator [
+	^ $, asParser token , (#newline asParser , #space asParser)
 	
-	==> [:token | 
-		token last isEmpty 
-			ifTrue: [token first] 
-			ifFalse: [((OrderedCollection with: token first) addAll: token last; yourself) asArray  ]]
 ]
