@@ -5,11 +5,11 @@ Class {
 		'pairs',
 		'pair',
 		'label',
+		'basicValue',
 		'oneLinerBasicValue',
 		'pairValue',
-		'valueSeparator',
-		'basicValue',
-		'newline'
+		'newline',
+		'valueSeparator'
 	],
 	#category : #PetitManifestMf
 }
@@ -24,7 +24,7 @@ PPManifestMfParser >> basicValue [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> label [
-	^ (#letter asParser / #digit asParser / $- asParser) star token
+	^ (#letter asParser / #digit asParser / $- asParser) star flatten trim
 ]
 
 { #category : #'as yet unclassified' }
@@ -35,8 +35,8 @@ PPManifestMfParser >> newline [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> oneLinerBasicValue [
-	^ (PPPredicateObjectParser anyExceptAnyOf: {($, asParser) . Character cr . Character lf })
-		star
+	^ (PPPredicateObjectParser anyExceptAnyOf: {$, . Character cr . Character lf })
+		star flatten
 ]
 
 { #category : #'as yet unclassified' }
@@ -46,12 +46,12 @@ PPManifestMfParser >> pair [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pairValue [
-	^ basicValue , ((valueSeparator , basicValue) ==> [:token | token last] ) star 
+	^ basicValue , ((valueSeparator , basicValue) ==> [:token | token last] ) star
 	
 	==> [:token | 
 		token last isEmpty 
-			ifTrue: [token first] 
-			ifFalse: [((OrderedCollection with: token first) addAll: token last; yourself) asArray  ]]
+			ifTrue: [token first first] 
+			ifFalse: [((OrderedCollection with: token first first) addAll: token last first; yourself) asArray  ]]
 ]
 
 { #category : #'as yet unclassified' }
