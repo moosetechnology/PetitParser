@@ -7,20 +7,36 @@ Class {
 		'label',
 		'oneLinerBasicValue',
 		'pairValue',
-		'valueSeparator'
+		'valueSeparator',
+		'basicValue',
+		'newline'
 	],
 	#category : #PetitManifestMf
 }
 
 { #category : #'as yet unclassified' }
+PPManifestMfParser >> basicValue [
+	^ oneLinerBasicValue , ((newline , #space asParser) , oneLinerBasicValue ==> #last) star
+	
+	==> [:token | 
+		((OrderedCollection with: token first) addAll: token second; yourself) asArray ]
+]
+
+{ #category : #'as yet unclassified' }
 PPManifestMfParser >> label [
-	^ (#letter asParser / #digit asParser / $- asParser) star token trim flatten
+	^ (#letter asParser / #digit asParser / $- asParser) star token
+]
+
+{ #category : #'as yet unclassified' }
+PPManifestMfParser >> newline [
+	^ (Character lf asParser)
+	/ (Character cr asParser , Character lf asParser optional)
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> oneLinerBasicValue [
-	^ (PPPredicateObjectParser anyExceptAnyOf: {$: . $, . Character cr . Character lf . Character space})
-		star flatten
+	^ (PPPredicateObjectParser anyExceptAnyOf: {($, asParser) . Character cr . Character lf })
+		star
 ]
 
 { #category : #'as yet unclassified' }
@@ -30,7 +46,7 @@ PPManifestMfParser >> pair [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pairValue [
-	^ oneLinerBasicValue , ((valueSeparator , oneLinerBasicValue) ==> [:token | token last] ) trim star 
+	^ basicValue , ((valueSeparator , basicValue) ==> [:token | token last] ) star 
 	
 	==> [:token | 
 		token last isEmpty 
@@ -40,10 +56,10 @@ PPManifestMfParser >> pairValue [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pairs [
-	^ pair , (#newline asParser , pair ==> [:token | token second ]) star
+	^ pair , (newline , pair ==> [:token | token second ]) star, newline star
 	
 	==> [:token | 
-		((OrderedCollection with: token first) addAll: token last; yourself) asArray ]
+		((OrderedCollection with: token first) addAll: token second; yourself) asArray ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -53,6 +69,5 @@ PPManifestMfParser >> start [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> valueSeparator [
-	^ $, asParser token , (#newline asParser , #space asParser)
-	
+	^ $, asParser token
 ]
