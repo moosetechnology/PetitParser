@@ -19,7 +19,7 @@ PPManifestMfParser >> basicValue [
 	^ oneLinerBasicValue , ((newline , #space asParser) , oneLinerBasicValue ==> #last) star
 	
 	==> [:token | 
-		((OrderedCollection with: token first) addAll: token second; yourself) asArray ]
+		((OrderedCollection with: token first inspect) addAll: token second; yourself) asArray ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -46,12 +46,12 @@ PPManifestMfParser >> pair [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pairValue [
-	^ basicValue , ((valueSeparator , basicValue) ==> [:token | token last] ) star
+	^ oneLinerBasicValue , ((valueSeparator , oneLinerBasicValue) ==> [:token | token last] ) star
 	
 	==> [:token | 
 		token last isEmpty 
-			ifTrue: [token first first] 
-			ifFalse: [((OrderedCollection with: token first first) addAll: token last first; yourself) asArray  ]]
+			ifTrue: [token first] 
+			ifFalse: [((OrderedCollection with: token first) addAll: token last; yourself) asArray  ]]
 ]
 
 { #category : #'as yet unclassified' }
