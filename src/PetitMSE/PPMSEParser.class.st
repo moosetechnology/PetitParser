@@ -28,7 +28,7 @@ Class {
 
 { #category : #accessing }
 PPMSEParser >> attribute [
-	^ $( asParser token , identifierName , attributeValue , $) asParser token
+	^ ($( asParser token , identifierName , attributeValue , $) asParser token) trim
 	
 	==> [:token | Array with: (token at: 2) with: (token at: 3) ]
 ]
