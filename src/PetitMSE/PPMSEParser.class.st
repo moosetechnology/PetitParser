@@ -42,7 +42,7 @@ PPMSEParser >> attributeValue [
 PPMSEParser >> boolean [ 
 	^ ('true' asParser / 'false' asParser) trim
 	
-	==> [:token | token first = 'true' ifTrue: [true] ifFalse: [token first = 'false' ifTrue: [false] ifFalse: [nil]]] 
+	==> [:token | token = 'true' ifTrue: [true] ifFalse: [token = 'false' ifTrue: [false] ifFalse: [nil]]] 
 ]
 
 { #category : #accessing }
@@ -82,7 +82,9 @@ PPMSEParser >> identifierName [
 
 { #category : #values }
 PPMSEParser >> number [
-	^ #digit asParser plus flatten
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim
+
+	==> [ :token | token value asNumber ]
 ]
 
 { #category : #values }
