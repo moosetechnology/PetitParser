@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 PPMSEParserTest >> parserClass [
-	^ PPMSEParser
+	^ PPMSEArrayParser
 ]
 
 { #category : #testing }

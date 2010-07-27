@@ -8,7 +8,7 @@ Instance Variables:
 	elementId	<PPParser>
 "
 Class {
-	#name : #PPMSEParser,
+	#name : #PPMSEGrammar,
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'elements',
@@ -27,86 +27,65 @@ Class {
 }
 
 { #category : #accessing }
-PPMSEParser >> attribute [
+PPMSEGrammar >> attribute [
 	^ ($( asParser token , identifierName , attributeValue , $) asParser token) trim
-	
-	==> [:token | Array with: (token at: 2) with: (token at: 3) ]
 ]
 
 { #category : #accessing }
-PPMSEParser >> attributeValue [
+PPMSEGrammar >> attributeValue [
 	^ primitive / reference / element
 ]
 
 { #category : #values }
-PPMSEParser >> boolean [ 
+PPMSEGrammar >> boolean [ 
 	^ ('true' asParser / 'false' asParser) trim
-	
-	==> [:token | token = 'true' ifTrue: [true] ifFalse: [token = 'false' ifTrue: [false] ifFalse: [nil]]] 
 ]
 
 { #category : #accessing }
-PPMSEParser >> element [
+PPMSEGrammar >> element [
 	^ $( asParser token , identifierName , id optional , attribute star , $) asParser token
-	
-	==> [:token | Array with: (token at: 2) with: (token at: 3) with: (token at: 4) ]
 ]
 
 { #category : #accessing }
-PPMSEParser >> elements [
+PPMSEGrammar >> elements [
 	^ $( asParser trim , element trim star , $) asParser trim
-	
-	==> [:token | token second ]
 ]
 
 { #category : #accessing }
-PPMSEParser >> id [
+PPMSEGrammar >> id [
 	^ $( asParser trim , 'id:' asParser trim , #digit asParser star flatten trim , $) asParser trim
-	
-	==> [:token | Array with: 'id' with: (token at: 3) asNumber ]
 ]
 
 { #category : #accessing }
-PPMSEParser >> identifierName [
+PPMSEGrammar >> identifierName [
 	^ #word asParser star flatten trim , 
 	( $. asParser flatten trim , 
 	#word asParser star flatten trim 
 	==> [:token | token first, token second]
 	) optional trim
-	
-	==> [:token | 
-		token second isNil 
-			ifTrue: [ token first ] 
-			ifFalse: [ token first, token second ] ]
 ]
 
 { #category : #values }
-PPMSEParser >> number [
+PPMSEGrammar >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim
-
-	==> [ :token | token value asNumber ]
 ]
 
 { #category : #values }
-PPMSEParser >> primitive [ 
+PPMSEGrammar >> primitive [ 
 	^ string / number / boolean" , unlimited"
 ]
 
 { #category : #values }
-PPMSEParser >> reference [ 
+PPMSEGrammar >> reference [ 
 	^ $( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser trim
-
-	==> [:token | Array with: 'ref' with: (token at: 3) asNumber ]
 ]
 
 { #category : #accessing }
-PPMSEParser >> start [ 
+PPMSEGrammar >> start [ 
 	^ elements end
 ]
 
 { #category : #values }
-PPMSEParser >> string [ 
+PPMSEGrammar >> string [ 
 	^ ($' asParser , ( $' asParser negate ) star flatten , $' asParser) trim
-	
-	==> [:token | token second ]
 ]
