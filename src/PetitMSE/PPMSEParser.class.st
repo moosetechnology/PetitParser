@@ -54,7 +54,7 @@ PPMSEParser >> element [
 
 { #category : #accessing }
 PPMSEParser >> elements [
-	^ $( asParser trim , element trim star  , $) asParser trim
+	^ $( asParser trim , element trim star , $) asParser trim
 	
 	==> [:token | token second ]
 ]
@@ -82,7 +82,7 @@ PPMSEParser >> identifierName [
 
 { #category : #values }
 PPMSEParser >> number [
-	^ #digit asParser star flatten
+	^ #digit asParser plus flatten
 ]
 
 { #category : #values }
@@ -104,7 +104,7 @@ PPMSEParser >> start [
 
 { #category : #values }
 PPMSEParser >> string [ 
-	^ $' asParser trim , ( $' asParser negate ) star flatten , $' asParser trim
+	^ ($' asParser , ( $' asParser negate ) star flatten , $' asParser) trim
 	
 	==> [:token | token second ]
 ]
