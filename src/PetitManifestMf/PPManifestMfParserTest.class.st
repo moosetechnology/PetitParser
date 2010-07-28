@@ -40,7 +40,7 @@ PPManifestMfParserTest >> testMultilineSinglePairWithCollection [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParserTest >> testSinglePair [
-	self assert: 'Header: value' is: {'Header'->'value'}
+	self assert: 'Header: value' is: {'Header'->#('value')}
 ]
 
 { #category : #'as yet unclassified' }
