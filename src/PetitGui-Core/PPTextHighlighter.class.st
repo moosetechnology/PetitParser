@@ -7,8 +7,8 @@ Here is a template to use it:
 
 PPTextHighlighter new
 	parser: YourParser new;
-	color: 'tokenName1' with: #blue;
-	color: 'tokenName2' with: #gray;
+	color: 'tokenName1' with: Color blue;
+	color: 'tokenName2' with: Color gray;
 	highlight: string.
 "
 Class {
@@ -46,8 +46,8 @@ PPTextHighlighter >> bold: anElementString [
 ]
 
 { #category : #public }
-PPTextHighlighter >> color: anElementString with: aColorSymbol [
-	self addAttribute: (TextColor perform: aColorSymbol) for: anElementString
+PPTextHighlighter >> color: anElementString with: aColor [
+	self addAttribute: (TextColor new color: aColor) for: anElementString
 ]
 
 { #category : #public }
