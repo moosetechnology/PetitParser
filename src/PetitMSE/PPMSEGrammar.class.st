@@ -22,7 +22,9 @@ Class {
 		'string',
 		'number',
 		'boolean',
-		'attributeName'
+		'attributeName',
+		'integerReference',
+		'nameReference'
 	],
 	#category : #PetitMSE
 }
@@ -71,6 +73,16 @@ PPMSEGrammar >> identifierName [
 ]
 
 { #category : #values }
+PPMSEGrammar >> integerReference [ 
+	^ ($( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser) token trim
+]
+
+{ #category : #values }
+PPMSEGrammar >> nameReference [ 
+	^ ($( asParser trim , 'ref:' asParser trim , #word asParser star token , $) asParser trim) token
+]
+
+{ #category : #values }
 PPMSEGrammar >> number [
 	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim
 ]
@@ -82,7 +94,7 @@ PPMSEGrammar >> primitive [
 
 { #category : #values }
 PPMSEGrammar >> reference [ 
-	^ ($( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser) token trim
+	^ integerReference / nameReference
 ]
 
 { #category : #accessing }

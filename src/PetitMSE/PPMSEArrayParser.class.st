@@ -59,6 +59,20 @@ PPMSEArrayParser >> identifierName [
 ]
 
 { #category : #values }
+PPMSEArrayParser >> integerReference [ 
+	^ super integerReference
+
+	==> [:token | Array with: 'ref' with: token "(token at: 3) asNumber" ]
+]
+
+{ #category : #values }
+PPMSEArrayParser >> nameReference [ 
+	^ super nameReference
+
+	==> [:token | Array with: 'ref' with: token ]
+]
+
+{ #category : #values }
 PPMSEArrayParser >> number [
 	^ super number
 	
@@ -68,13 +82,6 @@ PPMSEArrayParser >> number [
 { #category : #values }
 PPMSEArrayParser >> primitive [ 
 	^ super primitive
-]
-
-{ #category : #values }
-PPMSEArrayParser >> reference [ 
-	^ super reference
-
-	==> [:token | Array with: 'ref' with: (token at: 3) asNumber ]
 ]
 
 { #category : #values }
