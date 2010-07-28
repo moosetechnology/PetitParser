@@ -18,8 +18,9 @@ PPMSEParserTest >> testEmpty [
 
 { #category : #testing }
 PPMSEParserTest >> testOneElement [
+	self assert: '((X))' is: #(('X' nil #())).
 	self assert: '((X.Y))' is: #(('X.Y' nil #())).
-	self assert: '((X))' is: #(('X' nil #()))
+	
 ]
 
 { #category : #testing }

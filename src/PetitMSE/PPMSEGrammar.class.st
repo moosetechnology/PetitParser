@@ -21,24 +21,30 @@ Class {
 		'id',
 		'string',
 		'number',
-		'boolean'
+		'boolean',
+		'attributeName'
 	],
 	#category : #PetitMSE
 }
 
 { #category : #accessing }
 PPMSEGrammar >> attribute [
-	^ ($( asParser token , identifierName , attributeValue , $) asParser token) trim
+	^ ($( asParser token , attributeName , attributeValue , $) asParser token) trim
+]
+
+{ #category : #accessing }
+PPMSEGrammar >> attributeName [
+	^ self identifierName
 ]
 
 { #category : #accessing }
 PPMSEGrammar >> attributeValue [
-	^ primitive / reference / element
+	^ primitive / reference / elements
 ]
 
 { #category : #values }
 PPMSEGrammar >> boolean [ 
-	^ ('true' asParser / 'false' asParser) trim
+	^ ('true' asParser / 'false' asParser) token trim
 ]
 
 { #category : #accessing }
@@ -53,16 +59,15 @@ PPMSEGrammar >> elements [
 
 { #category : #accessing }
 PPMSEGrammar >> id [
-	^ $( asParser trim , 'id:' asParser trim , #digit asParser star flatten trim , $) asParser trim
+	^ ($( asParser trim , 'id:' asParser trim , #digit asParser star token trim , $) asParser) trim
 ]
 
 { #category : #accessing }
 PPMSEGrammar >> identifierName [
-	^ #word asParser star flatten trim , 
-	( $. asParser flatten trim , 
-	#word asParser star flatten trim 
-	==> [:token | token first, token second]
-	) optional trim
+	^ (#word asParser star flatten , 
+		( $. asParser flatten , #word asParser star flatten 
+			==> [:token | token first, token second]
+		) optional) token trim
 ]
 
 { #category : #values }
@@ -77,7 +82,7 @@ PPMSEGrammar >> primitive [
 
 { #category : #values }
 PPMSEGrammar >> reference [ 
-	^ $( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser trim
+	^ ($( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser) token trim
 ]
 
 { #category : #accessing }
@@ -87,5 +92,5 @@ PPMSEGrammar >> start [
 
 { #category : #values }
 PPMSEGrammar >> string [ 
-	^ ($' asParser , ( $' asParser negate ) star flatten , $' asParser) trim
+	^ ( $' asParser , ( $' asParser negate ) star token , $' asParser ==> #second ) trim
 ]

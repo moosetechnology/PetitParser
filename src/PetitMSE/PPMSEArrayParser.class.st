@@ -12,6 +12,13 @@ PPMSEArrayParser >> attribute [
 ]
 
 { #category : #accessing }
+PPMSEArrayParser >> attributeName [
+	^ super attributeName
+	
+	==> [:token | token value ]
+]
+
+{ #category : #accessing }
 PPMSEArrayParser >> attributeValue [
 	^ super attributeValue
 ]
@@ -20,7 +27,7 @@ PPMSEArrayParser >> attributeValue [
 PPMSEArrayParser >> boolean [ 
 	^ super boolean 
 	
-	==> [:token | token = 'true' ifTrue: [true] ifFalse: [token = 'false' ifTrue: [false] ifFalse: [nil]]] 
+	==> [:token | token value = 'true' ifTrue: [true] ifFalse: [token value = 'false' ifTrue: [false] ifFalse: [nil]]] 
 ]
 
 { #category : #accessing }
@@ -41,17 +48,14 @@ PPMSEArrayParser >> elements [
 PPMSEArrayParser >> id [
 	^ super id
 	
-	==> [:token | Array with: 'id' with: (token at: 3) asNumber ]
+	==> [:token | Array with: 'id' with: (token at: 3) value asNumber ]
 ]
 
 { #category : #accessing }
 PPMSEArrayParser >> identifierName [
 	^ super identifierName
 	
-	==> [:token | 
-		token second isNil 
-			ifTrue: [ token first ] 
-			ifFalse: [ token first, token second ] ]
+	==> [:token | token value ]
 ]
 
 { #category : #values }
@@ -77,5 +81,5 @@ PPMSEArrayParser >> reference [
 PPMSEArrayParser >> string [ 
 	^ super string
 	
-	==> [:token | token second ]
+	==> [:token | token value ]
 ]
