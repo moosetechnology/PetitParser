@@ -1,35 +1,35 @@
 Class {
-	#name : #PPMSEParserTest,
+	#name : #PPMSEArrayParserTest,
 	#superclass : #PPCompositeParserTest,
 	#category : #PetitMSE
 }
 
 { #category : #accessing }
-PPMSEParserTest >> parserClass [
+PPMSEArrayParserTest >> parserClass [
 	^ PPMSEArrayParser
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testEmpty [
+PPMSEArrayParserTest >> testEmpty [
 	self assert: '()' is: #().
 	self assert: '( )' is: #().
 	self assert: ' ( ) ' is: #()
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testOneElement [
+PPMSEArrayParserTest >> testOneElement [
 	self assert: '((X))' is: #(('X' nil #())).
 	self assert: '((X.Y))' is: #(('X.Y' nil #())).
 	
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testOneElementWithBooleanAttribute [
+PPMSEArrayParserTest >> testOneElementWithBooleanAttribute [
 	self assert: '((X.Y (attribute true)))' is: #(('X.Y' nil #(('attribute' true))))
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testOneElementWithId [
+PPMSEArrayParserTest >> testOneElementWithId [
 	self assert: '((FAMIX.Class (id: 1)))' is: #(('FAMIX.Class' #('id' 1) #())).
 	self assert: '( ( FAMIX.Class (id: 1) ) )' is: #(('FAMIX.Class' #('id' 1) #())).
 	self assert: '( 
@@ -42,14 +42,34 @@ PPMSEParserTest >> testOneElementWithId [
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testOneElementWithNumericAttribute [
+PPMSEArrayParserTest >> testOneElementWithMultipleSubElements [
+	self assert: '(
+	(X (id: 1)
+		(sub (Y (id: 11))(Z (id: 12)))
+	)
+)' is: #(#('X' #('id' 1) #(#('sub' #(#('Y' #('id' 11) #()) #('Z' #('id' 12) #())))))).
+	self assert: '(
+	(X (id: 1)
+		(sub (Y (id: 11)) (Z (id: 12)))
+	)
+)' is: #(#('X' #('id' 1) #(#('sub' #(#('Y' #('id' 11) #()) #('Z' #('id' 12) #()))))))
+]
+
+{ #category : #testing }
+PPMSEArrayParserTest >> testOneElementWithNumericAttribute [
 	self assert: '((X.Y (attribute 2)))' is: #(('X.Y' nil #(('attribute' 2)))).
 	self assert: '((X.Y (attribute 2.1)))' is: #(('X.Y' nil #(('attribute' 2.1)))).
 	self assert: '((X.Y (attribute 1234.567)))' is: #(('X.Y' nil #(('attribute' 1234.567))))
 ]
 
 { #category : #testing }
-PPMSEParserTest >> testOneElementWithStringAttribute [
+PPMSEArrayParserTest >> testOneElementWithStringAttribute [
 	self assert: '((FAMIX.Class (name ''Something'')))' is: #(('FAMIX.Class' nil #(('name' 'Something')))).
 	self assert: '((FAMIX.Class (attribute ''as:.,><asd'')))' is: #(('FAMIX.Class' nil #(('attribute' 'as:.,><asd')))).
+]
+
+{ #category : #testing }
+PPMSEArrayParserTest >> testOneElementWithSubElement [
+	self assert: '((X (sub (Y))))' is: #(#('X' nil #(#('sub' #(#('Y' nil #())))))).
+	
 ]

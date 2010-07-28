@@ -39,7 +39,7 @@ PPMSEGrammar >> attributeName [
 
 { #category : #accessing }
 PPMSEGrammar >> attributeValue [
-	^ primitive / reference / elements
+	^ primitive / reference / element star
 ]
 
 { #category : #values }
@@ -49,7 +49,7 @@ PPMSEGrammar >> boolean [
 
 { #category : #accessing }
 PPMSEGrammar >> element [
-	^ $( asParser token , identifierName , id optional , attribute star , $) asParser token
+	^ ($( asParser token , identifierName , id optional , attribute star , $) asParser token) trim
 ]
 
 { #category : #accessing }
