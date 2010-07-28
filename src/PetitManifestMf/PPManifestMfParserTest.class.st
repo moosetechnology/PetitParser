@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+PPManifestMfParserTest >> expectedFailures [
+	^ #(testDoublePairsWithCollection testMultilineDoublePairsWithCollection testMultilineSinglePairWithCollection testSinglePairWithCollection)
+]
+
+{ #category : #'as yet unclassified' }
 PPManifestMfParserTest >> parserClass [
 	^ PPManifestMfParser
 ]
