@@ -11,7 +11,15 @@ PPJsonParser >> array [
 
 { #category : #primitives }
 PPJsonParser >> charEscape [
-	^ $\ asParser , #any asParser
+	^ super charEscape ==> [ :nodes | CharacterTable at: nodes last ]
+]
+
+{ #category : #primitives }
+PPJsonParser >> charOctal [
+	^ super charOctal ==> [ :nodes |
+		Character value: (nodes last allButFirst
+			inject: nodes last first digitValue
+			into: [ :result :each | (result << 4) + each digitValue ]) ]
 ]
 
 { #category : #grammar }
@@ -57,7 +65,7 @@ PPJsonParser >> pair [
 
 { #category : #tokens }
 PPJsonParser >> stringToken [
-	^ super stringToken ==> [ :token | token value copyFrom: 2 to: token value size - 1 ]
+	^ string trim ==> [ :nodes | String withAll: nodes second ]
 ]
 
 { #category : #tokens }

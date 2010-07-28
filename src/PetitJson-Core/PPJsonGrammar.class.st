@@ -17,10 +17,28 @@ Class {
 		'stringToken',
 		'numberToken',
 		'charEscape',
-		'charNormal'
+		'charNormal',
+		'charOctal'
+	],
+	#classVars : [
+		'CharacterTable'
 	],
 	#category : #'PetitJson-Core'
 }
+
+{ #category : #initialization }
+PPJsonGrammar class >> initialize [
+	CharacterTable := Dictionary new.
+	CharacterTable
+		at: $\ put: $\;
+		at: $/ put: $/;
+		at: $" put: $";
+		at: $b put: Character backspace;
+		at: $f put: Character newPage;
+		at: $n put: Character lf;
+		at: $r put: Character cr;
+		at: $t put: Character tab
+]
 
 { #category : #grammar }
 PPJsonGrammar >> array [
@@ -29,17 +47,22 @@ PPJsonGrammar >> array [
 
 { #category : #primitives }
 PPJsonGrammar >> char [
-	^ charEscape / charNormal
+	^ charEscape / charOctal / charNormal
 ]
 
 { #category : #primitives }
 PPJsonGrammar >> charEscape [
-	^ $\ asParser , #any asParser
+	^ $\ asParser , (PPPredicateObjectParser anyOf: (String withAll: CharacterTable keys))
 ]
 
 { #category : #primitives }
 PPJsonGrammar >> charNormal [
-	^ $" asParser negate
+	^ PPPredicateObjectParser anyExceptAnyOf: '\"'
+]
+
+{ #category : #primitives }
+PPJsonGrammar >> charOctal [
+	^ '\u' asParser , (#hex asParser min: 4 max: 4)
 ]
 
 { #category : #grammar }
