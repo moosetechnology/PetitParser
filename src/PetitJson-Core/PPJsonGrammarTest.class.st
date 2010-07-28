@@ -4,6 +4,11 @@ Class {
 	#category : #'PetitJson-Tests'
 }
 
+{ #category : #accessing }
+PPJsonGrammarTest class >> packageNamesUnderTest [
+	^ #('PetitJson')
+]
+
 { #category : #utilities }
 PPJsonGrammarTest >> assertInvalid: aString [
 	self should: [ self parse: aString ] raise: Error
