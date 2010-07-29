@@ -9,8 +9,7 @@ Class {
 
 { #category : #private }
 PPTrimmingParser >> consumeSpaces: aStream [
-	[ aStream atEnd not and: [ aStream peek isSeparator ] ]
-		whileTrue: [ aStream next ]
+	self subclassResponsibility
 ]
 
 { #category : #parsing }
@@ -34,11 +33,4 @@ PPTrimmingParser >> parseOn: aStream [
 		^ element ].
 	self parseAfterOn: aStream.
 	^ element
-]
-
-{ #category : #operations }
-PPTrimmingParser >> trim [
-	"There is no point in trimming more than once."
-
-	^ self
 ]

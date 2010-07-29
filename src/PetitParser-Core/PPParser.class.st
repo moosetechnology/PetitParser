@@ -444,7 +444,14 @@ PPParser >> token: aTokenClass [
 PPParser >> trim [
 	"Answer a new parser that consumes spaces before and after the receiving parser."
 	
-	^ PPTrimmingParser on: self
+	^ PPTrimmingAllParser on: self
+]
+
+{ #category : #'operations-mapping' }
+PPParser >> trimSpace [
+	"Answer a new parser that consumes spaces before and after the receiving parser."
+	
+	^ PPTrimmingSpaceParser on: self
 ]
 
 { #category : #operations }
