@@ -41,7 +41,7 @@ PPMSEGrammar >> attributeName [
 
 { #category : #accessing }
 PPMSEGrammar >> attributeValue [
-	^ primitive / reference / element star
+	^ (primitive / reference / element) star
 ]
 
 { #category : #values }
