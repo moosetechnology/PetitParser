@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-PPTrimmingParser class >> on: aParser [
-	^ self on: aParser trimmer: #space asParser
-]
-
-{ #category : #'instance creation' }
 PPTrimmingParser class >> on: aParser trimmer: aTrimParser [
 	^ self new
 		setParser: aParser;
