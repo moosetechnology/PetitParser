@@ -42,6 +42,10 @@ PPMSEGrammar >> attributeName [
 { #category : #accessing }
 PPMSEGrammar >> attributeValue [
 	^ (primitive / reference / element) star
+	
+	==> [:tokens | 
+		(tokens size > 1 or: [tokens isEmpty]) ifTrue: [tokens] ifFalse: [
+			tokens first ]]
 ]
 
 { #category : #values }

@@ -43,16 +43,8 @@ PPMSEArrayParserTest >> testOneElementWithId [
 
 { #category : #testing }
 PPMSEArrayParserTest >> testOneElementWithMultipleSubElements [
-	self assert: '(
-	(X (id: 1)
-		(sub (Y (id: 11))(Z (id: 12)))
-	)
-)' is: #(#('X' #('id' 1) #(#('sub' #(#('Y' #('id' 11) #()) #('Z' #('id' 12) #())))))).
-	self assert: '(
-	(X (id: 1)
-		(sub (Y (id: 11)) (Z (id: 12)))
-	)
-)' is: #(#('X' #('id' 1) #(#('sub' #(#('Y' #('id' 11) #()) #('Z' #('id' 12) #()))))))
+	self assert: '((X (sub (Y) (Z))))' is: #(#('X' nil #(#('sub' #(#('Y' nil #()) #('Z' nil #())))))).
+	
 ]
 
 { #category : #testing }
@@ -70,6 +62,5 @@ PPMSEArrayParserTest >> testOneElementWithStringAttribute [
 
 { #category : #testing }
 PPMSEArrayParserTest >> testOneElementWithSubElement [
-	self assert: '((X (sub (Y))))' is: #(#('X' nil #(#('sub' #(#('Y' nil #())))))).
-	
+	self assert: '((X (sub (Y))))' is: #(#('X' nil #(#('sub' #('Y' nil #())))))
 ]
