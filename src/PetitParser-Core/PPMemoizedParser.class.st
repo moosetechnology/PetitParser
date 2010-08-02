@@ -34,7 +34,7 @@ PPMemoizedParser >> parseOn: aStream [
 		ifTrue: [
 			memento result: (stream size - stream position + 2 < memento count
 				ifTrue: [ PPFailure message: 'overflow' at: stream position ]
-				ifFalse: [ memento increment. super parseOn: stream ]).
+				ifFalse: [ memento increment. parser parseOn: stream ]).
 			memento position: stream position ]
 		ifFalse: [ stream position: memento position ].
 	^ memento result

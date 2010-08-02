@@ -16,7 +16,7 @@ PPEndOfInputParser >> end [
 PPEndOfInputParser >> parseOn: aStream [
 	| position result |
 	position := aStream position.
-	result := super parseOn: aStream.
+	result := parser parseOn: aStream.
 	(result isPetitFailure or: [ aStream atEnd ])
 		ifTrue: [ ^ result ].
 	result := PPFailure

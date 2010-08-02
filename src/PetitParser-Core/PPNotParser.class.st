@@ -16,7 +16,7 @@ PPNotParser >> not [
 PPNotParser >> parseOn: aStream [
 	| element position |
 	position := aStream position.
-	element := super parseOn: aStream.
+	element := parser parseOn: aStream.
 	aStream position: position.
 	^ element isPetitFailure
 		ifFalse: [ PPFailure message: '' at: aStream position ]

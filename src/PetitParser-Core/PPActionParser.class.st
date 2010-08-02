@@ -29,7 +29,7 @@ PPActionParser >> block [
 { #category : #parsing }
 PPActionParser >> parseOn: aStream [
 	| element |
-	^ (element := super parseOn: aStream) isPetitFailure
+	^ (element := parser parseOn: aStream) isPetitFailure
 		ifFalse: [ block value: element ]
 		ifTrue: [ element ]
 ]

@@ -16,7 +16,7 @@ PPAndParser >> and [
 PPAndParser >> parseOn: aStream [
 	| element position |
 	position := aStream position.
-	element := super parseOn: aStream.
+	element := parser parseOn: aStream.
 	aStream position: position.
 	^ element
 ]

@@ -24,7 +24,7 @@ PPTrimmingParser >> parseOn: aStream [
 	position := aStream position.
 	[ (trimmer parseOn: aStream) isPetitFailure ]
 		whileFalse.
-	element := super parseOn: aStream.
+	element := parser parseOn: aStream.
 	element isPetitFailure ifTrue: [
 		aStream position: position.
 		^ element ].

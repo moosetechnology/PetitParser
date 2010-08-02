@@ -16,7 +16,7 @@ PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 PPFlattenParser >> parseOn: aStream [
 	| start element stop |
 	start := aStream position.
-	element := super parseOn: aStream.
+	element := parser parseOn: aStream.
 	element isPetitFailure ifTrue: [
 		aStream position: start.
 		^ element ].
