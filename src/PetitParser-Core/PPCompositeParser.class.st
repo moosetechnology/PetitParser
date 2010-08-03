@@ -75,7 +75,7 @@ PPCompositeParser >> initializeStartingAt: aSymbol [
 	parser := PPUnresolvedParser named: aSymbol.
 	productionIndexesAndNames do: [ :assoc |
 		self instVarAt: assoc key put: (PPUnresolvedParser named: assoc value) ].
-	parser := self perform: aSymbol.
+	parser def: (self perform: aSymbol).
 	
 	"resolve unresolved parsers with their actual implementation"
 	productionIndexesAndNames do: [ :assoc |
