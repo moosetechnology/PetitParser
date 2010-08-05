@@ -190,6 +190,7 @@ PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser list
 		title: 'Debugger';
 		format: [ :each | (String new: 2 * each fourth withAll: $ ) asText , each first, ' - ', each last printString ];
+		act: [:list | list selection last inspect ] entitled: 'Inspect token';
 		display: [ 
 			| depth trace |
 			depth := -1.
