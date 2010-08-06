@@ -492,6 +492,17 @@ PPParserTest >> testParseOnError2 [
 	self assert: seen
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testParser [
+	| parser |
+	parser := PPParser new.
+	
+	self assert: parser isPetitParser.
+
+	self deny: 4 isPetitParser.
+	self deny: 'foo' isPetitParser
+]
+
 { #category : #testing }
 PPParserTest >> testPermutation [
 	| parser |
