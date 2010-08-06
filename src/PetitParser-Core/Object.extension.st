@@ -9,3 +9,8 @@ Object >> asParser [
 Object >> isPetitFailure [
 	^ false
 ]
+
+{ #category : #'*petitparser-core-testing' }
+Object >> isPetitParser [
+	^ false
+]

@@ -152,6 +152,11 @@ PPParser >> initialize [
 ]
 
 { #category : #testing }
+PPParser >> isPetitParser [
+	^ true
+]
+
+{ #category : #testing }
 PPParser >> isUnresolved [
 	^ false
 ]
