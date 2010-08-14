@@ -79,7 +79,7 @@ PPTokenTest >> testNew [
 PPTokenTest >> testPrinting [
 	| result |
 	result := PPToken on: 'var'.
-	self assert: result printString = 'a PPToken(var)'
+	self assert: (result printString includesSubString: 'PPToken(var)')
 ]
 
 { #category : #testing }

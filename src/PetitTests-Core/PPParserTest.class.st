@@ -605,10 +605,10 @@ PPParserTest >> testPostCopy [
 PPParserTest >> testPrint [
 	| parser |
 	parser := PPParser new.
-	self assert: (parser printString beginsWith: 'a PPParser').
+	self assert: (parser printString includesSubString: 'PPParser').
 	
 	parser := PPParser named: 'choice'.
-	self assert: (parser printString beginsWith: 'a PPParser(choice').
+	self assert: (parser printString includesSubString: 'PPParser(choice').
 	
 	parser := PPLiteralObjectParser on: $a.
 	self assert: (parser printString includesSubString: '$a').
