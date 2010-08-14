@@ -109,7 +109,7 @@ PPArithmeticParserTest >> testPriority [
 { #category : #'testing-operations' }
 PPArithmeticParserTest >> testSub [
 	self assert: '1 - 2' is: -1.
-	self assert: '1.3 - 2' is: -0.7.
+	self assert: '1.2 - 1.2' is: 0.
 	self assert: '1 - -2' is: 3.
 	self assert: '-1 - -2' is: 1
 ]
