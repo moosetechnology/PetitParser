@@ -438,13 +438,15 @@ PPParserTest >> testParse [
 	
 	self assert: (parser parse: 'a') = $a.
 	self assert: (result := parser parse: 'b') isPetitFailure.
+	self assert: (result message includesSubString: '$a').
+	self assert: (result message includesSubString: 'expected').
 	self assert: (result position = 0).
-	self assert: (result message =  '$a expected').
 	
 	self assert: (parser parse: 'a' readStream) = $a.
 	self assert: (result := parser parse: 'b' readStream) isPetitFailure.
-	self assert: (result position = 0).
-	self assert: (result message =  '$a expected')
+	self assert: (result message includesSubString: '$a').
+	self assert: (result message includesSubString: 'expected').
+	self assert: (result position = 0)
 ]
 
 { #category : #'testing-utilities' }
@@ -469,8 +471,9 @@ PPParserTest >> testParseOnError1 [
 	self assert: result = $a.
 	
 	result := parser parse: 'b' onError: [ :failure | 
-		self assert: failure position = 0.
-		self assert: failure message = '$a expected'.
+		self assert: (failure position = 0).
+		self assert: (failure message includesSubString: '$a').
+		self assert: (failure message includesSubString: 'expected').
 		seen := true ].
 	self assert: result.
 	self assert: seen
@@ -485,7 +488,8 @@ PPParserTest >> testParseOnError2 [
 	self assert: result = $a.
 
 	result := parser parse: 'b' onError: [ :msg :pos | 
-		self assert: msg = '$a expected'.
+		self assert: (msg includesSubString: '$a').
+		self assert: (msg includesSubString: 'expected').
 		self assert: pos = 0.
 		seen := true ].
 	self assert: result.
