@@ -26,7 +26,7 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 
 { #category : #'*petitanalyzer-private' }
 PPSequenceParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
-	parsers withIndexDo: [ :parser :index |
+	parsers keysAndValuesDo: [ :index :parser |
 		| followSet firstSet |
 		followSet := aFollowDictionary at: parser.
 		index = parsers size
