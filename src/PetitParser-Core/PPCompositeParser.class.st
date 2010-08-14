@@ -62,15 +62,17 @@ PPCompositeParser class >> startSymbol [
 { #category : #initialization }
 PPCompositeParser >> initializeStartingAt: aSymbol [
 	| allVariableNames ignoredVariableNames productionIndexesAndNames |
-	self initialize.
-	
+	self initialize.	
+
 	"find all the productions that need to be initialized"
-	allVariableNames := self class allInstVarNames.
-	ignoredVariableNames := self class ignoredNames.
+	allVariableNames := self class allInstVarNames
+		collect: [ :each | each asSymbol ].
+	ignoredVariableNames := self class ignoredNames
+		collect: [ :each | each asSymbol ].
 	productionIndexesAndNames := ((1 to: self class instSize)
-		collect: [ :index | index -> (allVariableNames at: index) asSymbol ])
-		reject: [ :assoc | ignoredVariableNames includes: assoc value asString ].
-		
+		collect: [ :index | index -> (allVariableNames at: index) ])
+		reject: [ :assoc | ignoredVariableNames includes: assoc value ].
+	
 	"initialize productions with an undefined parser to be replaced later"
 	parser := PPUnresolvedParser named: aSymbol.
 	productionIndexesAndNames do: [ :assoc |
