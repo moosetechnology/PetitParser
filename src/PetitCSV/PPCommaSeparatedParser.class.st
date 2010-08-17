@@ -21,7 +21,6 @@ PPCommaSeparatedParser >> cell [
 { #category : #'as yet unclassified' }
 PPCommaSeparatedParser >> endOfLine [
 	^ #newline asParser token
-	"(#cr asParser , #lf asParser optional) / #lf asParser"
 ]
 
 { #category : #'as yet unclassified' }
