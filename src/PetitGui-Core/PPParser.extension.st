@@ -124,3 +124,19 @@ PPParser >> newSpacerMorph [
 		extent: 7 @ 7;
 		yourself
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> viewAllParsers [
+	| view |
+	view := MOViewRenderer new.
+	self viewAllParsersOn: view.
+	view open
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> viewAllParsersOn: view [
+	view shape rectangle text: #displayName; withoutBorder. 
+	view nodes: self allParsers.
+	view edgesToAll: #children.
+	view horizontalDominanceTreeLayout
+]
