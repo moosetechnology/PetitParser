@@ -1,6 +1,6 @@
 Class {
 	#name : #PPCompositeParserTest,
-	#superclass : #TestCase,
+	#superclass : #PPAbstractParseTest,
 	#instVars : [
 		'parser'
 	],
@@ -20,13 +20,25 @@ PPCompositeParserTest class >> resources [
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
 	| result |
-	result := parser
-		parse: aCollection
-		onError: [ :err :pos | self error: err ].
+	result := self parse: aCollection.
 	self
 		assert: result = anObject
 		description: 'Got: ' , result printString , '; Expected: ' , anObject printString
 		resumable: true
+]
+
+{ #category : #utilities }
+PPCompositeParserTest >> parse: aString [
+	^ parser
+		parse: aString
+		onError: [ :err :pos | self error: err ]
+]
+
+{ #category : #utilities }
+PPCompositeParserTest >> parse: aString production: aSymbol [
+	^ (parser productionAt: aSymbol)
+		parse: aString
+		onError: [ :err :pos | self error: err ].
 ]
 
 { #category : #accessing }
