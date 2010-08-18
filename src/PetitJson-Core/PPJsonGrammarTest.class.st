@@ -1,6 +1,6 @@
 Class {
 	#name : #PPJsonGrammarTest,
-	#superclass : #TestCase,
+	#superclass : #PPCompositeParserTest,
 	#category : #'PetitJson-Tests'
 }
 
@@ -14,9 +14,9 @@ PPJsonGrammarTest >> assertInvalid: aString [
 	self should: [ self parse: aString ] raise: Error
 ]
 
-{ #category : #utilities }
-PPJsonGrammarTest >> parse: aString [
-	^ PPJsonParser parse: aString onError: [ :pos :msg | self error: msg ]
+{ #category : #accessing }
+PPJsonGrammarTest >> parserClass [
+	^ PPJsonParser
 ]
 
 { #category : #'testing-array' }
