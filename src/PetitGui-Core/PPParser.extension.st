@@ -138,5 +138,5 @@ PPParser >> viewAllParsersOn: view [
 	view shape rectangle text: #displayName; withoutBorder. 
 	view nodes: self allParsers.
 	view edgesToAll: #children.
-	view horizontalDominanceTreeLayout
+	view horizontalDominanceTreeLayout layered
 ]
