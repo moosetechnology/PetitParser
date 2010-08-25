@@ -92,6 +92,30 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 			depth: anInteger + 1 ]
 ]
 
+{ #category : #'*petitgui-mondrian' }
+PPParser >> namedParsers [
+    | result |
+    result := OrderedCollection new.
+    self namedParsersDo: [ :parser | result addLast: parser ].
+    ^ result
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> namedParsersDo: aBlock [
+    self namedParsersDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> namedParsersDo: aBlock seen: aSet [
+    self children do: [ :each | 
+        (aSet includes: each)
+            ifTrue: [ ^ self ].
+        aSet add: each.
+        each name isEmptyOrNil
+            ifFalse: [ aBlock value: each ]
+            ifTrue: [ each namedParsersDo: aBlock seen: aSet ] ]
+]
+
 { #category : #'*petitgui-morphic-creational' }
 PPParser >> newColumnMorph [
 	^ AlignmentMorph newColumn
@@ -126,17 +150,17 @@ PPParser >> newSpacerMorph [
 ]
 
 { #category : #'*petitgui-mondrian' }
-PPParser >> viewAllParsers [
+PPParser >> viewAllNamedParsers [
 	| view |
 	view := MOViewRenderer new.
-	self viewAllParsersOn: view.
+	self viewAllNamedParsersOn: view.
 	view open
 ]
 
 { #category : #'*petitgui-mondrian' }
-PPParser >> viewAllParsersOn: view [
+PPParser >> viewAllNamedParsersOn: view [
 	view shape rectangle text: #displayName; withoutBorder. 
-	view nodes: self allParsers.
-	view edgesToAll: #children.
+	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
+	view edgesToAll: #namedParsers.
 	view horizontalDominanceTreeLayout layered
 ]
