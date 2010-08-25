@@ -37,55 +37,59 @@ PPPredicateObjectParser class >> between: min and: max [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> blank [
-	^ self anyOf: (String with: Character space with: Character tab)
+	^ self chars: (String with: Character space with: Character tab) message: 'blank expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> char: aCharacter [
-	^ self expect: aCharacter
+	^ self expect: aCharacter message: (String with: $" with: aCharacter with: $") , ' expected'
 ]
 
 { #category : #'factory-chars' }
-PPPredicateObjectParser class >> control [
-	^ self
-		on: [ :char | char asInteger < 32 ] message: 'control character expected'
-		negated: [ :char | char asInteger >= 32 ] message: 'no control character expected'
+PPPredicateObjectParser class >> char: aCharacter message: aString [
+	^ self expect: aCharacter message: aString
+]
+
+{ #category : #'factory-chars' }
+PPPredicateObjectParser class >> chars: aCollection message: aString [
+	^ self on: (PPCharSetPredicate on: [ :char | aCollection includes: char ]) message: aString
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> cr [
-	^ self char: Character cr
+	^ self char: Character cr message: 'carriage return expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> digit [
-	^ self 
-		on: [ :char | char isDigit ] message: 'digit expected'
-		negated: [ :char | char isDigit not ] message: 'no digit expected'
+	^ self on: (PPCharSetPredicate on: [ :char | char isDigit ]) message: 'digit expected'
 ]
 
 { #category : #'factory-objects' }
 PPPredicateObjectParser class >> expect: anObject [
+	^ self expect: anObject message: anObject printString , ' expected'
+]
+
+{ #category : #'factory-objects' }
+PPPredicateObjectParser class >> expect: anObject message: aString [
 	^ self 
-		on: [ :each | each = anObject ] message: anObject printString , ' expected'
-		negated: [ :each | each ~= anObject ] message: anObject printString , ' not expected'
+		on: [ :each | each = anObject ] message: aString
+		negated: [ :each | each ~= anObject ] message: 'no ' , aString
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> hex [
 	^ self 
-		on: [ :char | 
+		on: (PPCharSetPredicate on: [ :char | 
 			(char between: $0 and: $9) 
 				or: [ (char between: $a and: $f) 
-				or: [ (char between: $A and: $F) ] ] ] 
+				or: [ (char between: $A and: $F) ] ] ])
 		message: 'hex digit expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> letter [
-	^ self 
-		on: [ :char | char isLetter ] message: 'letter expected'
-		negated: [ :char | char isLetter not ] message: 'no letter expected'
+	^ self on: (PPCharSetPredicate on: [ :char | char isLetter ]) message: 'letter expected'
 ]
 
 { #category : #'factory-chars' }
@@ -95,14 +99,12 @@ PPPredicateObjectParser class >> lf [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> lowercase [
-	^ self
-		on: [ :char | char isLowercase ] message: 'lowercase letter expected'
-		negated: [ :char | char isLowercase not ] message: 'no lowercase letter expected'
+	^ self on: (PPCharSetPredicate on: [ :char | char isLowercase ]) message: 'lowercase letter expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> newline [
-	^ self anyOf: (String with: Character cr with: Character lf)
+	^ self chars: (String with: Character cr with: Character lf) message: 'newline expected'
 ]
 
 { #category : #'instance creation' }
@@ -117,34 +119,27 @@ PPPredicateObjectParser class >> on: aBlock message: aString negated: aNegatedBl
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> punctuation [
-	^ self anyOf: '.,"''?!;:#$%&()*+-/<>=@[]\^_{}|~'
+	^ self chars: '.,"''?!;:#$%&()*+-/<>=@[]\^_{}|~' message: 'punctuation expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> space [
-	^ self 
-		on: [ :char | char isSeparator ] message: 'separator expected'
-		negated: [ :char | char isSeparator not ] message: 'no separator expected'
+	^ self on: (PPCharSetPredicate on: [ :char | char isSeparator ]) message: 'separator expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> tab [
-	^ self char: Character tab
+	^ self char: Character tab message: 'tab expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> uppercase [
-	^ self 
-		on: [ :char | char isUppercase ] message: 'uppercase letter expected'
-		negated: [ :char | char isUppercase not ] message: 'no uppercase letter expected'
-		
+	^ self on: (PPCharSetPredicate on: [ :char | char isUppercase ]) message: 'uppercase letter expected'
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> word [
-	^ self 
-		on: [ :each | each isAlphaNumeric ] message: 'letter or digit expected'
-		negated: [ :each | each isAlphaNumeric not ] message: 'no letter or digit expected'
+	^ self on: (PPCharSetPredicate on: [ :char | char isAlphaNumeric ]) message: 'letter or digit expected'
 ]
 
 { #category : #initialization }
