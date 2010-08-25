@@ -161,6 +161,15 @@ PPBrowser >> browseInputOn: aBrowser [
 			output ]
 ]
 
+{ #category : #'browse-static' }
+PPBrowser >> browseMapOn: aBrowser [
+	aBrowser mondrian
+		title: 'Map';
+		useExplicitNotNil;
+		painting: [ :view :parsers |
+			self production viewAllNamedParsersOn: view ]
+]
+
 { #category : #browse }
 PPBrowser >> browseOn: aBrowser [
 	aBrowser title: self class label; color: Color yellow muchDarker.
@@ -294,6 +303,7 @@ PPBrowser >> browseStaticOn: aBrowser [
 	aBrowser tabbedArrangement.
 	self browseSourceOn: aBrowser.
 	self browseGraphOn: aBrowser.
+	self browseMapOn: aBrowser.
 	self browseCyclesOn: aBrowser.
 	self browseFirstOn: aBrowser.
 	self browseFollowOn: aBrowser.
