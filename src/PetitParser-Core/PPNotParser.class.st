@@ -7,11 +7,6 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operations }
-PPNotParser >> not [
-	^ parser
-]
-
 { #category : #parsing }
 PPNotParser >> parseOn: aStream [
 	| element position |
