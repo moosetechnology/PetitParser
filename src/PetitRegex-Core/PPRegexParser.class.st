@@ -42,7 +42,7 @@ PPRegexParser class >> atWordBoundary: aStream [
 	^ (self isWordChar: (self lastCharIn: aStream)) xor: (self isWordChar: aStream peek)
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 PPRegexParser class >> condition: aBlock message: aString [
 	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure message: aString at: stream position ] ] asParser
 ]

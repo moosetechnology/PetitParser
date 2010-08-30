@@ -13,14 +13,17 @@ PPRegexTest class >> packageNamesUnderTest [
 PPRegexTest >> compileRegex: aString [
 	"Compile the regex and answer the matcher, or answer nil if compilation fails."
 
-	| syntaxTree |
-	syntaxTree := self parserClass parse: aString.
-	^ syntaxTree isPetitFailure ifFalse: [ syntaxTree ]
+	^ self parserClass parse: aString onError: [ nil ]
 ]
 
 { #category : #'testing-henry' }
 PPRegexTest >> henryReadme [
 	self error: 'The tests in this category are based on the ones in Henry Spencer''s regexp.c package.'
+]
+
+{ #category : #accessing }
+PPRegexTest >> matcherClass [
+	^ PPRegexMatcher
 ]
 
 { #category : #accessing }
@@ -117,7 +120,7 @@ PPRegexTest >> testCopyTranslatingMatches [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtBeginningOfLine [
 	| matcher |
-	matcher := self compileRegex: '^'.
+	matcher := self matcherClass forString: '^'.
 	self
 		assert: (matcher copy: 'foo1 bar1' , String cr , 'foo2 bar2' replacingMatchesWith: '*')
 			= ('*foo1 bar1' , String cr , '*foo2 bar2')
@@ -127,7 +130,7 @@ PPRegexTest >> testEmptyStringAtBeginningOfLine [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtBeginningOfWord [
 	| matcher |
-	matcher := self compileRegex: '\<'.
+	matcher := self matcherClass forString: '\<'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= '*foo *bar'
@@ -137,7 +140,7 @@ PPRegexTest >> testEmptyStringAtBeginningOfWord [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtEndOfLine [
 	| matcher |
-	matcher := self compileRegex: '$'.
+	matcher := self matcherClass forString: '$'.
 	self
 		assert: (matcher copy: 'foo1 bar1' , String cr , 'foo2 bar2' replacingMatchesWith: '*')
 			= ('foo1 bar1*', String cr , 'foo2 bar2*')
@@ -147,7 +150,7 @@ PPRegexTest >> testEmptyStringAtEndOfLine [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtEndOfWord [
 	| matcher |
-	matcher := self compileRegex: '\>'.
+	matcher := self matcherClass forString: '\>'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= 'foo* bar*'
@@ -157,7 +160,7 @@ PPRegexTest >> testEmptyStringAtEndOfWord [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringAtWordBoundary [
 	| matcher |
-	matcher := self compileRegex: '\b'.
+	matcher := self matcherClass forString: '\b'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= '*foo* *bar*'
@@ -167,7 +170,7 @@ PPRegexTest >> testEmptyStringAtWordBoundary [
 { #category : #'testing-empty' }
 PPRegexTest >> testEmptyStringNotAtWordBoundary [
 	| matcher |
-	matcher := self compileRegex: '\B'.
+	matcher := self matcherClass forString: '\B'.
 	self
 		assert: (matcher copy: 'foo bar' replacingMatchesWith: '*')
 			= 'f*o*o b*a*r'
@@ -1051,7 +1054,7 @@ PPRegexTest >> testHenry137 [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatches [
 	| matcher |
-	matcher := self compileRegex: '\w+$'.
+	matcher := self matcherClass forString: '\w+'.
 	self assert: (matcher matches: 'now').
 	self deny: (matcher matches: 'now is')
 ]
@@ -1059,7 +1062,7 @@ PPRegexTest >> testMatches [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesIn [
 	| matcher |
-	matcher := self compileRegex: '\w+'.
+	matcher := self matcherClass forString: '\w+'.
 	self assert: (matcher matchesIn: 'now is the time') asArray 
 		= #('now' 'is' 'the' 'time')
 ]
@@ -1067,7 +1070,7 @@ PPRegexTest >> testMatchesIn [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesInCollect [
 	| matcher |
-	matcher := self compileRegex: '\w+'.
+	matcher := self matcherClass forString: '\w+'.
 	self assert: (matcher
 		matchesIn: 'now is the time'
 		collect: [ :each | each reverse ]) asArray
@@ -1077,7 +1080,7 @@ PPRegexTest >> testMatchesInCollect [
 { #category : #'testing-protocol' }
 PPRegexTest >> testMatchesInDo [
 	| matcher expected |
-	matcher := self compileRegex: '\w+'.
+	matcher := self matcherClass forString: '\w+'.
 	expected := #('now' 'is' 'the' 'time') asOrderedCollection.
 	matcher 
 		matchesIn: 'now is the time'
@@ -1086,9 +1089,46 @@ PPRegexTest >> testMatchesInDo [
 ]
 
 { #category : #'testing-protocol' }
+PPRegexTest >> testMatchesOnStream [
+	| matcher |
+	matcher := self matcherClass forString: '\w+'.
+	self assert: (matcher matchesOnStream: 'now is the time' readStream) asArray 
+		= #('now' 'is' 'the' 'time')
+]
+
+{ #category : #'testing-protocol' }
+PPRegexTest >> testMatchesOnStreamCollect [
+	| matcher |
+	matcher := self matcherClass forString: '\w+'.
+	self assert: (matcher 
+		matchesOnStream: 'now is the time' readStream 
+		collect: [ :each | each reverse ]) asArray
+			= #('won' 'si' 'eht' 'emit')
+]
+
+{ #category : #'testing-protocol' }
+PPRegexTest >> testMatchesOnStreamDo [
+	| matcher expected |
+	matcher := self matcherClass forString: '\w+'.
+	expected := #('now' 'is' 'the' 'time') asOrderedCollection.
+	matcher 
+		matchesOnStream: 'now is the time' readStream
+		do: [ :each | self assert: each = expected removeFirst ].
+	self assert: expected isEmpty
+]
+
+{ #category : #'testing-protocol' }
+PPRegexTest >> testMatchesStream [
+	| matcher |
+	matcher := self matcherClass forString: '\w+'.
+	self assert: (matcher matchesStream: 'now' readStream).
+	self deny: (matcher matchesStream: 'now is' readStream)
+]
+
+{ #category : #'testing-protocol' }
 PPRegexTest >> testMatchingRangesIn [
 	| matcher expected |
-	matcher := self compileRegex: '\w+'.
+	matcher := self matcherClass forString: '\w+'.
 	expected := #(1 3 5 6 8 10 12 15) asOrderedCollection.
 	(matcher matchingRangesIn: 'now is the time') do: [ :range |
 		self assert: range first = expected removeFirst.
@@ -1117,6 +1157,98 @@ PPRegexTest >> testRegex003 [
 		' abb_bbc ' false nil
 		'abb-bc' false nil
 		'a.,:;-&!"#%/()={[]}+?\~*''c' true (1 'a.,:;-&!"#%/()={[]}+?\~*''c'))
+]
+
+{ #category : #testing }
+PPRegexTest >> testRegex004 [
+	self runRegex: #(':isVowel:'
+		'aei' true nil
+		'xyz' false nil)
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringAllRangesOfRegexMatches [
+	| result |
+	result := 'aabbcc' allRangesOfRegexMatches: 'b+'.
+	self assert: result size = 1.
+	self assert: result first first = 3.
+	self assert: result first last = 4
+	
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringAllRegexMatches [
+	| result |
+	result := 'aabbcc' allRegexMatches: 'b+'.
+	self assert: result size = 1.
+	self assert: result first = 'bb'
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringAsRegex [
+	self assert: 'b+' asRegex class = RxParser preferredMatcherClass
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringAsRegexIgnoringCase [
+	self assert: 'b+' asRegexIgnoringCase class = RxParser preferredMatcherClass
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringCopyWithRegexMatchesReplacedWith [
+	self assert: ('aabbcc' copyWithRegex: 'b+' matchesReplacedWith: 'X') = 'aaXcc'
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringCopyWithRegexMatchesTranslatedUsing [
+	self assert: ('aabbcc' 
+		copyWithRegex: 'b+' 
+		matchesTranslatedUsing: [ :each | 
+			self assert: each = 'bb'.
+			'X' ]) = 'aaXcc'
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringMatchesRegex [
+	self deny: ('aabbcc' matchesRegex: 'a+').
+	self deny: ('aabbcc' matchesRegex: 'b+c+').
+	self assert: ('aabbcc' matchesRegex: 'a+b+c+')
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringMatchesRegexIgnoringCase [
+	self deny: ('AABBCC' matchesRegexIgnoringCase: 'a+').
+	self deny: ('AABBCC' matchesRegexIgnoringCase: 'b+c+').
+	self assert: ('AABBCC' matchesRegexIgnoringCase: 'a+b+c+')
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringPrefixMatchesRegex [
+	self assert: ('aabbcc' prefixMatchesRegex: 'a+').
+	self deny: ('aabbcc' prefixMatchesRegex: 'b+')
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringPrefixMatchesRegexIgnoringCase [
+	self assert: ('AABBCC' prefixMatchesRegexIgnoringCase: 'a+').
+	self deny: ('AABBCC' prefixMatchesRegexIgnoringCase: 'b+')
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringRegexMatchesCollect [
+	| result |
+	result := 'aabbcc' regex: 'b+' matchesCollect: [ :each | each asUppercase ].
+	self assert: result size = 1.
+	self assert: result first = 'BB'
+]
+
+{ #category : #'testing-extensions' }
+PPRegexTest >> testStringRegexMatchesDo [
+	| result |
+	result := OrderedCollection new.
+	'aabbcc' regex: 'b+' matchesDo: [ :each | result add: each ].
+	self assert: result size = 1.
+	self assert: result first = 'bb'
 ]
 
 { #category : #'testing-protocol' }
