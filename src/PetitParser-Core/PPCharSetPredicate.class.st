@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'block',
-		'lookup'
+		'classification'
 	],
 	#category : #'PetitParser-Tools'
 }
@@ -16,16 +16,19 @@ PPCharSetPredicate class >> on: aBlock [
 { #category : #initialization }
 PPCharSetPredicate >> initializeOn: aBlock [
 	block := aBlock.
-	lookup := Array new: 257.
-	1 to: lookup size do: [ :index |
-		lookup at: index put: (block
-			value: (Character value: index - 1)) ]
+	classification := Array new: 255.
+	1 to: classification size do: [ :index |
+		classification at: index put: (block
+			value: (Character value: index)) ]
 ]
 
 { #category : #evaluating }
 PPCharSetPredicate >> value: aCharacter [
-	| value |
-	^ (value := aCharacter asInteger) < 257
-		ifTrue: [ lookup at: value + 1 ]
-		ifFalse: [ block value: aCharacter ]
+	| index |
+	index := aCharacter asInteger.
+	index == 0
+		ifTrue: [ ^ block value: aCharacter ].
+	index > 255
+		ifTrue: [ ^ block value: aCharacter ].
+	^ classification at: index
 ]
