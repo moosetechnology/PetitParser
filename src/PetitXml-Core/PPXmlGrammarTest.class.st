@@ -47,6 +47,22 @@ PPXmlGrammarTest >> assertInvariants: aDocumentNode [
 ]
 
 { #category : #utilities }
+PPXmlGrammarTest >> assertNameInvariant: aXmlName [
+	"Asser the name invariants."
+	
+	self assert: (aXmlName localName notNil and: [ aXmlName localName notEmpty and: [ aXmlName qualifiedName endsWith: aXmlName localName ] ]).
+	self assert: (aXmlName namespacePrefix isNil or: [ aXmlName namespacePrefix notEmpty and: [ aXmlName qualifiedName beginsWith: aXmlName namespacePrefix ] ]).
+	self assert: (aXmlName uri isNil or: [ aXmlName uri notEmpty ]).
+	
+	self assert: aXmlName = aXmlName.
+	self assert: aXmlName copy = aXmlName.
+	self assert: aXmlName = aXmlName copy.
+	
+	self assert: aXmlName printString isString
+	
+]
+
+{ #category : #utilities }
 PPXmlGrammarTest >> assertNavigationInvariant: aXmlNode [
 	"Asswer that the firstChild, lastChild, previousSibling, nextSibling are properly setup."
 
@@ -124,7 +140,9 @@ PPXmlGrammarTest >> assertTypeInvariant: aNode [
 		#(isAttribute isComment isDoctype isDocument isElement isProcessing isText) do: [ :each |
 			(node perform: each)
 				ifTrue: [ types add: each ] ].
-		self assert: types size = 1 ]
+		self assert: types size = 1.
+		(node isElement or: [ node isAttribute ])
+			ifTrue: [ self assertNameInvariant: node name ] ]
 ]
 
 { #category : #parsing }
@@ -156,23 +174,34 @@ PPXmlGrammarTest >> resource [
 	^ PPXmlResource current
 ]
 
+{ #category : #'testing-other' }
+PPXmlGrammarTest >> testInstantiation [
+	self should: [ PPXmlAttribute new ] raise: Error.
+	self should: [ PPXmlComment new ] raise: Error.
+	self should: [ PPXmlDoctype new ] raise: Error.
+	self should: [ PPXmlProcessing new ] raise: Error.
+	self should: [ PPXmlText new ] raise: Error.
+	self should: [ PPXmlDocument new ] raise: Error.
+	self should: [ PPXmlElement new ] raise: Error
+]
+
 { #category : #testing }
 PPXmlGrammarTest >> testParseAllXml [
 	self resource allXmlDefinitions 
 		do: [ :each | self assertParseInvariant: each ]
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseComment [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- comment --></schema>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseCommentWithXml [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema><!-- <foo></foo> --></schema>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseComplicated [
 	self assertParseInvariant: '<?xml foo?>
 <foo>
@@ -184,36 +213,68 @@ PPXmlGrammarTest >> testParseComplicated [
 </foo>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseDoctype [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE freaking <schema> [ <!-- schema --> ]  >
 	<schema></schema>'
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseEmptyElement [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema/>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseNamespace [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><xs:schema></xs:schema>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseSimple [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema></schema>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseSimpleAttribute [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema foo="bar"></schema>' 
 ]
 
-{ #category : #'testing-specific' }
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseWithWhitsepaceAfterProlog [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
 	<schema></schema>
 ' 
+]
+
+{ #category : #'testing-other' }
+PPXmlGrammarTest >> testQualifiedName [
+	| name |
+	name := PPXmlName name: 'prefix:tag'.
+	self assertNameInvariant: name.
+	self assert: name localName = 'tag'.
+	self assert: name namespacePrefix = 'prefix'.
+	self assert: name qualifiedName = 'prefix:tag'.
+	self assert: name uri isNil
+]
+
+{ #category : #'testing-other' }
+PPXmlGrammarTest >> testUnqualifiedName [
+	| name |
+	name := PPXmlName name: 'tag'.
+	self assert: name localName = 'tag'.
+	self assert: name namespacePrefix isNil.
+	self assert: name qualifiedName = 'tag'.
+	self assert: name uri isNil
+]
+
+{ #category : #'testing-other' }
+PPXmlGrammarTest >> testUriName [
+	| name |
+	name := PPXmlName name: 'prefix:tag' uri: 'http://www.lukas-renggli.ch/'.
+	self assertNameInvariant: name.
+	self assert: name localName = 'tag'.
+	self assert: name namespacePrefix = 'prefix'.
+	self assert: name qualifiedName = 'prefix:tag'.
+	self assert: name uri = 'http://www.lukas-renggli.ch/'
 ]
