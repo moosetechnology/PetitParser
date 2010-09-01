@@ -84,10 +84,12 @@ PPParser >> firstSets [
 	
 	| firstSets |
 	firstSets := IdentityDictionary new.
-	self allParsersDo: [ :each | 
+	self allParsersDo: [ :each |
 		firstSets at: each put: (each isTerminal
 			ifTrue: [ IdentitySet with: each ]
-			ifFalse: [ IdentitySet new ]) ].
+			ifFalse: [ IdentitySet new ]).
+		each isNullable
+			ifTrue: [ (firstSets at: each) add: nil asParser ] ].
 	[	| changed tally |
 		changed := false.
 		firstSets keysAndValuesDo: [ :parser :first |

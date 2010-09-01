@@ -58,7 +58,7 @@ PPSearcherTest >> testCopyMatchDelegate [
 { #category : #'testing-copy' }
 PPSearcherTest >> testCopyMatchEpsilon [
 	| old new |
-	old := PPEpsilonParser new.
+	old := nil asParser.
 	new := old copyInContext: Dictionary new.
 	self assert: (old match: old inContext: Dictionary new).
 	self assert: (old match: new inContext: Dictionary new).
