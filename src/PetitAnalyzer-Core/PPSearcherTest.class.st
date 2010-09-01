@@ -383,8 +383,14 @@ PPSearcherTest >> testMultiplePattern [
 		initialAnswer: (Array 
 			with: OrderedCollection new 
 			with: OrderedCollection new).
+	
 	self assert: result first size = 2.
-	self assert: result second size = 4
+	self assert: result first first literal = $a.
+	self assert: result first last literal = $a.
+	
+	self assert: result last size = 2.
+	self assert: result last first class = PPSequenceParser.
+	self assert: result last last literal = $b
 ]
 
 { #category : #testing }

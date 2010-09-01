@@ -33,9 +33,8 @@ PPSearcher >> execute: aParser initialAnswer: anObject [
 	previous := context.
 	answer := anObject.
 	context := Dictionary new.
-	aParser allParsersDo: [ :each |
-		searches
-			do: [ :rule | self perform: rule on: each ] ].
+	aParser allParsersDo: [ :each | 
+		self performRulesOn: each ].
 	context := previous.
 	^ answer
 ]
