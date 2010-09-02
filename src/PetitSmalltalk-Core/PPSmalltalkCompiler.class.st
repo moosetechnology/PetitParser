@@ -1,3 +1,6 @@
+"
+Enhances the Smalltalk grammar with production actions to build parse-tree nodes of the refactoring browser.
+"
 Class {
 	#name : #PPSmalltalkCompiler,
 	#superclass : #PPSmalltalkGrammar,
@@ -25,12 +28,12 @@ PPSmalltalkCompiler >> arrayLiteralArray [
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> binaryExpression [
-	^ super binaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
+	^ super binaryExpression map: [ :receiverNode :messageNodes | self build: receiverNode messages: messageNodes ]
 ]
 
 { #category : #'grammar-blocks' }
 PPSmalltalkCompiler >> block [
-	^ super block map: [ :left :block :right | block left: left start; right: right start ]
+	^ super block map: [ :leftToken :blockNode :rightToken | blockNode left: leftToken start; right: rightToken start ]
 ]
 
 { #category : #'grammar-blocks' }
@@ -39,18 +42,13 @@ PPSmalltalkCompiler >> blockArgument [
 ]
 
 { #category : #'grammar-blocks' }
-PPSmalltalkCompiler >> blockArgumentsEmpty [
-	^ super blockArgumentsEmpty ==> [ :nodes | #() ]
-]
-
-{ #category : #'grammar-blocks' }
 PPSmalltalkCompiler >> blockBody [
-	^ super blockBody ==> [ :nodes | RBBlockNode arguments: nodes first body: nodes last ]
-]
-
-{ #category : #'grammar-blocks' }
-PPSmalltalkCompiler >> blockSequenceEmpty [
-	^ super blockSequenceEmpty ==> [ :nodes | RBSequenceNode statements: #() ]
+	^ super blockBody ==> [ :nodes | 
+		| result |
+		result := RBBlockNode arguments: nodes first first body: nodes last.
+		nodes first last isNil
+			ifFalse: [ result bar: nodes first last start ].
+		result ]
 ]
 
 { #category : #private }
@@ -107,7 +105,10 @@ PPSmalltalkCompiler >> build: aTempCollection sequence: aStatementCollection [
 	aStatementCollection do: [ :each |
 		(each isKindOf: RBProgramNode)
 			ifTrue: [ nodes add: each ]
-			ifFalse: [ periods add: each start ] ].
+			ifFalse: [
+				nodes isEmpty
+					ifFalse: [ nodes last addComments: each comments ].
+				periods add: each start ] ].
 	result := RBSequenceNode statements: nodes.
 	result periods: periods.
 	aTempCollection isEmpty ifFalse: [
@@ -126,10 +127,30 @@ PPSmalltalkCompiler >> buildArray: aStatementCollection [
 	aStatementCollection do: [ :each |
 		(each isKindOf: RBProgramNode)
 			ifTrue: [ nodes add: each ]
-			ifFalse: [ periods add: each start ] ].
+			ifFalse: [
+				nodes isEmpty
+					ifFalse: [ nodes last addComments: each comments ].
+				periods add: each start ] ].
 	result := RBArrayNode statements: nodes.
 	result periods: periods.
 	^ result
+]
+
+{ #category : #private }
+PPSmalltalkCompiler >> buildMethod: aMethodNode [
+	aMethodNode selectorParts 
+		do: [ :each | aMethodNode addComments: each comments ].
+	aMethodNode arguments
+		do: [ :each | aMethodNode addComments: each token comments ].
+	aMethodNode pragmas do: [ :pragma |
+		aMethodNode addComments: pragma comments.
+		pragma selectorParts 
+			do: [ :each | aMethodNode addComments: each comments ].
+		pragma arguments do: [ :each | 
+			each isLiteralArray
+				ifFalse: [ aMethodNode addComments: each token comments ] ].
+		pragma comments: nil ].
+	^ aMethodNode
 ]
 
 { #category : #private }
@@ -157,7 +178,7 @@ PPSmalltalkCompiler >> byteLiteralArray [
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> cascadeExpression [
-	^ super cascadeExpression map: [ :receiver :messages | self build: receiver cascade: messages ]
+	^ super cascadeExpression map: [ :receiverNode :messageNodes | self build: receiverNode cascade: messageNodes ]
 ]
 
 { #category : #'grammar-literals' }
@@ -167,7 +188,7 @@ PPSmalltalkCompiler >> charLiteral [
 
 { #category : #grammar }
 PPSmalltalkCompiler >> expression [
-	^ super expression map: [ :vars :expr | self build: expr assignment: vars ]
+	^ super expression map: [ :variableNodes :expressionNodes | self build: expressionNodes assignment: variableNodes ]
 ]
 
 { #category : #'grammar-literals' }
@@ -177,22 +198,22 @@ PPSmalltalkCompiler >> falseLiteral [
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> keywordExpression [
-	^ super keywordExpression map: [ :receiver :message | self build: receiver messages: (Array with: message) ]
+	^ super keywordExpression map: [ :receiveNode :messageNode | self build: receiveNode messages: (Array with: messageNode) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> method [
-	^ super method map: [ :declaration :body | 
-		declaration pragmas: body first.
-		declaration body: (self 
-			build: body second
-			sequence: body third).
-		declaration ]
+	^ super method map: [ :methodNode :bodyNode | 
+		methodNode pragmas: bodyNode first.
+		methodNode body: (self 
+			build: bodyNode second
+			sequence: bodyNode third).
+		self buildMethod: methodNode ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> methodDeclaration [
-	^ super methodDeclaration ==> [ :nodes | 
+	^ super methodDeclaration ==> [ :nodes |
 		RBMethodNode 
 			selectorParts: nodes first
 			arguments: nodes second ]
@@ -210,13 +231,15 @@ PPSmalltalkCompiler >> numberLiteral [
 
 { #category : #grammar }
 PPSmalltalkCompiler >> parens [
-	^ super parens map: [ :open :expr :close | expr addParenthesis: (open start to: close start) ]
+	^ super parens map: [ :openToken :expressionNode :closeToken | expressionNode addParenthesis: (openToken start to: closeToken start) ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> pragma [
 	^ super pragma ==> [ :nodes | 
 		(RBPragmaNode selectorParts: nodes second first arguments: nodes second second)
+			addComments: nodes first comments;
+			addComments: nodes last comments;
 			left: nodes first start;
 			right: nodes last start;
 			yourself ]
@@ -224,17 +247,31 @@ PPSmalltalkCompiler >> pragma [
 
 { #category : #grammar }
 PPSmalltalkCompiler >> return [
-	^ super return map: [ :token :expr | RBReturnNode return: token start value: expr ]
+	^ super return map: [ :token :expressionNode | RBReturnNode return: token start value: expressionNode ]
 ]
 
 { #category : #grammar }
 PPSmalltalkCompiler >> sequence [
-	^ super sequence map: [ :temps :stats | self build: temps sequence: stats ]
+	^ super sequence map: [ :tempNodes :statementNodes | self build: tempNodes sequence: statementNodes ]
 ]
 
 { #category : #accessing }
-PPSmalltalkCompiler >> start [
-	^ ([ :stream | stream collection ] asParser and , super start)
+PPSmalltalkCompiler >> startExpression [
+	"Make the sequence node has a method node as its parent and that the source is set."
+
+	^ ([ :stream | stream collection ] asParser and , super startExpression) map: [ :source :node | 
+		(RBMethodNode selector: #doIt body: node)
+			source: source.
+		(node statements size = 1 and: [ node temporaries isEmpty ])
+			ifTrue: [ node statements first ]
+			ifFalse: [ node ] ]
+]
+
+{ #category : #accessing }
+PPSmalltalkCompiler >> startMethod [
+	"Make sure the method node has the source code properly set."
+	
+	^ ([ :stream | stream collection ] asParser and , super startMethod)
 		map: [ :source :node | node source: source ]
 ]
 
@@ -260,7 +297,7 @@ PPSmalltalkCompiler >> trueLiteral [
 
 { #category : #'grammar-messages' }
 PPSmalltalkCompiler >> unaryExpression [
-	^ super unaryExpression map: [ :receiver :messages | self build: receiver messages: messages ]
+	^ super unaryExpression map: [ :receiverNode :messageNodes | self build: receiverNode messages: messageNodes ]
 ]
 
 { #category : #grammar }

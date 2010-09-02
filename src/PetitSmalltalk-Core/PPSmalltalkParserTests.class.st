@@ -16,7 +16,7 @@ PPSmalltalkParserTests >> assert: aNode format: aString [
 
 { #category : #accessing }
 PPSmalltalkParserTests >> parserClass [
-	^ PPSmalltalkParser
+	^ PPSmalltalkCompiler
 ]
 
 { #category : #'testing-blocks' }

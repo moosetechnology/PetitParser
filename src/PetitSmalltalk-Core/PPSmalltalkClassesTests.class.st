@@ -24,7 +24,7 @@ PPSmalltalkClassesTests >> assert: aBoolean description: aString [
 
 { #category : #accessing }
 PPSmalltalkClassesTests >> parserClass [
-	^ PPSmalltalkParser
+	^ PPSmalltalkCompiler
 ]
 
 { #category : #testing }
