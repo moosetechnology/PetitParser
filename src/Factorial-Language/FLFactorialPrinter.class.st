@@ -3,7 +3,7 @@ I implement the pretty printer of the FL language.
 "
 Class {
 	#name : #FLFactorialPrinter,
-	#superclass : #FLFactorialParser,
+	#superclass : #FLFactorialGrammar,
 	#category : #'Factorial-Language'
 }
 

@@ -2,7 +2,7 @@
 I define the scanner and parser for the FL programming language using the parser combinator framework PetitParser.
 "
 Class {
-	#name : #FLFactorialParser,
+	#name : #FLFactorialGrammar,
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'apply',
@@ -29,101 +29,101 @@ Class {
 }
 
 { #category : #token }
-FLFactorialParser >> add [
-	^ $+ asParser flatten
+FLFactorialGrammar >> add [
+	^ $+ asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> apply [
+FLFactorialGrammar >> apply [
 	^ open , id , expression star , close
 ]
 
 { #category : #grammar }
-FLFactorialParser >> binary [
+FLFactorialGrammar >> binary [
 	^ open , expression , operation , expression , close
 ]
 
 { #category : #token }
-FLFactorialParser >> close [
-	^ $) asParser flatten
+FLFactorialGrammar >> close [
+	^ $) asParser flatten trim
 ]
 
 { #category : #token }
-FLFactorialParser >> cmp [
-	^ '==' asParser flatten
+FLFactorialGrammar >> cmp [
+	^ '==' asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> condition [
+FLFactorialGrammar >> condition [
 	^ if , expression , then , expression , else , expression
 ]
 
 { #category : #token }
-FLFactorialParser >> else [
-	^ 'else' asParser flatten
+FLFactorialGrammar >> else [
+	^ 'else' asParser flatten trim
 ]
 
 { #category : #token }
-FLFactorialParser >> equal [
-	^ $= asParser flatten
+FLFactorialGrammar >> equal [
+	^ $= asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> expression [
+FLFactorialGrammar >> expression [
 	^ apply / condition / binary / variable / literal
 ]
 
 { #category : #grammar }
-FLFactorialParser >> function [
+FLFactorialGrammar >> function [
 	^ id , variable star , equal , expression
 ]
 
 { #category : #token }
-FLFactorialParser >> id [
-	^ #letter asParser plus flatten
+FLFactorialGrammar >> id [
+	^ #letter asParser plus flatten trim
 ]
 
 { #category : #token }
-FLFactorialParser >> if [
-	^ 'if' asParser flatten
+FLFactorialGrammar >> if [
+	^ 'if' asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> literal [
+FLFactorialGrammar >> literal [
 	^ num
 ]
 
 { #category : #token }
-FLFactorialParser >> num [
-	^ #digit asParser plus flatten
+FLFactorialGrammar >> num [
+	^ #digit asParser plus flatten trim
 ]
 
 { #category : #token }
-FLFactorialParser >> open [
-	^ $( asParser flatten
+FLFactorialGrammar >> open [
+	^ $( asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> operation [
+FLFactorialGrammar >> operation [
 	^ cmp / add / sub
 ]
 
 { #category : #accessing }
-FLFactorialParser >> start [
+FLFactorialGrammar >> start [
 	^ function end
 ]
 
 { #category : #token }
-FLFactorialParser >> sub [
-	^ $- asParser flatten
+FLFactorialGrammar >> sub [
+	^ $- asParser flatten trim
 ]
 
 { #category : #token }
-FLFactorialParser >> then [
-	^ 'then' asParser flatten
+FLFactorialGrammar >> then [
+	^ 'then' asParser flatten trim
 ]
 
 { #category : #grammar }
-FLFactorialParser >> variable [
+FLFactorialGrammar >> variable [
 	^ id
 ]
