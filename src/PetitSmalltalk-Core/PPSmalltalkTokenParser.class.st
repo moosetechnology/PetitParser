@@ -4,8 +4,16 @@ A parser that knows how to skip comments and whitespace in Smalltalk and how to 
 Class {
 	#name : #PPSmalltalkTokenParser,
 	#superclass : #PPTokenParser,
+	#classVars : [
+		'SeparatorPredicate'
+	],
 	#category : #'PetitSmalltalk-Core'
 }
+
+{ #category : #initialization }
+PPSmalltalkTokenParser class >> initialize [
+	SeparatorPredicate := PPCharSetPredicate on: [ :char | char isSeparator ]
+]
 
 { #category : #private }
 PPSmalltalkTokenParser >> defaultTokenClass [
@@ -16,7 +24,7 @@ PPSmalltalkTokenParser >> defaultTokenClass [
 PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
 	| start comments |
 	comments := anArray.
-	[ [ aStream atEnd not and: [ aStream peek isSeparator ] ]
+	[ [ aStream atEnd not and: [ SeparatorPredicate value: aStream peek ] ]
 		whileTrue: [ aStream next ].
 	  aStream peek = $" ] whileTrue: [
 		aStream next.
