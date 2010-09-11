@@ -144,10 +144,32 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 		self 
 			assert: node1 sourceInterval = node2 sourceInterval 
 			description: 'Source intervals in ' , source.
-		(node2 isArray or: [ node2 isSequence ]) ifTrue: [
+		(node1 isArray or: [ node1 isBlock or: [ node1 isPragma ] ]) ifTrue: [
+			self
+				assert: node1 left = node2 left
+				description: 'Source position left in ' , source.
+			self
+				assert: node1 right = node2 right
+				description: 'Source position right in ' , source ].
+		(node1 isSequence) ifTrue: [
+			self
+				assert: node1 leftBar = node2 leftBar
+				description: 'Source position leftBar in ' , source.
+			self
+				assert: node1 rightBar = node2 rightBar
+				description: 'Source position rightBar in ' , source ].
+		(node1 isBlock) ifTrue: [.
+			self
+				assert: node1 bar = node2 bar
+				description: 'Source position bar in ' , source ].
+		(node1 isCascade) ifTrue: [.
+			self
+				assert: node1 semicolons = node2 semicolons
+				description: 'Source position semicolons in ' , source ].
+		(node1 isArray or: [ node1 isSequence ]) ifTrue: [
 			self
 				assert: node1 periods = node2 periods
-				description: 'Periods in ' , source ].
+				description: 'Source position periods in ' , source ].
 		node1 children with: node2 children do: checker ].
 	checker value: original value: other
 ]

@@ -67,17 +67,19 @@ PPSmalltalkParser >> build: aNode assignment: anArray [
 
 { #category : #private }
 PPSmalltalkParser >> build: aNode cascade: anArray [ 
-	| messages |
+	| messages semicolons |
 	^ (anArray isNil or: [ anArray isEmpty ]) 
 		ifTrue: [ aNode ]
 		ifFalse: [
 			messages := OrderedCollection new: anArray size + 1.
 			messages addLast: aNode.
+			semicolons := OrderedCollection new.
 			anArray do: [ :each | 
 				messages addLast: (self 
 					build: aNode receiver
-					messages: (Array with: each second)) ].
-			RBCascadeNode messages: messages ]
+					messages: (Array with: each second)).
+				semicolons addLast: each first start ].
+			RBCascadeNode messages: messages semicolons: semicolons ]
 ]
 
 { #category : #private }
