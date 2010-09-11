@@ -162,6 +162,14 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 			self
 				assert: node1 bar = node2 bar
 				description: 'Source position bar in ' , source ].
+		(node1 isReturn) ifTrue: [.
+			self
+				assert: node1 return = node2 return
+				description: 'Source position return in ' , source ].
+		(node1 isAssignment) ifTrue: [.
+			self
+				assert: node1 assignment = node2 assignment
+				description: 'Source position return in ' , source ].
 		(node1 isCascade) ifTrue: [.
 			self
 				assert: node1 semicolons = node2 semicolons
@@ -170,6 +178,11 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 			self
 				assert: node1 periods = node2 periods
 				description: 'Source position periods in ' , source ].
+		(node1 isMethod or: [ node1 isMessage ]) ifTrue: [
+			node1 selectorParts with: node2 selectorParts do: [ :a :b |
+				self
+					assert: a start = b start
+					description: 'Source position selector parts in ' , source ] ].
 		node1 children with: node2 children do: checker ].
 	checker value: original value: other
 ]
