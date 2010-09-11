@@ -178,7 +178,7 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 			self
 				assert: node1 periods = node2 periods
 				description: 'Source position periods in ' , source ].
-		(node1 isMethod or: [ node1 isMessage ]) ifTrue: [
+		(node1 isMethod or: [ node1 isMessage or: [ node1 isPragma ] ]) ifTrue: [
 			node1 selectorParts with: node2 selectorParts do: [ :a :b |
 				self
 					assert: a start = b start
