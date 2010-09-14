@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlGrammarTest,
-	#superclass : #TestCase,
+	#superclass : #PPXmlTest,
 	#category : #'PetitXml-Tests'
 }
 
@@ -143,35 +143,6 @@ PPXmlGrammarTest >> assertTypeInvariant: aNode [
 		self assert: types size = 1.
 		(node isElement or: [ node isAttribute ])
 			ifTrue: [ self assertNameInvariant: node name ] ]
-]
-
-{ #category : #parsing }
-PPXmlGrammarTest >> parse: aString [
-	^ self parse: aString rule: #start
-]
-
-{ #category : #parsing }
-PPXmlGrammarTest >> parse: aString rule: aSymbol [ 
-	| production |
-	production := self parser.
-	aSymbol = #start 
-		ifFalse: [ production := production instVarNamed: aSymbol ].
-	^ production end parse: aString
-]
-
-{ #category : #accessing }
-PPXmlGrammarTest >> parser [
-	^ self resource parserAt: self parserClass
-]
-
-{ #category : #accessing }
-PPXmlGrammarTest >> parserClass [
-	^ PPXmlParser
-]
-
-{ #category : #accessing }
-PPXmlGrammarTest >> resource [
-	^ PPXmlResource current
 ]
 
 { #category : #'testing-other' }

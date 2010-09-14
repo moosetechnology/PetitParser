@@ -35,6 +35,11 @@ PPXmlElement >> = anXmlNode [
 ]
 
 { #category : #accessing }
+PPXmlElement >> attributeAt: aString [
+	^ self attributes detect: [:att | att name localName = aString]
+]
+
+{ #category : #accessing }
 PPXmlElement >> attributes [
 	^ attributes
 ]
