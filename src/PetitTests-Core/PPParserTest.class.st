@@ -225,6 +225,7 @@ PPParserTest >> testLiteralSequence [
 	parser := PPLiteralSequenceParser 
 		on: 'abc'
 		message: 'sequence "abc" expected'.
+	self assert: parser size = 3.
 	self assert: parser literal = 'abc'.
 	self assert: parser message = 'sequence "abc" expected'.
 	
