@@ -33,3 +33,10 @@ PPLiteralSequenceParser >> parseOn: aStream [
 	aStream position: position.
 	^ PPFailure message: message at: aStream position
 ]
+
+{ #category : #accessing }
+PPLiteralSequenceParser >> size [
+	"Answer the sequence size of the receiver."
+
+	^ size
+]
