@@ -11,7 +11,7 @@ Class {
 PPParserResource >> parserAt: aParserClass [
 	"Answer a cached instance of aParserClass."
 	
-	^ parsers at: aParserClass name ifAbsentPut: [ aParserClass new optimize ]
+	^ parsers at: aParserClass name ifAbsentPut: [ aParserClass new ]
 ]
 
 { #category : #running }
