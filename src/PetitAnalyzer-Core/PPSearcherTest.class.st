@@ -369,6 +369,24 @@ PPSearcherTest >> testListPrefix [
 ]
 
 { #category : #testing }
+PPSearcherTest >> testMatchesAny [
+	| result |
+	searcher
+		matchesAnyOf: (Array 
+			with: $a asParser
+			with: $b asParser)
+		do: [ :parser :answer | answer add: parser; yourself ].
+
+	result := searcher
+		execute: $a asParser , $b asParser , $c asParser
+		initialAnswer: OrderedCollection new.
+	
+	self assert: result size = 2.
+	self assert: result first literal = $a.
+	self assert: result last literal = $b
+]
+
+{ #category : #testing }
 PPSearcherTest >> testMultiplePattern [
 	| result |
 	searcher
