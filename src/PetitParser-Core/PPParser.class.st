@@ -431,6 +431,13 @@ PPParser >> starLazy: aParser [
 	^ parser ==> [ :rest | rest asArray ]
 ]
 
+{ #category : #operations }
+PPParser >> times: anInteger [
+	"Answer a new parser that parses the receiver exactly anInteger times."
+	
+	^ self min: anInteger max: anInteger
+]
+
 { #category : #'operations-mapping' }
 PPParser >> token [
 	"Answer a new parser that transforms the input to a token."
