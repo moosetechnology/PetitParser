@@ -21,7 +21,7 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 				ifFalse: [ aSet add: each ] ].
 		nullable
 			ifFalse: [ ^ self ] ].
-	aSet add: nil asParser
+	aSet add: PPSentinel instance
 ]
 
 { #category : #'*petitanalyzer-private' }
