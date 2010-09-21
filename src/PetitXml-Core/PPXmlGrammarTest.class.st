@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlGrammarTest,
-	#superclass : #PPXmlTest,
+	#superclass : #TestCase,
 	#category : #'PetitXml-Tests'
 }
 
@@ -12,6 +12,20 @@ PPXmlGrammarTest class >> packageNamesUnderTest [
 { #category : #accessing }
 PPXmlGrammarTest class >> resources [
 	^ Array with: PPXmlResource
+]
+
+{ #category : #utilities }
+PPXmlGrammarTest >> assertAttributeInvariant: aNode [
+	"Assert that the attributes can be properly accessed."
+	
+	aNode nodesDo: [ :node |
+		node isElement ifTrue: [
+			node attributes do: [ :attr |
+				self assert: (node attributeAt: attr name localName) = attr value.
+				self assert: (node attributeNodeAt: attr name localName) = attr ].
+			node attributes isEmpty ifTrue: [ 
+				self assert: (node attributeAt: 'foo') isNil.
+				self assert: (node attributeNodeAt: 'foo') isNil ] ] ]
 ]
 
 { #category : #utilities }
@@ -43,6 +57,7 @@ PPXmlGrammarTest >> assertInvariants: aDocumentNode [
 	self assertRootInvariant: aDocumentNode.
 	self assertParentInvariant: aDocumentNode.
 	self assertNavigationInvariant: aDocumentNode.
+	self assertAttributeInvariant: aDocumentNode.
 	self assertTypeInvariant: aDocumentNode
 ]
 
@@ -143,6 +158,35 @@ PPXmlGrammarTest >> assertTypeInvariant: aNode [
 		self assert: types size = 1.
 		(node isElement or: [ node isAttribute ])
 			ifTrue: [ self assertNameInvariant: node name ] ]
+]
+
+{ #category : #parsing }
+PPXmlGrammarTest >> parse: aString [
+	^ self parse: aString rule: #start
+]
+
+{ #category : #parsing }
+PPXmlGrammarTest >> parse: aString rule: aSymbol [ 
+	| production |
+	production := self parser.
+	aSymbol = #start 
+		ifFalse: [ production := production productionAt: aSymbol ].
+	^ production end parse: aString
+]
+
+{ #category : #accessing }
+PPXmlGrammarTest >> parser [
+	^ self resource parserAt: self parserClass
+]
+
+{ #category : #accessing }
+PPXmlGrammarTest >> parserClass [
+	^ PPXmlParser
+]
+
+{ #category : #accessing }
+PPXmlGrammarTest >> resource [
+	^ PPXmlResource current
 ]
 
 { #category : #'testing-other' }

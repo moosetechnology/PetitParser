@@ -34,9 +34,34 @@ PPXmlElement >> = anXmlNode [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing-attributes' }
 PPXmlElement >> attributeAt: aString [
-	^ self attributes detect: [:att | att name localName = aString]
+	"Answer the attribute value by name, if the node does not exist answer nil."
+	
+	^ self attributeAt: aString ifAbsent: [ nil ]
+]
+
+{ #category : #'accessing-attributes' }
+PPXmlElement >> attributeAt: aString ifAbsent: aBlock [
+	"Answer the attribute value by name, if the node does not exist evaluate aBlock."
+	
+	^ (self attributeNodeAt: aString ifAbsent: [ ^ aBlock value ]) value
+]
+
+{ #category : #'accessing-attributes' }
+PPXmlElement >> attributeNodeAt: aString [
+	"Answer the attribute node by name, if the node does not exist answer nil."
+	
+	^ self attributeNodeAt: aString ifAbsent: [ nil ]
+]
+
+{ #category : #'accessing-attributes' }
+PPXmlElement >> attributeNodeAt: aString ifAbsent: aBlock [
+	"Answer the attribute node by name, if the node does not exist evaluate aBlock."
+	
+	^ self attributes
+		detect: [ :each | each name localName = aString ]
+		ifNone: aBlock
 ]
 
 { #category : #accessing }

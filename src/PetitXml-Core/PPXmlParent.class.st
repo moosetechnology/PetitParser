@@ -33,11 +33,6 @@ PPXmlParent >> children [
 	^ children
 ]
 
-{ #category : #testing }
-PPXmlParent >> hasSubElements [
-	^ self children anySatisfy: [:child | child isElement]
-]
-
 { #category : #comparing }
 PPXmlParent >> hash [
 	^ self children size hash
