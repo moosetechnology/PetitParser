@@ -45,3 +45,10 @@ PPStream >> printOn: aStream [
 		nextPutAll: '·';
 		nextPutAll: (collection copyFrom: position + 1 to: readLimit)
 ]
+
+{ #category : #accessing }
+PPStream >> uncheckedPeek [
+	"An unchecked version of peek that throws an error if we try to peek over the end of the stream, even faster than #peek."
+
+	^ collection at: position + 1
+]
