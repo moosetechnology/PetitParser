@@ -75,6 +75,7 @@ PPExtensionTest >> testStream [
 	self assert: (stream class = PPStream).
 	self assert: (stream printString = '·abc').
 	self assert: (stream peek) = $a.
+	self assert: (stream uncheckedPeek = $a).
 	self assert: (stream next) = $a.
 	self assert: (stream printString = 'a·bc').
 	self assert: (stream asPetitStream = stream)
