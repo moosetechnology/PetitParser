@@ -24,9 +24,9 @@ PPSmalltalkTokenParser >> defaultTokenClass [
 PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
 	| start comments |
 	comments := anArray.
-	[ [ aStream atEnd not and: [ SeparatorPredicate value: aStream peek ] ]
+	[ [ aStream atEnd not and: [ SeparatorPredicate value: aStream uncheckedPeek ] ]
 		whileTrue: [ aStream next ].
-	  aStream peek = $" ] whileTrue: [
+	 aStream atEnd not and: [ aStream uncheckedPeek = $" ] ] whileTrue: [
 		aStream next.
 		start := aStream position.
 		aStream upTo: $".
