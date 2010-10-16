@@ -88,5 +88,8 @@ PPMSEArrayParser >> primitive [
 PPMSEArrayParser >> string [ 
 	^ super string
 	
-	==> [:token | token value ]
+	==> [:token | 
+		 token value
+			copyReplaceAll: ''''''
+			with: '''' ]
 ]

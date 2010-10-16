@@ -64,3 +64,9 @@ PPMSEArrayParserTest >> testOneElementWithStringAttribute [
 PPMSEArrayParserTest >> testOneElementWithSubElement [
 	self assert: '((X (sub (Y))))' is: #(#('X' nil #(#('sub' #('Y' nil #())))))
 ]
+
+{ #category : #testing }
+PPMSEArrayParserTest >> testStringEscape [
+	super testStringEscape.
+	self assert: result = 'It''s here'.
+]

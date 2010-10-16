@@ -108,5 +108,5 @@ PPMSEGrammar >> start [
 
 { #category : #values }
 PPMSEGrammar >> string [ 
-	^ ( $' asParser , ( $' asParser negate ) star token , $' asParser ==> #second ) trim
+	^ ($' asParser , ('''''' asParser / $' asParser negate) star token , $' asParser ==> #second) trim
 ]

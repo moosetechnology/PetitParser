@@ -11,5 +11,5 @@ PPMSEGrammarTest >> parserClass [
 
 { #category : #testing }
 PPMSEGrammarTest >> testStringEscape [
-	self 
+	self parse: '''It''''s here''' rule: #string
 ]
