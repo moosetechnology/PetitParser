@@ -2,7 +2,8 @@ Class {
 	#name : #PPCompositeParserTest,
 	#superclass : #PPAbstractParseTest,
 	#instVars : [
-		'parser'
+		'parser',
+		'result'
 	],
 	#category : #'PetitTests-Core'
 }
@@ -27,6 +28,19 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 		resumable: true
 ]
 
+{ #category : #private }
+PPCompositeParserTest >> fail: aString rule: aSymbol [ 
+	| production result |
+	production := self parserInstance
+		productionAt: aSymbol.
+	result := production end 
+		parse: aString.
+	self
+		assert: result isPetitFailure
+		description: 'Able to parse ' , aString printString.
+	^ result
+]
+
 { #category : #utilities }
 PPCompositeParserTest >> parse: aString [
 	^ parser
@@ -39,6 +53,17 @@ PPCompositeParserTest >> parse: aString production: aSymbol [
 	^ (parser productionAt: aSymbol)
 		parse: aString
 		onError: [ :err :pos | self error: err ].
+]
+
+{ #category : #private }
+PPCompositeParserTest >> parse: aString rule: aSymbol [ 
+	| production |
+	production := self parserInstance productionAt: aSymbol.
+	result := production end parse: aString.
+	self
+		deny: result isPetitFailure
+		description: 'Unable to parse ' , aString printString.
+	^ result
 ]
 
 { #category : #accessing }
