@@ -176,7 +176,8 @@ PPJsonGrammarTest >> testNumberFloat [
 	self assert: (self parse: '12.34') = 12.34.
 	self assert: (self parse: '-12.34') = -12.34.
 	self assert: (self parse: '1.2e0') = 1.2.
-	self assert: (self parse: '1.2e-1') = 1.2e-1
+	self assert: (self parse: '1.2e-1') = 1.2e-1.
+	self assert: (self parse:  '1.2E-1') = 1.2e-1
 ]
 
 { #category : #'testing-literals' }
