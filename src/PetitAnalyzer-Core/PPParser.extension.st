@@ -224,7 +224,7 @@ PPParser >> replace: aParser with: anotherParser [
 
 { #category : #'*petitanalyzer-transforming' }
 PPParser >> transform: aBlock [
-	"Answer a copy all parsers reachable from the receiver transformed using aBlock."
+	"Answer a copy of all parsers reachable from the receiver transformed using aBlock."
 
 	| mapping root |
 	mapping := IdentityDictionary new.
