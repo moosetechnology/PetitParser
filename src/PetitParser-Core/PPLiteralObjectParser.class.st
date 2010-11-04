@@ -17,7 +17,7 @@ PPLiteralObjectParser >> caseInsensitive [
 
 { #category : #parsing }
 PPLiteralObjectParser >> parseOn: aStream [
-	^ (aStream atEnd not and: [ aStream uncheckedPeek = literal ])
+	^ (aStream atEnd not and: [ literal = aStream uncheckedPeek ])
 		ifFalse: [ PPFailure message: message at: aStream position ]
 		ifTrue: [ aStream next ]
 ]

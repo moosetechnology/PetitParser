@@ -29,7 +29,7 @@ PPLiteralSequenceParser >> parseOn: aStream [
 	| position result |
 	position := aStream position.
 	result := aStream next: size.
-	result = literal ifTrue: [ ^ result ].
+	literal = result ifTrue: [ ^ result ].
 	aStream position: position.
 	^ PPFailure message: message at: aStream position
 ]
