@@ -16,12 +16,23 @@ PPAbstractParseTest class >> packageNamesUnderTest [
 
 { #category : #utilities }
 PPAbstractParseTest >> assert: aParser fail: aCollection [
+	self assert: aParser fail: aCollection end: 0
+]
+
+{ #category : #utilities }
+PPAbstractParseTest >> assert: aParser fail: aCollection end: anInteger [
 	| stream result |
-	self assert: aParser isPetitParser.
+	self 
+		assert: aParser isPetitParser
+		description: 'Parser invalid'.
 	stream := aCollection asPetitStream.
 	result := aParser parse: stream.
-	self assert: result isPetitFailure.
-	self assert: stream position = 0
+	self 
+		assert: result isPetitFailure
+		description: 'Parser did not fail'.
+	self
+		assert: stream position = anInteger
+		description: 'Parser failed at wrong position'
 ]
 
 { #category : #utilities }
@@ -42,13 +53,17 @@ PPAbstractParseTest >> assert: aParser parse: aCollection to: anObject [
 { #category : #utilities }
 PPAbstractParseTest >> assert: aParser parse: aParseObject to: aTargetObject end: anInteger [
 	| stream result |
-	self assert: aParser isPetitParser.
+	self 
+		assert: aParser isPetitParser
+		description: 'Parser invalid'.
 	stream := aParseObject asPetitStream.
 	result := aParser parse: stream.
 	aTargetObject isNil
 		ifTrue: [ self deny: result isPetitFailure ]
 		ifFalse: [ self assert: result = aTargetObject ].
-	self assert: stream position = anInteger
+	self 
+		assert: stream position = anInteger
+		description: 'Parser accepted at wrong position'
 ]
 
 { #category : #utilities }
