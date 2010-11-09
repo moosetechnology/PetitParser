@@ -61,7 +61,7 @@ PPCompositeParser class >> startSymbol [
 
 { #category : #initialization }
 PPCompositeParser >> initializeStartingAt: aSymbol [
-	| allVariableNames ignoredVariableNames productionIndexesAndNames |
+	| allVariableNames ignoredVariableNames productionIndexesAndNames  |
 	self initialize.	
 
 	"find all the productions that need to be initialized"
@@ -74,16 +74,16 @@ PPCompositeParser >> initializeStartingAt: aSymbol [
 		reject: [ :assoc | ignoredVariableNames includes: assoc value ].
 	
 	"initialize productions with an undefined parser to be replaced later"
-	parser := PPUnresolvedParser named: aSymbol.
+	parser := PPDelegateParser on: PPUnresolvedParser new.
 	productionIndexesAndNames do: [ :assoc |
-		self instVarAt: assoc key put: (PPUnresolvedParser named: assoc value) ].
-	parser def: (self perform: aSymbol).
+		self instVarAt: assoc key put: (PPDelegateParser on: PPUnresolvedParser new) ].
+	parser setParser: (self perform: aSymbol).
 	
 	"resolve unresolved parsers with their actual implementation"
 	productionIndexesAndNames do: [ :assoc |
 		(self respondsTo: assoc value)
 			ifFalse: [ self error: 'Unable to initialize ' , assoc value printString ]
-			ifTrue: [ (self instVarAt: assoc key) def: (self perform: assoc value) ] ]
+			ifTrue: [ (self instVarAt: assoc key) setParser: (self perform: assoc value) ] ]
 ]
 
 { #category : #querying }
