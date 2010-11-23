@@ -170,6 +170,13 @@ PPSmalltalkGrammarTests >> testAssignment5 [
 		rule: #expression
 ]
 
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testAssignment6 [
+	self 
+		parse: 'a := (b := c)'
+		rule: #expression
+]
+
 { #category : #'testing-messages' }
 PPSmalltalkGrammarTests >> testBinaryExpression1 [
 	self 
@@ -554,6 +561,13 @@ PPSmalltalkGrammarTests >> testPragma14 [
 PPSmalltalkGrammarTests >> testPragma15 [
 	self 
 		parse: 'method <foo: #()>'
+		rule: #method
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkGrammarTests >> testPragma16 [
+	self 
+		parse: 'method < + 1 >'
 		rule: #method
 ]
 

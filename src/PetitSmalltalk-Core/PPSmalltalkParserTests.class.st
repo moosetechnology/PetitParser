@@ -237,6 +237,19 @@ PPSmalltalkParserTests >> testAssignment5 [
 	self assert: result value value value = 1
 ]
 
+{ #category : #testing }
+PPSmalltalkParserTests >> testAssignment6 [
+	super testAssignment6.
+	self assert: result isAssignment.
+	self assert: result variable isVariable.
+	self assert: result variable name = 'a'.
+	self assert: result value isAssignment.
+	self assert: result value variable isVariable.
+	self assert: result value variable name = 'b'.
+	self assert: result value value isVariable.
+	self assert: result value value name = 'c'
+]
+
 { #category : #'testing-messages' }
 PPSmalltalkParserTests >> testBinaryExpression1 [
 	super testBinaryExpression1.
@@ -793,6 +806,16 @@ PPSmalltalkParserTests >> testPragma15 [
 	self 
 		assert: result pragmas
 		format: #('<foo: #()>' ).
+	self assert: result body temporaries isEmpty.
+	self assert: result body statements isEmpty
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkParserTests >> testPragma16 [
+	super testPragma16.
+	self 
+		assert: result pragmas
+		format: #('< + 1>' ).
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
