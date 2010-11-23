@@ -103,10 +103,12 @@ PPParser >> firstSets [
 	
 	| firstSets |
 	firstSets := IdentityDictionary new.
-	self allParsersDo: [ :each | 
+	self allParsersDo: [ :each |
 		firstSets at: each put: (each isTerminal
 			ifTrue: [ IdentitySet with: each ]
-			ifFalse: [ IdentitySet new ]) ].
+			ifFalse: [ IdentitySet new ]).
+		each isNullable
+			ifTrue: [ (firstSets at: each) add: PPSentinel instance ] ].
 	[	| changed tally |
 		changed := false.
 		firstSets keysAndValuesDo: [ :parser :first |
@@ -140,7 +142,7 @@ PPParser >> followSets [
 	firstSets := self firstSets.
 	followSets := IdentityDictionary new.
 	self allParsersDo: [ :each | followSets at: each put: IdentitySet new ].
-	(followSets at: self) add: nil asParser.
+	(followSets at: self) add: PPSentinel instance.
 	[	followSets keysAndValuesDo: [ :parser :follow |
 			parser 
 				followSets: followSets
@@ -271,7 +273,7 @@ PPParser >> replace: aParser with: anotherParser [
 
 { #category : #'*petitanalyzer-transforming' }
 PPParser >> transform: aBlock [
-	"Answer a copy all parsers reachable from the receiver transformed using aBlock."
+	"Answer a copy of all parsers reachable from the receiver transformed using aBlock."
 
 	| mapping root |
 	mapping := IdentityDictionary new.

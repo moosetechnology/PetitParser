@@ -40,7 +40,16 @@ PPProcessor >> initialize [
 ]
 
 { #category : #private }
-PPProcessor >> perform: aRule on: aParser [
+PPProcessor >> performRule: aRule on: aParser [
 	context := Dictionary new.
 	^ aRule performOn: aParser
+]
+
+{ #category : #private }
+PPProcessor >> performRulesOn: aParser [
+	| result |
+	searches do: [ :rule |
+		result := self performRule: rule on: aParser.
+		result notNil ifTrue: [ ^ result ] ].
+	^ nil
 ]
