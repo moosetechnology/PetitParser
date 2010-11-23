@@ -58,7 +58,7 @@ PPSearcherTest >> testCopyMatchDelegate [
 { #category : #'testing-copy' }
 PPSearcherTest >> testCopyMatchEpsilon [
 	| old new |
-	old := nil asParser.
+	old := PPEpsilonParser new.
 	new := old copyInContext: Dictionary new.
 	self assert: (old match: old inContext: Dictionary new).
 	self assert: (old match: new inContext: Dictionary new).
@@ -369,24 +369,6 @@ PPSearcherTest >> testListPrefix [
 ]
 
 { #category : #testing }
-PPSearcherTest >> testMatchesAny [
-	| result |
-	searcher
-		matchesAnyOf: (Array 
-			with: $a asParser
-			with: $b asParser)
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: $a asParser , $b asParser , $c asParser
-		initialAnswer: OrderedCollection new.
-	
-	self assert: result size = 2.
-	self assert: result first literal = $a.
-	self assert: result last literal = $b
-]
-
-{ #category : #testing }
 PPSearcherTest >> testMultiplePattern [
 	| result |
 	searcher
@@ -401,14 +383,8 @@ PPSearcherTest >> testMultiplePattern [
 		initialAnswer: (Array 
 			with: OrderedCollection new 
 			with: OrderedCollection new).
-	
 	self assert: result first size = 2.
-	self assert: result first first literal = $a.
-	self assert: result first last literal = $a.
-	
-	self assert: result last size = 2.
-	self assert: result last first class = PPSequenceParser.
-	self assert: result last last literal = $b
+	self assert: result second size = 4
 ]
 
 { #category : #testing }

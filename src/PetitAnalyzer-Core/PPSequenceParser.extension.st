@@ -21,12 +21,12 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 				ifFalse: [ aSet add: each ] ].
 		nullable
 			ifFalse: [ ^ self ] ].
-	aSet add: PPSentinel instance
+	aSet add: nil asParser
 ]
 
 { #category : #'*petitanalyzer-private' }
 PPSequenceParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
-	parsers keysAndValuesDo: [ :index :parser |
+	parsers withIndexDo: [ :parser :index |
 		| followSet firstSet |
 		followSet := aFollowDictionary at: parser.
 		index = parsers size

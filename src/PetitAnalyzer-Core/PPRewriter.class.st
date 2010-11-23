@@ -23,10 +23,14 @@ PPRewriter >> execute: aParser [
 	context := Dictionary new.
 	result := aParser transform: [ :each |
 		| transformed |
-		transformed := self performRulesOn: each.
-		transformed isNil
-			ifTrue: [ each ]
-			ifFalse: [ changed := true. transformed ] ].
+		transformed := searches
+			inject: each
+			into: [ :parser :rule | 
+				(self perform: rule on: parser)
+					ifNil: [ parser ] ].
+		transformed == each
+			ifFalse: [ changed := true ].
+		transformed ].
 	context := previous.
 	^ result
 ]

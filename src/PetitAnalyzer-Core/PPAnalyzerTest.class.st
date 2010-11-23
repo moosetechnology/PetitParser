@@ -112,6 +112,20 @@ PPAnalyzerTest >> grammarE [
 ]
 
 { #category : #testing }
+PPAnalyzerTest >> testAllNamedParsers [
+	| p1 p2 p3 |
+	p1 := (#digit asParser name: 'a').
+	p2 := (#digit asParser name: 'b') star.
+	p3 := (#digit asParser name: 'c') token end.
+	self assert: p1 allNamedParsers size = 1.
+	self assert: p1 allNamedParsers first name = 'a'.
+	self assert: p2 allNamedParsers size = 1.
+	self assert: p2 allNamedParsers first name = 'b'.
+	self assert: p3 allNamedParsers size = 1.
+	self assert: p3 allNamedParsers first name = 'c'
+]
+
+{ #category : #testing }
 PPAnalyzerTest >> testAllParsers [
 	| p1 p2 p3 |
 	p1 := #lowercase asParser.
@@ -405,6 +419,22 @@ PPAnalyzerTest >> testListReplace [
 	self assert: list children first == other.
 	self assert: list children second == one.
 	self assert: list children last == other
+]
+
+{ #category : #testing }
+PPAnalyzerTest >> testNamedChildren [
+	| p1 p2 p3 p4 |
+	p1 := (#digit asParser name: 'a').
+	p2 := (#digit asParser name: 'b') star.
+	p3 := (#digit asParser name: 'c') token end.
+	p4 := ((#digit asParser name: 'c') token name: 'd') end.
+	self assert: p1 namedChildren isEmpty.
+	self assert: p2 namedChildren size = 1.
+	self assert: p2 namedChildren first name = 'b'.
+	self assert: p3 namedChildren size = 1.
+	self assert: p3 namedChildren first name = 'c'.
+	self assert: p4 namedChildren size = 1.
+	self assert: p4 namedChildren first name = 'd'
 ]
 
 { #category : #'testing-transform' }

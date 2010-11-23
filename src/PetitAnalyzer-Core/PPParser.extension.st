@@ -1,5 +1,24 @@
 Extension { #name : #PPParser }
 
+{ #category : #'*petitanalyzer-named' }
+PPParser >> allNamedParsers [
+	"Answer all the named parse nodes of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self allNamedParsersDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-named' }
+PPParser >> allNamedParsersDo: aBlock [
+	"Iterate over all the named parse nodes of the receiver."
+
+	self allParsersDo: [ :each | 
+		each name notNil
+			ifTrue: [ aBlock value: each ] ]
+]
+
 { #category : #'*petitanalyzer-enumerating' }
 PPParser >> allParsers [
 	"Answer all the parse nodes of the receiver."
@@ -84,12 +103,10 @@ PPParser >> firstSets [
 	
 	| firstSets |
 	firstSets := IdentityDictionary new.
-	self allParsersDo: [ :each |
+	self allParsersDo: [ :each | 
 		firstSets at: each put: (each isTerminal
 			ifTrue: [ IdentitySet with: each ]
-			ifFalse: [ IdentitySet new ]).
-		each isNullable
-			ifTrue: [ (firstSets at: each) add: PPSentinel instance ] ].
+			ifFalse: [ IdentitySet new ]) ].
 	[	| changed tally |
 		changed := false.
 		firstSets keysAndValuesDo: [ :parser :first |
@@ -123,7 +140,7 @@ PPParser >> followSets [
 	firstSets := self firstSets.
 	followSets := IdentityDictionary new.
 	self allParsersDo: [ :each | followSets at: each put: IdentitySet new ].
-	(followSets at: self) add: PPSentinel instance.
+	(followSets at: self) add: nil asParser.
 	[	followSets keysAndValuesDo: [ :parser :follow |
 			parser 
 				followSets: followSets
@@ -217,6 +234,36 @@ PPParser >> matchList: matchList index: matchIndex against: parserList index: pa
 		seen: aSet
 ]
 
+{ #category : #'*petitanalyzer-named' }
+PPParser >> namedChildren [
+	"Answer the named children of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self namedChildrenDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-named' }
+PPParser >> namedChildrenDo: aBlock [
+	"Iterate over the named children of the receiver."
+
+	self namedChildrenDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #'*petitanalyzer-named' }
+PPParser >> namedChildrenDo: aBlock seen: aSet [
+	"Iterate over the named children of the receiver."
+	
+	self children do: [ :each |
+		(aSet includes: each)
+			ifTrue: [ ^ self ].
+		aSet add: each.
+		each name isNil
+			ifTrue: [ each namedChildrenDo: aBlock seen: aSet ]
+			ifFalse: [ aBlock value: each ] ]
+]
+
 { #category : #'*petitanalyzer-transforming' }
 PPParser >> replace: aParser with: anotherParser [
 	"Replace the references of the receiver pointing to aParser with anotherParser."
@@ -224,7 +271,7 @@ PPParser >> replace: aParser with: anotherParser [
 
 { #category : #'*petitanalyzer-transforming' }
 PPParser >> transform: aBlock [
-	"Answer a copy of all parsers reachable from the receiver transformed using aBlock."
+	"Answer a copy all parsers reachable from the receiver transformed using aBlock."
 
 	| mapping root |
 	mapping := IdentityDictionary new.
