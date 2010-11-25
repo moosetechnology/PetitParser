@@ -256,6 +256,11 @@ PPXmlGrammarTest >> testParseSimpleAttribute [
 ]
 
 { #category : #'testing-parsing' }
+PPXmlGrammarTest >> testParseSimpleAttributeWithSingleQuote [
+	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?><schema foo=''bar''></schema>' 
+]
+
+{ #category : #'testing-parsing' }
 PPXmlGrammarTest >> testParseWithWhitsepaceAfterProlog [
 	self assertParseInvariant: '<?xml version="1.0" encoding="UTF-8"?>
 	<schema></schema>
