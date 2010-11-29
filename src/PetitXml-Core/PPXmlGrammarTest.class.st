@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlGrammarTest,
-	#superclass : #TestCase,
+	#superclass : #PPCompositeParserTest,
 	#category : #'PetitXml-Tests'
 }
 
