@@ -50,7 +50,7 @@ PPLambdaParserTest >> testOr [
 
 { #category : #'testing-utilities' }
 PPLambdaParserTest >> testParseOnError [
-	| result beenHere |
+	| beenHere |
 	result := self parserClass
 		parse: '\x.y'
 		onError: [ self fail ].
@@ -85,7 +85,7 @@ PPLambdaParserTest >> testParseOnError [
 
 { #category : #'testing-utilities' }
 PPLambdaParserTest >> testParseStartingAtOnError [
-	| result beenHere |
+	| beenHere |
 	result := self parserClass
 		parse: 'x'
 		startingAt: #variable

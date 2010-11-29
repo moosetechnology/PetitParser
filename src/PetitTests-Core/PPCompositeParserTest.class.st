@@ -20,49 +20,29 @@ PPCompositeParserTest class >> resources [
 
 { #category : #utilities }
 PPCompositeParserTest >> assert: aCollection is: anObject [
-	| result |
-	result := self parse: aCollection.
+	self parse: aCollection.
 	self
 		assert: result = anObject
 		description: 'Got: ' , result printString , '; Expected: ' , anObject printString
 		resumable: true
 ]
 
-{ #category : #private }
-PPCompositeParserTest >> fail: aString rule: aSymbol [ 
-	| production result |
-	production := self parserInstance
-		productionAt: aSymbol.
-	result := production end 
-		parse: aString.
-	self
-		assert: result isPetitFailure
-		description: 'Able to parse ' , aString printString.
-	^ result
+{ #category : #parsing }
+PPCompositeParserTest >> parse: aString [ 
+	^ self parse: aString rule: #start
 ]
 
-{ #category : #utilities }
-PPCompositeParserTest >> parse: aString [
-	^ parser
-		parse: aString
-		onError: [ :err :pos | self error: err ]
-]
-
-{ #category : #utilities }
-PPCompositeParserTest >> parse: aString production: aSymbol [
-	^ (parser productionAt: aSymbol)
-		parse: aString
-		onError: [ :err :pos | self error: err ].
-]
-
-{ #category : #private }
-PPCompositeParserTest >> parse: aString rule: aSymbol [ 
+{ #category : #parsing }
+PPCompositeParserTest >> parse: aString rule: aSymbol [
 	| production |
-	production := self parserInstance productionAt: aSymbol.
-	result := production end parse: aString.
+	production := self parserInstance.
+	aSymbol = #start
+		ifFalse: [ production := production productionAt: aSymbol ].
+	result := production parse: aString.
 	self
 		deny: result isPetitFailure
-		description: 'Unable to parse ' , aString printString.
+		description: 'Unable to parse ' , aString printString
+		resumable: true.
 	^ result
 ]
 
@@ -80,4 +60,10 @@ PPCompositeParserTest >> parserInstance [
 PPCompositeParserTest >> setUp [
 	super setUp.
 	parser := self parserInstance
+]
+
+{ #category : #running }
+PPCompositeParserTest >> tearDown [
+	super tearDown.
+	parser := result := nil
 ]
