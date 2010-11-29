@@ -1,8 +1,13 @@
 Class {
 	#name : #PPSmalltalkGrammarTests,
-	#superclass : #PPSmalltalkTest,
+	#superclass : #PPCompositeParserTest,
 	#category : #'PetitSmalltalk-Tests'
 }
+
+{ #category : #accessing }
+PPSmalltalkGrammarTests class >> packageNamesUnderTest [
+	^ #('PetitSmalltalk')
+]
 
 { #category : #accessing }
 PPSmalltalkGrammarTests >> parserClass [

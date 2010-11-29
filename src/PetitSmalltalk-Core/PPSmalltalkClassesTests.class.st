@@ -10,9 +10,14 @@ PackageOrganizer default packages
 "
 Class {
 	#name : #PPSmalltalkClassesTests,
-	#superclass : #PPSmalltalkTest,
+	#superclass : #PPCompositeParserTest,
 	#category : #'PetitSmalltalk-Tests'
 }
+
+{ #category : #accessing }
+PPSmalltalkClassesTests class >> packageNamesUnderTest [
+	^ #('PetitSmalltalk')
+]
 
 { #category : #private }
 PPSmalltalkClassesTests >> assert: aBoolean description: aString [ 
