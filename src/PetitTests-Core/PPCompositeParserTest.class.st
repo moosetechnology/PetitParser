@@ -28,6 +28,19 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 ]
 
 { #category : #parsing }
+PPCompositeParserTest >> fail: aString rule: aSymbol [ 
+	| production |
+	production := self parserInstance
+		productionAt: aSymbol.
+	result := production end 
+		parse: aString.
+	self
+		assert: result isPetitFailure
+		description: 'Able to parse ' , aString printString.
+	^ result
+]
+
+{ #category : #parsing }
 PPCompositeParserTest >> parse: aString [ 
 	^ self parse: aString rule: #start
 ]
