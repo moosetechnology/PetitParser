@@ -51,11 +51,11 @@ PPBrowser >> browseClassesOn: aBrowser [
 		title: 'Grammars';
 		format: [ :class | class name ];
 		children: [ :class | self subclassesOf: class ];
-		act: [
+		selectionAct: [
 			self selectedClass removeFromSystem.
 			aBrowser entity: self rootClass ]
 			on: $r entitled: 'remove (x)';
-		act: [
+		selectionAct: [
 			StandardToolSet browse: self selectedClass selector: nil ] 
 			on: $b entitled: 'browse (b)'
 ]
@@ -199,7 +199,7 @@ PPBrowser >> browseOutputOn: aBrowser [
 	aBrowser list
 		title: 'Debugger';
 		format: [ :each | (String new: 2 * each fourth withAll: $ ) asText , each first, ' - ', each last printString ];
-		act: [:list | list selection last inspect ] entitled: 'Inspect token';
+		selectionAct: [:list | list selection last inspect ] entitled: 'Inspect token';
 		display: [ 
 			| depth trace |
 			depth := -1.
@@ -287,7 +287,7 @@ PPBrowser >> browseSourceOn: aBrowser [
 		useExplicitNotNil;
 		display: [ self sourceCode ];
 		forSmalltalk: [ self selectedClass ];
-		act: [ :node | 
+		selectionAct: [ :node | 
 			| class selector |
 			class := self selectedClass.
 			selector := self sourceCode: node text asString in: class.
