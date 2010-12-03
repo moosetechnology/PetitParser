@@ -164,6 +164,36 @@ PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet
 	self children do: [ :parser | (aFollowDictionary at: parser) addAll: aSet ]
 ]
 
+{ #category : #'*petitanalyzer-named' }
+PPParser >> innerChildren [
+	"Answer the inner children of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self innerChildrenDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #'*petitanalyzer-named' }
+PPParser >> innerChildrenDo: aBlock [
+	"Iterate over the inner children of the receiver."
+
+	self innerChildrenDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #'*petitanalyzer-named' }
+PPParser >> innerChildrenDo: aBlock seen: aSet [
+	"Iterate over the inner children of the receiver."
+	
+	self children do: [ :each |
+		(aSet includes: each)
+			ifTrue: [ ^ self ].
+		aSet add: each.
+		each name isNil ifTrue: [
+			aBlock value: each.
+			each innerChildrenDo: aBlock seen: aSet ] ]
+]
+
 { #category : #'*petitanalyzer-testing' }
 PPParser >> isNullable [
 	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
