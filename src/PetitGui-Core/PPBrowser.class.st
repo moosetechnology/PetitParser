@@ -144,20 +144,13 @@ PPBrowser >> browseInputOn: aBrowser [
 	aBrowser text
 		useExplicitNotNil;
 		display: [ :class :selector | input ];
-		populate: #selection on: $s entitled: 'parse (s)' with: [ :presentation |
+		selectionPopulate: #selection on: $s entitled: 'Parse (s)' with: [ :presentation |
 			input := presentation text asString.
 			stream := PPBrowserStream on: input.
 			output := self production end 
 				parse: stream.
 			output isPetitFailure
 				ifTrue: [ presentation selectionInterval: (output position + 1 to: output position) ].
-			output ];
-		populate: #selection on: $s entitled: 'inspect (i)' with: [ :presentation |
-			input := presentation text asString.
-			stream := PPBrowserStream on: input.
-			output := self production end
-				parse: stream.
-			output explore.
 			output ]
 ]
 
@@ -171,22 +164,22 @@ PPBrowser >> browseMapOn: aBrowser [
 ]
 
 { #category : #browse }
-PPBrowser >> browseOn: aBrowser [
-	aBrowser title: self class label; color: Color yellow muchDarker.
-	aBrowser row: [ :row | row column: #class; column: #selector ].
-	aBrowser row: [ :row | row column: #part span: 2 ] span: 2.
-	aBrowser transmit 
+PPBrowser >> browseOn: aComposite [
+	aComposite title: self class label; color: Color yellow muchDarker.
+	aComposite row: [ :row | row column: #class; column: #selector ].
+	aComposite row: [ :row | row column: #part span: 2 ] span: 2.
+	aComposite transmit 
 		to: #class; 
-		andShow: [ :aPane | self browseClassesOn: aPane ].
-	aBrowser transmit 
+		andShow: [ :composite | self browseClassesOn: composite ].
+	aComposite transmit 
 		to: #selector; 
 		from: #class; 
-		andShow: [ :aPane | self browseSelectorsOn: aPane ].
-	aBrowser transmit
+		andShow: [ :composite | self browseSelectorsOn: composite ].
+	aComposite transmit
 		to: #part;
 		from: #class;
 		from: #selector;
-		andShow: [ :aPane | self browsePartsOn: aPane ]
+		andShow: [ :composite | self browsePartsOn: composite ]
 ]
 
 { #category : #'browse-dynamic' }
@@ -263,12 +256,12 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 				collect: [ :each | each asSymbol ])
 				select: [ :each | class includesSelector: each ])
 				asSortedCollection ];
-		act: [
+		selectionAct: [
 			StandardToolSet 
 				browse: self selectedClass 
 				selector: self selectedSelector ] 
 			on: $b entitled: 'browse (b)';
-		act: [
+		selectionAct: [
 			| class selector |
 			class := self selectedClass.
 			selector := self selectedSelector.
