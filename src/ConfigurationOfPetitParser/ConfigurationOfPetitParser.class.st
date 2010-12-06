@@ -88,6 +88,14 @@ ConfigurationOfPetitParser >> default: spec [
 	]
 ]
 
+{ #category : #'symbolic versions' }
+ConfigurationOfPetitParser >> development: spec [
+	<symbolicVersion: #'development'>
+
+	spec for: #'common' version: '1.0'.
+
+]
+
 { #category : #baselines }
 ConfigurationOfPetitParser >> minimal: spec [ 
 	<version: 'minimal'>
@@ -114,4 +122,22 @@ ConfigurationOfPetitParser >> project [
 		constructor := (Smalltalk at: #MetacelloVersionConstructor) on: self.
 		project := constructor project.
 		project]
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version10: spec [
+	<version: '1.0' imports: #('1.0-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'development'.
+		spec description: 'First release'.
+		spec author: 'AlexandreBergel'.
+		spec timestamp: '12/6/2010 16:11'.
+		spec project: 'Glamour for Petit' with: '2.0.6'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-lr.208';
+			package: 'PetitTests' with: 'PetitTests-TudorGirba.24';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.31';
+			package: 'PetitGui' with: 'PetitGui-TudorGirba.58'.].
+
 ]
