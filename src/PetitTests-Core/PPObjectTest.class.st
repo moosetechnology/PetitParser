@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : #parsers }
-PPObjectTest >> number [
+PPObjectTest >> integer [
 	^ PPPredicateObjectParser
-		on: [ :each | each isNumber ]
-		message: 'number expected'
+		on: [ :each | each isInteger ]
+		message: 'integer expected'
 ]
 
 { #category : #parsers }
@@ -21,7 +21,7 @@ PPObjectTest >> string [
 { #category : #'testing-operators' }
 PPObjectTest >> testChoice [
 	| parser |
-	parser := self number / self string.
+	parser := self integer / self string.
 	self assert: parser parse: #(123) to: 123.
 	self assert: parser parse: #('abc') to: 'abc'
 ]
@@ -31,8 +31,8 @@ PPObjectTest >> testFibonacci [
 	"This parser accepts fibonacci sequences with arbitrary start pairs."
 	
 	| parser |
-	parser := ((self number , self number) end ==> [ :pair | pair first + pair last ])
-		/ (self number , (self number , self number) and >=> [ :stream :continuation |
+	parser := ((self integer , self integer) end ==> [ :pair | pair first + pair last ])
+		/ (self integer , (self integer , self integer) and >=> [ :stream :continuation |
 			| result |
 			result := continuation value.
 			(result isPetitFailure or: [ result first + result last first ~= result last last ])
@@ -51,15 +51,15 @@ PPObjectTest >> testFibonacci [
 ]
 
 { #category : #testing }
-PPObjectTest >> testNumber [
-	self assert: self number parse: #(123) to: 123.
-	self assert: self number fail: #('abc')
+PPObjectTest >> testInteger [
+	self assert: self integer parse: #(123) to: 123.
+	self assert: self integer fail: #('abc')
 ]
 
 { #category : #'testing-operators' }
 PPObjectTest >> testSequence [
 	| parser |
-	parser := self number , self string.
+	parser := self integer , self string.
 	self assert: parser parse: #(123 'abc') to: #(123 'abc').
 	self assert: parser fail: #(123 456).
 	self assert: parser fail: #('abc' 'def').
