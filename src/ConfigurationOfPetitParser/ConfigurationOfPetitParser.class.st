@@ -26,12 +26,12 @@ ConfigurationOfPetitParser class >> isMetacelloConfig [
 
 { #category : #loading }
 ConfigurationOfPetitParser class >> loadDefault [
-	self project version: 'default'
+	(self project version: 'default') load
 ]
 
 { #category : #loading }
 ConfigurationOfPetitParser class >> loadMinimal [
-	self project version: 'minimal'
+	(self project version: 'minimal') load
 ]
 
 { #category : #accessing }
