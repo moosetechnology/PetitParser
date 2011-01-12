@@ -4,7 +4,7 @@ http://www.iam.unibe.ch/~scg/Teaching/CC/index.html
 "
 Class {
 	#name : #PPScriptingTest,
-	#superclass : #PPAbstractParseTest,
+	#superclass : #PPAbstractParserTest,
 	#category : #'PetitTests-Tests'
 }
 

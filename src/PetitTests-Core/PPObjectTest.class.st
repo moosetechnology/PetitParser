@@ -1,6 +1,6 @@
 Class {
 	#name : #PPObjectTest,
-	#superclass : #PPAbstractParseTest,
+	#superclass : #PPAbstractParserTest,
 	#category : #'PetitTests-Tests'
 }
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #PPCompositeParserTest,
-	#superclass : #PPAbstractParseTest,
+	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'parser',
 		'result'
