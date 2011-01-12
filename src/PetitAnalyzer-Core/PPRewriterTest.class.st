@@ -1,6 +1,6 @@
 Class {
 	#name : #PPRewriterTest,
-	#superclass : #PPAbstractParseTest,
+	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'rewriter'
 	],

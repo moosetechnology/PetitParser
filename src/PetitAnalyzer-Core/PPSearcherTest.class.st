@@ -1,6 +1,6 @@
 Class {
 	#name : #PPSearcherTest,
-	#superclass : #PPAbstractParseTest,
+	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'searcher'
 	],
