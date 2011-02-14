@@ -12,15 +12,12 @@ PPMSEArrayParser >> attribute [
 ]
 
 { #category : #accessing }
-PPMSEArrayParser >> attributeName [
-	^ super attributeName
-	
-	==> [:token | token value ]
-]
-
-{ #category : #accessing }
 PPMSEArrayParser >> attributeValue [
 	^ super attributeValue
+	
+	==> [:tokens | 
+		(tokens size > 1 or: [tokens isEmpty]) ifTrue: [tokens] ifFalse: [
+			tokens first ]]
 ]
 
 { #category : #values }
@@ -38,6 +35,13 @@ PPMSEArrayParser >> element [
 ]
 
 { #category : #accessing }
+PPMSEArrayParser >> elementName [
+	^ super elementName
+	
+	==> [:token | token value ]
+]
+
+{ #category : #accessing }
 PPMSEArrayParser >> elements [
 	^ super elements
 	
@@ -49,13 +53,6 @@ PPMSEArrayParser >> id [
 	^ super id
 	
 	==> [:token | Array with: 'id' with: (token at: 3) value asNumber ]
-]
-
-{ #category : #accessing }
-PPMSEArrayParser >> identifierName [
-	^ super identifierName
-	
-	==> [:token | token value ]
 ]
 
 { #category : #values }
@@ -73,6 +70,13 @@ PPMSEArrayParser >> nameReference [
 ]
 
 { #category : #values }
+PPMSEArrayParser >> natural [
+	^ super natural
+	
+	==> [ :token | token value asNumber ]
+]
+
+{ #category : #values }
 PPMSEArrayParser >> number [
 	^ super number
 	
@@ -84,12 +88,19 @@ PPMSEArrayParser >> primitive [
 	^ super primitive
 ]
 
+{ #category : #accessing }
+PPMSEArrayParser >> simpleName [
+	^ super simpleName
+	
+	==> [:token | token value ]
+]
+
 { #category : #values }
 PPMSEArrayParser >> string [ 
 	^ super string
 	
 	==> [:token | 
-		 token value
+		 token second
 			copyReplaceAll: ''''''
 			with: '''' ]
 ]

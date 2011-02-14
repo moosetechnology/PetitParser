@@ -15,90 +15,102 @@ Class {
 		'element',
 		'attributeValue',
 		'attribute',
-		'identifierName',
+		'elementName',
 		'primitive',
 		'reference',
 		'id',
 		'string',
 		'number',
 		'boolean',
-		'attributeName',
 		'integerReference',
-		'nameReference'
+		'nameReference',
+		'open',
+		'close',
+		'simpleName',
+		'natural'
 	],
 	#category : #PetitMSE
 }
 
-{ #category : #accessing }
+{ #category : #grammar }
 PPMSEGrammar >> attribute [
-	^ ($( asParser token , attributeName , attributeValue , $) asParser token) trim
+	^ (open , simpleName , attributeValue , close) trim
 ]
 
-{ #category : #accessing }
-PPMSEGrammar >> attributeName [
-	^ self identifierName
-]
-
-{ #category : #accessing }
+{ #category : #grammar }
 PPMSEGrammar >> attributeValue [
 	^ (primitive / reference / element) star
-	
-	==> [:tokens | 
-		(tokens size > 1 or: [tokens isEmpty]) ifTrue: [tokens] ifFalse: [
-			tokens first ]]
 ]
 
-{ #category : #values }
+{ #category : #basic }
 PPMSEGrammar >> boolean [ 
-	^ ('true' asParser / 'false' asParser) token trim
+	^ ('true' asParser / 'false' asParser) flatten trim
 ]
 
-{ #category : #accessing }
+{ #category : #basic }
+PPMSEGrammar >> close [
+	^ $) asParser trim
+]
+
+{ #category : #grammar }
 PPMSEGrammar >> element [
-	^ ($( asParser token , identifierName , id optional , attribute star , $) asParser token) trim
+	^ (open , elementName , id optional , attribute star , close) trim
 ]
 
-{ #category : #accessing }
-PPMSEGrammar >> elements [
-	^ $( asParser trim , element trim star , $) asParser trim
-]
-
-{ #category : #accessing }
-PPMSEGrammar >> id [
-	^ ($( asParser trim , 'id:' asParser trim , #digit asParser star token trim , $) asParser) trim
-]
-
-{ #category : #accessing }
-PPMSEGrammar >> identifierName [
+{ #category : #basic }
+PPMSEGrammar >> elementName [
 	^ (#word asParser star flatten , 
-		( $. asParser flatten , #word asParser star flatten 
-			==> [:token | token first, token second]
-		) optional) token trim
+		( $. asParser , #word asParser star flatten ) optional) token trim
 ]
 
-{ #category : #values }
+{ #category : #grammar }
+PPMSEGrammar >> elements [
+	^ open , element star , close
+]
+
+{ #category : #grammar }
+PPMSEGrammar >> id [
+	^ open , 'id:' asParser , #digit asParser star token trim , close
+]
+
+{ #category : #grammar }
 PPMSEGrammar >> integerReference [ 
-	^ ($( asParser trim , 'ref:' asParser trim , #digit asParser star flatten trim , $) asParser) token trim
+	^ (open , 'ref:' asParser , natural trim , close) token trim
 ]
 
-{ #category : #values }
+{ #category : #grammar }
 PPMSEGrammar >> nameReference [ 
-	^ ($( asParser trim , 'ref:' asParser trim , #word asParser star token , $) asParser trim) token
+	^ open , 'ref:' asParser , elementName trim , close
 ]
 
-{ #category : #values }
+{ #category : #basic }
+PPMSEGrammar >> natural [
+	^ #digit asParser plus flatten trim
+]
+
+{ #category : #basic }
 PPMSEGrammar >> number [
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim
+	^ ($- asParser optional , natural , ($. asParser , natural) optional) flatten trim
 ]
 
-{ #category : #values }
+{ #category : #basic }
+PPMSEGrammar >> open [
+	^ $( asParser trim
+]
+
+{ #category : #basic }
 PPMSEGrammar >> primitive [ 
 	^ string / number / boolean" , unlimited"
 ]
 
-{ #category : #values }
+{ #category : #grammar }
 PPMSEGrammar >> reference [ 
 	^ integerReference / nameReference
+]
+
+{ #category : #basic }
+PPMSEGrammar >> simpleName [
+	^ #word asParser star flatten trim
 ]
 
 { #category : #accessing }
@@ -106,7 +118,7 @@ PPMSEGrammar >> start [
 	^ elements end
 ]
 
-{ #category : #values }
+{ #category : #basic }
 PPMSEGrammar >> string [ 
-	^ ($' asParser , ('''''' asParser / $' asParser negate) star token , $' asParser ==> #second) trim
+	^ ($' asParser , ('''''' asParser / $' asParser negate) star flatten , $' asParser) trim
 ]
