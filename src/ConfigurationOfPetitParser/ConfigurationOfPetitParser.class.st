@@ -66,6 +66,33 @@ ConfigurationOfPetitParser >> baseline10: spec [
 ]
 
 { #category : #baselines }
+ConfigurationOfPetitParser >> baseline11: spec [
+	<version: '1.1-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec description: 'Preparing Moose 4.3.2'.
+		spec repository: 'http://source.lukas-renggli.ch/petit'.
+		spec project: 'Glamour for Petit' with: [
+				spec
+					className: 'ConfigurationOfGlamour';
+					versionString: '2.1';
+					repository: 'http://www.squeaksource.com/Glamour' ].
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [
+				spec requires: #('PetitParser' ). ];
+			package: 'PetitAnalyzer' with: [
+				spec requires: #('PetitTests' ). ];
+			package: 'PetitGui' with: [
+				spec requires: #('Glamour for Petit' ). ].
+		spec 
+			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
+			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
+
+]
+
+{ #category : #baselines }
 ConfigurationOfPetitParser >> default: spec [ 
 	<version: 'default'>
 	
@@ -128,7 +155,7 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '1.1'.
+	spec for: #'common' version: '1.2'.
 
 ]
 
@@ -159,6 +186,24 @@ ConfigurationOfPetitParser >> version11: spec [
 		spec description: 'New version'.
 		spec author: 'AlexandreBergel'.
 		spec timestamp: '2/18/2011 13:30'.
+		spec project: 'Glamour for Petit' with: '2.1'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser';
+			package: 'PetitTests' with: 'PetitTests';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer';
+			package: 'PetitGui' with: 'PetitGui'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version12: spec [
+	<version: '1.2' imports: #('1.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'release'.
+		spec description: 'New version'.
+		spec author: 'AlexandreBergel'.
+		spec timestamp: '2/18/2011 13:56'.
 		spec project: 'Glamour for Petit' with: '2.1'.
 		spec 
 			package: 'PetitParser' with: 'PetitParser';
