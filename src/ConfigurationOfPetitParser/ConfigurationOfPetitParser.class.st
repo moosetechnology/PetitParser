@@ -92,7 +92,7 @@ ConfigurationOfPetitParser >> default: spec [
 ConfigurationOfPetitParser >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '1.0'.
+	spec for: #'common' version: #'notDefined'.
 
 ]
 
@@ -124,6 +124,14 @@ ConfigurationOfPetitParser >> project [
 		project]
 ]
 
+{ #category : #'symbolic versions' }
+ConfigurationOfPetitParser >> stable: spec [
+	<symbolicVersion: #'stable'>
+
+	spec for: #'common' version: '1.1'.
+
+]
+
 { #category : #versions }
 ConfigurationOfPetitParser >> version10: spec [
 	<version: '1.0' imports: #('1.0-baseline' )>
@@ -139,5 +147,23 @@ ConfigurationOfPetitParser >> version10: spec [
 			package: 'PetitTests' with: 'PetitTests-TudorGirba.24';
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.31';
 			package: 'PetitGui' with: 'PetitGui-TudorGirba.58'.].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version11: spec [
+	<version: '1.1' imports: #('1.0-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'release'.
+		spec description: 'New version'.
+		spec author: 'AlexandreBergel'.
+		spec timestamp: '2/18/2011 13:30'.
+		spec project: 'Glamour for Petit' with: '2.1'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser';
+			package: 'PetitTests' with: 'PetitTests';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer';
+			package: 'PetitGui' with: 'PetitGui'. ].
 
 ]
