@@ -51,7 +51,7 @@ PPCompositeParserTest >> parse: aString rule: aSymbol [
 	production := self parserInstance.
 	aSymbol = #start
 		ifFalse: [ production := production productionAt: aSymbol ].
-	result := production parse: aString.
+	result := production end parse: aString.
 	self
 		deny: result isPetitFailure
 		description: 'Unable to parse ' , aString printString
