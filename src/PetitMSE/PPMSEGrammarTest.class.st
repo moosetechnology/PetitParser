@@ -35,6 +35,11 @@ PPMSEGrammarTest >> testNaturalWithSpace [
 ]
 
 { #category : #'tests-basic' }
+PPMSEGrammarTest >> testNumberWithE [
+	self parse: '	-123.45E-2' rule: #number
+]
+
+{ #category : #'tests-basic' }
 PPMSEGrammarTest >> testOpen [
 	self parse: '(' rule: #open.
 	self parse: ' (' rule: #open.

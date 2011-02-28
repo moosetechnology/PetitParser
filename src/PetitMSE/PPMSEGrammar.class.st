@@ -27,7 +27,8 @@ Class {
 		'open',
 		'close',
 		'simpleName',
-		'natural'
+		'natural',
+		'e'
 	],
 	#category : #PetitMSE
 }
@@ -50,6 +51,11 @@ PPMSEGrammar >> boolean [
 { #category : #basic }
 PPMSEGrammar >> close [
 	^ $) asParser trim
+]
+
+{ #category : #basic }
+PPMSEGrammar >> e [
+	^ ($e asParser / $E asParser) , ($- asParser / $+ asParser) optional , natural
 ]
 
 { #category : #grammar }
@@ -90,7 +96,7 @@ PPMSEGrammar >> natural [
 
 { #category : #basic }
 PPMSEGrammar >> number [
-	^ ($- asParser optional , natural , ($. asParser , natural) optional) flatten trim
+	^ ($- asParser optional , natural , ($. asParser , natural , e optional) optional) flatten trim
 ]
 
 { #category : #basic }
