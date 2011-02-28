@@ -23,9 +23,21 @@ PPMSEArrayParserTest >> testEmpty [
 ]
 
 { #category : #'tests-basic' }
+PPMSEArrayParserTest >> testNatural [
+	super testNatural.
+	self assert: result = 123
+]
+
+{ #category : #'tests-basic' }
 PPMSEArrayParserTest >> testNaturalWithSpace [
 	super testNaturalWithSpace.
 	self assert: result = 123
+]
+
+{ #category : #'tests-basic' }
+PPMSEArrayParserTest >> testNumberWithE [
+	super testNumberWithE.
+	self assert: result halt
 ]
 
 { #category : #'tests-start' }

@@ -15,9 +15,10 @@ PPMSEArrayParser >> attribute [
 PPMSEArrayParser >> attributeValue [
 	^ super attributeValue
 	
-	==> [:tokens | 
-		(tokens size > 1 or: [tokens isEmpty]) ifTrue: [tokens] ifFalse: [
-			tokens first ]]
+	==> [ :tokens | 
+		    (tokens size > 1 or: [ tokens isEmpty ]) 	
+				ifTrue: [ tokens ] 
+				ifFalse: [ tokens first ]]
 ]
 
 { #category : #values }
