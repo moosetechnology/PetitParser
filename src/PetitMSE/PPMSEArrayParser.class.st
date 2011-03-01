@@ -81,7 +81,7 @@ PPMSEArrayParser >> natural [
 PPMSEArrayParser >> number [
 	^ super number
 	
-	==> [ :token | token value asNumber ]
+	==> [ :token | (token value copyReplaceAll: 'E' with: 'e') asNumber ]
 ]
 
 { #category : #values }

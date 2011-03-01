@@ -37,7 +37,7 @@ PPMSEArrayParserTest >> testNaturalWithSpace [
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testNumberWithE [
 	super testNumberWithE.
-	self assert: result halt
+	self assert: result = -1.2345
 ]
 
 { #category : #'tests-start' }
