@@ -241,7 +241,7 @@ PPBrowser >> browsePartsOn: aComposite [
 	aComposite useExplicitNotNil.
 	aComposite tabbedArrangement.
 	self browseStaticOn: aComposite.
-	self browseDynamicOn: aComposite	
+	self browseDynamicOn: aComposite
 ]
 
 { #category : #browse }
