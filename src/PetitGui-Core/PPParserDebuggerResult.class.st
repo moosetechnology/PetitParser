@@ -1,3 +1,15 @@
+"
+This class is meant to be used as a model for running a parser over a given stream.
+
+You create it via parse:with: class side method. For example:
+self parse: '1 + 2' with: PPArithmeticParser new.
+
+Instance Variables:
+	parser	<PPParser>
+	result	<Object>
+	children	<OrderedCollection of PPParserDebuggerResult>
+	parent	<PPParserDebuggerResult>
+"
 Class {
 	#name : #PPParserDebuggerResult,
 	#superclass : #Object,
@@ -29,7 +41,7 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 					root := root parent.
 					result ]]].
 	newParser parse: aStream.
-	^ root
+	^ root children first  
 ]
 
 { #category : #accessing }
@@ -40,6 +52,13 @@ PPParserDebuggerResult >> children [
 { #category : #accessing }
 PPParserDebuggerResult >> children: anObject [
 	children := anObject
+]
+
+{ #category : #printing }
+PPParserDebuggerResult >> formattedText [
+	^ self result isPetitFailure 
+		ifTrue: [ Text string: self printString attribute: TextColor gray ]
+		ifFalse: [ self printString]
 ]
 
 { #category : #initialization }
@@ -65,6 +84,14 @@ PPParserDebuggerResult >> parser [
 { #category : #accessing }
 PPParserDebuggerResult >> parser: anObject [
 	parser := anObject
+]
+
+{ #category : #printing }
+PPParserDebuggerResult >> printOn: aStream [ 
+	aStream 
+		nextPutAll: self parser name;
+		nextPutAll: ' - ';   
+		nextPutAll: self result printString
 ]
 
 { #category : #accessing }

@@ -26,31 +26,11 @@ PPParserInspector >> buildBrowser [
 
 { #category : #'private building' }
 PPParserInspector >> debuggerIn: composite [
-	| input |
-	composite list
+	composite tree
 		title: 'Debugger';
-		format: [ :each | (String new: 2 * each fourth withAll: $ ) asText , each first, ' - ', each last printString ];
-		display: [ :result :sample :parser |
-			| depth trace |
-			depth := -1.
-			trace := OrderedCollection new.
-			(parser end transform: [ :each |
-				each name notNil 
-					ifTrue: [ 
-						each >=> [ :s :cc |
-							| t r |
-							depth := depth + 1. 
-							trace addLast: (t := Array with: each name with: s position + 1 with: s position with: depth with: Object new with: nil).
-							r := cc value.
-							t at: t size put: r.
-							t at: 3 put: s position.
-							r isPetitFailure
-								ifFalse: [ t at: 1 put: (t at: 1) asText allBold ].
-							depth := depth - 1.
-							r ] ]
-					ifFalse: [ each ] ])
-				parse: sample.
-			trace ].
+		format: [:resultNode | resultNode formattedText ];
+		display: [ :result :sample :parser | {PPParserDebuggerResult parse: sample with: parser } ];
+		children: [:resultNode | resultNode children ].
 ]
 
 { #category : #'private building' }
@@ -69,7 +49,7 @@ PPParserInspector >> resultIn: composite [
 
 { #category : #'private building' }
 PPParserInspector >> sampleIn: composite [
-	^ (composite text)
+	(composite text)
 		title: 'Sample';
 		display: '';
 		selectionPopulate: #selection
