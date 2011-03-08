@@ -8,11 +8,11 @@ Class {
 PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
-	browser column: #productions ; column: #details.
+	browser column: #productions ; column: #workspace.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
-	browser transmit to: #details; fromOutside: #entity; from: #productions; andShow: [:a | 
-		self sourceIn: a ]. 
+	browser transmit to: #workspace; fromOutside: #entity; from: #productions; andShow: [:a | 
+		self workspaceIn: a ]. 
 	^ browser
 ]
 
@@ -78,4 +78,10 @@ PPParserBrowser >> sourceIn: composite [
 			icon: GLMUIThemeExtraIcons glamorousAccept 
 			on: $s 
 			entitled: 'accept (s)'
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> workspaceIn: composite [
+	self sourceIn: composite.
+	composite custom: (PPParserInspector new browser title: 'Inspector')
 ]

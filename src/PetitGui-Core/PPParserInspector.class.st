@@ -37,6 +37,20 @@ PPParserInspector >> debuggerIn: composite [
 PPParserInspector >> inspectorsIn: composite [
 	self resultIn: composite.
 	self debuggerIn: composite.
+	"self tallyIn: composite  "
+]
+
+{ #category : #'private building' }
+PPParserInspector >> progressChartIn: composite [
+	self flag: 'stream'.
+	composite morph 
+		title: 'Progress';
+		display: [ :stream |
+			| morph |
+			morph := ScrollPane new.
+			morph color: Color white.
+			morph scroller addMorph: stream asPositionMorph.
+			morph ]
 ]
 
 { #category : #'private building' }
@@ -63,4 +77,14 @@ PPParserInspector >> sampleIn: composite [
 					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position) ].
 				(presentation pane port: #sample) value: presentation text.
 				output ]
+]
+
+{ #category : #'private building' }
+PPParserInspector >> tallyIn: composite [
+	composite table 
+		title: 'Tally';
+		column: 'Parser' evaluated: [ :each | each first displayName ];
+		column: 'Count' evaluated: [ :each | each second printString ];
+		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+		display: [:result :sample | (PPBrowserStream on: sample) asFrequencyTable ]
 ]

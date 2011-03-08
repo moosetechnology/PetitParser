@@ -17,7 +17,7 @@ PPAllParsersBrowser >> buildBrowser [
 	browser transmit to: #classes; andShow: [:a | 
 		self classesIn: a ]. 
 	browser transmit to: #parser; from: #classes; andShow: [:a | 
-		self custom: PPParserBrowser new ].
+		a custom: PPParserBrowser new browser ].
 	^ browser
 ]
 
