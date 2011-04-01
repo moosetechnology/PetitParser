@@ -160,25 +160,6 @@ PPXmlGrammarTest >> assertTypeInvariant: aNode [
 			ifTrue: [ self assertNameInvariant: node name ] ]
 ]
 
-{ #category : #parsing }
-PPXmlGrammarTest >> parse: aString [
-	^ self parse: aString rule: #start
-]
-
-{ #category : #parsing }
-PPXmlGrammarTest >> parse: aString rule: aSymbol [ 
-	| production |
-	production := self parser.
-	aSymbol = #start 
-		ifFalse: [ production := production productionAt: aSymbol ].
-	^ production end parse: aString
-]
-
-{ #category : #accessing }
-PPXmlGrammarTest >> parser [
-	^ self resource parserAt: self parserClass
-]
-
 { #category : #accessing }
 PPXmlGrammarTest >> parserClass [
 	^ PPXmlParser
