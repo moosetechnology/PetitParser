@@ -15,17 +15,17 @@ PPPredicateObjectParser class >> any [
 ]
 
 { #category : #'factory-objects' }
-PPPredicateObjectParser class >> anyExceptAnyOf: aCollectionOfChars [
+PPPredicateObjectParser class >> anyExceptAnyOf: aCollection [
 	^ self
-		on: [ :each | (aCollectionOfChars includes: each) not ] message: 'any except ' , aCollectionOfChars printString , ' expected'
-		negated: [ :each | aCollectionOfChars includes: each ] message: aCollectionOfChars printString ,  ' not expected'
+		on: [ :each | (aCollection includes: each) not ] message: 'any except ' , aCollection printString , ' expected'
+		negated: [ :each | aCollection includes: each ] message: aCollection printString ,  ' not expected'
 ]
 
 { #category : #'factory-objects' }
-PPPredicateObjectParser class >> anyOf: anArray [
+PPPredicateObjectParser class >> anyOf: aCollection [
 	^ self
-		on: [ :each | anArray includes: each ] message: 'any of ' , anArray printString , ' expected'
-		negated: [ :each | (anArray includes: each) not ] message: 'none of ' , anArray printString ,  'expected'
+		on: [ :each | aCollection includes: each ] message: 'any of ' , aCollection printString , ' expected'
+		negated: [ :each | (aCollection includes: each) not ] message: 'none of ' , aCollection printString ,  'expected'
 ]
 
 { #category : #'factory-objects' }

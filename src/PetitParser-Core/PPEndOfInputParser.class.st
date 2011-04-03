@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operations }
+{ #category : #operators }
 PPEndOfInputParser >> end [
 	^ self
 ]

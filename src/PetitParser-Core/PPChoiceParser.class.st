@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operations }
+{ #category : #operators }
 PPChoiceParser >> / aRule [ 
 	^ self copyWith: aRule
 ]

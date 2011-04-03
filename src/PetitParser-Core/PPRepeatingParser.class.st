@@ -1,5 +1,5 @@
 "
-A parser that eagerly parses min to max instances of my delegate. The default instance parses eagerly an infinite number of elements, as min is set to 0 and max to infinity (SmallInteger maxVal).
+An abstract parser that repeatedly parses between 'min' and 'max' instances of its delegate. The default configuration parses an infinite number of elements, as 'min' is set to 0 and 'max' to infinity (SmallInteger maxVal).
 
 Instance Variables:
 	min	<Integer>	The minimum number of repetitions.
@@ -15,24 +15,10 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'instance creation' }
-PPRepeatingParser class >> on: aParser [
-	^ (super on: aParser) setMin: 0 max: SmallInteger maxVal
-]
-
-{ #category : #'instance creation' }
-PPRepeatingParser class >> on: aParser max: aMaxInteger [
-	^ (self on: aParser) setMin: 0 max: aMaxInteger
-]
-
-{ #category : #'instance creation' }
-PPRepeatingParser class >> on: aParser min: aMinInteger [
-	^ (self on: aParser) setMin: aMinInteger max: SmallInteger maxVal 
-]
-
-{ #category : #'instance creation' }
-PPRepeatingParser class >> on: aParser min: aMinInteger max: aMaxInteger [
-	^ (self on: aParser) setMin: aMinInteger max: aMaxInteger
+{ #category : #initialization }
+PPRepeatingParser >> initialize [
+	super initialize.
+	self setMin: 0; setMax: SmallInteger maxVal
 ]
 
 { #category : #accessing }
@@ -49,23 +35,6 @@ PPRepeatingParser >> min [
 	^ min
 ]
 
-{ #category : #parsing }
-PPRepeatingParser >> parseOn: aStream [
-	| start element elements |
-	start := aStream position.
-	elements := OrderedCollection new.
-	[ elements size < min ] whileTrue: [
-		(element := parser parseOn: aStream) isPetitFailure ifTrue: [
-			aStream position: start.
-			^ element ].
-		elements addLast: element ].
-	[ elements size < max ] whileTrue: [
-	 	(element := parser parseOn: aStream) isPetitFailure
-			ifTrue: [ ^ elements asArray ].
-		elements addLast: element ].
-	^ elements asArray
-]
-
 { #category : #printing }
 PPRepeatingParser >> printOn: aStream [
 	super printOn: aStream.
@@ -74,7 +43,11 @@ PPRepeatingParser >> printOn: aStream [
 ]
 
 { #category : #initialization }
-PPRepeatingParser >> setMin: aMinInteger max: aMaxInteger [
-	min := aMinInteger.
-	max := aMaxInteger
+PPRepeatingParser >> setMax: anInteger [
+	max := anInteger
+]
+
+{ #category : #initialization }
+PPRepeatingParser >> setMin: anInteger [
+	min := anInteger
 ]

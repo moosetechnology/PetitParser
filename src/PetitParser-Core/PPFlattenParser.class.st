@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #hooks }
+{ #category : #private }
 PPFlattenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
 	^ aCollection copyFrom: aStartInteger to: aStopInteger
 ]

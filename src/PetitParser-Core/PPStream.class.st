@@ -13,18 +13,6 @@ PPStream >> asPetitStream [
 ]
 
 { #category : #accessing }
-PPStream >> next: anInteger [ 
-	"Answer up to anInteger elements of my collection. Overridden for efficiency."
-
-	| answer endPosition |
-	endPosition := position + anInteger min: readLimit.
-	answer := collection copyFrom: position + 1 to: endPosition.
-	position := endPosition.
-	^ answer
-
-]
-
-{ #category : #accessing }
 PPStream >> peek [
 	"An improved version of peek, that is slightly faster than the built in version."
 

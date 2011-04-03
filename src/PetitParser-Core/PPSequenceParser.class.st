@@ -7,12 +7,12 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operations }
+{ #category : #operators }
 PPSequenceParser >> , aRule [
 	^ self copyWith: aRule
 ]
 
-{ #category : #operations }
+{ #category : #'operators-mapping' }
 PPSequenceParser >> map: aBlock [
 	^ self ==> [ :nodes | aBlock valueWithArguments: nodes ]
 ]
@@ -34,7 +34,7 @@ PPSequenceParser >> parseOn: aStream [
 	^ elements
 ]
 
-{ #category : #operations }
+{ #category : #'operators-mapping' }
 PPSequenceParser >> permutation: anArrayOfIntegers [
 	"Answer a permutation of the receivers sequence."
 	

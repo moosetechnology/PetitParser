@@ -38,7 +38,7 @@ PPTrimmingParser >> setTrimmer: aParser [
 	trimmer := aParser
 ]
 
-{ #category : #operations }
+{ #category : #'operators-mapping' }
 PPTrimmingParser >> trim [
 	"There is no point in trimming more than once."
 

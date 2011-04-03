@@ -1,3 +1,6 @@
+"
+A parser that optionally parsers its delegate, or answers nil.
+"
 Class {
 	#name : #PPOptionalParser,
 	#superclass : #PPDelegateParser,

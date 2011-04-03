@@ -16,7 +16,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #operations }
+{ #category : #operators }
 PPMemoizedParser >> memoized [
 	"Ther is no point in memoizing more than once."
 
