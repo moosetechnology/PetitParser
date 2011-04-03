@@ -327,6 +327,54 @@ PPParserTest >> testMax [
 ]
 
 { #category : #testing }
+PPParserTest >> testMaxGreedy [
+	| parser |
+	parser := #word asParser max: 2 greedy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abc'.
+	
+	self assert: parser parse: '1' to: #() end: 0.
+	self assert: parser parse: 'a1' to: #($a) end: 1.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc1'.
+	
+	self assert: parser parse: '12' to: #($1) end: 1.
+	self assert: parser parse: 'a12' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab12' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc12'.
+	
+	self assert: parser parse: '123' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a123' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab123' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc123'
+]
+
+{ #category : #testing }
+PPParserTest >> testMaxLazy [
+	| parser |
+	parser := #word asParser max: 2 lazy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abc'.
+	
+	self assert: parser parse: '1' to: #() end: 0.
+	self assert: parser parse: 'a1' to: #($a) end: 1.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc1'.
+	
+	self assert: parser parse: '12' to: #() end: 0.
+	self assert: parser parse: 'a12' to: #($a) end: 1.
+	self assert: parser parse: 'ab12' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc12'.
+	
+	self assert: parser parse: '123' to: #() end: 0.
+	self assert: parser parse: 'a123' to: #($a) end: 1.
+	self assert: parser parse: 'ab123' to: #($a $b) end: 2.
+	self assert: parser fail: 'abc123'
+]
+
+{ #category : #testing }
 PPParserTest >> testMemoized [
 	| count parser twice |
 	count := 0.
@@ -361,6 +409,80 @@ PPParserTest >> testMin [
 ]
 
 { #category : #testing }
+PPParserTest >> testMinGreedy [
+	| parser |
+	parser := #word asParser min: 2 greedy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abcde'.
+	
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a1'.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1' to: #($a $b $c $d) end: 4.
+	self assert: parser parse: 'abcde1' to: #($a $b $c $d $e) end: 5.
+	
+	self assert: parser fail: '12'.
+	self assert: parser parse: 'a12' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab12' to: #($a $b $1) end: 3.
+	self assert: parser parse: 'abc12' to: #($a $b $c $1) end: 4.
+	self assert: parser parse: 'abcd12' to: #($a $b $c $d $1) end: 5.
+	self assert: parser parse: 'abcde12' to: #($a $b $c $d $e $1) end: 6.
+	
+	self assert: parser parse: '123' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a123' to: #($a $1 $2) end: 3.
+	self assert: parser parse: 'ab123' to: #($a $b $1 $2) end: 4.
+	self assert: parser parse: 'abc123' to: #($a $b $c $1 $2) end: 5.
+	self assert: parser parse: 'abcd123' to: #($a $b $c $d $1 $2) end: 6.
+	self assert: parser parse: 'abcde123' to: #($a $b $c $d $e $1 $2) end: 7.
+	
+	self assert: parser parse: '1234' to: #($1 $2 $3) end: 3.
+	self assert: parser parse: 'a1234' to: #($a $1 $2 $3) end: 4.
+	self assert: parser parse: 'ab1234' to: #($a $b $1 $2 $3) end: 5.
+	self assert: parser parse: 'abc1234' to: #($a $b $c $1 $2 $3) end: 6.
+	self assert: parser parse: 'abcd1234' to: #($a $b $c $d $1 $2 $3) end: 7.
+	self assert: parser parse: 'abcde1234' to: #($a $b $c $d $e $1 $2 $3) end: 8
+]
+
+{ #category : #testing }
+PPParserTest >> testMinLazy [
+	| parser |
+	parser := #word asParser min: 2 lazy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abcde'.
+	
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a1'.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1' to: #($a $b $c $d) end: 4.
+	self assert: parser parse: 'abcde1' to: #($a $b $c $d $e) end: 5.
+	
+	self assert: parser fail: '12'.
+	self assert: parser parse: 'a12' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab12' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc12' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd12' to: #($a $b $c $d) end: 4.
+	self assert: parser parse: 'abcde12' to: #($a $b $c $d $e) end: 5.
+	
+	self assert: parser parse: '123' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a123' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab123' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc123' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd123' to: #($a $b $c $d) end: 4.
+	self assert: parser parse: 'abcde123' to: #($a $b $c $d $e) end: 5.
+	
+	self assert: parser parse: '1234' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a1234' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab1234' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1234' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1234' to: #($a $b $c $d) end: 4.
+	self assert: parser parse: 'abcde1234' to: #($a $b $c $d $e) end: 5
+]
+
+{ #category : #testing }
 PPParserTest >> testMinMax [
 	| parser |
 	parser := $a asParser min: 2 max: 4.
@@ -376,6 +498,80 @@ PPParserTest >> testMinMax [
 	self assert: parser parse: 'aaaaaa' to: #($a $a $a $a) end: 4.
 	
 	self assert: (parser printString endsWith: '[2, 4]')
+]
+
+{ #category : #testing }
+PPParserTest >> testMinMaxGreedy [
+	| parser |
+	parser := #word asParser min: 2 max: 4 greedy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abcde'.
+	
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a1'.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde1'.
+	
+	self assert: parser fail: '12'.
+	self assert: parser parse: 'a12' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab12' to: #($a $b $1) end: 3.
+	self assert: parser parse: 'abc12' to: #($a $b $c $1) end: 4.
+	self assert: parser parse: 'abcd12' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde12'.
+	
+	self assert: parser parse: '123' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a123' to: #($a $1 $2) end: 3.
+	self assert: parser parse: 'ab123' to: #($a $b $1 $2) end: 4.
+	self assert: parser parse: 'abc123' to: #($a $b $c $1) end: 4.
+	self assert: parser parse: 'abcd123' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde123'.
+	
+	self assert: parser parse: '1234' to: #($1 $2 $3) end: 3.
+	self assert: parser parse: 'a1234' to: #($a $1 $2 $3) end: 4.
+	self assert: parser parse: 'ab1234' to: #($a $b $1 $2) end: 4.
+	self assert: parser parse: 'abc1234' to: #($a $b $c $1) end: 4.
+	self assert: parser parse: 'abcd1234' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde1234'
+]
+
+{ #category : #testing }
+PPParserTest >> testMinMaxLazy [
+	| parser |
+	parser := #word asParser min: 2 max: 4 lazy: #digit asParser.
+	
+	self assert: parser fail: ''.
+	self assert: parser fail: 'abcde'.
+	
+	self assert: parser fail: '1'.
+	self assert: parser fail: 'a1'.
+	self assert: parser parse: 'ab1' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde1'.
+	
+	self assert: parser fail: '12'.
+	self assert: parser parse: 'a12' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab12' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc12' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd12' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde12'.
+	
+	self assert: parser parse: '123' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a123' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab123' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc123' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd123' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde123'.
+	
+	self assert: parser parse: '1234' to: #($1 $2) end: 2.
+	self assert: parser parse: 'a1234' to: #($a $1) end: 2.
+	self assert: parser parse: 'ab1234' to: #($a $b) end: 2.
+	self assert: parser parse: 'abc1234' to: #($a $b $c) end: 3.
+	self assert: parser parse: 'abcd1234' to: #($a $b $c $d) end: 4.
+	self assert: parser fail: 'abcde1234'
 ]
 
 { #category : #'testing-accessing' }
