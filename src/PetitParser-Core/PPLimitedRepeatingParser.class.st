@@ -19,6 +19,11 @@ PPLimitedRepeatingParser class >> on: aParser limit: aLimitParser [
 ]
 
 { #category : #accessing }
+PPLimitedRepeatingParser >> children [
+	^ Array with: parser with: limit
+]
+
+{ #category : #accessing }
 PPLimitedRepeatingParser >> limit [
 	"Answer the parser that limits (or ends) this repetition."
 	
