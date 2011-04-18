@@ -18,7 +18,8 @@ Class {
 		'characterSetClass',
 		'characterSetEscape',
 		'characterSetRange',
-		'characterSetCharacter'
+		'characterSetCharacter',
+		'predicateAtom'
 	],
 	#classVars : [
 		'ClassMap',
@@ -97,7 +98,7 @@ PPRegexParser class >> initializeEscapeMap [
 		"not digit"
 		at: $D put: #digit asParser negate;
 		"word"
-		at: $w put: #word asParser;
+		at: $w put: #word asParser / $_ asParser;
 		"not word"
 		at: $W put: #word asParser negate;
 		"whitespace"
@@ -125,7 +126,7 @@ PPRegexParser >> anyAtom [
 
 { #category : #grammar }
 PPRegexParser >> atom [
-	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterGroup / groupAtom / characterAtom
+	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterGroup / groupAtom / predicateAtom / characterAtom
 ]
 
 { #category : #'grammar-atoms' }
@@ -206,20 +207,32 @@ PPRegexParser >> number [
 PPRegexParser >> oneOrMorePiece [
 	"+	1 or more times"
 	
-	^ $+ asParser , quantifier map: [ :op :qu | qu on: nil min: 1 max: SmallInteger maxVal ]
+	^ $+ asParser , quantifier map: [ :op :qu | qu setMin: 1 ]
+]
+
+{ #category : #'grammar-atoms' }
+PPRegexParser >> predicateAtom [
+	^ $: asParser , $^ asParser optional , #word asParser plus flatten , $: asParser map: [ :begin :negated :selector :end |
+		| result |
+		result := PPPredicateObjectParser 
+			on: (PPCharSetPredicate on: [ :char | char perform: selector asSymbol ]) 
+			message: selector printString , ' expected'.
+		negated isNil
+			ifFalse: [ result := result negated ].
+		result ]
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> quantifier [
-	^ ($+ asParser ==> [ :node | PPRepeatingParser ])
-	/ ($? asParser ==> [ :node | PPLazyQuantifierStub ])
-	/ (nil asParser ==> [ :node | PPGreedyQuantifierStub ])
+	^ ($+ asParser ==> [ :node | PPPossessiveRepeatingParser new ])
+	/ ($? asParser ==> [ :node | PPLazyRepeatingParser new setLimit: nil asParser end ])
+	/ (nil asParser ==> [ :node | PPGreedyRepeatingParser new setLimit: nil asParser end ])
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> rangePiece [
 	^ ${ asParser , rangePieceSpec , $} asParser , quantifier 
-		map: [ :op :ra :cl :qu | qu on: nil min: ra first max: ra last ]
+		map: [ :op :ra :cl :qu | qu setMin: ra first; setMax: ra last ]
 ]
 
 { #category : #'grammar-operators' }
@@ -251,11 +264,16 @@ PPRegexParser >> regex [
 PPRegexParser >> resolveStubs: aParser [
 	"In this post-processing step we need to fix the quantifiers."
 	
-	aParser followSets keysAndValuesDo: [ :each :set |
-		(each class = PPGreedyQuantifierStub or: [ each class = PPLazyQuantifierStub ]) ifTrue: [
-			each def: (each resolve: (set size = 1
-				ifTrue: [ set anyOne ]
-				ifFalse: [ PPChoiceParser withAll: set ])) ] ].
+	aParser followSets keysAndValuesDo: [ :start :follow |
+		(start isKindOf: PPLimitedRepeatingParser) ifTrue: [
+			| limit |
+			limit := follow collect: [ :each | 
+				each isNil
+					ifTrue: [ nil asParser end ]
+					ifFalse: [ each ] ].
+			start setLimit: (limit size = 1
+				ifTrue: [ limit anyOne ]
+				ifFalse: [ PPChoiceParser withAll: limit ]) ] ].
 	^ aParser
 ]
 
@@ -268,12 +286,12 @@ PPRegexParser >> start [
 PPRegexParser >> zeroOrMorePiece [
 	"*	0 or more times"
 		
-	^ $* asParser , quantifier map: [ :op :qu | qu on: nil min: 0 max: SmallInteger maxVal ]
+	^ $* asParser , quantifier map: [ :op :qu | qu ]
 ]
 
 { #category : #'grammar-operators' }
 PPRegexParser >> zeroOrOnePiece [
 	"?	0 or 1 times"
 
-	^ $? asParser , quantifier map: [ :op :qu | qu on: nil min: 0 max: 1 ]
+	^ $? asParser , quantifier map: [ :op :qu | qu setMax: 1 ]
 ]

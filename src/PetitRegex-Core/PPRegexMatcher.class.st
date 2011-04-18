@@ -24,12 +24,12 @@ PPRegexMatcher class >> forString: aString ignoreCase: aBoolean [
 	^ self for: (PPRegexParser parse: aString) ignoringCase: aBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 PPRegexMatcher >> search: aString [
 	^ self searchOn: aString asPetitStream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 PPRegexMatcher >> searchOn: aStream [
 	| position result |
 	position := aStream position.
