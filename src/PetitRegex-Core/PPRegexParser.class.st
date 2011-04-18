@@ -138,7 +138,7 @@ PPRegexParser >> beginOfLineAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterAtom [
-	^(PPPredicateObjectParser anyOf: '[)') negate map: [ :char | char asParser ]
+	^(PPPredicateObjectParser anyOf: '[|()*+?\') negate map: [ :char | char asParser ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -263,8 +263,9 @@ PPRegexParser >> regex [
 			g postfix: self oneOrMorePiece do: [ :at :op | op setParser: at ].
 			g postfix: self rangePiece do: [ :at :op | op setParser: at ] ];
 		group: [ :g |
-			g left: $| do: [ :left :op :right | left / right ].
 			g left: nil do: [ :left :op :right | left , right ] ];
+		group: [ :g |
+			g left: $| do: [ :left :op :right | left / right ] ];
 		yourself
 ]
 
