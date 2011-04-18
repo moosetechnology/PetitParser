@@ -143,7 +143,7 @@ PPRegexParser >> characterAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterGroup [
-	^ $[ asParser , $^ asParser optional , $- asParser optional , characterSet star , $- asParser optional , $] asParser map: [ :open :negate :opend :parsers :closed :close |
+	^ [ :stream | stream position ] asParser , $[ asParser , $^ asParser optional , $- asParser optional , characterSet star , $- asParser optional , $] asParser map: [ :pos :open :negate :opend :parsers :closed :close |
 		| result |
 		result := parsers
 			inject: PPChoiceParser new
@@ -153,7 +153,7 @@ PPRegexParser >> characterGroup [
 		result children size = 1
 			ifTrue: [ result := result children first ].
 		result children isEmpty
-			ifTrue: [ self error: 'Empty character set' ].
+			ifTrue: [ PPFailure message: 'Empty character set' at: pos ].
 		negate isNil
 			ifTrue: [ result ]
 			ifFalse: [ result negate ] ]
@@ -171,7 +171,8 @@ PPRegexParser >> characterSetCharacter [
 
 { #category : #'grammar-characters' }
 PPRegexParser >> characterSetClass [
-	^ '[:' asParser , #word asParser star flatten , ':]' asParser map: [ :open :class :close | ClassMap at: class ifAbsent: [ self error: 'Invalid character class [:' , class , ':]' ] ]
+	^ [ :stream | stream position ] asParser , '[:' asParser , #word asParser star flatten , ':]' asParser map: [ :pos :open :class :close | 
+		ClassMap at: class ifAbsent: [ PPFailure message: 'Invalid character class [:' , class , ':]' at: pos ] ]
 ]
 
 { #category : #'grammar-characters' }
@@ -181,10 +182,10 @@ PPRegexParser >> characterSetEscape [
 
 { #category : #'grammar-characters' }
 PPRegexParser >> characterSetRange [
-	^ #any asParser , $- asParser , $] asParser negate map: [ :start :sep :stop | 
+	^ [ :stream | stream position ] asParser , #any asParser , $- asParser , $] asParser negate map: [ :pos :start :sep :stop | 
 		start < stop
 			ifTrue: [ PPPredicateObjectParser between: start and: stop ]
-			ifFalse: [ self error: 'Invalid character range: ' , (String with: start with: $- with: stop) ] ]
+			ifFalse: [ PPFailure message: 'Invalid character range: ' , (String with: start with: $- with: stop) at: pos ] ]
 ]
 
 { #category : #'grammar-atoms' }
