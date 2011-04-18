@@ -150,13 +150,14 @@ PPRegexParser >> characterGroup [
 			into: [ :each :other | each / other ].
 		(opend notNil or: [ closed notNil ])
 			ifTrue: [ result := $- asParser / result ].
-		result children size = 1
-			ifTrue: [ result := result children first ].
 		result children isEmpty
-			ifTrue: [ PPFailure message: 'Empty character set' at: pos ].
-		negate isNil
-			ifTrue: [ result ]
-			ifFalse: [ result negate ] ]
+			ifTrue: [ PPFailure message: 'Empty character set' at: pos ]
+			ifFalse: [
+				result children size = 1
+					ifTrue: [ result := result children first ]. 
+				negate isNil
+					ifTrue: [ result ]
+					ifFalse: [ result negate ] ] ]
 ]
 
 { #category : #'grammar-characters' }
