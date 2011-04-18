@@ -121,7 +121,7 @@ PPRegexParser class >> lastCharIn: aStream [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> anyAtom [
-	^ $. asParser map: [ :char | #any asParser ]
+	^ $. asParser map: [ :char | (PPPredicateObjectParser char: (Character value: 0)) negate ]
 ]
 
 { #category : #grammar }
@@ -138,18 +138,22 @@ PPRegexParser >> beginOfLineAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterAtom [
-	^ $) asParser negate map: [ :char | char asParser ]
+	^(PPPredicateObjectParser anyOf: '[)') negate map: [ :char | char asParser ]
 ]
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterGroup [
-	^ $[ asParser , $^ asParser optional , characterSet star , $] asParser map: [ :open :negate :parsers :close |
+	^ $[ asParser , $^ asParser optional , $- asParser optional , characterSet star , $- asParser optional , $] asParser map: [ :open :negate :opend :parsers :closed :close |
 		| result |
 		result := parsers
 			inject: PPChoiceParser new
-			into: [ :parser :each | parser / each ].
+			into: [ :each :other | each / other ].
+		(opend notNil or: [ closed notNil ])
+			ifTrue: [ result := $- asParser / result ].
 		result children size = 1
-			ifTrue: [ result := result children first ].		
+			ifTrue: [ result := result children first ].
+		result children isEmpty
+			ifTrue: [ self error: 'Empty character set' ].
 		negate isNil
 			ifTrue: [ result ]
 			ifFalse: [ result negate ] ]
@@ -162,7 +166,7 @@ PPRegexParser >> characterSet [
 
 { #category : #'grammar-characters' }
 PPRegexParser >> characterSetCharacter [
-	^ $] asParser negate map: [ :char | char asParser ]
+	^ (PPPredicateObjectParser anyOf: '-]') negate map: [ :char | char asParser ]
 ]
 
 { #category : #'grammar-characters' }
@@ -177,8 +181,10 @@ PPRegexParser >> characterSetEscape [
 
 { #category : #'grammar-characters' }
 PPRegexParser >> characterSetRange [
-	^ #any asParser , $- asParser , $] asParser negate
-		map: [ :start :sep :stop | PPPredicateObjectParser between: start and: stop ]
+	^ #any asParser , $- asParser , $] asParser negate map: [ :start :sep :stop | 
+		start < stop
+			ifTrue: [ PPPredicateObjectParser between: start and: stop ]
+			ifFalse: [ self error: 'Invalid character range: ' , (String with: start with: $- with: stop) ] ]
 ]
 
 { #category : #'grammar-atoms' }
