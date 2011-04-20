@@ -210,12 +210,9 @@ PPParser >> matchingRangesIn: anObject [
 PPParser >> matchingRangesIn: anObject do: aBlock [
 	"Search anObject repeatedly for the matches of the receiver.  Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
 	
-	| result |
-	result := OrderedCollection new.
 	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
 		matchesIn: anObject
-		do: [ :value | aBlock value: (value first to: value last) ].
-	^ result
+		do: [ :value | aBlock value: (value first to: value last) ]
 ]
 
 { #category : #'operators-repeating' }
