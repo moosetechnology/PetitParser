@@ -9,6 +9,11 @@ PPComposedTest >> comment [
 	^ ($" asParser , $" asParser negate star , $" asParser) flatten
 ]
 
+{ #category : #private }
+PPComposedTest >> expectedFailures [
+	^ #(testLaurenceTratt1 testLaurenceTratt2)
+]
+
 { #category : #accessing }
 PPComposedTest >> identifier [
 	^ (#letter asParser , #word asParser star) flatten
@@ -126,6 +131,28 @@ PPComposedTest >> testIfThenElse [
 	self assert: parser fail: 'if C'.
 	self assert: parser fail: 'if C else X'.
 	self assert: parser fail: 'if C then if C'
+]
+
+{ #category : #'testing-memoization' }
+PPComposedTest >> testLaurenceTratt1 [
+	"Laurence Tratt, Direct Left-Recursive Parsing Expression Grammars, http://tratt.net/laurie/research/publications/html/tratt__direct_left_recursive_parsing_expression_grammars/"
+
+	| digit expr inner |
+	digit := #digit asParser.
+	expr := (inner := PPUnresolvedParser new) memoized.
+	inner def: (expr , $- asParser , expr) / digit.
+	self assert: expr parse: '1-2-3' to: #(#($1 $- $2) $- $3)
+]
+
+{ #category : #'testing-memoization' }
+PPComposedTest >> testLaurenceTratt2 [
+	"Laurence Tratt, Direct Left-Recursive Parsing Expression Grammars, http://tratt.net/laurie/research/publications/html/tratt__direct_left_recursive_parsing_expression_grammars/"
+	
+	| digit expr inner |
+	digit := #digit asParser.
+	expr := (inner := PPUnresolvedParser new) memoized.
+	inner def: (expr , $- asParser , digit) / (expr , $+ asParser , digit) / digit.
+	self assert: expr parse: '1+2-3' to: #(#($1 $+ $2) $- $3)
 ]
 
 { #category : #testing }
