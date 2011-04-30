@@ -57,7 +57,7 @@ PPTextHighlighter >> highlight: aString [
 	highlighter := parser transform: [ :p |
 		attributeMapper at: p name
 			ifPresent: [ :attributes | 
-				p ==> [ :token | 
+				p token ==> [ :token | 
 					attributes do: [:each |
 						text 
 							addAttribute: each 
