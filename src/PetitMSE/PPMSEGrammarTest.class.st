@@ -57,3 +57,13 @@ PPMSEGrammarTest >> testString [
 PPMSEGrammarTest >> testStringEscape [
 	self parse: '''It''''s here''' rule: #string
 ]
+
+{ #category : #'tests-basic' }
+PPMSEGrammarTest >> testStringText [
+	self parse: '1.,abc' rule: #stringText
+]
+
+{ #category : #'tests-basic' }
+PPMSEGrammarTest >> testStringTextWithEscapeChars [
+	self parse: 'a''''bc' rule: #stringText
+]

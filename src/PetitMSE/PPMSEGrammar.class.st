@@ -28,7 +28,8 @@ Class {
 		'close',
 		'simpleName',
 		'natural',
-		'e'
+		'e',
+		'stringText'
 	],
 	#category : #PetitMSE
 }
@@ -45,7 +46,7 @@ PPMSEGrammar >> attributeValue [
 
 { #category : #basic }
 PPMSEGrammar >> boolean [ 
-	^ ('true' asParser / 'false' asParser) flatten trim
+	^ ('true' asParser / 'false' asParser) flatten token trim
 ]
 
 { #category : #basic }
@@ -96,7 +97,7 @@ PPMSEGrammar >> natural [
 
 { #category : #basic }
 PPMSEGrammar >> number [
-	^ ($- asParser optional , natural , ($. asParser , natural , e optional) optional) flatten trim
+	^ ($- asParser optional , natural , ($. asParser , natural , e optional) optional) flatten token trim
 ]
 
 { #category : #basic }
@@ -116,7 +117,7 @@ PPMSEGrammar >> reference [
 
 { #category : #basic }
 PPMSEGrammar >> simpleName [
-	^ #word asParser star flatten trim
+	^ #word asParser star flatten token trim
 ]
 
 { #category : #accessing }
@@ -125,6 +126,11 @@ PPMSEGrammar >> start [
 ]
 
 { #category : #basic }
-PPMSEGrammar >> string [ 
-	^ ($' asParser , ('''''' asParser / $' asParser negate) star flatten , $' asParser) trim
+PPMSEGrammar >> string [
+	^ ($' asParser , stringText , $' asParser) trim
+]
+
+{ #category : #basic }
+PPMSEGrammar >> stringText [
+	^ ('''''' asParser / $' asParser negate) star flatten token
 ]

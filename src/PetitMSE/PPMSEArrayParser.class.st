@@ -97,11 +97,18 @@ PPMSEArrayParser >> simpleName [
 ]
 
 { #category : #values }
-PPMSEArrayParser >> string [ 
+PPMSEArrayParser >> string [
 	^ super string
+		
+	==> [ :token | token second ]
+]
+
+{ #category : #basic }
+PPMSEArrayParser >> stringText [
+	^ super stringText
 	
 	==> [:token | 
-		 token second
+		 token value
 			copyReplaceAll: ''''''
 			with: '''' ]
 ]

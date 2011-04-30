@@ -100,3 +100,9 @@ PPMSEArrayParserTest >> testStringEscape [
 	super testStringEscape.
 	self assert: result = 'It''s here'.
 ]
+
+{ #category : #'tests-basic' }
+PPMSEArrayParserTest >> testStringTextWithEscapeChars [
+	super testStringTextWithEscapeChars.
+	self assert: result = 'a''bc'
+]
