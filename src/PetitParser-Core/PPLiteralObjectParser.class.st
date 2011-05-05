@@ -15,6 +15,11 @@ PPLiteralObjectParser >> caseInsensitive [
 	^ PPPredicateObjectParser on: [ :value | literal sameAs: value ] message: message
 ]
 
+{ #category : #operators }
+PPLiteralObjectParser >> negate [
+	^ (PPPredicateObjectParser expect: literal message: message) negate
+]
+
 { #category : #parsing }
 PPLiteralObjectParser >> parseOn: aStream [
 	^ (aStream atEnd not and: [ literal = aStream uncheckedPeek ])
