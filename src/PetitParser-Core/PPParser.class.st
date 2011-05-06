@@ -165,7 +165,10 @@ PPParser >> isUnresolved [
 PPParser >> map: aBlock [
 	"Answer a new parser that works on the receiving sequence an passes in each element as a block argument."
 	
-	^ self ==> aBlock
+	^ aBlock numArgs = 1
+		ifTrue: [ self ==> aBlock ]
+		ifFalse: [ self error: aBlock numArgs asString , ' arguments expected.' ]
+
 ]
 
 { #category : #parsing }
