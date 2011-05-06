@@ -78,3 +78,25 @@ PPMappingTest >> testMap3 [
 
 	self assert: parser parse: #(a b c) to: #(c b a)
 ]
+
+{ #category : #testing }
+PPMappingTest >> testMapFail1 [
+	self
+		should: [ #any asParser map: [  ] ]
+		raise: Error.
+	self
+		should: [ #any asParser map: [ :a :b | ] ]
+		raise: Error
+
+]
+
+{ #category : #testing }
+PPMappingTest >> testMapFail2 [
+	self
+		should: [ (#any asParser , #any asParser) map: [ :a | ] ]
+		raise: Error.
+	self
+		should: [ (#any asParser , #any asParser) map: [ :a :b :c | ] ]
+		raise: Error
+
+]
