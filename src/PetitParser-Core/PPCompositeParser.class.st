@@ -61,29 +61,15 @@ PPCompositeParser class >> startSymbol [
 
 { #category : #initialization }
 PPCompositeParser >> initializeStartingAt: aSymbol [
-	| allVariableNames ignoredVariableNames productionIndexesAndNames |
-	self initialize.	
-
-	"find all the productions that need to be initialized"
-	allVariableNames := self class allInstVarNames
-		collect: [ :each | each asSymbol ].
-	ignoredVariableNames := self class ignoredNames
-		collect: [ :each | each asSymbol ].
-	productionIndexesAndNames := ((1 to: self class instSize)
-		collect: [ :index | index -> (allVariableNames at: index) ])
-		reject: [ :assoc | ignoredVariableNames includes: assoc value ].
-	
-	"initialize productions with an undefined parser to be replaced later"
-	parser := PPUnresolvedParser named: aSymbol.
-	productionIndexesAndNames do: [ :assoc |
-		self instVarAt: assoc key put: (PPUnresolvedParser named: assoc value) ].
-	parser def: (self perform: aSymbol).
-	
-	"resolve unresolved parsers with their actual implementation"
-	productionIndexesAndNames do: [ :assoc |
-		(self respondsTo: assoc value)
-			ifFalse: [ self error: 'Unable to initialize ' , assoc value printString ]
-			ifTrue: [ (self instVarAt: assoc key) def: (self perform: assoc value) ] ]
+	| productionNames |
+	self initialize.
+	productionNames := self productionNames.
+	parser := PPDelegateParser named: aSymbol.
+	productionNames keysAndValuesDo: [ :key :value |
+		self instVarAt: key put: (PPDelegateParser named: value) ].
+	parser setParser: (self perform: aSymbol).
+	productionNames keysAndValuesDo: [ :key :value |
+		(self instVarAt: key) setParser: (self perform: value) ]
 ]
 
 { #category : #querying }
@@ -104,6 +90,19 @@ PPCompositeParser >> productionAt: aSymbol ifAbsent: aBlock [
 	^ self instVarAt: (self class allInstVarNames
 		indexOf: aSymbol asString
 		ifAbsent: [ ^ aBlock value ])
+]
+
+{ #category : #querying }
+PPCompositeParser >> productionNames [
+	"Answer a dictionary of slot indexes and production names."
+	
+	| productionNames ignoredNames |
+	productionNames := Dictionary new.
+	ignoredNames := self class ignoredNames.
+	self class allInstVarNames keysAndValuesDo: [ :key :value |
+		(ignoredNames includes: value asSymbol)
+			ifFalse: [ productionNames at: key put: value asSymbol ] ].
+	^ productionNames
 ]
 
 { #category : #accessing }
