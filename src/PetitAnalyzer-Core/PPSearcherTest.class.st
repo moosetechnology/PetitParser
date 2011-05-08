@@ -137,6 +137,46 @@ PPSearcherTest >> testCopyMatchRecursiveList [
 	self deny: (old == new).
 ]
 
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchRepetition [
+	| old new |
+	old := #word asParser star.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchRepetitionGreedy [
+	| old new |
+	old := #word asParser starGreedy: #digit asParser.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchRepetitionLazy [
+	| old new |
+	old := #word asParser starLazy: #digit asParser.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
+{ #category : #'testing-copy' }
+PPSearcherTest >> testCopyMatchRepetitionMinMax [
+	| old new |
+	old := #word asParser min: 5 max: 10.
+	new := old copyInContext: Dictionary new.
+	self assert: (old match: old inContext: Dictionary new).
+	self assert: (old match: new inContext: Dictionary new).
+	self deny: (old == new).
+]
+
 { #category : #testing }
 PPSearcherTest >> testKindPattern [
 	| result |

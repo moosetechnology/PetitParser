@@ -1,8 +1,14 @@
 Extension { #name : #PPLimitedRepeatingParser }
 
 { #category : #'*petitanalyzer-matching' }
-PPLimitedRepeatingParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
-	^ (super match: aParser inContext: aDictionary seen: anIdentitySet) and: [ self limit match: aParser limit inContext: aDictionary seen: anIdentitySet ]
+PPLimitedRepeatingParser >> copyInContext: aDictionary seen: aSeenDictionary [
+	aSeenDictionary 
+		at: self 
+		ifPresent: [ :value | ^ value ].
+	^ (aSeenDictionary at: self put: self copy)
+		setParser: (parser copyInContext: aDictionary seen: aSeenDictionary);
+		setLimit: (limit copyInContext: aDictionary seen: aSeenDictionary);
+		yourself
 ]
 
 { #category : #'*petitanalyzer-transforming' }
