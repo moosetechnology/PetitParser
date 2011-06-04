@@ -138,7 +138,7 @@ PPRegexParser >> beginOfLineAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterAtom [
-	^(PPPredicateObjectParser anyOf: '[|()*+?\') negate map: [ :char | char asParser ]
+	^ (PPPredicateObjectParser anyOf: '[|()*+?\') negate map: [ :char | char asParser ]
 ]
 
 { #category : #'grammar-atoms' }

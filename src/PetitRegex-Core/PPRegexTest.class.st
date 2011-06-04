@@ -13,7 +13,9 @@ PPRegexTest class >> packageNamesUnderTest [
 PPRegexTest >> compileRegex: aString [
 	"Compile the regex and answer the matcher, or answer nil if compilation fails."
 
-	^ self parserClass parse: aString onError: [ nil ]
+	^ self matcherClass for: (self parserClass
+		parse: aString
+		onError: [ ^ nil ])
 ]
 
 { #category : #'testing-henry' }
@@ -33,18 +35,18 @@ PPRegexTest >> parserClass [
 
 { #category : #utilties }
 PPRegexTest >> runMatcher: aParser with: aString expect: aBoolean withSubexpressions: anArray [
-	| got |
-	"copy := aParser
+	| copy got |
+	copy := aParser
 		copy: aString
 		translatingMatchesUsing: [ :each | each ].
 	self 
 		assert: copy = aString
-		description: 'Copying: expected ' , aString printString , ', but got ' , copy printString."
+		description: 'Copying: expected ' , aString printString , ', but got ' , copy printString.
 	got := aParser matchesIn: aString.
 	self
 		assert: got notEmpty = aBoolean 
 		description: 'Searching: expected ' , aBoolean printString , ', but got ' , got printString.
-	"(anArray isNil or: [ aParser supportsSubexpressions not ])
+	(anArray isNil or: [ aParser supportsSubexpressions not ])
 		ifTrue: [ ^ self ].
 	1 to: anArray size by: 2 do: [ :index |
 		| sub subExpect subGot |
@@ -53,7 +55,7 @@ PPRegexTest >> runMatcher: aParser with: aString expect: aBoolean withSubexpress
 		subGot := aParser subexpression: sub.
 		self
 			assert: subExpect = subGot
-			description: 'Subexpression ' , sub printString , ': expected ' , subExpect printString , ', but got ' , subGot printString ]"
+			description: 'Subexpression ' , sub printString , ': expected ' , subExpect printString , ', but got ' , subGot printString ]
 ]
 
 { #category : #utilties }
