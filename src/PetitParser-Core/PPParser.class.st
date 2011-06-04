@@ -180,7 +180,7 @@ PPParser >> matches: anObject [
 
 { #category : #parsing }
 PPParser >> matchesIn: anObject [
-	"Search anObject repeatedly for the matches of the receiver."
+	"Search anObject repeatedly for the matches of the receiver. Answered an OrderedCollection of the matched parse-trees."
 
 	| result |
 	result := OrderedCollection new.
@@ -199,7 +199,7 @@ PPParser >> matchesIn: anObject do: aBlock [
 
 { #category : #parsing }
 PPParser >> matchingRangesIn: anObject [
-	"Search anObject repeatedly for the matches of the receiver.  Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
+	"Search anObject repeatedly for the matches of the receiver. Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
 	
 	| result |
 	result := OrderedCollection new.
@@ -211,7 +211,7 @@ PPParser >> matchingRangesIn: anObject [
 
 { #category : #parsing }
 PPParser >> matchingRangesIn: anObject do: aBlock [
-	"Search anObject repeatedly for the matches of the receiver.  Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
+	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock with the range of each match (index of first character to: index of last character)."
 	
 	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
 		matchesIn: anObject
