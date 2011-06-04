@@ -146,7 +146,8 @@ PPRegexParser >> beginOfLineAtom [
 
 { #category : #grammar }
 PPRegexParser >> branch [
-	^ piece plus foldLeft: [ :a :b | a , b ]
+	^ (piece plus foldLeft: [ :a :b | a , b ])
+	/ (PPEpsilonParser new ==> [ :r | PPEpsilonParser new ])
 ]
 
 { #category : #'grammar-atoms' }
@@ -276,7 +277,8 @@ PPRegexParser >> rangePieceSpec [
 
 { #category : #grammar }
 PPRegexParser >> regex [
-	^ (branch separatedBy: $| asParser) foldLeft: [ :a :op :b | a / b ]
+	^ ((branch separatedBy: $| asParser) foldLeft: [ :a :op :b | a / b ])
+	/ (PPEpsilonParser new ==> [ :r | PPEpsilonParser new ])
 ]
 
 { #category : #private }
