@@ -2,6 +2,7 @@ Class {
 	#name : #PPRegexParser,
 	#superclass : #PPCompositeParser,
 	#instVars : [
+		'caseSensitive',
 		'regex',
 		'atom',
 		'anyAtom',
@@ -46,6 +47,11 @@ PPRegexParser class >> atWordBoundary: aStream [
 { #category : #private }
 PPRegexParser class >> condition: aBlock message: aString [
 	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure message: aString at: stream position ] ] asParser
+]
+
+{ #category : #accessing }
+PPRegexParser class >> ignoredNames [
+	^ super ignoredNames , #(caseSensitive)
 ]
 
 { #category : #initialization }
@@ -158,6 +164,19 @@ PPRegexParser >> characterGroup [
 				negate isNil
 					ifTrue: [ result ]
 					ifFalse: [ result negate ] ] ]
+]
+
+{ #category : #private }
+PPRegexParser >> characterParser: aCharacter [
+	^ caseSensitive
+		ifTrue: [ aCharacter asParser ]
+		ifFalse: [
+			| lowercase uppercase |
+			lowercase := aCharacter lowercase.
+			uppercase := aCharacter uppercase.
+			uppercase = lowercase
+				ifTrue: [ aCharacter asParser ]
+				ifFalse: [ lowercase asParser / uppercase asParser ] ]
 ]
 
 { #category : #'grammar-characters' }

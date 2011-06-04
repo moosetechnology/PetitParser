@@ -64,7 +64,14 @@ PPRegexMatcher >> copyStream: aStream to: writeStream translatingMatchesUsing: a
 
 { #category : #initialization }
 PPRegexMatcher >> initializeFor: aParser ignoringCase: aBoolean [
-	parser := aParser
+	parser := aParser.
+	aBoolean ifTrue: [
+		parser := parser transform: [ :each |
+			(each respondsTo: #caseInsensitive)
+				ifTrue: [ each caseInsensitive ]
+				ifFalse: [ each ] ] ].
+	(parser respondsTo: #optimize)
+		ifTrue: [ parser := parser optimize ]
 ]
 
 { #category : #matching }
