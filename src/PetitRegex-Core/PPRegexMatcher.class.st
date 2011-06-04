@@ -152,10 +152,11 @@ PPRegexMatcher >> search: anObject [
 
 { #category : #searching }
 PPRegexMatcher >> searchOn: anObject [
-	(parser ==> [ :node | ^ true ]) 
-	/ #any asParser 
-		parseOn: anObject.
+	self
+		matchesIn: anObject
+		do: [ :match | ^ true ].
 	^ false
+	
 ]
 
 { #category : #testing }
