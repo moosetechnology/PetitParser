@@ -1,17 +1,20 @@
 Class {
 	#name : #PPRegexMatcher,
-	#superclass : #PPDelegateParser,
+	#superclass : #Object,
+	#instVars : [
+		'parser'
+	],
 	#category : #'PetitRegex-Core'
 }
 
 { #category : #'instance creation' }
 PPRegexMatcher class >> for: aParser [
-	^ self on: aParser
+	^ self for: aParser ignoringCase: false
 ]
 
 { #category : #'instance creation' }
 PPRegexMatcher class >> for: aParser ignoringCase: aBoolean [ 
-	^ self on: aParser
+	^ self new initializeFor: aParser ignoringCase: aBoolean
 ]
 
 { #category : #'instance creation' }
@@ -24,58 +27,138 @@ PPRegexMatcher class >> forString: aString ignoreCase: aBoolean [
 	^ self for: (PPRegexParser parse: aString) ignoringCase: aBoolean
 ]
 
-{ #category : #execution }
+{ #category : #copying }
+PPRegexMatcher >> copy: aString replacingMatchesWith: replacementString [
+	| writeStream |
+	writeStream := (String new: 40) writeStream.
+	self copyStream: aString to: writeStream replacingMatchesWith: replacementString.
+	^ writeStream contents
+]
+
+{ #category : #copying }
+PPRegexMatcher >> copy: aString translatingMatchesUsing: aBlock [
+	| writeStream |
+	writeStream := (String new: 40) writeStream.
+	self copyStream: aString to: writeStream translatingMatchesUsing: aBlock.
+	^ writeStream contents
+]
+
+{ #category : #copying }
+PPRegexMatcher >> copyStream: aStream to: writeStream replacingMatchesWith: aString [
+	self copyStream: aStream to: writeStream translatingMatchesUsing: [ :each | aString ]
+]
+
+{ #category : #copying }
+PPRegexMatcher >> copyStream: aStream to: writeStream translatingMatchesUsing: aBlock [
+	| stream |
+	stream := aStream asPetitStream.
+	((parser flatten ==> [ :match | 
+		writeStream nextPutAll: (aBlock value: match).
+		(match isEmpty and: [ stream atEnd not ])
+			ifTrue: [ writeStream nextPut: stream next ].
+		stream atEnd
+			ifTrue: [ ^ self ] ])
+	/ (#any asParser ==> [ :char | writeStream nextPut: char ]))
+		star parse: stream
+]
+
+{ #category : #initialization }
+PPRegexMatcher >> initializeFor: aParser ignoringCase: aBoolean [
+	parser := aParser
+]
+
+{ #category : #matching }
 PPRegexMatcher >> matches: anObject [
 	^ parser end matches: anObject
 ]
 
-{ #category : #execution }
+{ #category : #matching }
+PPRegexMatcher >> matchesIn: anObject [
+	| result |
+	result := OrderedCollection new.
+	self 
+		matchesIn: anObject
+		do: [ :each | result addLast: each ].
+	^ result
+]
+
+{ #category : #matching }
 PPRegexMatcher >> matchesIn: anObject collect: aBlock [
 	^ (self matchesIn: anObject) collect: aBlock
 ]
 
-{ #category : #execution }
+{ #category : #matching }
 PPRegexMatcher >> matchesIn: anObject do: aBlock [
-	(parser flatten ==> aBlock / #any asParser) star parse: anObject
+	| stream |
+	stream := anObject asPetitStream.
+	(parser flatten ==> [ :match | 
+		aBlock value: match.
+		(match isEmpty and: [ stream atEnd not ])
+			ifTrue: [ stream next ].
+		stream atEnd
+			ifTrue: [ ^ self ] ]
+	/ #any asParser)
+		star parse: stream
 ]
 
-{ #category : #execution }
+{ #category : #matching }
 PPRegexMatcher >> matchesOnStream: aStream [
 	^ self matchesIn: aStream
 ]
 
-{ #category : #execution }
+{ #category : #matching }
 PPRegexMatcher >> matchesOnStream: aStream collect: aBlock [
 	^ self matchesIn: aStream collect: aBlock
 ]
 
-{ #category : #execution }
+{ #category : #matching }
 PPRegexMatcher >> matchesOnStream: aStream do: aBlock [
 	^ self matchesIn: aStream do: aBlock
 ]
 
-{ #category : #execution }
+{ #category : #matching }
 PPRegexMatcher >> matchesStream: aStream [
 	^ self matches: aStream
 ]
 
-{ #category : #execution }
+{ #category : #matching }
+PPRegexMatcher >> matchingRangesIn: anObject [
+	| result |
+	result := OrderedCollection new.
+	self 
+		matchingRangesIn: anObject
+		do: [ :each | result addLast: each ].
+	^ result
+]
+
+{ #category : #matching }
 PPRegexMatcher >> matchingRangesIn: anObject do: aBlock [
-	(([ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser ==> [ :nodes | aBlock value: (nodes first to: nodes last) ]) / #any asParser) star parse: anObject
+	| stream |
+	stream := anObject asPetitStream.
+	(([ :s | s position ] asParser , parser ==> [ :nodes |
+		aBlock value: (nodes first + 1 to: stream position).
+		nodes first = stream position
+			ifTrue: [ stream next ].
+		stream atEnd
+			ifTrue: [ ^ self ] ])
+	/ #any asParser)
+		star parse: stream
 ]
 
-{ #category : #execution }
-PPRegexMatcher >> search: aString [
-	^ self searchOn: aString asPetitStream
+{ #category : #searching }
+PPRegexMatcher >> search: anObject [
+	^ self searchOn: anObject
 ]
 
-{ #category : #execution }
-PPRegexMatcher >> searchOn: aStream [
-	| position result |
-	position := aStream position.
-	[ aStream atEnd ] whileFalse: [
-		(self parseOn: aStream) isPetitFailure
-			ifFalse: [ ^ true ].
-		aStream position: (position := position + 1) ].
+{ #category : #searching }
+PPRegexMatcher >> searchOn: anObject [
+	(parser ==> [ :node | ^ true ]) 
+	/ #any asParser 
+		parseOn: anObject.
+	^ false
+]
+
+{ #category : #testing }
+PPRegexMatcher >> supportsSubexpressions [
 	^ false
 ]
