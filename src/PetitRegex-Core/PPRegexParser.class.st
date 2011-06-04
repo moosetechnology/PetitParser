@@ -20,7 +20,9 @@ Class {
 		'characterSetEscape',
 		'characterSetRange',
 		'characterSetCharacter',
-		'predicateAtom'
+		'predicateAtom',
+		'piece',
+		'branch'
 	],
 	#classVars : [
 		'ClassMap',
@@ -132,7 +134,7 @@ PPRegexParser >> anyAtom [
 
 { #category : #grammar }
 PPRegexParser >> atom [
-	^ escapeAtom / anyAtom / beginOfLineAtom / endOfLineAtom / characterGroup / groupAtom / predicateAtom / characterAtom
+	^ groupAtom / characterGroup / predicateAtom / anyAtom / beginOfLineAtom / endOfLineAtom / escapeAtom / characterAtom
 ]
 
 { #category : #'grammar-atoms' }
@@ -142,9 +144,17 @@ PPRegexParser >> beginOfLineAtom [
 			ifFalse: [ PPFailure message: '^ not expected' at: stream position ] ] asParser ]
 ]
 
+{ #category : #grammar }
+PPRegexParser >> branch [
+	^ piece star ==> [ :nodes |
+		nodes isEmpty
+			ifTrue: [ PPEpsilonParser new ]
+			ifFalse: [ nodes reduce: [ :a :b | a , b ] ] ]
+]
+
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterAtom [
-	^ (PPPredicateObjectParser anyOf: '[|()*+?\') negate map: [ :char | char asParser ]
+	^ (PPPredicateObjectParser anyOf: '()[|:{*+?\.^$') negate map: [ :char | char asParser ]
 ]
 
 { #category : #'grammar-atoms' }
@@ -164,19 +174,6 @@ PPRegexParser >> characterGroup [
 				negate isNil
 					ifTrue: [ result ]
 					ifFalse: [ result negate ] ] ]
-]
-
-{ #category : #private }
-PPRegexParser >> characterParser: aCharacter [
-	^ caseSensitive
-		ifTrue: [ aCharacter asParser ]
-		ifFalse: [
-			| lowercase uppercase |
-			lowercase := aCharacter lowercase.
-			uppercase := aCharacter uppercase.
-			uppercase = lowercase
-				ifTrue: [ aCharacter asParser ]
-				ifFalse: [ lowercase asParser / uppercase asParser ] ]
 ]
 
 { #category : #'grammar-characters' }
@@ -237,6 +234,14 @@ PPRegexParser >> oneOrMorePiece [
 	^ $+ asParser , quantifier map: [ :op :qu | qu setMin: 1 ]
 ]
 
+{ #category : #grammar }
+PPRegexParser >> piece [
+	^ atom , (self zeroOrOnePiece /  self zeroOrMorePiece / self oneOrMorePiece / self rangePiece) optional map: [ :at :op |
+		op isNil
+			ifTrue: [ at ]
+			ifFalse: [ op setParser: at ] ]
+]
+
 { #category : #'grammar-atoms' }
 PPRegexParser >> predicateAtom [
 	^ $: asParser , $^ asParser optional , #word asParser plus flatten , $: asParser map: [ :begin :negated :selector :end |
@@ -274,18 +279,10 @@ PPRegexParser >> rangePieceSpec [
 
 { #category : #grammar }
 PPRegexParser >> regex [
-	^ PPExpressionParser new
-		term: atom;
-		group: [ :g |.
-			g postfix: self zeroOrOnePiece do: [ :at :op | op setParser: at ].
-			g postfix: self zeroOrMorePiece do: [ :at :op | op setParser: at ].
-			g postfix: self oneOrMorePiece do: [ :at :op | op setParser: at ].
-			g postfix: self rangePiece do: [ :at :op | op setParser: at ] ];
-		group: [ :g |
-			g left: nil do: [ :left :op :right | left , right ] ];
-		group: [ :g |
-			g left: $| do: [ :left :op :right | left / right ] ];
-		yourself
+	^ (branch separatedBy: $| asParser) ==> [ :nodes |
+		nodes isEmpty
+			ifTrue: [ PPEpsilonParser new ]
+			ifFalse: [ nodes reduce: [ :a :op :b | a / b ] ] ]
 ]
 
 { #category : #private }
