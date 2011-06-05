@@ -24,7 +24,7 @@ PPBlockReplaceRule class >> searchFor: aSearchParser replaceWith: aReplaceBlock 
 
 { #category : #matching }
 PPBlockReplaceRule >> foundMatchFor: aParser [ 
-	^ replaceBlock value: aParser
+	^ replaceBlock cull: aParser
 ]
 
 { #category : #initialization }

@@ -21,7 +21,7 @@ PPSearchRule class >> searchFor: aParser thenDo: aBlock [
 
 { #category : #matching }
 PPSearchRule >> canMatch: aParser [
-	owner setAnswer: (answerBlock value: aParser value: owner answer).
+	owner setAnswer: (answerBlock cull: aParser cull: owner answer).
 	^ super canMatch: aParser
 ]
 

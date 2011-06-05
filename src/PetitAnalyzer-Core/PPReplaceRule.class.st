@@ -15,7 +15,7 @@ Class {
 
 { #category : #matching }
 PPReplaceRule >> canMatch: aParser [ 
-	^ verificationBlock value: aParser
+	^ verificationBlock cull: aParser
 ]
 
 { #category : #initialization }
