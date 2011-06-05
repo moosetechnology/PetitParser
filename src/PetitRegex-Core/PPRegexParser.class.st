@@ -2,7 +2,6 @@ Class {
 	#name : #PPRegexParser,
 	#superclass : #PPCompositeParser,
 	#instVars : [
-		'caseSensitive',
 		'regex',
 		'atom',
 		'anyAtom',
@@ -25,7 +24,9 @@ Class {
 		'branch'
 	],
 	#classVars : [
+		'BeginOfLineParser',
 		'ClassMap',
+		'EndOfLineParser',
 		'EscapeMap'
 	],
 	#category : #'PetitRegex-Core'
@@ -51,13 +52,9 @@ PPRegexParser class >> condition: aBlock message: aString [
 	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure message: aString at: stream position ] ] asParser
 ]
 
-{ #category : #accessing }
-PPRegexParser class >> ignoredNames [
-	^ super ignoredNames , #(caseSensitive)
-]
-
 { #category : #initialization }
 PPRegexParser class >> initialize [
+	self initializeOther.
 	self initializeClassMap.
 	self initializeEscapeMap
 ]
@@ -117,6 +114,16 @@ PPRegexParser class >> initializeEscapeMap [
 		at: $\ put: $\ asParser
 ]
 
+{ #category : #initialization }
+PPRegexParser class >> initializeOther [
+	BeginOfLineParser := [ :stream | 
+		(stream position = 0 or: [ (stream skip: -1; next) = Character cr ])
+			ifFalse: [ PPFailure message: '^ not expected' at: stream position ] ] asParser.
+	EndOfLineParser := [ :stream | 
+		(stream atEnd or: [ stream peek = Character cr ])
+			ifFalse: [ PPFailure message: '$ not expected' at: stream position ] ] asParser
+]
+
 { #category : #private }
 PPRegexParser class >> isWordChar: aCharacterOrNil [
 	^ aCharacterOrNil ~~ nil and: [ aCharacterOrNil isAlphaNumeric ]
@@ -139,9 +146,7 @@ PPRegexParser >> atom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> beginOfLineAtom [
-	^ $^ asParser map: [ :char | [ :stream | 
-		(stream position = 0 or: [ (stream skip: -1; next) = Character cr ])
-			ifFalse: [ PPFailure message: '^ not expected' at: stream position ] ] asParser ]
+	^ $^ asParser answer: BeginOfLineParser
 ]
 
 { #category : #grammar }
@@ -205,9 +210,7 @@ PPRegexParser >> characterSetRange [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> endOfLineAtom [
-	^ $$ asParser map: [ :char | [ :stream | 
-		(stream atEnd or: [ stream peek = Character cr ])
-			ifFalse: [ PPFailure message: '$ not expected' at: stream position ] ] asParser ]
+	^ $$ asParser answer: EndOfLineParser
 ]
 
 { #category : #'grammar-atoms' }

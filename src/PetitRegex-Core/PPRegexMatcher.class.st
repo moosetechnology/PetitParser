@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'parser'
 	],
+	#classVars : [
+		'ParserValidator'
+	],
 	#category : #'PetitRegex-Core'
 }
 
@@ -25,6 +28,22 @@ PPRegexMatcher class >> forString: aString [
 { #category : #'instance creation' }
 PPRegexMatcher class >> forString: aString ignoreCase: aBoolean [
 	^ self for: (PPRegexParser parse: aString) ignoringCase: aBoolean
+]
+
+{ #category : #initialization }
+PPRegexMatcher class >> initialize [
+	ParserValidator := PPSearcher new.
+	ParserValidator
+		matchesAnyOf: (OrderedCollection new 
+			add: (PPEpsilonParser new starGreedy: PPPattern any);
+			add: ((PPRegexParser classPool at: #BeginOfLineParser) starGreedy: PPPattern any);
+			add: ((PPRegexParser classPool at: #EndOfLineParser) starGreedy: PPPattern any);
+			add: ((PPChoiceParser withAll: (Array with: PPListPattern any with: PPEpsilonParser new with: PPListPattern any)) starGreedy: PPPattern any);
+			add: ((PPChoiceParser withAll: (Array with: PPListPattern any with: (PPPattern any starGreedy: PPPattern any) with: PPListPattern any)) starGreedy: PPPattern any);
+			add: ((PPPattern any starGreedy: PPPattern any) starGreedy: PPPattern any);
+			add: ((PPPattern any starGreedy: PPPattern any) plusGreedy: PPPattern any);
+			yourself)
+		do: [ :node :result | self error: 'Invalid regular expression' ]
 ]
 
 { #category : #copying }
@@ -65,6 +84,7 @@ PPRegexMatcher >> copyStream: aStream to: writeStream translatingMatchesUsing: a
 { #category : #initialization }
 PPRegexMatcher >> initializeFor: aParser ignoringCase: aBoolean [
 	parser := aParser.
+	ParserValidator execute: parser.
 	aBoolean ifTrue: [
 		parser := parser transform: [ :each |
 			(each respondsTo: #caseInsensitive)
