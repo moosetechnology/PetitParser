@@ -4,7 +4,7 @@ Class {
 	#category : #'PetitTests-Tests'
 }
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testAction [
 	| block parser |
 	block := [ :char | char asUppercase ].
@@ -27,7 +27,7 @@ PPParserTest >> testAnd [
 	self assert: parser and = parser
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testAnswer [
 	| parser |
 	parser := $a asParser answer: $b.
@@ -158,7 +158,7 @@ PPParserTest >> testFailure [
 	self deny: 'foo' isPetitFailure
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testFlatten [
 	| parser |
 	parser := $a asParser flatten.
@@ -168,6 +168,54 @@ PPParserTest >> testFlatten [
 	
 	self assert: parser fail: ''.
 	self assert: parser fail: 'b'
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldLeft2 [
+	| parser |
+	parser := #any asParser star 
+		foldLeft: [ :a :b | Array with: a with: b ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b) to: #(a b).
+	self assert: parser parse: #(a b c) to: #((a b) c).
+	self assert: parser parse: #(a b c d) to: #(((a b) c) d).
+	self assert: parser parse: #(a b c d e) to: #((((a b) c) d) e)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldLeft3 [
+	| parser |
+	parser := #any asParser star 
+		foldLeft: [ :a :b :c | Array with: a with: b with: c ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b c) to: #(a b c).
+	self assert: parser parse: #(a b c d e) to: #((a b c) d e)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldRight2 [
+	| parser |
+	parser := #any asParser star 
+		foldRight: [ :a :b | Array with: a with: b ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b) to: #(a b).
+	self assert: parser parse: #(a b c) to: #(a (b c)).
+	self assert: parser parse: #(a b c d) to: #(a (b (c d))).
+	self assert: parser parse: #(a b c d e) to: #(a (b (c (d e))))
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testFoldRight3 [
+	| parser |
+	parser := #any asParser star 
+		foldRight: [ :a :b :c | Array with: a with: b with: c ].
+
+	self assert: parser parse: #(a) to: #a.
+	self assert: parser parse: #(a b c) to: #(a b c).
+	self assert: parser parse: #(a b c d e) to: #(a b (c d e))
 ]
 
 { #category : #'testing-properties' }
@@ -246,6 +294,55 @@ PPParserTest >> testLiteralSequenceCaseInsensitive [
 	
 	self assert: parser fail: 'ab'.
 	self assert: parser fail: 'abd'
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMap1 [
+	| parser |
+	parser := #any asParser 
+		map: [ :a | Array with: a ].
+
+	self assert: parser parse: #(a) to: #(a)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMap2 [
+	| parser |
+	parser := (#any asParser , #any asParser) 
+		map: [ :a :b | Array with: b with: a ].
+
+	self assert: parser parse: #(a b) to: #(b a)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMap3 [
+	| parser |
+	parser := (#any asParser , #any asParser , #any asParser)
+		map: [ :a :b :c | Array with: c with: b with: a ].
+
+	self assert: parser parse: #(a b c) to: #(c b a)
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMapFail1 [
+	self
+		should: [ #any asParser map: [  ] ]
+		raise: Error.
+	self
+		should: [ #any asParser map: [ :a :b | ] ]
+		raise: Error
+
+]
+
+{ #category : #'testing-mapping' }
+PPParserTest >> testMapFail2 [
+	self
+		should: [ (#any asParser , #any asParser) map: [ :a | ] ]
+		raise: Error.
+	self
+		should: [ (#any asParser , #any asParser) map: [ :a :b :c | ] ]
+		raise: Error
+
 ]
 
 { #category : #'testing-utilities' }
@@ -701,7 +798,7 @@ PPParserTest >> testParser [
 	self deny: 'foo' isPetitParser
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testPermutation [
 	| parser |
 	parser := #any asParser , #any asParser , #any asParser.
@@ -1028,7 +1125,7 @@ PPParserTest >> testTimes [
 	self assert: parser parse: 'aaa' to: #($a $a) end: 2
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testToken [
 	| parser |
 	parser := $a asParser token.
@@ -1044,7 +1141,7 @@ PPParserTest >> testToken [
 	self assert: parser fail: 'b'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testTrim [
 	| parser |
 	parser := $a asParser token trim.
@@ -1072,7 +1169,7 @@ a' toToken: 5 stop: 5.
 	self assert: parser fail: 'b'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testTrimBlanks [
 	| parser |
 	parser := $a asParser token trimBlanks.
@@ -1099,7 +1196,7 @@ a'.
 	self assert: parser fail: 'b'.
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testTrimSpaces [
 	| parser |
 	parser := $a asParser token trimSpaces.
@@ -1152,7 +1249,7 @@ PPParserTest >> testWrapped [
 	self assert: parser parse: 'abc' to: #(#($a $b) $c)
 ]
 
-{ #category : #testing }
+{ #category : #'testing-mapping' }
 PPParserTest >> testWrapping [
 	| parser result |
 	parser := #digit asParser plus >=> [ :stream :cc | 

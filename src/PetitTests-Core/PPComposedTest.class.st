@@ -108,13 +108,13 @@ PPComposedTest >> testIfThenElse [
 	"S ::= if C then S else S | if C then S | X"
 
 	| start if then else cond expr parser |
-	start := PPUnresolvedParser new.
+	start := PPDelegateParser new.
 	if := 'if' asParser token trim.
 	then := 'then' asParser token trim.
 	else := 'else' asParser token trim.
 	cond := 'C' asParser token trim.
 	expr := 'X' asParser token trim.
-	start def: (if , cond , then , start , else , start) / (if , cond , then , start) / expr.
+	start setParser: (if , cond , then , start , else , start) / (if , cond , then , start) / expr.
 	parser := start end.
 	self assert: parser parse: 'X'.
 	self assert: parser parse: 'if C then X'.
@@ -133,8 +133,8 @@ PPComposedTest >> testLeftRecursion [
 	"S ::= S 'x' S / '1'"
 	
 	| parser |
-	parser := PPUnresolvedParser new.
-	parser def: ((parser , $x asParser , parser) / $1 asParser) memoized flatten.
+	parser := PPDelegateParser new.
+	parser setParser: ((parser , $x asParser , parser) / $1 asParser) memoized flatten.
 
 	self assert: parser parse: '1' to: '1'.
 	self assert: parser parse: '1x1' to: '1x1'.
@@ -192,9 +192,9 @@ PPComposedTest >> testNestedComments [
 	end := '*/' asParser.
 	any := #any asParser.
 	
-	parser := PPUnresolvedParser new.
+	parser := PPDelegateParser new.
 	inside := end not , (parser / any).
-	parser def: begin , inside star , end.
+	parser setParser: begin , inside star , end.
 	
 	self assert: parser parse: '/*ab*/cd' end: 6.
 	self assert: parser parse: '/*a/*b*/c*/'.
@@ -230,12 +230,12 @@ PPComposedTest >> testPalindrome [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPUnresolvedParser new.
-	s1 := PPUnresolvedParser new.
-	s0 def: ($a asParser , s1 , $a asParser)
+	s0 := PPDelegateParser new.
+	s1 := PPDelegateParser new.
+	s0 setParser: ($a asParser , s1 , $a asParser)
 		/ ($b asParser , s1 , $b asParser)
 		/ ($c asParser , s1 , $c asParser).	
-	s1 def: s0 / nil asParser.
+	s1 setParser: s0 / nil asParser.
 	parser := s0 flatten end.
 
 	self assert: parser parse: 'aa' to: 'aa'.
@@ -261,10 +261,10 @@ PPComposedTest >> testParseAaaBbb [
 	 S1 ::= S0 | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPUnresolvedParser new.
-	s1 := PPUnresolvedParser new.
-	s0 def: $a asParser , s1 , $b asParser.
-	s1 def: s0 / nil asParser.
+	s0 := PPDelegateParser new.
+	s1 := PPDelegateParser new.
+	s0 setParser: $a asParser , s1 , $b asParser.
+	s1 setParser: s0 / nil asParser.
 	parser := s0 flatten.
 
 	self assert: parser parse: 'ab' to: 'ab'.
@@ -288,9 +288,9 @@ PPComposedTest >> testParseAaaaaa [
 	"S ::= a a S | epsilon"
 	
 	| s0 s1 parser |
-	s0 := PPUnresolvedParser new.
+	s0 := PPDelegateParser new.
 	s1 := $a asParser , $a asParser , s0.
-	s0 def: s1 / nil asParser.
+	s0 setParser: s1 / nil asParser.
 	parser := s0 flatten.
 
 	self assert: parser parse: '' to: ''.
@@ -368,17 +368,17 @@ PPComposedTest >> testParseAnBnCn [
 	BC <- 'b' BC 'c' / epsilon"
 	
 	| s p1 ab p2 bc |
-	s := PPUnresolvedParser new.
-	p1 := PPUnresolvedParser new.
-	ab := PPUnresolvedParser new.
-	p2 := PPUnresolvedParser new.
-	bc := PPUnresolvedParser new.
+	s := PPDelegateParser new.
+	p1 := PPDelegateParser new.
+	ab := PPDelegateParser new.
+	p2 := PPDelegateParser new.
+	bc := PPDelegateParser new.
 	
-	s def: (p1 and , p2 end) flatten.
-	p1 def: ab , $c asParser.
-	ab def: ($a asParser , ab , $b asParser) optional.
-	p2 def: $a asParser star , bc.
-	bc def: ($b asParser , bc , $c asParser) optional.
+	s setParser: (p1 and , p2 end) flatten.
+	p1 setParser: ab , $c asParser.
+	ab setParser: ($a asParser , ab , $b asParser) optional.
+	p2 setParser: $a asParser star , bc.
+	bc setParser: ($b asParser , bc , $c asParser) optional.
 	
 	self assert: s parse: 'abc' to: 'abc'.
 	self assert: s parse: 'aabbcc' to: 'aabbcc'.
