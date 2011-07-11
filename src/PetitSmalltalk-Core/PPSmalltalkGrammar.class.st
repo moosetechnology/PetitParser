@@ -82,6 +82,11 @@ Class {
 	#category : #'PetitSmalltalk-Core'
 }
 
+{ #category : #testing }
+PPSmalltalkGrammar class >> allowUnderscoreAssignment [
+	^ Scanner allowUnderscoreAsAssignment
+]
+
 { #category : #benchmarking }
 PPSmalltalkGrammar class >> benchmark: aParser [
 	"self benchmark: PPSmalltalkGrammar new"
@@ -159,7 +164,9 @@ PPSmalltalkGrammar >> assignment [
 
 { #category : #token }
 PPSmalltalkGrammar >> assignmentToken [
-	^ (':=' asParser / '_' asParser) smalltalkToken
+	^ self class allowUnderscoreAssignment
+		ifTrue: [ (':=' asParser / '_' asParser) smalltalkToken ]
+		ifFalse: [ ':=' asParser smalltalkToken ]
 ]
 
 { #category : #primitives }
@@ -284,7 +291,15 @@ PPSmalltalkGrammar >> falseToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> identifier [
-	^ #letter asParser , #word asParser star
+	^ self class allowUnderscoreAssignment
+		ifTrue: [ #letter asParser , #word asParser star ]
+		ifFalse: [
+			(PPPredicateObjectParser
+				on: [ :each | each isLetter or: [ each = $_ ] ]
+				message: 'letter expected') ,
+			(PPPredicateObjectParser
+				on: [ :each | each isAlphaNumeric or: [ each = $_ ] ]
+				message: 'letter or digit expected') star ]
 ]
 
 { #category : #token }

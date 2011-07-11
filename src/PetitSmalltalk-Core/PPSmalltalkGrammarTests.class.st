@@ -163,16 +163,16 @@ PPSmalltalkGrammarTests >> testAssignment3 [
 
 { #category : #testing }
 PPSmalltalkGrammarTests >> testAssignment4 [
-	self 
-		parse: 'a _ 1'
-		rule: #expression
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifTrue: [ self parse: 'a _ 1' rule: #expression ]
+		ifFalse: [ self fail: 'a _ 1' rule: #expression ]
 ]
 
 { #category : #testing }
 PPSmalltalkGrammarTests >> testAssignment5 [
-	self 
-		parse: 'a _ b _ 1'
-		rule: #expression
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifTrue: [ self parse: 'a _ b _ 1' rule: #expression ]
+		ifFalse: [ self fail: 'a _ b _ 1' rule: #expression ]
 ]
 
 { #category : #testing }
@@ -793,6 +793,14 @@ PPSmalltalkGrammarTests >> testSymbolLiteral5 [
 		rule: #symbolLiteral
 ]
 
+{ #category : #'testing-literals' }
+PPSmalltalkGrammarTests >> testSymbolLiteral6 [
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self 
+			parse: '#__gen__binding'
+			rule: #symbolLiteral ]
+]
+
 { #category : #testing }
 PPSmalltalkGrammarTests >> testTemporaries1 [
 	self 
@@ -896,4 +904,20 @@ PPSmalltalkGrammarTests >> testVariable5 [
 	self 
 		parse: 'supernanny'
 		rule: #primary
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testVariable6 [
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self 
+			parse: 'super_nanny'
+			rule: #primary ]
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testVariable7 [
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self 
+			parse: '__gen_var_123__'
+			rule: #primary ]
 ]

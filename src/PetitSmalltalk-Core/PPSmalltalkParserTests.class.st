@@ -217,24 +217,26 @@ PPSmalltalkParserTests >> testAssignment3 [
 { #category : #testing }
 PPSmalltalkParserTests >> testAssignment4 [
 	super testAssignment4.
-	self assert: result isAssignment.
-	self assert: result variable isVariable.
-	self assert: result variable name = 'a'.
-	self assert: result value isLiteral.
-	self assert: result value value = 1
+	PPSmalltalkGrammar allowUnderscoreAssignment ifTrue: [
+		self assert: result isAssignment.
+		self assert: result variable isVariable.
+		self assert: result variable name = 'a'.
+		self assert: result value isLiteral.
+		self assert: result value value = 1 ]
 ]
 
 { #category : #testing }
 PPSmalltalkParserTests >> testAssignment5 [
 	super testAssignment5.
-	self assert: result isAssignment.
-	self assert: result variable isVariable.
-	self assert: result variable name = 'a'.
-	self assert: result value isAssignment.
-	self assert: result value variable isVariable.
-	self assert: result value variable name = 'b'.
-	self assert: result value value isLiteral.
-	self assert: result value value value = 1
+	PPSmalltalkGrammar allowUnderscoreAssignment ifTrue: [
+		self assert: result isAssignment.
+		self assert: result variable isVariable.
+		self assert: result variable name = 'a'.
+		self assert: result value isAssignment.
+		self assert: result value variable isVariable.
+		self assert: result value variable name = 'b'.
+		self assert: result value value isLiteral.
+		self assert: result value value value = 1 ]
 ]
 
 { #category : #testing }
@@ -1107,6 +1109,14 @@ PPSmalltalkParserTests >> testSymbolLiteral5 [
 	self assert: result value = #'testing-result'
 ]
 
+{ #category : #'testing-literals' }
+PPSmalltalkParserTests >> testSymbolLiteral6 [
+	super testSymbolLiteral6.
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self assert: result isLiteral.
+		self assert: result value = #'__gen__binding' ]
+]
+
 { #category : #testing }
 PPSmalltalkParserTests >> testTemporaries1 [
 	super testTemporaries1.
@@ -1248,4 +1258,20 @@ PPSmalltalkParserTests >> testVariable5 [
 	super testVariable5.
 	self assert: result isVariable.
 	self assert: result name = 'supernanny'
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testVariable6 [
+	super testVariable6.
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self assert: result isVariable.
+		self assert: result name = 'super_nanny' ]
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testVariable7 [
+	super testVariable7.
+	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
+		self assert: result isVariable.
+		self assert: result name = '__gen_var_123__' ]
 ]
