@@ -37,10 +37,3 @@ PPTrimmingParser >> parseOn: aStream [
 PPTrimmingParser >> setTrimmer: aParser [
 	trimmer := aParser
 ]
-
-{ #category : #'operators-mapping' }
-PPTrimmingParser >> trim [
-	"There is no point in trimming more than once."
-
-	^ self
-]

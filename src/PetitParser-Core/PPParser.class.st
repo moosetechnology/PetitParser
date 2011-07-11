@@ -504,17 +504,24 @@ PPParser >> trim [
 ]
 
 { #category : #'operators-mapping' }
+PPParser >> trim: aParser [
+	"Answer a new parser that consumes and ignores aParser repeatedly before and after the receiving parser."
+	
+	^ PPTrimmingParser on: self trimmer: aParser
+]
+
+{ #category : #'operators-mapping' }
 PPParser >> trimBlanks [
 	"Answer a new parser that consumes blanks before and after the receiving parser."
 	
-	^ PPTrimmingParser on: self trimmer: #blank asParser
+	^ self trim: #blank asParser
 ]
 
 { #category : #'operators-mapping' }
 PPParser >> trimSpaces [
 	"Answer a new parser that consumes spaces before and after the receiving parser."
 	
-	^ PPTrimmingParser on: self trimmer: #space asParser
+	^ self trim: #space asParser
 ]
 
 { #category : #operators }
