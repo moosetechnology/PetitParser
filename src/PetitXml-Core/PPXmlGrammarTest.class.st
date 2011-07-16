@@ -63,7 +63,7 @@ PPXmlGrammarTest >> assertInvariants: aDocumentNode [
 
 { #category : #utilities }
 PPXmlGrammarTest >> assertNameInvariant: aXmlName [
-	"Asser the name invariants."
+	"Assert the name invariants."
 	
 	self assert: (aXmlName localName notNil and: [ aXmlName localName notEmpty and: [ aXmlName qualifiedName endsWith: aXmlName localName ] ]).
 	self assert: (aXmlName namespacePrefix isNil or: [ aXmlName namespacePrefix notEmpty and: [ aXmlName qualifiedName beginsWith: aXmlName namespacePrefix ] ]).
@@ -79,7 +79,7 @@ PPXmlGrammarTest >> assertNameInvariant: aXmlName [
 
 { #category : #utilities }
 PPXmlGrammarTest >> assertNavigationInvariant: aXmlNode [
-	"Asswer that the firstChild, lastChild, previousSibling, nextSibling are properly setup."
+	"Assert that the firstChild, lastChild, previousSibling, nextSibling are properly setup."
 
 	| current children |
 	aXmlNode nodesDo: [ :node |

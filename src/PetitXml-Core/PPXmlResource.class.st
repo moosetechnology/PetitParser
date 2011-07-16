@@ -14,6 +14,23 @@ PPXmlResource >> allXsdDefinitions [
 	^ (Pragma allNamed: #xsd in: self class) collect: [ :each | self perform: each selector ]
 ]
 
+{ #category : #'accessing-xml' }
+PPXmlResource >> bookstoreXml [
+	<xml: #bookstoreXsd>
+	
+	^ '<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+	<book>
+		<title lang="eng">Harry Potter</title>
+		<price>29.99</price>
+	</book>
+	<book>
+		<title lang="eng">Learning XML</title>
+		<price>39.95</price>
+	</book>
+</bookstore>'
+]
+
 { #category : #'accessing-xsd' }
 PPXmlResource >> elementFormXsd [
 	<xml: #xsdXsd>
