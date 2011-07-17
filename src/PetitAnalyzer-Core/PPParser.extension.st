@@ -55,7 +55,18 @@ PPParser >> copyInContext: aDictionary [
 
 { #category : #'*petitanalyzer-matching' }
 PPParser >> copyInContext: aDictionary seen: aSeenDictionary [
-	^ aSeenDictionary at: self ifAbsentPut: [ self copy ]
+	| copy |
+	aSeenDictionary 
+		at: self 
+		ifPresent: [ :value | ^ value ].
+	copy := aSeenDictionary
+		at: self
+		put: self copy.
+	copy children do: [ :each |
+		copy
+			replace: each
+			with: (each copyInContext: aDictionary seen: aSeenDictionary) ].
+	^ copy
 ]
 
 { #category : #'*petitanalyzer-querying' }
