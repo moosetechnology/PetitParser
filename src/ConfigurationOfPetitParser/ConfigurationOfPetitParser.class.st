@@ -121,7 +121,7 @@ ConfigurationOfPetitParser >> baseline12: spec [
 			package: 'PetitGui' with: [
 				spec requires: #('Glamour for Petit' ). ];
 			package: 'PetitSmalltalk' with: [
-				spec requires: #( 'PetitParser' 'AST-Core' ) ].
+				spec requires: #( 'AST-Core' 'PetitParser' 'PetitTests') ].
 			"todo: declare all other packages & dependencies here"
 .
 		spec 
