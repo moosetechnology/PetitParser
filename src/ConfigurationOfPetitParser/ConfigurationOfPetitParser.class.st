@@ -106,7 +106,7 @@ ConfigurationOfPetitParser >> baseline12: spec [
 				versionString: '2.1';
 				repository: 'http://www.squeaksource.com/Glamour' ].
 		
-		spec project: 'RefactoringBrowser' with: [
+		spec project: 'AST-Core' with: [
 			spec
 				repository: 'http://www.squeaksource.com/rb';
 				className: 'ConfigurationOfRefactoringBrowser';
