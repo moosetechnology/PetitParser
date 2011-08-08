@@ -271,7 +271,7 @@ ConfigurationOfPetitParser >> version13: spec [
 
 { #category : #versions }
 ConfigurationOfPetitParser >> version14: spec [
-	<version: '1.4' imports: #('1.1-baseline' )>
+	<version: '1.4' imports: #('1.2-baseline' )>
 
 	spec for: #'common' do: [
 		spec blessing: #'development'.
