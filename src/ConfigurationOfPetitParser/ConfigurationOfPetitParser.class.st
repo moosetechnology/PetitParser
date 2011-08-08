@@ -108,7 +108,7 @@ ConfigurationOfPetitParser >> baseline12: spec [
 		
 		spec project: 'AST-Core' with: [
 			spec
-				repository: 'http://www.squeaksource.com/rb';
+				repository: 'http://www.squeaksource.com/MetacelloRepository';
 				className: 'ConfigurationOfRefactoringBrowser';
 				loads: #('AST-Core') ].
 		
