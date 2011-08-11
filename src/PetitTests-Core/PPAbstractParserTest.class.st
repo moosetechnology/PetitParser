@@ -16,7 +16,7 @@ PPAbstractParserTest class >> packageNamesUnderTest [
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser fail: aCollection [
-	self assert: aParser fail: aCollection end: 0
+	^ self assert: aParser fail: aCollection end: 0
 ]
 
 { #category : #utilities }
@@ -32,22 +32,23 @@ PPAbstractParserTest >> assert: aParser fail: aCollection end: anInteger [
 		description: 'Parser did not fail'.
 	self
 		assert: stream position = anInteger
-		description: 'Parser failed at wrong position'
+		description: 'Parser failed at wrong position'.
+	^ result
 ]
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser parse: aCollection [
-	self assert: aParser parse: aCollection to: nil end: aCollection size 
+	^ self assert: aParser parse: aCollection to: nil end: aCollection size 
 ]
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser parse: aCollection end: anInteger [
-	self assert: aParser parse: aCollection to: nil end: anInteger
+	^ self assert: aParser parse: aCollection to: nil end: anInteger
 ]
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser parse: aCollection to: anObject [
-	self assert: aParser parse: aCollection to: anObject end: aCollection size 
+	^ self assert: aParser parse: aCollection to: anObject end: aCollection size 
 ]
 
 { #category : #utilities }
@@ -63,7 +64,8 @@ PPAbstractParserTest >> assert: aParser parse: aParseObject to: aTargetObject en
 		ifFalse: [ self assert: result = aTargetObject ].
 	self 
 		assert: stream position = anInteger
-		description: 'Parser accepted at wrong position'
+		description: 'Parser accepted at wrong position'.
+	^ result
 ]
 
 { #category : #utilities }
