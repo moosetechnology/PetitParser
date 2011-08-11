@@ -232,6 +232,13 @@ PPSmalltalkGrammarTests >> testBinaryExpression7 [
 ]
 
 { #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression8 [
+	self 
+		parse: 'nil -+ nil'
+		rule: #expression
+]
+
+{ #category : #'testing-messages' }
 PPSmalltalkGrammarTests >> testBinaryMethod1 [
 	self 
 		parse: '+ a'
