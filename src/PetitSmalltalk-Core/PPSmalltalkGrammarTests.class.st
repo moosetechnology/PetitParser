@@ -206,36 +206,15 @@ PPSmalltalkGrammarTests >> testBinaryExpression3 [
 { #category : #'testing-messages' }
 PPSmalltalkGrammarTests >> testBinaryExpression4 [
 	self 
-		parse: 'nil -- nil'
+		parse: '1 -- 2'
 		rule: #expression
 ]
 
 { #category : #'testing-messages' }
 PPSmalltalkGrammarTests >> testBinaryExpression5 [
 	self 
-		parse: 'nil ==> nil'
+		parse: '1 ==> 2'
 		rule: #expression.
-]
-
-{ #category : #'testing-messages' }
-PPSmalltalkGrammarTests >> testBinaryExpression6 [
-	self 
-		parse: 'nil ++ nil'
-		rule: #expression.
-]
-
-{ #category : #'testing-messages' }
-PPSmalltalkGrammarTests >> testBinaryExpression7 [
-	self 
-		parse: '1 @@@ 1'
-		rule: #expression.
-]
-
-{ #category : #'testing-messages' }
-PPSmalltalkGrammarTests >> testBinaryExpression8 [
-	self 
-		parse: 'nil -+ nil'
-		rule: #expression
 ]
 
 { #category : #'testing-messages' }
@@ -263,6 +242,13 @@ PPSmalltalkGrammarTests >> testBinaryMethod3 [
 PPSmalltalkGrammarTests >> testBinaryMethod4 [
 	self 
 		parse: '+ a | b | c'
+		rule: #method
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryMethod5 [
+	self 
+		parse: '-- a'
 		rule: #method
 ]
 

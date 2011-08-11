@@ -279,6 +279,42 @@ PPSmalltalkParserTests >> testBinaryExpression2 [
 ]
 
 { #category : #'testing-messages' }
+PPSmalltalkParserTests >> testBinaryExpression3 [
+	super testBinaryExpression3.
+	self assert: result isMessage.
+	self assert: result receiver isLiteral.
+	self assert: result receiver value = 1.
+	self assert: result selector = #//.
+	self assert: result arguments size = 1.
+	self assert: result arguments first isLiteral.
+	self assert: result arguments first value = 2
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkParserTests >> testBinaryExpression4 [
+	super testBinaryExpression4.
+	self assert: result isMessage.
+	self assert: result receiver isLiteral.
+	self assert: result receiver value = 1.
+	self assert: result selector = #--.
+	self assert: result arguments size = 1.
+	self assert: result arguments first isLiteral.
+	self assert: result arguments first value = 2
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkParserTests >> testBinaryExpression5 [
+	super testBinaryExpression5.
+	self assert: result isMessage.
+	self assert: result receiver isLiteral.
+	self assert: result receiver value = 1.
+	self assert: result selector = #==>.
+	self assert: result arguments size = 1.
+	self assert: result arguments first isLiteral.
+	self assert: result arguments first value = 2
+]
+
+{ #category : #'testing-messages' }
 PPSmalltalkParserTests >> testBinaryMethod1 [
 	super testBinaryMethod1.
 	self assert: result isMethod.
@@ -324,6 +360,18 @@ PPSmalltalkParserTests >> testBinaryMethod4 [
 	self assert: result arguments first name = 'a'.
 	self assert: result body temporaries size = 1.
 	self assert: result body statements size = 1
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkParserTests >> testBinaryMethod5 [
+	super testBinaryMethod5.
+	self assert: result isMethod.
+	self assert: result selector = #--.
+	self assert: result arguments size = 1.
+	self assert: result arguments first isVariable.
+	self assert: result arguments first name = 'a'.
+	self assert: result body temporaries isEmpty.
+	self assert: result body statements isEmpty
 ]
 
 { #category : #'testing-literals' }
