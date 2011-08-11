@@ -131,6 +131,67 @@ ConfigurationOfPetitParser >> baseline12: spec [
 ]
 
 { #category : #baselines }
+ConfigurationOfPetitParser >> baseline13: spec [
+	<version: '1.3-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec description: 'Describing all satellite packages'.
+		spec repository: 'http://source.lukas-renggli.ch/petit'.
+		spec project: 'Glamour for Petit' with: [
+			spec
+				className: 'ConfigurationOfGlamour';
+				versionString: '2.1';
+				repository: 'http://www.squeaksource.com/Glamour' ].
+		
+		spec project: 'AST-Core' with: [
+			spec
+				repository: 'http://www.squeaksource.com/MetacelloRepository';
+				className: 'ConfigurationOfRefactoringBrowser';
+				loads: #('AST-Core') ].
+		
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [
+				spec requires: #('PetitParser' ). ];
+			package: 'PetitAnalyzer' with: [
+				spec requires: #('PetitTests' ). ];
+			package: 'PetitGui' with: [
+				spec requires: #('PetitParser' 'Glamour for Petit' ). ].
+		
+		spec
+			package: 'PrettyPetit' with: [
+				spec requires: #('AST-Core') ].
+		
+		spec
+			package: 'PetitSmalltalk' with: [
+				spec requires: #( 'AST-Core' 'PetitParser' 'PetitTests') ];
+			package: 'PetitCSV' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitJson' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitMSE' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitManifestMf' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitRegex' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitSQL' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitXPath' with: [
+				spec requires: #('PetitParser' 'PetitXml') ];
+			package: 'PetitXml' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'Factorial-Language' with: [
+				spec requires: #('PetitParser') ].
+.
+		spec 
+			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
+			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
+
+]
+
+{ #category : #baselines }
 ConfigurationOfPetitParser >> default: spec [ 
 	<version: 'default'>
 	
@@ -271,18 +332,19 @@ ConfigurationOfPetitParser >> version13: spec [
 
 { #category : #versions }
 ConfigurationOfPetitParser >> version14: spec [
-	<version: '1.4' imports: #('1.2-baseline' )>
+	<version: '1.4' imports: #('1.3-baseline' )>
 
 	spec for: #'common' do: [
 		spec blessing: #'development'.
 		spec description: ''.
 		spec author: 'DamienPollet'.
-		spec timestamp: '8/07/2011 14:00'.
+		spec timestamp: '8/11/2011 14:00'.
 		spec project: 'Glamour for Petit' with: '2.1'.
 		spec 
 			package: 'PetitParser' with: 'PetitParser-lr.218';
-			package: 'PetitTests' with: 'PetitTests-lr.34';
+			package: 'PetitTests' with: 'PetitTests-DamienPollet.35';
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.39';
-			package: 'PetitGui' with: 'PetitGui-TudorGirba.65'. ].
+			package: 'PetitGui' with: 'PetitGui-TudorGirba.65';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-lr.47'. ].
 
 ]
