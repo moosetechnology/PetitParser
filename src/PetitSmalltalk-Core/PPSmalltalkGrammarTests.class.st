@@ -197,6 +197,41 @@ PPSmalltalkGrammarTests >> testBinaryExpression2 [
 ]
 
 { #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression3 [
+	self 
+		parse: '1 // 2'
+		rule: #expression
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression4 [
+	self 
+		parse: 'nil -- nil'
+		rule: #expression
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression5 [
+	self 
+		parse: 'nil ==> nil'
+		rule: #expression.
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression6 [
+	self 
+		parse: 'nil ++ nil'
+		rule: #expression.
+]
+
+{ #category : #'testing-messages' }
+PPSmalltalkGrammarTests >> testBinaryExpression7 [
+	self 
+		parse: '1 @@@ 1'
+		rule: #expression.
+]
+
+{ #category : #'testing-messages' }
 PPSmalltalkGrammarTests >> testBinaryMethod1 [
 	self 
 		parse: '+ a'
