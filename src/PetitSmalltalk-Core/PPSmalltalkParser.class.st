@@ -206,10 +206,12 @@ PPSmalltalkParser >> keywordExpression [
 { #category : #grammar }
 PPSmalltalkParser >> method [
 	^ super method map: [ :methodNode :bodyNode | 
-		methodNode pragmas: bodyNode first.
+		methodNode pragmas: bodyNode second.
 		methodNode body: (self 
-			build: bodyNode second
-			sequence: bodyNode third).
+			build: bodyNode third
+			sequence: bodyNode fourth).
+		bodyNode first isEmpty
+			ifFalse: [ methodNode body periods: (bodyNode first collect: [ :each | each start ]) , methodNode body periods ].
 		self buildMethod: methodNode ]
 ]
 

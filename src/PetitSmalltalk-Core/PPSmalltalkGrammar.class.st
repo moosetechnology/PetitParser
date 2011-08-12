@@ -369,6 +369,7 @@ PPSmalltalkGrammar >> methodDeclaration [
 PPSmalltalkGrammar >> methodSequence [
 	^ ($. asParser smalltalkToken star , pragmas , temporaries , pragmas , statements) ==> [ :nodes | 
 		Array 
+			with: nodes first
 			with: nodes second , nodes fourth
 			with: nodes third
 			with: nodes fifth ]
