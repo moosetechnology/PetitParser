@@ -14,6 +14,32 @@ Class {
 	#category : #'PetitSmalltalk-Tests'
 }
 
+{ #category : #utilities }
+PPSmalltalkClassesTests class >> benchmark: aParser [
+	"self benchmark: PPSmalltalkGrammar new"
+	"self benchmark: PPSmalltalkParser new"
+	"self benchmark: RBParser"
+	
+	| sources |
+	sources := OrderedCollection new.
+	SequenceableCollection withAllSubclassesDo: [ :class |
+		class selectors do: [ :selector |
+			sources add: (class sourceCodeAt: selector) ] ].
+	^ self benchmark: aParser sources: sources asArray
+]
+
+{ #category : #utilities }
+PPSmalltalkClassesTests class >> benchmark: aParser sources: aCollection [
+	| count start end |
+	count := 0.
+	start := Time millisecondClockValue.
+	[  aCollection do: [ :each | aParser parseMethod: each ].
+		count := count + 1.
+		(Time millisecondsSince: start) < 10000 ] whileTrue.
+	^ (1000 * count * (aCollection detectSum: [ :each | each size ]) 
+		/ (Time millisecondsSince: start)) asInteger asString , ' characters/sec'
+]
+
 { #category : #accessing }
 PPSmalltalkClassesTests class >> packageNamesUnderTest [
 	^ #('PetitSmalltalk')

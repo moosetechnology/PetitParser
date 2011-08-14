@@ -89,36 +89,6 @@ PPSmalltalkGrammar class >> allowUnderscoreAssignment [
 	^ Scanner allowUnderscoreAsAssignment
 ]
 
-{ #category : #benchmarking }
-PPSmalltalkGrammar class >> benchmark: aParser [
-	"self benchmark: PPSmalltalkGrammar new"
-	"self benchmark: PPSmalltalkParser new"
-	"self benchmark: RBParser"
-	
-	<ignoreForCoverage>
-	| sources |
-	sources := OrderedCollection new.
-	SequenceableCollection withAllSubclassesDo: [ :class |
-		class selectors do: [ :selector |
-			sources add: (class sourceCodeAt: selector) ] ].
-	^ self benchmark: aParser sources: sources asArray
-]
-
-{ #category : #benchmarking }
-PPSmalltalkGrammar class >> benchmark: aParser sources: aCollection [
-	<ignoreForCoverage>
-	| start count end |
-	start := Time millisecondClockValue.
-	end := start + 10000.
-	count := 0.
-	[  aCollection do: [ :each | aParser parseMethod: each ].
-		count := count + 1.
-		Time millisecondClockValue < end ] whileTrue.
-	end := Time millisecondClockValue.
-	^ (1000 * count * (aCollection detectSum: [ :each | each size ]) 
-		/ (end - start)) asInteger asString , ' characters/sec'
-]
-
 { #category : #accessing }
 PPSmalltalkGrammar class >> parseExpression: aString [
 	^ self new parseExpression: aString
