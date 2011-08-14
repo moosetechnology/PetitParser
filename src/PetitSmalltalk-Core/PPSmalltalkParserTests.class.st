@@ -217,26 +217,28 @@ PPSmalltalkParserTests >> testAssignment3 [
 { #category : #testing }
 PPSmalltalkParserTests >> testAssignment4 [
 	super testAssignment4.
-	PPSmalltalkGrammar allowUnderscoreAssignment ifTrue: [
-		self assert: result isAssignment.
-		self assert: result variable isVariable.
-		self assert: result variable name = 'a'.
-		self assert: result value isLiteral.
-		self assert: result value value = 1 ]
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifFalse: [ ^ self ].
+	self assert: result isAssignment.
+	self assert: result variable isVariable.
+	self assert: result variable name = 'a'.
+	self assert: result value isLiteral.
+	self assert: result value value = 1
 ]
 
 { #category : #testing }
 PPSmalltalkParserTests >> testAssignment5 [
 	super testAssignment5.
-	PPSmalltalkGrammar allowUnderscoreAssignment ifTrue: [
-		self assert: result isAssignment.
-		self assert: result variable isVariable.
-		self assert: result variable name = 'a'.
-		self assert: result value isAssignment.
-		self assert: result value variable isVariable.
-		self assert: result value variable name = 'b'.
-		self assert: result value value isLiteral.
-		self assert: result value value value = 1 ]
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifFalse: [ ^ self ].
+	self assert: result isAssignment.
+	self assert: result variable isVariable.
+	self assert: result variable name = 'a'.
+	self assert: result value isAssignment.
+	self assert: result value variable isVariable.
+	self assert: result value variable name = 'b'.
+	self assert: result value value isLiteral.
+	self assert: result value value value = 1
 ]
 
 { #category : #testing }
@@ -735,6 +737,13 @@ PPSmalltalkParserTests >> testNumberLiteral14 [
 ]
 
 { #category : #'testing-literals' }
+PPSmalltalkParserTests >> testNumberLiteral15 [
+	super testNumberLiteral15.
+	self assert: result isLiteral.
+	self assert: result value = (1 / 2)
+]
+
+{ #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral2 [
 	super testNumberLiteral2.
 	self assert: result isLiteral.
@@ -1046,7 +1055,8 @@ PPSmalltalkParserTests >> testStatements1 [
 	self assert: result temporaries isEmpty.
 	self assert: result statements size = 1.
 	self assert: result statements first isLiteral.
-	self assert: result statements first value = 1
+	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger
 ]
 
 { #category : #testing }
@@ -1057,8 +1067,10 @@ PPSmalltalkParserTests >> testStatements2 [
 	self assert: result statements size = 2.
 	self assert: result statements first isLiteral.
 	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger.
 	self assert: result statements second isLiteral.
-	self assert: result statements second value = 2
+	self assert: result statements second value = 2.
+	self assert: result statements second value isInteger
 ]
 
 { #category : #testing }
@@ -1069,10 +1081,13 @@ PPSmalltalkParserTests >> testStatements3 [
 	self assert: result statements size = 3.
 	self assert: result statements first isLiteral.
 	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger.
 	self assert: result statements second isLiteral.
 	self assert: result statements second value = 2.
+	self assert: result statements second value isInteger.
 	self assert: result statements third isLiteral.
-	self assert: result statements third value = 3
+	self assert: result statements third value = 3.
+	self assert: result statements third value isInteger
 ]
 
 { #category : #testing }
@@ -1083,10 +1098,13 @@ PPSmalltalkParserTests >> testStatements4 [
 	self assert: result statements size = 3.
 	self assert: result statements first isLiteral.
 	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger.
 	self assert: result statements second isLiteral.
 	self assert: result statements second value = 2.
+	self assert: result statements second value isInteger.
 	self assert: result statements third isLiteral.
-	self assert: result statements third value = 3
+	self assert: result statements third value = 3.
+	self assert: result statements third value isInteger
 ]
 
 { #category : #testing }
@@ -1097,8 +1115,47 @@ PPSmalltalkParserTests >> testStatements5 [
 	self assert: result statements size = 2.
 	self assert: result statements first isLiteral.
 	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger.
 	self assert: result statements second isLiteral.
-	self assert: result statements second value = 2
+	self assert: result statements second value = 2.
+	self assert: result statements second value isInteger
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testStatements6 [
+	super testStatements6.
+	self assert: result isSequence.
+	self assert: result temporaries isEmpty.
+	self assert: result statements size = 2.
+	self assert: result statements first isLiteral.
+	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger.
+	self assert: result statements second isLiteral.
+	self assert: result statements second value = 2.
+	self assert: result statements second value isInteger
+	
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testStatements7 [
+	super testStatements7.
+	self assert: result isSequence.
+	self assert: result temporaries isEmpty.
+	self assert: result statements size = 1.
+	self assert: result statements first isLiteral.
+	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testStatements8 [
+	super testStatements8.
+	self assert: result isSequence.
+	self assert: result temporaries isEmpty.
+	self assert: result statements size = 1.
+	self assert: result statements first isLiteral.
+	self assert: result statements first value = 1.
+	self assert: result statements first value isInteger
 ]
 
 { #category : #'testing-literals' }
@@ -1160,9 +1217,31 @@ PPSmalltalkParserTests >> testSymbolLiteral5 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral6 [
 	super testSymbolLiteral6.
-	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
-		self assert: result isLiteral.
-		self assert: result value = #'__gen__binding' ]
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifTrue: [ ^ self ].
+	self assert: result isLiteral.
+	self assert: result value = #__gen__binding
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkParserTests >> testSymbolLiteral7 [
+	super testSymbolLiteral7.
+	self assert: result isLiteral.
+	self assert: result value = #fucker
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkParserTests >> testSymbolLiteral8 [
+	super testSymbolLiteral8.
+	self assert: result isLiteral.
+	self assert: result value = #fucker
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkParserTests >> testSymbolLiteral9 [
+	super testSymbolLiteral9.
+	self assert: result isLiteral.
+	self assert: result value = #fucker
 ]
 
 { #category : #testing }
@@ -1311,15 +1390,17 @@ PPSmalltalkParserTests >> testVariable5 [
 { #category : #testing }
 PPSmalltalkParserTests >> testVariable6 [
 	super testVariable6.
-	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
-		self assert: result isVariable.
-		self assert: result name = 'super_nanny' ]
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifTrue: [ ^ self ].
+	self assert: result isVariable.
+	self assert: result name = 'super_nanny'
 ]
 
 { #category : #testing }
 PPSmalltalkParserTests >> testVariable7 [
 	super testVariable7.
-	PPSmalltalkGrammar allowUnderscoreAssignment ifFalse: [
-		self assert: result isVariable.
-		self assert: result name = '__gen_var_123__' ]
+	PPSmalltalkGrammar allowUnderscoreAssignment
+		ifTrue: [ ^ self ].
+	self assert: result isVariable.
+	self assert: result name = '__gen_var_123__'
 ]

@@ -506,6 +506,13 @@ PPSmalltalkGrammarTests >> testNumberLiteral14 [
 ]
 
 { #category : #'testing-literals' }
+PPSmalltalkGrammarTests >> testNumberLiteral15 [
+	self 
+		parse: '0.50s2'
+		rule: #numberLiteral
+]
+
+{ #category : #'testing-literals' }
 PPSmalltalkGrammarTests >> testNumberLiteral2 [
 	self 
 		parse: '0.1'
@@ -778,6 +785,27 @@ PPSmalltalkGrammarTests >> testStatements5 [
 		rule: #sequence
 ]
 
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testStatements6 [
+	self 
+		parse: '1. 2'
+		rule: #sequence
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testStatements7 [
+	self 
+		parse: '. 1'
+		rule: #sequence
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testStatements8 [
+	self 
+		parse: '.1'
+		rule: #sequence
+]
+
 { #category : #'testing-literals' }
 PPSmalltalkGrammarTests >> testStringLiteral1 [
 	self 
@@ -840,6 +868,27 @@ PPSmalltalkGrammarTests >> testSymbolLiteral6 [
 		self 
 			parse: '#__gen__binding'
 			rule: #symbolLiteral ]
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkGrammarTests >> testSymbolLiteral7 [
+	self 
+		parse: '# fucker'
+		rule: #symbolLiteral
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkGrammarTests >> testSymbolLiteral8 [
+	self 
+		parse: '##fucker'
+		rule: #symbolLiteral
+]
+
+{ #category : #'testing-literals' }
+PPSmalltalkGrammarTests >> testSymbolLiteral9 [
+	self 
+		parse: '## fucker'
+		rule: #symbolLiteral
 ]
 
 { #category : #testing }

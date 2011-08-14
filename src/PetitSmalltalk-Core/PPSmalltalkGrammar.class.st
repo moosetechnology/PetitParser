@@ -6,6 +6,7 @@ Class {
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'array',
+		'arrayItem',
 		'arrayLiteral',
 		'arrayLiteralArray',
 		'assignment',
@@ -19,8 +20,11 @@ Class {
 		'block',
 		'blockArgument',
 		'blockArguments',
+		'blockArgumentsWith',
+		'blockArgumentsWithout',
 		'blockBody',
 		'byteLiteral',
+		'byteLiteralArray',
 		'cascadeExpression',
 		'cascadeMessage',
 		'char',
@@ -49,20 +53,23 @@ Class {
 		'numberLiteral',
 		'numberToken',
 		'parens',
+		'period',
+		'periodToken',
 		'pragma',
 		'pragmaMessage',
 		'pragmas',
 		'primary',
 		'return',
 		'sequence',
-		'statements',
-		'startMethod',
 		'startExpression',
+		'startMethod',
+		'statements',
 		'string',
 		'stringLiteral',
 		'stringToken',
 		'symbol',
 		'symbolLiteral',
+		'symbolLiteralArray',
 		'temporaries',
 		'trueLiteral',
 		'trueToken',
@@ -72,12 +79,7 @@ Class {
 		'unaryMethod',
 		'unaryPragma',
 		'unaryToken',
-		'variable',
-		'symbolLiteralArray',
-		'byteLiteralArray',
-		'arrayItem',
-		'blockArgumentsWith',
-		'blockArgumentsWithout'
+		'variable'
 	],
 	#category : #'PetitSmalltalk-Core'
 }
@@ -139,7 +141,7 @@ PPSmalltalkGrammar class >> parseMethod: aString onError: aBlock [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> array [
-	^ ${ asParser smalltalkToken , statements , $} asParser smalltalkToken
+	^ ${ asParser smalltalkToken , (expression delimitedBy: periodToken) optional , $} asParser smalltalkToken
 ]
 
 { #category : #'grammar-literals' }
@@ -367,12 +369,7 @@ PPSmalltalkGrammar >> methodDeclaration [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> methodSequence [
-	^ ($. asParser smalltalkToken star , pragmas , temporaries , pragmas , statements) ==> [ :nodes | 
-		Array 
-			with: nodes first
-			with: nodes second , nodes fourth
-			with: nodes third
-			with: nodes fifth ]
+	^ periodToken star , pragmas , periodToken star , temporaries , periodToken star , pragmas , periodToken star , statements
 ]
 
 { #category : #primitives }
@@ -392,7 +389,7 @@ PPSmalltalkGrammar >> nilToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> number [
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) and , [ :stream | 
+	^ ($- asParser optional , #digit asParser) and , [ :stream | 
 		[ Number readFrom: stream ] 
 			on: Error
 			do: [ :err | PPFailure message: err messageText at: stream position ] ] 
@@ -434,6 +431,16 @@ PPSmalltalkGrammar >> parseMethod: aString onError: aBlock [
 	^ startMethod parse: aString onError: aBlock
 ]
 
+{ #category : #primitives }
+PPSmalltalkGrammar >> period [
+	^ $. asParser
+]
+
+{ #category : #token }
+PPSmalltalkGrammar >> periodToken [
+	^ period smalltalkToken
+]
+
 { #category : #grammar }
 PPSmalltalkGrammar >> pragma [
 	^ $< asParser smalltalkToken , pragmaMessage , $> asParser smalltalkToken
@@ -461,7 +468,7 @@ PPSmalltalkGrammar >> return [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> sequence [
-	^ temporaries , statements
+	^ temporaries , periodToken star , statements
 ]
 
 { #category : #accessing }
@@ -517,7 +524,9 @@ PPSmalltalkGrammar >> symbol [
 
 { #category : #'grammar-literals' }
 PPSmalltalkGrammar >> symbolLiteral [
-	^ ($# asParser , symbol) smalltalkToken
+	"This is totally fucked up: The Pharo compiler allows multiple #, arbitrary spaces between the # and the symbol, as well as comments inbetween. And yes, it is used."
+
+	^ $# asParser smalltalkToken plus , symbol smalltalkToken ==> [ :tokens | tokens first copyWith: tokens last ]
 ]
 
 { #category : #'grammar-literals' }

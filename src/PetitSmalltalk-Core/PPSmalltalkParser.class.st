@@ -7,12 +7,29 @@ Class {
 	#category : #'PetitSmalltalk-Core'
 }
 
+{ #category : #private }
+PPSmalltalkParser >> addStatements: aCollection into: aNode [
+	aCollection isNil 
+		ifTrue: [ ^ aNode ].
+	aCollection do: [ :each |
+		each class == PPSmalltalkToken
+			ifFalse: [ aNode addNode:  each ]
+			ifTrue: [
+				aNode statements isEmpty
+					ifTrue: [ aNode addComments: each comments ]
+					ifFalse: [ aNode statements last addComments: each comments ].
+				aNode periods: (aNode periods asOrderedCollection
+					addLast: each start;
+					yourself) ] ].
+	^ aNode
+]
+
 { #category : #grammar }
 PPSmalltalkParser >> array [
-	^ super array ==> [ :nodes | 
-		(self buildArray: nodes second)
-			left: nodes first start;
-			right: nodes last start;
+	^ super array map: [ :openNode :statementNodes :closeNode |
+		(self buildArray: statementNodes)
+			left: openNode start;
+			right: closeNode start;
 			yourself ]
 ]
 
@@ -101,18 +118,10 @@ PPSmalltalkParser >> build: aNode messages: anArray [
 
 { #category : #private }
 PPSmalltalkParser >> build: aTempCollection sequence: aStatementCollection [
-	| nodes periods result |
-	nodes := OrderedCollection new.
-	periods := OrderedCollection new.
-	aStatementCollection do: [ :each |
-		(each isKindOf: RBProgramNode)
-			ifTrue: [ nodes add: each ]
-			ifFalse: [
-				nodes isEmpty
-					ifFalse: [ nodes last addComments: each comments ].
-				periods add: each start ] ].
-	result := RBSequenceNode statements: nodes.
-	result periods: periods.
+	| result |
+	result := self
+		addStatements: aStatementCollection
+		into: RBSequenceNode new.
 	aTempCollection isEmpty ifFalse: [
 		result
 			leftBar: aTempCollection first start
@@ -123,19 +132,7 @@ PPSmalltalkParser >> build: aTempCollection sequence: aStatementCollection [
 
 { #category : #private }
 PPSmalltalkParser >> buildArray: aStatementCollection [
-	| nodes periods result |
-	nodes := OrderedCollection new.
-	periods := OrderedCollection new.
-	aStatementCollection do: [ :each |
-		(each isKindOf: RBProgramNode)
-			ifTrue: [ nodes add: each ]
-			ifFalse: [
-				nodes isEmpty
-					ifFalse: [ nodes last addComments: each comments ].
-				periods add: each start ] ].
-	result := RBArrayNode statements: nodes.
-	result periods: periods.
-	^ result
+	^ self addStatements: aStatementCollection into: RBArrayNode new
 ]
 
 { #category : #private }
@@ -157,8 +154,6 @@ PPSmalltalkParser >> buildMethod: aMethodNode [
 
 { #category : #private }
 PPSmalltalkParser >> buildString: aString [ 
-	(aString isEmpty not and: [ aString first = $# ]) 
-		ifTrue: [ ^ (self buildString: aString allButFirst) asSymbol ].
 	(aString isEmpty or: [ aString first ~= $' or: [ aString last ~= $' ] ])
 		ifTrue: [ ^ aString ].
 	^ (aString 
@@ -206,12 +201,8 @@ PPSmalltalkParser >> keywordExpression [
 { #category : #grammar }
 PPSmalltalkParser >> method [
 	^ super method map: [ :methodNode :bodyNode | 
-		methodNode pragmas: bodyNode second.
-		methodNode body: (self 
-			build: bodyNode third
-			sequence: bodyNode fourth).
-		bodyNode first isEmpty
-			ifFalse: [ methodNode body periods: (bodyNode first collect: [ :each | each start ]) , methodNode body periods ].
+		methodNode pragmas: bodyNode first.
+		methodNode body: bodyNode second.
 		self buildMethod: methodNode ]
 ]
 
@@ -221,6 +212,14 @@ PPSmalltalkParser >> methodDeclaration [
 		RBMethodNode 
 			selectorParts: nodes first
 			arguments: nodes second ]
+]
+
+{ #category : #grammar }
+PPSmalltalkParser >> methodSequence [
+	^ super methodSequence map: [ :periodNodes1 :pragmaNodes1 :periodNodes2 :tempNodes :periodNodes3 :pragmaNodes2 :periodNodes4 :statementNodes |
+		Array
+			with: pragmaNodes1 , pragmaNodes2
+			with: (self build: tempNodes sequence: periodNodes1 , periodNodes2 , periodNodes3 , periodNodes4 , statementNodes) ]
 ]
 
 { #category : #'grammar-literals' }
@@ -256,7 +255,7 @@ PPSmalltalkParser >> return [
 
 { #category : #grammar }
 PPSmalltalkParser >> sequence [
-	^ super sequence map: [ :tempNodes :statementNodes | self build: tempNodes sequence: statementNodes ]
+	^ super sequence map: [ :tempNodes :periodNodes :statementNodes | self build: tempNodes sequence: periodNodes , statementNodes ]
 ]
 
 { #category : #accessing }
@@ -286,7 +285,7 @@ PPSmalltalkParser >> stringLiteral [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> symbolLiteral [
-	^ super symbolLiteral ==> [ :token | RBLiteralValueNode literalToken: (RBLiteralToken value: (self buildString: token value) start: token start stop: token stop) ]
+	^ super symbolLiteral ==> [ :tokens | RBLiteralValueNode literalToken: (RBLiteralToken value: (self buildString: tokens last value) asSymbol start: tokens first start stop: tokens last stop) ]
 ]
 
 { #category : #'grammar-literals' }
