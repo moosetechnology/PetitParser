@@ -54,8 +54,7 @@ PPCompositeParserTest >> parse: aString rule: aSymbol [
 	result := production end parse: aString.
 	self
 		deny: result isPetitFailure
-		description: 'Unable to parse ' , aString printString
-		resumable: true.
+		description: 'Unable to parse ' , aString printString.
 	^ result
 ]
 
