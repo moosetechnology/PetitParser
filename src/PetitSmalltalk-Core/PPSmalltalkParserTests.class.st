@@ -698,42 +698,48 @@ PPSmalltalkParserTests >> testMethod3 [
 PPSmalltalkParserTests >> testNumberLiteral1 [
 	super testNumberLiteral1.
 	self assert: result isLiteral.
-	self assert: result value = 0
+	self assert: result value = 0.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral10 [
 	super testNumberLiteral10.
 	self assert: result isLiteral.
-	self assert: result value = 10
+	self assert: result value = 10.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral11 [
 	super testNumberLiteral11.
 	self assert: result isLiteral.
-	self assert: result value = 511
+	self assert: result value = 511.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral12 [
 	super testNumberLiteral12.
 	self assert: result isLiteral.
-	self assert: result value = 175
+	self assert: result value = 175.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral13 [
 	super testNumberLiteral13.
 	self assert: result isLiteral.
-	self assert: result value = 202.9921875
+	self assert: result value = 202.9921875.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral14 [
 	super testNumberLiteral14.
 	self assert: result isLiteral.
-	self assert: result value floor = -9
+	self assert: result value floor = -9.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-literals' }
@@ -747,56 +753,64 @@ PPSmalltalkParserTests >> testNumberLiteral15 [
 PPSmalltalkParserTests >> testNumberLiteral2 [
 	super testNumberLiteral2.
 	self assert: result isLiteral.
-	self assert: result value = 0.1
+	self assert: result value = 0.1.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral3 [
 	super testNumberLiteral3.
 	self assert: result isLiteral.
-	self assert: result value = 123
+	self assert: result value = 123.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral4 [
 	super testNumberLiteral4.
 	self assert: result isLiteral.
-	self assert: result value = 123.456
+	self assert: result value = 123.456.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral5 [
 	super testNumberLiteral5.
 	self assert: result isLiteral.
-	self assert: result value = 0
+	self assert: result value = 0.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral6 [
 	super testNumberLiteral6.
 	self assert: result isLiteral.
-	self assert: result value = -0.1
+	self assert: result value = -0.1.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral7 [
 	super testNumberLiteral7.
 	self assert: result isLiteral.
-	self assert: result value = -123
+	self assert: result value = -123.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral8 [
 	super testNumberLiteral8.
 	self assert: result isLiteral.
-	self assert: result value = -123
+	self assert: result value = -123.
+	self assert: result value isInteger
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral9 [
 	super testNumberLiteral9.
 	self assert: result isLiteral.
-	self assert: result value = -123.456
+	self assert: result value = -123.456.
+	self assert: result value isFloat
 ]
 
 { #category : #'testing-pragmas' }
@@ -1183,35 +1197,40 @@ PPSmalltalkParserTests >> testStringLiteral3 [
 PPSmalltalkParserTests >> testSymbolLiteral1 [
 	super testSymbolLiteral1.
 	self assert: result isLiteral.
-	self assert: result value = #foo
+	self assert: result value = #foo.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral2 [
 	super testSymbolLiteral2.
 	self assert: result isLiteral.
-	self assert: result value = #+
+	self assert: result value = #+.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral3 [
 	super testSymbolLiteral3.
 	self assert: result isLiteral.
-	self assert: result value = #key:
+	self assert: result value = #key:.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral4 [
 	super testSymbolLiteral4.
 	self assert: result isLiteral.
-	self assert: result value = #key:value:
+	self assert: result value = #key:value:.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral5 [
 	super testSymbolLiteral5.
 	self assert: result isLiteral.
-	self assert: result value = #'testing-result'
+	self assert: result value = #'testing-result'.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
@@ -1220,28 +1239,32 @@ PPSmalltalkParserTests >> testSymbolLiteral6 [
 	PPSmalltalkGrammar allowUnderscoreAssignment
 		ifTrue: [ ^ self ].
 	self assert: result isLiteral.
-	self assert: result value = #__gen__binding
+	self assert: result value = #__gen__binding.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral7 [
 	super testSymbolLiteral7.
 	self assert: result isLiteral.
-	self assert: result value = #fucker
+	self assert: result value = #fucker.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral8 [
 	super testSymbolLiteral8.
 	self assert: result isLiteral.
-	self assert: result value = #fucker
+	self assert: result value = #fucker.
+	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral9 [
 	super testSymbolLiteral9.
 	self assert: result isLiteral.
-	self assert: result value = #fucker
+	self assert: result value = #fucker.
+	self assert: result value isSymbol
 ]
 
 { #category : #testing }
