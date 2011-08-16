@@ -198,6 +198,25 @@ PPParser >> matchesIn: anObject do: aBlock [
 ]
 
 { #category : #parsing }
+PPParser >> matchesSkipIn: anObject [
+	"Search anObject repeatedly for the matches of the receiver. Answer an OrderedCollection of the matched parse-trees. Skip over matches."
+
+	| result |
+	result := OrderedCollection new.
+	self 
+		matchesSkipIn: anObject
+		do: [ :each | result addLast: each ].
+	^ result
+]
+
+{ #category : #parsing }
+PPParser >> matchesSkipIn: anObject do: aBlock [
+	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock for each match with the matched parse-tree as the argument. Skip over matches."
+
+	(self ==> aBlock / #any asParser) star parse: anObject
+]
+
+{ #category : #parsing }
 PPParser >> matchingRangesIn: anObject [
 	"Search anObject repeatedly for the matches of the receiver. Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
 	
