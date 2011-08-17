@@ -855,6 +855,7 @@ PPParserTest >> testPluggable [
 PPParserTest >> testPlus [
 	| parser |
 	parser := $a asParser plus.
+	
 	self assert: parser min = 1.
 	self assert: parser max > parser min.
 	
@@ -873,8 +874,15 @@ PPParserTest >> testPlus [
 
 { #category : #testing }
 PPParserTest >> testPlusGreedy [
-	| parser |
-	parser := #word asParser plusGreedy: #digit asParser.
+	| limit parser |
+	limit := #digit asParser.
+	parser := #word asParser plusGreedy: limit.
+	
+	self assert: parser min = 1.
+	self assert: parser max > parser min.	
+	self assert: parser limit = limit.
+	self assert: parser children size = 2.
+	self assert: parser children last = limit.
 
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
@@ -894,8 +902,15 @@ PPParserTest >> testPlusGreedy [
 
 { #category : #testing }
 PPParserTest >> testPlusLazy [
-	| parser |
-	parser := #word asParser plusLazy: #digit asParser.
+	| limit parser |
+	limit := #digit asParser.
+	parser := #word asParser plusLazy: limit.
+	
+	self assert: parser min = 1.
+	self assert: parser max > parser min.	
+	self assert: parser limit = limit.
+	self assert: parser children size = 2.
+	self assert: parser children last = limit.
 
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
@@ -1082,6 +1097,7 @@ PPParserTest >> testSideEffectSequence [
 PPParserTest >> testStar [
 	| parser |
 	parser := $a asParser star.
+	
 	self assert: parser min = 0.
 	self assert: parser max > parser min.
 	
@@ -1098,8 +1114,15 @@ PPParserTest >> testStar [
 
 { #category : #testing }
 PPParserTest >> testStarGreedy [
-	| parser |
-	parser := #word asParser starGreedy: #digit asParser.
+	| limit parser |
+	limit := #digit asParser.
+	parser := #word asParser starGreedy: limit.
+	
+	self assert: parser min = 0.
+	self assert: parser max > parser min.
+	self assert: parser limit = limit.
+	self assert: parser children size = 2.
+	self assert: parser children last = limit.
 
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
@@ -1121,8 +1144,15 @@ PPParserTest >> testStarGreedy [
 
 { #category : #testing }
 PPParserTest >> testStarLazy [
-	| parser |
-	parser := #word asParser starLazy: #digit asParser.
+	| limit parser |
+	limit := #digit asParser.
+	parser := #word asParser starLazy: limit.
+	
+	self assert: parser min = 0.
+	self assert: parser max > parser min.
+	self assert: parser limit = limit.
+	self assert: parser children size = 2.
+	self assert: parser children last = limit.
 
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'.
