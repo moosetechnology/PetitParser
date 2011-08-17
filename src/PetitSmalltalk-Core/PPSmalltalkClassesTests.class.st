@@ -30,7 +30,7 @@ PPSmalltalkClassesTests class >> benchmark: aParser [
 
 { #category : #utilities }
 PPSmalltalkClassesTests class >> benchmark: aParser sources: aCollection [
-	| count start end |
+	| count start |
 	count := 0.
 	start := Time millisecondClockValue.
 	[  aCollection do: [ :each | aParser parseMethod: each ].

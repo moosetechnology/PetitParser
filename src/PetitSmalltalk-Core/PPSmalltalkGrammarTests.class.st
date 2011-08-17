@@ -369,8 +369,6 @@ PPSmalltalkGrammarTests >> testCompleteness [
 	"This test asserts that all subclasses override all test methods."
 	
 	self class allSubclasses do: [ :subclass |
-		| selectors |
-		selectors := subclass selectors.
 		self class testSelectors do: [ :selector |
 			self 
 				assert: (selector = #testCompleteness or: [ subclass selectors includes: selector ])
