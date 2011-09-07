@@ -102,14 +102,6 @@ PPToken >> line [
 	^ line
 ]
 
-{ #category : #private }
-PPToken >> newline [
-	"Parser a platform independent newline sequence. LF: Unix, CR+LF: Windows, and CR: Apple."
-
-	^ (Character lf asParser)
-	/ (Character cr asParser , Character lf asParser optional)
-]
-
 { #category : #printing }
 PPToken >> printOn: aStream [
 	super printOn: aStream.
