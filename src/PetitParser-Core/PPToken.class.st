@@ -14,8 +14,17 @@ Class {
 		'start',
 		'stop'
 	],
+	#classVars : [
+		'NewLineParser'
+	],
 	#category : #'PetitParser-Core'
 }
+
+{ #category : #initialization }
+PPToken class >> initialize [
+	"Platform independent newline sequence. LF: Unix, CR+LF: Windows, and CR: Apple."
+	NewLineParser := (Character lf asParser) / (Character cr asParser , Character lf asParser optional)
+]
 
 { #category : #'instance creation' }
 PPToken class >> new [
@@ -52,7 +61,7 @@ PPToken >> column [
 	
 	| position |
 	position := 0.
-	(self newline , [ :stream |
+	(NewLineParser , [ :stream |
 		start <= stream position
 			ifTrue: [ ^ start - position ].
 		position := stream position ] asParser
@@ -84,7 +93,7 @@ PPToken >> line [
 	
 	| line |
 	line := 1.
-	(self newline , [ :stream |
+	(NewLineParser , [ :stream |
 		start <= stream position
 			ifTrue: [ ^ line ].
 		line := line + 1 ] asParser
