@@ -42,7 +42,6 @@ PPParserInspector >> inspectorsIn: composite [
 
 { #category : #'private building' }
 PPParserInspector >> progressChartIn: composite [
-	self flag: 'stream'.
 	composite morph 
 		title: 'Progress';
 		display: [ :stream |

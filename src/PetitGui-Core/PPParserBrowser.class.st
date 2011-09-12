@@ -4,7 +4,7 @@ Class {
 	#category : #'PetitGui-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #building }
 PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
