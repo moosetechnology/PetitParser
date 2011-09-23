@@ -11,10 +11,15 @@ Class {
 }
 
 { #category : #accessing }
+PPBrowser class >> label [
+	^ 'PetitParser'
+]
+
+{ #category : #accessing }
 PPBrowser class >> menuCommandOn: aBuilder [
 	<worldMenu>
 
-	(aBuilder item: 'PetitParser')
+	(aBuilder item: self label)
 		parent: #Tools;
 		action: [ self new open ]
 ]
