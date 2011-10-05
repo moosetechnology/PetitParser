@@ -144,12 +144,6 @@ ConfigurationOfPetitParser >> baseline13: spec [
 				versionString: '2.1';
 				repository: 'http://www.squeaksource.com/Glamour' ].
 		
-		spec project: 'AST-Core' with: [
-			spec
-				repository: 'http://www.squeaksource.com/MetacelloRepository';
-				className: 'ConfigurationOfRefactoringBrowser';
-				loads: #('AST-Core') ].
-		
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [
@@ -160,12 +154,11 @@ ConfigurationOfPetitParser >> baseline13: spec [
 				spec requires: #('PetitParser' 'Glamour for Petit' ). ].
 		
 		spec
-			package: 'PrettyPetit' with: [
-				spec requires: #('AST-Core') ].
+			package: 'PrettyPetit'.
 		
 		spec
 			package: 'PetitSmalltalk' with: [
-				spec requires: #( 'AST-Core' 'PetitParser' 'PetitTests') ];
+				spec requires: #( 'PetitParser' 'PetitTests') ];
 			package: 'PetitCSV' with: [
 				spec requires: #('PetitParser' 'PetitTests') ];
 			package: 'PetitJson' with: [
