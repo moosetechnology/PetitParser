@@ -1,3 +1,6 @@
+"
+self openOn: PPArithmeticParser
+"
 Class {
 	#name : #PPParserBrowser,
 	#superclass : #GLMBrowserTemplate,
@@ -61,14 +64,14 @@ PPParserBrowser >> sourceCode: aString in: aClass [
 
 { #category : #'private building' }
 PPParserBrowser >> sourceIn: composite [
-	composite text
+	composite smalltalkCode
 		title: 'Source';
 		useExplicitNotNil;
 		display: [ :class :production | 
 			class 
 				sourceCodeAt: (production ifNil: [ #start ])
 				ifAbsent: [ String new ] ];
-		forSmalltalk: [ :class | class ];
+		smalltalkClass: [ :class | class ];
 		act: [ :node  | 
 				| class selector |
 				class := self selectedClass.

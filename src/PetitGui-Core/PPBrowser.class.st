@@ -1,3 +1,6 @@
+"
+self open
+"
 Class {
 	#name : #PPBrowser,
 	#superclass : #Object,
@@ -270,19 +273,20 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 
 { #category : #'browse-static' }
 PPBrowser >> browseSourceOn: aBrowser [
-	aBrowser text
+	aBrowser smalltalkCode
 		title: 'Source';
 		useExplicitNotNil;
 		display: [ self sourceCode ];
-		forSmalltalk: [ self selectedClass ];
-		selectionAct: [ :node | 
+		smalltalkClass: [ self selectedClass ];
+		act: [ :node | 
 			| class selector |
 			class := self selectedClass.
 			selector := self sourceCode: node text asString in: class.
 			aBrowser entity: self rootModel.
 			self selectedClass: class.
 			self selectedSelector: selector ]
-		on: $s entitled: 'accept (s)'
+		on: $s 
+		entitled: 'accept (s)'
 ]
 
 { #category : #browse }

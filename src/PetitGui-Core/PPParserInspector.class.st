@@ -65,7 +65,8 @@ PPParserInspector >> sampleIn: composite [
 	(composite text)
 		title: 'Sample';
 		display: '';
-		selectionPopulate: #selection
+		populate: #selection
+			icon: GLMUIThemeExtraIcons glamorousAccept 
 			on: $s
 			entitled: 'Parse (s)'
 			with: [ :presentation :parser | 
