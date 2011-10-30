@@ -428,21 +428,26 @@ PPParserTest >> testMatchesSkipInOverlapping [
 { #category : #'testing-utilities' }
 PPParserTest >> testMatchingRangesIn [
 	| input parser result |
-	input := 'a12b1'.
+	input := 'a12b3'.
 	parser := #digit asParser plus.
 	result := parser matchingRangesIn: input.
+	result := result collect: [ :each | input copyFrom: each first to: each last ].
 	self assert: result size = 3.
-	result do: [ :each | self assert: (parser matches: (input copyFrom: each first to: each last)) ]
+	self assert: result first = '12'.
+	self assert: result second = '2'.
+	self assert: result last = '3'
 ]
 
 { #category : #'testing-utilities' }
 PPParserTest >> testMatchingSkipRangesIn [
 	| input parser result |
-	input := 'a12b1'.
+	input := 'a12b3'.
 	parser := #digit asParser plus.
 	result := parser matchingSkipRangesIn: input.
+	result := result collect: [ :each | input copyFrom: each first to: each last ].
 	self assert: result size = 2.
-	result do: [ :each | self assert: (parser matches: (input copyFrom: each first to: each last)) ]
+	self assert: result first = '12'.
+	self assert: result last = '3'
 ]
 
 { #category : #testing }
