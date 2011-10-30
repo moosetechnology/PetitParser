@@ -24,7 +24,7 @@ PPJsonGrammarTest >> parserClass [
 { #category : #'testing-array' }
 PPJsonGrammarTest >> testBigArray [
 	self parse: ' [ "a" , "b" ] '.
-	self assert: result isArray.
+	self assert: (result isKindOf: Array).
 	self assert: result size = 2.
 	self assert: result first = 'a'.
 	self assert: result second = 'b'.
@@ -33,7 +33,7 @@ PPJsonGrammarTest >> testBigArray [
 { #category : #'testing-objects' }
 PPJsonGrammarTest >> testBigObject [
 	self parse: ' { "a" : 1 , "b" : 2 } '.
-	self assert: result isDictionary.
+	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 2.
 	self assert: (result at: 'a') = 1.
 	self assert: (result at: 'b') = 2.
@@ -42,14 +42,14 @@ PPJsonGrammarTest >> testBigObject [
 { #category : #'testing-array' }
 PPJsonGrammarTest >> testEmptyArray [
 	self parse: '[]'.
-	self assert: result isArray.
+	self assert: (result isKindOf: Array).
 	self assert: result isEmpty
 ]
 
 { #category : #'testing-objects' }
 PPJsonGrammarTest >> testEmptyObject [
 	self parse: '{}'.
-	self assert: result isDictionary.
+	self assert: (result isKindOf: Dictionary).
 	self assert: result isEmpty
 ]
 
@@ -138,11 +138,11 @@ PPJsonGrammarTest >> testInvalidTrue [
 { #category : #'testing-array' }
 PPJsonGrammarTest >> testNestedArray [
 	self parse: '[[2]]'.
-	self assert: result isArray.
+	self assert: (result isKindOf: Array).
 	self assert: result size = 1.
 	
 	result := result first.
-	self assert: result isArray.
+	self assert: (result isKindOf: Array).
 	self assert: result size = 1.
 	self assert: result first = 2.
 ]
@@ -150,11 +150,11 @@ PPJsonGrammarTest >> testNestedArray [
 { #category : #'testing-objects' }
 PPJsonGrammarTest >> testNestedObject [
 	self parse: '{"object":{"1":"2"}} '.
-	self assert: result isDictionary.
+	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 1.
 	
 	result := result at: 'object'.
-	self assert: result isDictionary.
+	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 1.
 	self assert: (result at: '1') = '2'.
 ]
@@ -201,7 +201,7 @@ PPJsonGrammarTest >> testSafariEvent [
 { #category : #'testing-array' }
 PPJsonGrammarTest >> testSmallArray [
 	self parse: '["a"]'.
-	self assert: result isArray.
+	self assert: (result isKindOf: Array).
 	self assert: result size = 1.
 	self assert: result first = 'a'.
 ]
@@ -209,7 +209,7 @@ PPJsonGrammarTest >> testSmallArray [
 { #category : #'testing-objects' }
 PPJsonGrammarTest >> testSmallObject [
 	self parse: '{"a":1}'.
-	self assert: result isDictionary.
+	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 1.
 	self assert: (result at: 'a') = 1
 ]
