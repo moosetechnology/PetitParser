@@ -237,6 +237,27 @@ PPParser >> matchingRangesIn: anObject do: aBlock [
 		do: [ :value | aBlock value: (value first to: value last) ]
 ]
 
+{ #category : #parsing }
+PPParser >> matchingSkipRangesIn: anObject [
+	"Search anObject repeatedly for the matches of the receiver. Skip over matches. Answer an OrderedCollection of ranges of each match (index of first character to: index of last character)."
+	
+	| result |
+	result := OrderedCollection new.
+	self
+		matchingSkipRangesIn: anObject
+		do: [ :value | result addLast: value ].
+	^ result
+]
+
+{ #category : #parsing }
+PPParser >> matchingSkipRangesIn: anObject do: aBlock [
+	"Search anObject repeatedly for the matches of the receiver. Skip over matches. Evaluate aBlock with the range of each match (index of first character to: index of last character)."
+	
+	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
+		matchesSkipIn: anObject
+		do: [ :value | aBlock value: (value first to: value last) ]
+]
+
 { #category : #'operators-repeating' }
 PPParser >> max: anInteger [
 	"Answer a new parser that parses the receiver at most anInteger times."
