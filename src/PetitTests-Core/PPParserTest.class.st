@@ -435,6 +435,16 @@ PPParserTest >> testMatchingRangesIn [
 	result do: [ :each | self assert: (parser matches: (input copyFrom: each first to: each last)) ]
 ]
 
+{ #category : #'testing-utilities' }
+PPParserTest >> testMatchingSkipRangesIn [
+	| input parser result |
+	input := 'a12b1'.
+	parser := #digit asParser plus.
+	result := parser matchingSkipRangesIn: input.
+	self assert: result size = 2.
+	result do: [ :each | self assert: (parser matches: (input copyFrom: each first to: each last)) ]
+]
+
 { #category : #testing }
 PPParserTest >> testMax [
 	| parser |
