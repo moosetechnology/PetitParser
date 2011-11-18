@@ -30,10 +30,8 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 { #category : #parsing }
 PPCompositeParserTest >> fail: aString rule: aSymbol [ 
 	| production |
-	production := self parserInstance
-		productionAt: aSymbol.
-	result := production end 
-		parse: aString.
+	production := self parserInstanceFor: aSymbol.
+	result := production end parse: aString.
 	self
 		assert: result isPetitFailure
 		description: 'Able to parse ' , aString printString.
@@ -48,9 +46,7 @@ PPCompositeParserTest >> parse: aString [
 { #category : #parsing }
 PPCompositeParserTest >> parse: aString rule: aSymbol [
 	| production |
-	production := self parserInstance.
-	aSymbol = #start
-		ifFalse: [ production := production productionAt: aSymbol ].
+	production := self parserInstanceFor: aSymbol.
 	result := production end parse: aString.
 	self
 		deny: result isPetitFailure
@@ -66,6 +62,16 @@ PPCompositeParserTest >> parserClass [
 { #category : #accessing }
 PPCompositeParserTest >> parserInstance [
 	^ PPParserResource current parserAt: self parserClass
+]
+
+{ #category : #accessing }
+PPCompositeParserTest >> parserInstanceFor: aSymbol [
+	^ aSymbol = #start
+		ifTrue: [ self parserInstance ]
+		ifFalse: [
+			self parserInstance
+				productionAt: aSymbol 
+				ifAbsent: [ self error: 'Production ' , self parserClass name , '>>' , aSymbol printString , ' not found.' ] ]
 ]
 
 { #category : #running }
