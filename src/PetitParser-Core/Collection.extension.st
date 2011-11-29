@@ -1,13 +1,11 @@
 Extension { #name : #Collection }
 
-{ #category : #'*petitparser-core' }
-Collection >> flatten [
-	^ Array streamContents: [ :stream |
-		self flattenedDo: [ :each |
-			stream nextPut: each ] ]
+{ #category : #'*petitparser-core-converting' }
+Collection >> asChoiceParser [
+	^ PPChoiceParser withAll: (self collect: [ :each | each asParser ])
 ]
 
-{ #category : #'*petitparser-core' }
-Collection >> flattenedDo: aBlock [
-	self do: [ :each | each flattenedDo: aBlock ]
+{ #category : #'*petitparser-core-converting' }
+Collection >> asSequenceParser [
+	^ PPSequenceParser withAll: (self collect: [ :each | each asParser ])
 ]

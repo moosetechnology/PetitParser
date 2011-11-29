@@ -2,7 +2,8 @@ Extension { #name : #SequenceableCollection }
 
 { #category : #'*petitparser-core-converting' }
 SequenceableCollection >> asParser [
-	^ PPSequenceParser withAll: (self collect: [ :each | each asParser ])
+	self notify: 'SquenceableCollection>>#asParser is no longer supported. If you would like to create a PPSequenceParser from a Collection consider using #asSequenceParser instead.'.
+	^ self asSquenceParser
 ]
 
 { #category : #'*petitparser-core-converting' }

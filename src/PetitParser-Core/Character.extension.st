@@ -7,7 +7,9 @@ Character >> - aCharacter [
 	^ PPPredicateObjectParser between: self and: aCharacter
 ]
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*petitparser-core-converting' }
 Character >> asParser [
+	"Answers a parser that accepts the receving character."
+	
 	^ PPLiteralObjectParser on: self
 ]
