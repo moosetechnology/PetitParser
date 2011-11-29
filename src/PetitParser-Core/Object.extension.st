@@ -2,7 +2,7 @@ Extension { #name : #Object }
 
 { #category : #'*petitparser-core-converting' }
 Object >> asParser [
-	"Answers a parser accepting the receving object."
+	"Answer a parser accepting the receving object."
 
 	^ PPPredicateObjectParser expect: self
 ]

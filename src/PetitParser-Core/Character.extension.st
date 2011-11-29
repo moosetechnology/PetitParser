@@ -9,7 +9,7 @@ Character >> - aCharacter [
 
 { #category : #'*petitparser-core-converting' }
 Character >> asParser [
-	"Answers a parser that accepts the receving character."
+	"Answer a parser that accepts the receving character."
 	
 	^ PPLiteralObjectParser on: self
 ]

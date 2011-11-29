@@ -67,7 +67,7 @@ PPParser >> answer: anObject [
 
 { #category : #converting }
 PPParser >> asParser [
-	"Answers the receiving parser."
+	"Answer the receiving parser."
 	
 	^ self
 ]
