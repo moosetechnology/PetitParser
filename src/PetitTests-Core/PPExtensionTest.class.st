@@ -13,6 +13,18 @@ PPExtensionTest >> testCharacter [
 ]
 
 { #category : #'testing-parser' }
+PPExtensionTest >> testChoice [
+	| parser |
+	parser := #(1 2) asChoiceParser.
+	self assert: parser parse: #(1) to: 1.
+	self assert: parser parse: #(2) to: 2.
+	self assert: parser parse: #(1 2) to: 1 end: 1.
+	self assert: parser parse: #(2 1) to: 2 end: 1.
+	self assert: parser fail: #().
+	self assert: parser fail: #(3)
+]
+
+{ #category : #'testing-parser' }
 PPExtensionTest >> testClosure [
 	| parser |
 	parser := [ :stream | stream upTo: $s ] asParser.
@@ -40,18 +52,6 @@ PPExtensionTest >> testEpsilon [
 ]
 
 { #category : #'testing-parser' }
-PPExtensionTest >> testOrdered [
-	| parser |
-	parser := #(1 2) asParser.
-	self assert: parser parse: #(1 2) to: #(1 2).
-	self assert: parser parse: #(1 2 3) to: #(1 2) end: 2.
-	self assert: parser fail: #().
-	self assert: parser fail: #(1).
-	self assert: parser fail: #(1 1).
-	self assert: parser fail: #(1 1 2)
-]
-
-{ #category : #'testing-parser' }
 PPExtensionTest >> testParser [
 	| parser |
 	parser := $a asParser.
@@ -66,6 +66,18 @@ PPExtensionTest >> testRange [
 	self assert: parser parse: 'b' to: $b.
 	self assert: parser parse: 'c' to: $c.
 	self assert: parser fail: 'd'
+]
+
+{ #category : #'testing-parser' }
+PPExtensionTest >> testSequence [
+	| parser |
+	parser := #(1 2) asSequenceParser.
+	self assert: parser parse: #(1 2) to: #(1 2).
+	self assert: parser parse: #(1 2 3) to: #(1 2) end: 2.
+	self assert: parser fail: #().
+	self assert: parser fail: #(1).
+	self assert: parser fail: #(1 1).
+	self assert: parser fail: #(1 1 2)
 ]
 
 { #category : #'testing-stream' }
@@ -105,16 +117,4 @@ PPExtensionTest >> testText [
 	| stream |
 	stream := 'abc' asText asPetitStream.
 	self assert: stream class = PPStream
-]
-
-{ #category : #'testing-parser' }
-PPExtensionTest >> testUnordered [
-	| parser |
-	parser := #(1 2) asSet asParser.
-	self assert: parser parse: #(1) to: 1.
-	self assert: parser parse: #(2) to: 2.
-	self assert: parser parse: #(1 2) to: 1 end: 1.
-	self assert: parser parse: #(2 1) to: 2 end: 1.
-	self assert: parser fail: #().
-	self assert: parser fail: #(3)
 ]
