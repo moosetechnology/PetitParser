@@ -28,7 +28,7 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 	root := self new.
 	newParser := parser transform: [:each |
 		each name isNil 
-			ifTrue: [each ]
+			ifTrue: [ each ]
 			ifFalse: [
 				each >=> [:stream :continuation | 
 					| result child |
@@ -41,7 +41,7 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 					root := root parent.
 					result ]]].
 	newParser parse: aStream.
-	^ root children first  
+	^ root children first
 ]
 
 { #category : #accessing }

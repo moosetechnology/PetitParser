@@ -14,6 +14,15 @@ PPParserDebuggerResultTest >> testArithmetic [
 ]
 
 { #category : #tests }
+PPParserDebuggerResultTest >> testNumberParser [
+	| parser result |
+	parser := PPArithmeticParser new productionAt: #number.
+	result := PPParserDebuggerResult parse: '1' with: parser.
+	self assert: result children isEmpty.
+	self assert: result result = 1
+]
+
+{ #category : #tests }
 PPParserDebuggerResultTest >> testSimple [ 
 	| parser result |
 	parser := nil asParser.

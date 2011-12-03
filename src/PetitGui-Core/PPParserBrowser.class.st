@@ -11,7 +11,7 @@ Class {
 PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
-	browser column: #productions ; column: #workspace.
+	browser column: #productions ; column: #workspace span: 3.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
 	browser transmit to: #workspace; fromOutside: #entity; from: #productions; andShow: [:a | 
@@ -86,5 +86,14 @@ PPParserBrowser >> sourceIn: composite [
 { #category : #'private building' }
 PPParserBrowser >> workspaceIn: composite [
 	self sourceIn: composite.
-	composite custom: (PPParserInspector new browser title: 'Inspector')
+	composite dynamic 
+		title: 'Inspector';
+		display: [ :class :parser | 
+		| wrapperBrowser |
+		wrapperBrowser := GLMTabulator new.
+		wrapperBrowser column: #wrapped.
+		wrapperBrowser transmit 
+			to: #wrapped; 
+			andShow: [ :a | a custom: ( PPParserInspector new browser ) ].
+		wrapperBrowser startOn: (class new "perform: parser") ]
 ]
