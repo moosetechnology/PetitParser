@@ -22,7 +22,8 @@ PPParserInspector >> buildBrowser [
 		andShowIfNone: [ :a | self sampleIn: a ].
 	(browser transmit)
 		from: #sample; "result"
-		from: #sample port: #text; "sample text"
+		passivelyFrom: #sample port: #text; "sample text"
+		from: #sample port: #stream; "parser stream"
 		fromOutside: #entity; "parser"  
 		to: #inspectors;
 		andShow: [ :a | self inspectorsIn: a ].
@@ -34,7 +35,7 @@ PPParserInspector >> debuggerIn: composite [
 	composite tree
 		title: 'Debugger';
 		format: [:resultNode | resultNode formattedText ];
-		display: [ :result :sample :parser | {PPParserDebuggerResult parse: sample with: parser } ];
+		display: [ :result :sample :stream :parser | {PPParserDebuggerResult parse: sample with: parser } ];
 		children: [:resultNode | resultNode children ].
 ]
 
@@ -42,7 +43,21 @@ PPParserInspector >> debuggerIn: composite [
 PPParserInspector >> inspectorsIn: composite [
 	self resultIn: composite.
 	self debuggerIn: composite.
-	"self tallyIn: composite  "
+	self tallyIn: composite.
+	self profileIn: composite.
+	self progressIn: composite
+]
+
+{ #category : #'private building' }
+PPParserInspector >> profileIn: composite [
+	composite table 
+		title: 'Profile';
+		column: 'Parser' evaluated: [ :each | each first displayName ];
+		column: 'Time (ms)' evaluated: [ :each | each second printString ];
+		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+		display: [ :result :sample :stream :parser  | stream asFrequencyTable ];
+		showOnly: 50
+
 ]
 
 { #category : #'private building' }
@@ -58,10 +73,22 @@ PPParserInspector >> progressChartIn: composite [
 ]
 
 { #category : #'private building' }
+PPParserInspector >> progressIn: composite [
+	composite morph 
+		title: 'Progress';
+		display: [:result :sample :stream :parser  | 
+			| morph |
+			morph := ScrollPane new.
+			morph color: Color white.
+			morph scroller addMorph: stream asPositionMorph.
+			morph ]
+]
+
+{ #category : #'private building' }
 PPParserInspector >> resultIn: composite [
 	(composite text)
 		title: 'Result';
-		display: [ :result :sample :parser | result ];
+		display: [ :result :sample :stream :parser | result ];
 		act: [ :text | text entity inspect ] icon: GLMUIThemeExtraIcons glamorousInspect entitled: 'Inspect'
 ]
 
@@ -80,7 +107,7 @@ PPParserInspector >> sampleIn: composite [
 				output := parser parse: stream.
 				output isPetitFailure
 					ifTrue: [ presentation selectionInterval: (output position + 1 to: output position) ].
-				(presentation pane port: #sample) value: presentation text.
+				(presentation pane port: #stream) value: stream.
 				output ]
 ]
 
@@ -91,5 +118,6 @@ PPParserInspector >> tallyIn: composite [
 		column: 'Parser' evaluated: [ :each | each first displayName ];
 		column: 'Count' evaluated: [ :each | each second printString ];
 		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
-		display: [:result :sample | (PPBrowserStream on: sample) asFrequencyTable ]
+		display: [:result :sample :stream :parser | stream asFrequencyTable ];
+		showOnly: 50
 ]
