@@ -71,7 +71,7 @@ PPParserInspector >> sampleIn: composite [
 		title: 'Sample';
 		display: '';
 		populate: #selection
-			icon: GLMUIThemeExtraIcons glamorousAccept 
+			icon: GLMUIThemeExtraIcons glamorousPlay
 			on: $s
 			entitled: 'Parse (s)'
 			with: [ :presentation :parser | 

@@ -11,7 +11,7 @@ Class {
 PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
-	browser column: #productions ; column: #workspace span: 3.
+	browser column: #productions ; column: #workspace span: 2.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
 	browser transmit to: #workspace; fromOutside: #entity; from: #productions; andShow: [:a | 

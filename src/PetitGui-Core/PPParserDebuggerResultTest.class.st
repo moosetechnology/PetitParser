@@ -21,11 +21,3 @@ PPParserDebuggerResultTest >> testNumberParser [
 	self assert: result children isEmpty.
 	self assert: result result = 1
 ]
-
-{ #category : #tests }
-PPParserDebuggerResultTest >> testSimple [ 
-	| parser result |
-	parser := nil asParser.
-	result := PPParserDebuggerResult parse: '' with: parser.
-	self assert: result children isEmpty
-]
