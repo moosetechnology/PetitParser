@@ -95,5 +95,5 @@ PPParserBrowser >> workspaceIn: composite [
 		wrapperBrowser transmit 
 			to: #wrapped; 
 			andShow: [ :a | a custom: ( PPParserInspector new browser ) ].
-		wrapperBrowser startOn: (class new "perform: parser") ]
+		wrapperBrowser startOn: (class new productionAt: parser) ]
 ]
