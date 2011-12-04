@@ -11,6 +11,7 @@ Class {
 PPAllParsersBrowser >> buildBrowser [
 	"self open"
 	browser := GLMTabulator new.
+	browser title: 'PetitParser Browser'.
 	browser 
 		row: #parser;
 		row: #classes size: 25.
@@ -24,15 +25,10 @@ PPAllParsersBrowser >> buildBrowser [
 { #category : #'private building' }
 PPAllParsersBrowser >> classesIn: composite [
 	composite dropDownList 
-			display: [ :class | self subclassesOf: class ]
+		display: [ :class | class allSubclasses asSortedCollection: [ :a :b | a name < b name ] ]
 ]
 
 { #category : #opening }
 PPAllParsersBrowser >> entity [
 	^ PPCompositeParser
-]
-
-{ #category : #querying }
-PPAllParsersBrowser >> subclassesOf: aBehavior [
-	^ aBehavior allSubclasses asSortedCollection: [ :a :b | a name < b name ]
 ]

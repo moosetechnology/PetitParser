@@ -14,15 +14,74 @@ PPParserBrowser >> buildBrowser [
 	browser column: #productions ; column: #workspace span: 2.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
-	browser transmit to: #workspace; fromOutside: #entity; from: #productions; andShow: [:a | 
+	browser transmit to: #workspace; fromOutsidePort: #entity; from: #productions; andShow: [:a | 
 		self workspaceIn: a ]. 
+	browser transmit from: #workspace; toOutsidePort: #productionToSelect; 
+		transformed: [:parser | parser name ];
+		when: [:parser | parser name notNil ].
+	browser transmit fromOutsidePort: #productionToSelect; to: #productions port: #selection.
 	^ browser
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> exampleIn: composite [
+	composite text
+		title: 'Example';
+		useExplicitNotNil;
+		display: [ :class :productionSelector | (self production: productionSelector from: class) example ]
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> graphIn: composite [
+	composite morph
+		title: 'Graph';
+		useExplicitNotNil;
+		display: [ :class :selector |
+			| morph |
+			morph := ScrollPane new.
+			morph color: Color white.
+			morph scroller addMorph: (self production: selector from: class) morphicProduction.
+			morph ]
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> inspectorIn: composite [
+	composite dynamic
+		title: 'Inspector';
+		display: [ :class :parser | 
+					| wrapperBrowser |
+					wrapperBrowser := GLMTabulator new.
+					wrapperBrowser column: #wrapped.
+					wrapperBrowser transmit
+						to: #wrapped;
+						andShow: [ :a | a custom: PPParserInspector new browser ].
+					wrapperBrowser startOn: (class new productionAt: parser) ]
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> mapIn: composite [
+	self class environment at: #GLMMondrianPresentation ifPresent: [ :cls |
+		composite mondrian
+			title: 'Map';
+			useExplicitNotNil;
+			painting: [ :view :class :selector |
+				(self production: selector from: class) viewAllNamedParsersOn: view ] ]	
+
+]
+
+{ #category : #'private utilities' }
+PPParserBrowser >> production: selector from: class [
+	| parser |
+	parser := class new.
+	^ selector isNil 
+		ifTrue: [ parser ]
+		ifFalse: [ parser productionAt: selector ]
 ]
 
 { #category : #'private building' }
 PPParserBrowser >> productionsIn: composite [
 	composite list
-			title: 'Productions';
+			title: [:class | class name ];
 			format: [ :class | class asString ];
 			display: [ :class | 
 				((((class allInstVarNames
@@ -72,12 +131,10 @@ PPParserBrowser >> sourceIn: composite [
 				sourceCodeAt: (production ifNil: [ #start ])
 				ifAbsent: [ String new ] ];
 		smalltalkClass: [ :class | class ];
-		act: [ :node  | 
-				| class selector |
-				class := self selectedClass.
-				selector := self sourceCode: node text asString in: class.
-				self selectedClass: class.
-				self selectedSelector: selector ]
+		act: [ :text :class  | 
+				|  selector |
+				selector := self sourceCode: text text asString in: class.
+				text selection: selector ]
 			icon: GLMUIThemeExtraIcons glamorousAccept 
 			on: $s 
 			entitled: 'accept (s)'
@@ -86,14 +143,8 @@ PPParserBrowser >> sourceIn: composite [
 { #category : #'private building' }
 PPParserBrowser >> workspaceIn: composite [
 	self sourceIn: composite.
-	composite dynamic 
-		title: 'Inspector';
-		display: [ :class :parser | 
-		| wrapperBrowser |
-		wrapperBrowser := GLMTabulator new.
-		wrapperBrowser column: #wrapped.
-		wrapperBrowser transmit 
-			to: #wrapped; 
-			andShow: [ :a | a custom: ( PPParserInspector new browser ) ].
-		wrapperBrowser startOn: (class new productionAt: parser) ]
+	self mapIn: composite.
+	self exampleIn: composite.
+	self inspectorIn: composite.
+
 ]
