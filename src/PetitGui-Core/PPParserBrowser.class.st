@@ -65,7 +65,10 @@ PPParserBrowser >> mapIn: composite [
 			title: 'Map';
 			useExplicitNotNil;
 			painting: [ :view :class :selector |
-				(self production: selector from: class) viewAllNamedParsersOn: view ] ]	
+				(self production: #start from: class)
+					viewAllNamedParsersWithSelection: (Array with: selector)  
+					previewing: [:eachParser | self sourceCodeFrom: class selector: eachParser name ]
+					on:  view ] ]	
 
 ]
 
@@ -122,21 +125,23 @@ PPParserBrowser >> sourceCode: aString in: aClass [
 ]
 
 { #category : #'private building' }
+PPParserBrowser >> sourceCodeFrom: class selector: production [
+	^ class sourceCodeAt: (production ifNil: [ #start ]) ifAbsent: [ String new ]
+]
+
+{ #category : #'private building' }
 PPParserBrowser >> sourceIn: composite [
 	composite smalltalkCode
 		title: 'Source';
 		useExplicitNotNil;
-		display: [ :class :production | 
-			class 
-				sourceCodeAt: (production ifNil: [ #start ])
-				ifAbsent: [ String new ] ];
+		display: [ :class :production | self sourceCodeFrom: class selector: production ];
 		smalltalkClass: [ :class | class ];
-		act: [ :text :class  | 
-				|  selector |
+		act: [ :text :class | 
+				| selector |
 				selector := self sourceCode: text text asString in: class.
 				text selection: selector ]
-			icon: GLMUIThemeExtraIcons glamorousAccept 
-			on: $s 
+			icon: GLMUIThemeExtraIcons glamorousAccept
+			on: $s
 			entitled: 'accept (s)'
 ]
 

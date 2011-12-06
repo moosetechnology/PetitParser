@@ -164,3 +164,19 @@ PPParser >> viewAllNamedParsersOn: view [
 	view edgesToAll: #namedParsers.
 	view horizontalDominanceTreeLayout layered
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames on: view [
+	self viewAllNamedParsersWithSelection: aCollectionOfNames previewing: [ :each | each name ] on: view
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBlock on: view [
+	view shape rectangle 
+		text: #displayName; 
+		borderColor: [:each | (aCollectionOfNames includes: each name) ifTrue: [Color red] ifFalse: [Color transparent]]. 
+	view interaction popupText: aBlock.
+	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
+	view edgesToAll: #namedParsers.
+	view horizontalDominanceTreeLayout verticalGap: 10; layered
+]
