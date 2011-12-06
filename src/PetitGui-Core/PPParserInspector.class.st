@@ -27,6 +27,10 @@ PPParserInspector >> buildBrowser [
 		fromOutside: #entity; "parser"  
 		to: #inspectors;
 		andShow: [ :a | self inspectorsIn: a ].
+	browser transmit 
+		from: #inspectors; 
+		to: #sample port: #selectionInterval; 
+		transformed: [:debugResult | debugResult start to: debugResult end ].
 	^ browser
 ]
 

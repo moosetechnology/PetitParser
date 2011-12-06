@@ -17,7 +17,9 @@ Class {
 		'parser',
 		'result',
 		'children',
-		'parent'
+		'parent',
+		'start',
+		'end'
 	],
 	#category : #'PetitGui-Core'
 }
@@ -36,7 +38,9 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 							parser: each;
 							parent: root.
 					root := root children add: child.
+					child start: stream position + 1.
 					result := continuation value.
+					child end: stream position.
 					root result: result.
 					root := root parent.
 					result ]]].
@@ -52,6 +56,16 @@ PPParserDebuggerResult >> children [
 { #category : #accessing }
 PPParserDebuggerResult >> children: anObject [
 	children := anObject
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> end [
+	^ end
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> end: anObject [
+	end := anObject
 ]
 
 { #category : #printing }
@@ -102,4 +116,14 @@ PPParserDebuggerResult >> result [
 { #category : #accessing }
 PPParserDebuggerResult >> result: anObject [
 	result := anObject
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> start [
+	^ start
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> start: anObject [
+	start := anObject
 ]
