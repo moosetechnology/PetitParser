@@ -14,6 +14,7 @@ PPParserInspector >> buildBrowser [
 	"self openOn: PPArithmeticParser new"
 
 	browser := GLMTabulator new.
+	browser title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
 	browser
 		row: #sample;
 		row: #inspectors.

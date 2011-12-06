@@ -11,6 +11,7 @@ Class {
 PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
+	browser title: [:each | each name].
 	browser column: #productions ; column: #workspace span: 2.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
@@ -54,7 +55,7 @@ PPParserBrowser >> inspectorIn: composite [
 					wrapperBrowser column: #wrapped.
 					wrapperBrowser transmit
 						to: #wrapped;
-						andShow: [ :a | a custom: PPParserInspector new browser ].
+						andShow: [ :a | a custom: PPParserInspector new browser noTitle ].
 					wrapperBrowser startOn: (class new productionAt: parser) ]
 ]
 
