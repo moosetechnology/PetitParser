@@ -148,6 +148,7 @@ PPParserBrowser >> sourceIn: composite [
 { #category : #'private building' }
 PPParserBrowser >> workspaceIn: composite [
 	self sourceIn: composite.
+	self graphIn: composite.
 	self mapIn: composite.
 	self exampleIn: composite.
 	self inspectorIn: composite.
