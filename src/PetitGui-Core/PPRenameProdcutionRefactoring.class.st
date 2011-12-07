@@ -8,6 +8,14 @@ Class {
 	#category : #'PetitGui-Refactoring'
 }
 
+{ #category : #'instance creation' }
+PPRenameProdcutionRefactoring class >> onClass: aClass rename: anOldSelector to: aNewSelector [
+	^ (self onClass: aClass)
+		setOldProduction: anOldSelector;
+		setNewProduction: aNewSelector;
+		yourself
+]
+
 { #category : #initialization }
 PPRenameProdcutionRefactoring >> setNewProduction: aSymbol [
 	newProduction := aSymbol
@@ -20,14 +28,14 @@ PPRenameProdcutionRefactoring >> setOldProduction: aSymbol [
 
 { #category : #transforming }
 PPRenameProdcutionRefactoring >> transform [
-	| baseClass baseEnvironment |
+	| baseClass oldEnvironment |
 	baseClass := class whoDefinesInstanceVariable: oldProduction asString.
 	self performComponentRefactoring: (RBRenameInstanceVariableRefactoring
 		model: model
 		rename: oldProduction asString
 		to: newProduction asString
 		in: baseClass).
-	baseEnvironment := model environment.
+	oldEnvironment := model environment.
 	model environment: (model environment
 		forClasses: baseClass realClass withAllSubclasses).
 	[ self performComponentRefactoring: (RBRenameMethodRefactoring
@@ -36,5 +44,5 @@ PPRenameProdcutionRefactoring >> transform [
 		in: baseClass
 		to: newProduction asSymbol 
 		permutation: #()) ]
-			ensure: [ model environment: baseEnvironment ]
+			ensure: [ model environment: oldEnvironment ]
 ]

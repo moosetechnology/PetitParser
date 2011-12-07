@@ -1,11 +1,18 @@
 Class {
 	#name : #PPGrammarRefactoring,
-	#superclass : #AnObsoleteRefactoring,
+	#superclass : #RBRefactoring,
 	#instVars : [
 		'class'
 	],
 	#category : #'PetitGui-Refactoring'
 }
+
+{ #category : #'instance creation' }
+PPGrammarRefactoring class >> onClass: aClass [
+	^ self new
+		setClass: aClass;
+		yourself
+]
 
 { #category : #preconditions }
 PPGrammarRefactoring >> preconditions [
