@@ -38,7 +38,23 @@ PPGrammarRefactoringTest >> testDefineProduction [
 	self assert: self changes first class = RBAddInstanceVariableChange.
 	self assert: self changes first variable = 'function'.
 	self assert: self changes last class = RBAddMethodChange.
-	self assert: self changes last selector = #function
+	self assert: self changes last parseTree = (RBParser parseMethod: 'function ^ #any asParser plus , $( asParser , $) asParser ==> [ :e | 0 ]')
+]
+
+{ #category : #testing }
+PPGrammarRefactoringTest >> testExtractProduction [
+	self performRefactoring: (PPExtractProdcutionRefactoring
+		onClass: PPArithmeticParser
+		production: #addition
+		interval: (36 to: 60)
+		to: #plusOrMinus).
+	self assert: self changes size = 3.
+	self assert: self changes first class = RBAddInstanceVariableChange.
+	self assert: self changes first variable = 'plusOrMinus'.
+	self assert: self changes second class = RBAddMethodChange.
+	self assert: self changes second parseTree = (RBParser parseMethod: 'plusOrMinus ^ $+ asParser / $- asParser').
+	self assert: self changes last class = RBAddMethodChange.
+	self assert: self changes last parseTree = (RBParser parseMethod: 'addition ^ (factors separatedBy: plusOrMinus token trim) foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]')
 ]
 
 { #category : #testing }
@@ -64,7 +80,7 @@ PPGrammarRefactoringTest >> testRenameProduction [
 	self assert: self changes first oldName = 'addition'.
 	self assert: self changes first newName = 'add'.
 	self assert: self changes second class = RBAddMethodChange.
-	self assert: self changes second selector = #add.
+	self assert: self changes second parseTree = (RBParser parseMethod: 'add ^ (factors separatedBy: ($+ asParser / $- asParser) token trim) foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]').
 	self assert: self changes last class = RBRemoveMethodChange.
 	self assert: self changes last selector = #addition
 ]
