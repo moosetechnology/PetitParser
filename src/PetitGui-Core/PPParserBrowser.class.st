@@ -45,6 +45,28 @@ PPParserBrowser >> graphIn: composite [
 			morph ]
 ]
 
+{ #category : #'private refactoring' }
+PPParserBrowser >> handleError: anException [
+	self halt.
+	anException actionBlock isNil
+		ifTrue: [ UIManager default inform: anException messageText ]
+		ifFalse: [ 
+			(UIManager default confirm: anException messageText) 
+				ifTrue: [ anException actionBlock value ] ].
+	anException return
+]
+
+{ #category : #'private refactoring' }
+PPParserBrowser >> handleWarning: anException [ 
+	| message |
+	message := (anException messageText endsWith: '?')
+		ifTrue: [ anException messageText ]
+		ifFalse: [ anException messageText , String cr , 'Do you want to proceed?' ].
+	(UIManager default confirm: message)
+		ifTrue: [ anException resume ]
+		ifFalse: [ anException return ]
+]
+
 { #category : #'private building' }
 PPParserBrowser >> inspectorIn: composite [
 	composite dynamic
@@ -73,6 +95,15 @@ PPParserBrowser >> mapIn: composite [
 
 ]
 
+{ #category : #'private refactoring' }
+PPParserBrowser >> performRefactoring: aRefactoring [
+	[ [ aRefactoring execute ]
+		on: RBRefactoringWarning
+		do: [ :exception | self handleWarning: exception ] ]
+		on: RBRefactoringError
+		do: [ :exception | self handleError: exception ]
+]
+
 { #category : #'private utilities' }
 PPParserBrowser >> production: selector from: class [
 	| parser |
@@ -96,16 +127,44 @@ PPParserBrowser >> productionsIn: composite [
 		format: [ :class | class asString ];
 		display: [ :class | self productionSelectorsFrom: class ];
 		shouldValidate: true;
+		
+		"Doru: These menus should be built dynamically: title and enabled status should adapt"
+		selectionAct: [ :list :class |
+ 			RBRefactoryChangeManager instance
+				redoOperation.
+			list pane browser update ]
+			"enabled: RBRefactoryChangeManager instance hasRedoableOperations"
+			entitled: 'Redo' " , RBRefactoryChangeManager instance redoChange";
+		selectionAct: [ :list :class |
+ 			RBRefactoryChangeManager instance
+				undoOperation.
+			list pane browser update ]
+			"enabled: RBRefactoryChangeManager instance hasUndoableOperations"
+			entitled: 'Undo ' " , RBRefactoryChangeManager instance undoChange ";
+
+		"Doru: Need a horizontal ruler here"
 		selectionAct: [ :list :class | 
-			| refactoring |
-			refactoring := PPRemoveProdcutionRefactoring onClass: class production: list selection.
-			refactoring execute.
+			self performRefactoring: (PPRenameProdcutionRefactoring
+				onClass: class
+				rename: list selection
+				to: (UIManager default
+					request: 'Production name:'
+					initialAnswer: list selection)).
+			list pane browser update ]  
+			on: $r
+			entitled: 'Rename (r)';
+		selectionAct: [ :list :class | 
+			self performRefactoring: (PPRemoveProdcutionRefactoring
+				onClass: class 
+				production: list selection).
 			list pane browser update ]  
 			on: $x
-			entitled: 'remove (x)';
+			entitled: 'Remove (x)';
+
+		"Doru: Need a horizontal ruler here"
 		selectionAct: [ :list :class | StandardToolSet browse: class selector: list selection ] 
 			on: $b 
-			entitled: 'browse (b)'
+			entitled: 'Browse (b)'
 ]
 
 { #category : #'private building' }
@@ -126,7 +185,7 @@ PPParserBrowser >> sourceIn: composite [
 						onClass: class 
 						source: text text asString 
 						protocols: #(grammar).
-				refactoring execute.
+				self performRefactoring: refactoring.
 				selector := refactoring changes changes last selector.
 				selector = production 
 					ifTrue: [text update]
@@ -135,7 +194,7 @@ PPParserBrowser >> sourceIn: composite [
 						(text pane port: #productionToSelect) value: selector ] ]
 			icon: GLMUIThemeExtraIcons glamorousAccept
 			on: $s
-			entitled: 'accept'
+			entitled: 'Accept'
 ]
 
 { #category : #'private building' }
