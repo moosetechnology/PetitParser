@@ -47,7 +47,6 @@ PPParserBrowser >> graphIn: composite [
 
 { #category : #'private refactoring' }
 PPParserBrowser >> handleError: anException [
-	self halt.
 	anException actionBlock isNil
 		ifTrue: [ UIManager default inform: anException messageText ]
 		ifFalse: [ 
@@ -104,6 +103,15 @@ PPParserBrowser >> performRefactoring: aRefactoring [
 		do: [ :exception | self handleError: exception ]
 ]
 
+{ #category : #'private refactoring' }
+PPParserBrowser >> performRenameProduction: oldName from: class [
+	| refactoring newName |
+	newName := UIManager default request: 'Production name:' initialAnswer: oldName.
+	refactoring := PPRenameProdcutionRefactoring onClass: class rename: oldName to: newName.
+	self performRefactoring: refactoring.
+	^ refactoring
+]
+
 { #category : #'private utilities' }
 PPParserBrowser >> production: selector from: class [
 	| parser |
@@ -122,52 +130,44 @@ PPParserBrowser >> productionSelectorsFrom: class [
 
 { #category : #'private building' }
 PPParserBrowser >> productionsIn: composite [
+	"Doru: These menus should be built dynamically: title and enabled status should adapt" 
+	"enabled: RBRefactoryChangeManager instance hasRedoableOperations"	" , RBRefactoryChangeManager instance redoChange"	"enabled: RBRefactoryChangeManager instance hasUndoableOperations"	" , RBRefactoryChangeManager instance undoChange "
+
 	composite list
 		title: [ :class | class name ];
 		format: [ :class | class asString ];
 		display: [ :class | self productionSelectorsFrom: class ];
 		shouldValidate: true;
-		
-		"Doru: These menus should be built dynamically: title and enabled status should adapt"
-		selectionAct: [ :list :class |
- 			RBRefactoryChangeManager instance
-				redoOperation.
-			list pane browser update ]
-			"enabled: RBRefactoryChangeManager instance hasRedoableOperations"
-			entitled: 'Redo' " , RBRefactoryChangeManager instance redoChange";
-		selectionAct: [ :list :class |
- 			RBRefactoryChangeManager instance
-				undoOperation.
-			list pane browser update ]
-			"enabled: RBRefactoryChangeManager instance hasUndoableOperations"
-			entitled: 'Undo ' " , RBRefactoryChangeManager instance undoChange ";
-
-		"Doru: Need a horizontal ruler here"
-		selectionAct: [ :list :class | 
-			self performRefactoring: (PPRenameProdcutionRefactoring
-				onClass: class
-				rename: list selection
-				to: (UIManager default
-					request: 'Production name:'
-					initialAnswer: list selection)).
-			list pane browser update ]  
+		act: [ :list :class | 
+					RBRefactoryChangeManager instance redoOperation.
+					list pane browser update ]
+			icon: GLMUIThemeExtraIcons glamorousRedo
+			entitled: 'Redo';
+		act: [ :list :class | 
+					RBRefactoryChangeManager instance undoOperation.
+					list pane browser update ]
+			icon: GLMUIThemeExtraIcons glamorousUndo
+			entitled: 'Undo';
+		selectionAct: [ :list  :class | 
+					| oldName refactoring |
+					oldName := list selection.
+					refactoring := self performRenameProduction: oldName from: class.
+					refactoring changes changes notEmpty ifTrue: [
+						list update.
+						list selection: refactoring changes changes first newName asSymbol ] ]
 			on: $r
 			entitled: 'Rename (r)';
 		selectionAct: [ :list :class | 
-			self performRefactoring: (PPRemoveProdcutionRefactoring
-				onClass: class 
-				production: list selection).
-			list pane browser update ]  
+					self performRefactoring: (PPRemoveProdcutionRefactoring onClass: class production: list selection).
+					list pane browser update ]
 			on: $x
 			entitled: 'Remove (x)';
-
-		"Doru: Need a horizontal ruler here"
-		selectionAct: [ :list :class | StandardToolSet browse: class selector: list selection ] 
-			on: $b 
-			entitled: 'Browse (b)'
+		selectionAct: [ :list :class | StandardToolSet browse: class selector: list selection ]
+			on: $b
+			entitled: 'Browse (b)'	
 ]
 
-{ #category : #'private building' }
+{ #category : #'private utilities' }
 PPParserBrowser >> sourceCodeFrom: class selector: production [
 	^ class sourceCodeAt: (production ifNil: [ #start ]) ifAbsent: [ String new ]
 ]
