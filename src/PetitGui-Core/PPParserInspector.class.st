@@ -16,8 +16,8 @@ PPParserInspector >> buildBrowser [
 	browser := GLMTabulator new.
 	browser title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
 	browser
-		row: #sample;
-		row: #inspectors.
+		column: #sample;
+		column: #inspectors.
 	(browser transmit)
 		to: #sample;
 		andShowIfNone: [ :a | self sampleIn: a ].
@@ -61,6 +61,7 @@ PPParserInspector >> profileIn: composite [
 		column: 'Time (ms)' evaluated: [ :each | each second printString ];
 		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 		display: [ :result :sample :stream :parser  | stream asFrequencyTable ];
+		noSelection;
 		showOnly: 50
 
 ]
@@ -94,7 +95,7 @@ PPParserInspector >> resultIn: composite [
 	(composite text)
 		title: 'Result';
 		display: [ :result :sample :stream :parser | result ];
-		act: [ :text | text entity inspect ] icon: GLMUIThemeExtraIcons glamorousInspect entitled: 'Inspect'
+		act: [ :text :result :sample :stream :parser | text inspect ] icon: GLMUIThemeExtraIcons glamorousInspect entitled: 'Inspect'
 ]
 
 { #category : #'private building' }
@@ -124,5 +125,6 @@ PPParserInspector >> tallyIn: composite [
 		column: 'Count' evaluated: [ :each | each second printString ];
 		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
 		display: [:result :sample :stream :parser | stream asFrequencyTable ];
+		noSelection;
 		showOnly: 50
 ]

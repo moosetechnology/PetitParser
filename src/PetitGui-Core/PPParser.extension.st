@@ -109,11 +109,11 @@ PPParser >> namedParsersDo: aBlock [
 PPParser >> namedParsersDo: aBlock seen: aSet [
     self children do: [ :each | 
         (aSet includes: each)
-            ifTrue: [ ^ self ].
-        aSet add: each.
-        each name isEmptyOrNil
-            ifFalse: [ aBlock value: each ]
-            ifTrue: [ each namedParsersDo: aBlock seen: aSet ] ]
+            ifFalse: [
+		        aSet add: each.
+		        each name isEmptyOrNil
+		            ifFalse: [ aBlock value: each ]
+		            ifTrue: [ each namedParsersDo: aBlock seen: aSet ] ] ]
 ]
 
 { #category : #'*petitgui-morphic-creational' }
@@ -176,6 +176,7 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBl
 		text: #displayName; 
 		borderColor: [:each | (aCollectionOfNames includes: each name) ifTrue: [Color red] ifFalse: [Color transparent]]. 
 	view interaction popupText: aBlock.
+	view interaction item: 'Explore' action: #explore.
 	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
 	view edgesToAll: #namedParsers.
 	view horizontalDominanceTreeLayout verticalGap: 10; layered

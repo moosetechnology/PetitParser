@@ -12,11 +12,16 @@ PPParserBrowser >> buildBrowser [
 	"self openOn: PPArithmeticParser"
 	browser := GLMTabulator new.
 	browser title: [:each | each name].
-	browser column: #productions ; column: #workspace span: 2.
+	browser 
+		row: [:r | r column: #productions ; column: #workspace span: 2];
+		row: #inspector.
 	browser transmit to: #productions; andShow: [:a | 
 	 	self productionsIn: a ]. 
 	browser transmit to: #workspace; fromOutsidePort: #entity; from: #productions; andShow: [:a | 
 		self workspaceIn: a ]. 
+	browser transmit to: #inspector; fromOutsidePort: #entity; from: #productions; andShow: [:a |
+		self inspectorIn: a ].
+
 	browser transmit from: #workspace; toOutsidePort: #productionToSelect; 
 		transformed: [:parser | parser name ];
 		when: [:parser | parser name notNil ].
@@ -69,15 +74,15 @@ PPParserBrowser >> handleWarning: anException [
 { #category : #'private building' }
 PPParserBrowser >> inspectorIn: composite [
 	composite dynamic
-		title: 'Inspector';
-		display: [ :class :parser | 
+"		title: 'Inspector';"
+		display: [ :class :productionSelector | 
 					| wrapperBrowser |
 					wrapperBrowser := GLMTabulator new.
 					wrapperBrowser column: #wrapped.
 					wrapperBrowser transmit
 						to: #wrapped;
 						andShow: [ :a | a custom: PPParserInspector new browser noTitle ].
-					wrapperBrowser startOn: (class new productionAt: parser) ]
+					wrapperBrowser startOn: (class new productionAt: productionSelector) end ]
 ]
 
 { #category : #'private building' }
@@ -203,6 +208,6 @@ PPParserBrowser >> workspaceIn: composite [
 	self graphIn: composite.
 	self mapIn: composite.
 	self exampleIn: composite.
-	self inspectorIn: composite.
+"	self inspectorIn: composite."
 
 ]
