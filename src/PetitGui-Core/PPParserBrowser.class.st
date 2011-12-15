@@ -34,7 +34,8 @@ PPParserBrowser >> exampleIn: composite [
 	composite text
 		title: 'Example';
 		useExplicitNotNil;
-		display: [ :class :productionSelector | (self production: productionSelector from: class) example ]
+		display: [ :class :productionSelector | (self production: productionSelector from: class) example ];
+		act: [:text | text update] icon: GLMUIThemeExtraIcons glamorousRefresh entitled: 'Generate another one'
 ]
 
 { #category : #'private building' }
@@ -82,7 +83,7 @@ PPParserBrowser >> inspectorIn: composite [
 					wrapperBrowser transmit
 						to: #wrapped;
 						andShow: [ :a | a custom: PPParserInspector new browser noTitle ].
-					wrapperBrowser startOn: (class new productionAt: productionSelector) end ]
+					wrapperBrowser startOn: ([(class new productionAt: productionSelector) end] on: Error do: [:e | nil]) ]
 ]
 
 { #category : #'private building' }
