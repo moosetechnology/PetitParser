@@ -187,6 +187,25 @@ PPParserBrowser >> sourceIn: composite [
 		smalltalkClass: [ :class | class ];
 		act: [ :text :class :production | 
 				| selector refactoring |
+				selector := UIManager default
+					request: 'Production name to extract to:'
+					initialAnswer: ''
+					title: 'Extract production'.
+				selector isEmptyOrNil ifFalse: [
+					selector := selector asSymbol.
+					refactoring := PPExtractProdcutionRefactoring
+						onClass: class
+						production: production
+						interval: text selectionInterval
+						to: selector.
+					self performRefactoring: refactoring.
+					text pane browser update.
+					(text pane port: #productionToSelect) value: selector ] ]
+			icon: GLMUIThemeExtraIcons glamorousOver
+			on: $e
+			entitled: 'Extract production';		
+		act: [ :text :class :production | 
+				| selector refactoring |
 				refactoring := PPDefineProdcutionRefactoring 	
 						onClass: class 
 						source: text text asString 
