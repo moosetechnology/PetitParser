@@ -13,8 +13,8 @@ PPAllParsersBrowser >> buildBrowser [
 	browser := GLMTabulator new.
 	browser title: 'PetitParser Browser'.
 	browser 
-		row: #parser;
-		row: #classes size: 25.
+		row: #classes size: 25;
+		row: #parser.
 	browser transmit to: #classes; andShow: [:a | 
 		self classesIn: a ]. 
 	browser transmit to: #parser; from: #classes; andShow: [:a | 

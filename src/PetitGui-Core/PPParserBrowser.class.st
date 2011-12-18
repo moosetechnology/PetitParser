@@ -75,15 +75,16 @@ PPParserBrowser >> handleWarning: anException [
 { #category : #'private building' }
 PPParserBrowser >> inspectorIn: composite [
 	composite dynamic
-"		title: 'Inspector';"
+		allowNil;
 		display: [ :class :productionSelector | 
 					| wrapperBrowser |
 					wrapperBrowser := GLMTabulator new.
+					wrapperBrowser allowNil.
 					wrapperBrowser column: #wrapped.
 					wrapperBrowser transmit
 						to: #wrapped;
 						andShow: [ :a | a custom: PPParserInspector new browser noTitle ].
-					wrapperBrowser startOn: ([(class new productionAt: productionSelector) end] on: Error do: [:e | nil]) ]
+					wrapperBrowser startOn: ([(self production: productionSelector from: class) end] on: Error do: [:e | nil]) ]
 ]
 
 { #category : #'private building' }
@@ -185,7 +186,7 @@ PPParserBrowser >> sourceIn: composite [
 		useExplicitNotNil;
 		display: [ :class :production | self sourceCodeFrom: class selector: production ];
 		smalltalkClass: [ :class | class ];
-		act: [ :text :class :production | 
+		selectionAct: [ :text :class :production | 
 				| selector refactoring |
 				selector := UIManager default
 					request: 'Production name to extract to:'
@@ -201,7 +202,6 @@ PPParserBrowser >> sourceIn: composite [
 					self performRefactoring: refactoring.
 					text pane browser update.
 					(text pane port: #productionToSelect) value: selector ] ]
-			icon: GLMUIThemeExtraIcons glamorousOver
 			on: $e
 			entitled: 'Extract production';		
 		act: [ :text :class :production | 

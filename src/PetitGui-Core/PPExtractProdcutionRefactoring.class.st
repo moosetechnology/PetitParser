@@ -39,12 +39,25 @@ PPExtractProdcutionRefactoring >> nameNewMethod: aSymbol [
 ]
 
 { #category : #preconditions }
+PPExtractProdcutionRefactoring >> preconditionIsSubclassOfCompositeParser [
+	^ RBCondition new
+			type: (Array with: #subclass with: self rootClass with: class)
+			block: [class includesClass: self rootClass]
+			errorString: class printString , ' is <1?:not >a subclass of ' , self rootClass printString
+]
+
+{ #category : #preconditions }
 PPExtractProdcutionRefactoring >> preconditions [
 	^ (RBCondition isMetaclass: class) not
-		& (RBCondition isSubclass: class of: (self classObjectFor: #PPCompositeParser))
+		& self preconditionIsSubclassOfCompositeParser
 		& super preconditions		
 		& (RBCondition definesSelector: targetProduction asSymbol in: class) not
 		& (RBCondition definesInstanceVariable: targetProduction asString in: class) not
+]
+
+{ #category : #utilities }
+PPExtractProdcutionRefactoring >> rootClass [
+	^ self classObjectFor: #PPCompositeParser
 ]
 
 { #category : #initialization }
