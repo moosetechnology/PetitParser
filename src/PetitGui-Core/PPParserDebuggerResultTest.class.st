@@ -1,7 +1,7 @@
 Class {
 	#name : #PPParserDebuggerResultTest,
 	#superclass : #TestCase,
-	#category : #'PetitGui-Core'
+	#category : #'PetitGui-Tests'
 }
 
 { #category : #tests }

@@ -1,7 +1,8 @@
 Class {
 	#name : #PPDefineProdcutionRefactoring,
-	#superclass : #PPGrammarRefactoring,
+	#superclass : #RBRefactoring,
 	#instVars : [
+		'class',
 		'source',
 		'protocols',
 		'method'
@@ -11,7 +12,8 @@ Class {
 
 { #category : #'instance creation' }
 PPDefineProdcutionRefactoring class >> onClass: aClass source: aString protocols: anArray [
-	^ (self onClass: aClass)
+	^ self new
+		setClass: aClass;
 		setSource: aString;
 		setProtocols: anArray;
 		yourself
@@ -23,14 +25,21 @@ PPDefineProdcutionRefactoring >> checkSource [
 	method := RBParser
 		parseMethod: source
 		onError: [ :string :position | ^ false ].
-	((rewriter := self sourceRewriter) executeTree: method)
-		ifTrue: [ method := rewriter tree ].
+	rewriter := self sourceRewriter.
+	[ rewriter executeTree: method ]
+		whileTrue: [ method := rewriter tree ].
 	^ method selector isUnary
 ]
 
 { #category : #preconditions }
 PPDefineProdcutionRefactoring >> preconditions [
-	^ super preconditions & (RBCondition withBlock: [ self checkSource ] errorString: 'Unable to parse source code')
+	^ (self checkCompositeParser: class)
+		& (RBCondition withBlock: [ self checkSource ] errorString: 'Unable to parse source code')
+]
+
+{ #category : #initialization }
+PPDefineProdcutionRefactoring >> setClass: aClass [
+	class := self classObjectFor: aClass
 ]
 
 { #category : #initialization }

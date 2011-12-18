@@ -1,24 +1,31 @@
 Class {
 	#name : #PPRemoveProdcutionRefactoring,
-	#superclass : #PPGrammarRefactoring,
+	#superclass : #RBRefactoring,
 	#instVars : [
-		'production'
+		'production',
+		'class'
 	],
 	#category : #'PetitGui-Refactoring'
 }
 
 { #category : #'instance creation' }
 PPRemoveProdcutionRefactoring class >> onClass: aClass production: aSelector [
-	^ (self onClass: aClass)
+	^ self new
+		setClass: aClass;
 		setProduction: aSelector;
 		yourself
 ]
 
 { #category : #preconditions }
 PPRemoveProdcutionRefactoring >> preconditions [
-	^ super preconditions
+	^ (self checkCompositeParser: class)
 		& (RBCondition definesSelector: production asSymbol in: class)
 		& (RBCondition definesInstanceVariable: production asString in: class)
+]
+
+{ #category : #initialization }
+PPRemoveProdcutionRefactoring >> setClass: aClass [
+	class := self classObjectFor: aClass
 ]
 
 { #category : #initialization }

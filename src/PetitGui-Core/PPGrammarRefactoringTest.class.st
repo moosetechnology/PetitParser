@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'refactoring'
 	],
-	#category : #'PetitGui-Refactoring'
+	#category : #'PetitGui-Tests'
 }
 
 { #category : #accessing }
@@ -28,7 +28,36 @@ PPGrammarRefactoringTest >> refactoring [
 	^ refactoring
 ]
 
-{ #category : #testing }
+{ #category : #'testing-parsers' }
+PPGrammarRefactoringTest >> testAddParser [
+	self performRefactoring: (PPAddParserRefactoring
+		name: #PPMockParser
+		category: #'PetitGui-Mock').
+	self assert: self changes size = 2.
+	self assert: self changes first class = RBAddClassChange.
+	self assert: self changes first definitionClass = PPCompositeParser.
+	self assert: self changes first changeClassName = #PPMockParser.
+	self assert: self changes first category = #'PetitGui-Mock'.
+	self assert: self changes last class = RBAddMethodChange.
+	self assert: self changes last parseTree = (RBParser parseMethod: 'start ^ self shouldBeImplemented')
+]
+
+{ #category : #'testing-parsers' }
+PPGrammarRefactoringTest >> testAddParserWithSuperclass [
+	self performRefactoring: (PPAddParserRefactoring
+		name: #PPMockParser
+		category: #'PetitGui-Mock'
+		superclass: PPArithmeticParser).
+	self assert: self changes size = 2.
+	self assert: self changes first class = RBAddClassChange.
+	self assert: self changes first definitionClass = PPArithmeticParser.
+	self assert: self changes first changeClassName = #PPMockParser.
+	self assert: self changes first category = #'PetitGui-Mock'.
+	self assert: self changes last class = RBAddMethodChange.
+	self assert: self changes last parseTree = (RBParser parseMethod: 'start ^ self shouldBeImplemented')
+]
+
+{ #category : #'testing-productions' }
 PPGrammarRefactoringTest >> testDefineProduction [
 	self performRefactoring: (PPDefineProdcutionRefactoring
 		onClass: PPArithmeticParser
@@ -41,7 +70,7 @@ PPGrammarRefactoringTest >> testDefineProduction [
 	self assert: self changes last parseTree = (RBParser parseMethod: 'function ^ #any asParser plus , $( asParser , $) asParser ==> [ :e | 0 ]')
 ]
 
-{ #category : #testing }
+{ #category : #'testing-productions' }
 PPGrammarRefactoringTest >> testExtractProduction [
 	self performRefactoring: (PPExtractProdcutionRefactoring
 		onClass: PPArithmeticParser
@@ -57,7 +86,15 @@ PPGrammarRefactoringTest >> testExtractProduction [
 	self assert: self changes last parseTree = (RBParser parseMethod: 'addition ^ (factors separatedBy: plusOrMinus token trim) foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]')
 ]
 
-{ #category : #testing }
+{ #category : #'testing-parsers' }
+PPGrammarRefactoringTest >> testRemoveParser [
+	self performRefactoring: (PPRemoveParserRefactoring onClass: PPArithmeticParser).
+	self assert: self changes size = 1.
+	self assert: self changes first class =  RBRemoveClassChange.
+	self assert: self changes first changeClassName = 'PPArithmeticParser'
+]
+
+{ #category : #'testing-productions' }
 PPGrammarRefactoringTest >> testRemoveProduction [
 	self performRefactoring: (PPRemoveProdcutionRefactoring
 		onClass: PPArithmeticParser
@@ -69,7 +106,7 @@ PPGrammarRefactoringTest >> testRemoveProduction [
 	self assert: self changes last variable = 'addition'
 ]
 
-{ #category : #testing }
+{ #category : #'testing-productions' }
 PPGrammarRefactoringTest >> testRenameProduction [
 	self performRefactoring: (PPRenameProdcutionRefactoring
 		onClass: PPArithmeticParser

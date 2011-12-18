@@ -1,19 +1,31 @@
 Class {
 	#name : #PPRenameProdcutionRefactoring,
-	#superclass : #PPGrammarRefactoring,
+	#superclass : #RBRefactoring,
 	#instVars : [
 		'oldProduction',
-		'newProduction'
+		'newProduction',
+		'class'
 	],
 	#category : #'PetitGui-Refactoring'
 }
 
 { #category : #'instance creation' }
 PPRenameProdcutionRefactoring class >> onClass: aClass rename: anOldSelector to: aNewSelector [
-	^ (self onClass: aClass)
+	^ self new
+		setClass: aClass;
 		setOldProduction: anOldSelector;
 		setNewProduction: aNewSelector;
 		yourself
+]
+
+{ #category : #preconditions }
+PPRenameProdcutionRefactoring >> preconditions [
+	^ self checkCompositeParser: class
+]
+
+{ #category : #initialization }
+PPRenameProdcutionRefactoring >> setClass: aClass [
+	class := self classObjectFor: aClass
 ]
 
 { #category : #initialization }
