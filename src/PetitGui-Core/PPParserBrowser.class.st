@@ -39,6 +39,29 @@ PPParserBrowser >> exampleIn: composite [
 ]
 
 { #category : #'private building' }
+PPParserBrowser >> firstIn: composite [
+	composite list
+		title: 'First';
+		useExplicitNotNil;
+		display: [ :class :productionSelector | (self production: productionSelector from: class) firstSet ];
+		format: [ :parser | parser displayName ]
+]
+
+{ #category : #'private building' }
+PPParserBrowser >> followIn: aBrowser [
+	aBrowser list
+		title: 'Follow';
+		useExplicitNotNil;
+		format: [ :parser | parser displayName ];
+		display: [ :class :productionSelector | 
+			| parser |
+			parser := class new.
+			parser followSets
+				at: (parser productionAt: productionSelector)
+				ifAbsent: [ Array with: nil asParser ] ]
+]
+
+{ #category : #'private building' }
 PPParserBrowser >> graphIn: composite [
 	composite morph
 		title: 'Graph';
@@ -228,6 +251,6 @@ PPParserBrowser >> workspaceIn: composite [
 	self graphIn: composite.
 	self mapIn: composite.
 	self exampleIn: composite.
-"	self inspectorIn: composite."
-
+	self firstIn: composite.
+	self followIn: composite.
 ]
