@@ -35,7 +35,7 @@ PPXPathGrammar >> multiple [
 
 { #category : #'as yet unclassified' }
 PPXPathGrammar >> nameToken [
-	^ (#letter asParser / $_ asParser) plus flatten
+	^ (#letter asParser / $_ asParser / $- asParser) plus flatten
 ]
 
 { #category : #'as yet unclassified' }
