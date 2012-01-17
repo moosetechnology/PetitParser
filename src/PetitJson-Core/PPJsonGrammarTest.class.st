@@ -14,6 +14,7 @@ PPJsonGrammarTest >> assertInvalid: aString [
 	self 
 		should: [ self parse: aString ]
 		raise: TestResult failure
+		description: 'PetitParser could parse an invalid input'
 ]
 
 { #category : #accessing }
@@ -100,6 +101,13 @@ PPJsonGrammarTest >> testInvalidNull [
 	self assertInvalid: 'nu'.
 	self assertInvalid: 'nuclear'.
 	self assertInvalid: 'nullified'
+]
+
+{ #category : #'testing-invalid' }
+PPJsonGrammarTest >> testInvalidNumberInteger [
+	self assertInvalid: '00'.
+	self assertInvalid: '01'.
+	self assertInvalid: '00.1'
 ]
 
 { #category : #'testing-invalid' }
