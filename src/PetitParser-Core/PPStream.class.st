@@ -13,6 +13,13 @@ PPStream >> asPetitStream [
 ]
 
 { #category : #accessing }
+PPStream >> collection [
+	"Answer the underlying collection."
+	
+	^ collection
+]
+
+{ #category : #accessing }
 PPStream >> peek [
 	"An improved version of peek, that is slightly faster than the built in version."
 
