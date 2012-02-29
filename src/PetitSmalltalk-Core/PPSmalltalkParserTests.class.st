@@ -11,7 +11,7 @@ PPSmalltalkParserTests >> assert: aNode format: aString [
 	self assert: aNode size = aString size.
 	aNode
 		with: aString
-		do: [ :node :string | self assert: (RBFormatter new format: node) withBlanksTrimmed = string ]
+		do: [ :node :string | self assert: (RBFormatter new format: node) = string ]
 ]
 
 { #category : #accessing }
