@@ -142,6 +142,7 @@ ConfigurationOfPetitParser >> baseline13: spec [
 			spec
 				className: 'ConfigurationOfGlamour';
 				versionString: '2.1';
+				loads: #(Core Morphic);
 				repository: 'http://www.squeaksource.com/Glamour' ].
 		
 		spec 
@@ -185,6 +186,59 @@ ConfigurationOfPetitParser >> baseline13: spec [
 ]
 
 { #category : #baselines }
+ConfigurationOfPetitParser >> baseline15: spec [
+	<version: '1.5-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec description: 'Describing all satellite packages'.
+		spec repository: 'http://source.lukas-renggli.ch/petit'.
+		spec project: 'Glamour for Petit' with: [
+			spec
+				className: 'ConfigurationOfGlamour';
+				versionString: #stable;
+				loads: #(Core Morphic);
+				repository: 'http://www.squeaksource.com/Glamour' ].
+		
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [
+				spec requires: #('PetitParser' ). ];
+			package: 'PetitAnalyzer' with: [
+				spec requires: #('PetitTests' ). ];
+			package: 'PetitGui' with: [
+				spec requires: #('PetitParser' 'Glamour for Petit' ). ].
+		
+		spec
+			package: 'PrettyPetit'.
+		
+		spec
+			package: 'PetitSmalltalk' with: [
+				spec requires: #( 'PetitParser' 'PetitTests') ];
+			package: 'PetitCSV' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitJson' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitMSE' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitManifestMf' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitRegex' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitXPath' with: [
+				spec requires: #('PetitParser' 'PetitXml') ];
+			package: 'PetitXml' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'Factorial-Language' with: [
+				spec requires: #('PetitParser') ].
+.
+		spec 
+			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
+			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
+
+]
+
+{ #category : #baselines }
 ConfigurationOfPetitParser >> default: spec [ 
 	<version: 'default'>
 	
@@ -203,6 +257,7 @@ ConfigurationOfPetitParser >> default: spec [
 					className: 'ConfigurationOfGlamour';
 					file: 'ConfigurationOfGlamour';
 					version: 'default';
+					loads: #(Core Morphic);
 					repository: 'http://www.squeaksource.com/Glamour' ].
 	]
 ]
@@ -211,8 +266,7 @@ ConfigurationOfPetitParser >> default: spec [
 ConfigurationOfPetitParser >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '1.4'.
-
+	spec for: #'common' version: '1.5-baseline'
 ]
 
 { #category : #baselines }
@@ -247,8 +301,8 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '1.2'.
-
+	spec for: #'common' version: '1.4'.
+	spec for: #'pharo1.3.x' version: '1.4'
 ]
 
 { #category : #versions }
