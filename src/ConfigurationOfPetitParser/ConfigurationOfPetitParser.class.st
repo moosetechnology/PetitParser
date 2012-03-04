@@ -233,8 +233,10 @@ ConfigurationOfPetitParser >> baseline15: spec [
 				spec requires: #('PetitParser') ].
 .
 		spec 
+			group: 'default' with: #('UI' 'Tests');
 			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
-			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
+			group: 'UI' with: #('Core' 'PetitGui' );
+			group: 'Tests' with: #('Core' 'PetitTests'). ].
 
 ]
 
@@ -301,8 +303,8 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '1.4'.
-	spec for: #'pharo1.3.x' version: '1.4'
+	spec for: #'common' version: '1.5'.
+	spec for: #'pharo1.3.x' version: '1.5'
 ]
 
 { #category : #versions }
@@ -393,5 +395,24 @@ ConfigurationOfPetitParser >> version14: spec [
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.39';
 			package: 'PetitGui' with: 'PetitGui-TudorGirba.65';
 			package: 'PetitSmalltalk' with: 'PetitSmalltalk-lr.47'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version15: spec [
+	<version: '1.5' imports: #('1.5-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'development'.
+		spec description: ''.
+		spec author: 'DamienPollet'.
+		spec timestamp: '8/11/2011 14:00'.
+		spec project: 'Glamour for Petit' with: '2.2'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-lr.228';
+			package: 'PetitTests' with: 'PetitTests-lr.43';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.39';
+			package: 'PetitGui' with: 'PetitGui-TudorGirba.90';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-lr.57'. ].
 
 ]
