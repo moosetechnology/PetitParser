@@ -64,16 +64,7 @@ PPXmlGrammar >> comment [
 PPXmlGrammar >> content [
 	"[43]   	content	   ::=   	 CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*"
 				
-	^ characterData optional , ((element / processing / comment) , characterData optional) star ==> [ :nodes |
-		| result |
-		result := OrderedCollection new.
-		nodes first isNil
-			ifFalse: [ result addLast: nodes first ].
-		nodes second do:  [ :each |
-			result addLast: each first.
-			each second isNil
-				ifFalse: [ result addLast: each second ] ].
-		result asArray ]
+	^ (characterData / element / processing / comment) star
 ]
 
 { #category : #grammar }
