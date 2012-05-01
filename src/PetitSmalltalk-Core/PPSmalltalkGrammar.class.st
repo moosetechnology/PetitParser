@@ -86,7 +86,7 @@ Class {
 
 { #category : #testing }
 PPSmalltalkGrammar class >> allowUnderscoreAssignment [
-	^ Scanner allowUnderscoreAsAssignment
+	^ (Scanner respondsTo: #allowUnderscoreAsAssignment) and: [ Scanner allowUnderscoreAsAssignment ]
 ]
 
 { #category : #accessing }

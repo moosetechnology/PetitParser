@@ -77,12 +77,6 @@ PPSmalltalkClassesTests >> testCollection [
 ]
 
 { #category : #testing }
-PPSmalltalkClassesTests >> testDateAndTime [
-	self verifyClass: DateAndTime.
-	self verifyClass: Duration
-]
-
-{ #category : #testing }
 PPSmalltalkClassesTests >> testException [
 	self verifyClass: Exception.
 	self verifyClass: Notification.
@@ -196,19 +190,19 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 			self
 				assert: node1 rightBar = node2 rightBar
 				description: 'Source position rightBar in ' , signature ].
-		(node1 isBlock) ifTrue: [.
+		(node1 isBlock) ifTrue: [
 			self
 				assert: node1 bar = node2 bar
 				description: 'Source position bar in ' , signature ].
-		(node1 isReturn) ifTrue: [.
+		(node1 isReturn) ifTrue: [
 			self
 				assert: node1 return = node2 return
 				description: 'Source position return in ' , signature ].
-		(node1 isAssignment) ifTrue: [.
+		(node1 isAssignment) ifTrue: [
 			self
 				assert: node1 assignment = node2 assignment
 				description: 'Source position return in ' , signature ].
-		(node1 isCascade) ifTrue: [.
+		(node1 isCascade) ifTrue: [
 			self
 				assert: node1 semicolons asArray = node2 semicolons asArray
 				description: 'Source position semicolons in ' , signature ].
