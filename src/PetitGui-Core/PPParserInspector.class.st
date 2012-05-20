@@ -25,7 +25,7 @@ PPParserInspector >> buildBrowser [
 		from: #sample; "result"
 		passivelyFrom: #sample port: #text; "sample text"
 		from: #sample port: #stream; "parser stream"
-		fromOutside: #entity; "parser"  
+		fromOutsidePort: #entity; "parser"  
 		to: #inspectors;
 		andShow: [ :a | self inspectorsIn: a ].
 	browser transmit 
