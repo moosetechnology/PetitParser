@@ -464,12 +464,12 @@ PPSmalltalkGrammar >> startMethod [
 
 { #category : #grammar }
 PPSmalltalkGrammar >> statements [
-	^ 	(expression wrapped , (($. asParser smalltalkToken plus , statements ==> [ :nodes | nodes first , nodes last ])
-								/ $. asParser smalltalkToken star)
+	^ 	(expression wrapped , ((periodToken plus , statements ==> [ :nodes | nodes first , nodes last ])
+								/ periodToken star)
 			==> [ :nodes | (Array with: nodes first) , (nodes last) ])
-	/	(return , $. asParser smalltalkToken star
+	/	(return , periodToken star
 			==> [ :nodes | (Array with: nodes first) , (nodes last) ])
-	/	($. asParser smalltalkToken star)
+	/	(periodToken star)
 ]
 
 { #category : #primitives }
