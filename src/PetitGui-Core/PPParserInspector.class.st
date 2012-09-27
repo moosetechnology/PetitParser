@@ -31,7 +31,7 @@ PPParserInspector >> buildBrowser [
 	browser transmit 
 		from: #inspectors; 
 		to: #sample port: #selectionInterval; 
-		transformed: [:debugResult | debugResult start to: debugResult end ].
+		transformed: [:debugResult | debugResult ifNotNil: [debugResult start to: debugResult end] ].
 	^ browser
 ]
 
