@@ -13,8 +13,8 @@ PPAllParsersBrowser >> buildBrowser [
 	browser := GLMTabulator new.
 	browser title: 'PetitParser Browser'.
 	browser 
-		row: #classes size: 25;
-		row: #parser.
+		column: #classes;
+		column: #parser span: 3.
 	browser transmit to: #classes; andShow: [:a | 
 		self classesIn: a ]. 
 	browser transmit to: #parser; from: #classes; andShow: [:a | 
@@ -24,7 +24,8 @@ PPAllParsersBrowser >> buildBrowser [
 
 { #category : #'private building' }
 PPAllParsersBrowser >> classesIn: composite [
-	composite dropDownList 
+	composite list 
+		title: 'Parsers';
 		display: [ :class | class allSubclasses asSortedCollection: [ :a :b | a name < b name ] ]
 ]
 
