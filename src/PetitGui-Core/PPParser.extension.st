@@ -28,6 +28,12 @@ PPParser >> example [
 PPParser >> exampleOn: aStream [
 ]
 
+{ #category : #'*petitgui' }
+PPParser >> gtInspectorParserInspectorIn: composite [
+	<gtInspectorPresentationOrder: 30>
+	composite custom: (PPParserInspector new browser startOn: self)
+]
+
 { #category : #'*petitgui-morphic' }
 PPParser >> morphicProduction [
 	^ self newRowMorph
