@@ -31,7 +31,10 @@ PPParser >> exampleOn: aStream [
 { #category : #'*petitgui' }
 PPParser >> gtInspectorParserInspectorIn: composite [
 	<gtInspectorPresentationOrder: 30>
-	composite custom: (PPParserInspector new browser startOn: self)
+	composite custom: (
+		PPParserInspector new browser 
+			title: 'Inspector';
+			startOn: self)
 ]
 
 { #category : #'*petitgui-morphic' }
