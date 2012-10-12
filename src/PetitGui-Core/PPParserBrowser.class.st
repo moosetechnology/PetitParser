@@ -113,7 +113,7 @@ PPParserBrowser >> inspectorIn: composite [
 { #category : #'private building' }
 PPParserBrowser >> mapIn: composite [
 	self class environment at: #GLMMondrianPresentation ifPresent: [ :cls |
-		composite mondrian
+		composite roassal
 			title: 'Map';
 			useExplicitNotNil;
 			painting: [ :view :class :selector |

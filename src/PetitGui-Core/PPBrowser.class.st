@@ -154,7 +154,7 @@ PPBrowser >> browseInputOn: aBrowser [
 { #category : #'browse-static' }
 PPBrowser >> browseMapOn: aBrowser [
 	self class environment at: #GLMMondrianPresentation ifPresent: [ :class |
-		aBrowser mondrian
+		aBrowser roassal
 			title: 'Map';
 			useExplicitNotNil;
 			painting: [ :view :parsers |
