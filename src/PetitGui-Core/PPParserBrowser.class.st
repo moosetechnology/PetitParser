@@ -112,7 +112,7 @@ PPParserBrowser >> inspectorIn: composite [
 
 { #category : #'private building' }
 PPParserBrowser >> mapIn: composite [
-	self class environment at: #GLMMondrianPresentation ifPresent: [ :cls |
+	self class environment at: #GLMRoassalPresentation ifPresent: [ :cls |
 		composite roassal
 			title: 'Map';
 			useExplicitNotNil;

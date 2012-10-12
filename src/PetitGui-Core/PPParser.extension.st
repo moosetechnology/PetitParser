@@ -187,6 +187,6 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBl
 	view interaction popupText: aBlock.
 	view interaction item: 'Explore' action: #explore.
 	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
-	view edgesToAll: #namedParsers.
+	view edges: (self allParsers select: [:each |  each name isEmptyOrNil not ])from: #yourself toAll: #namedParsers.
 	view horizontalDominanceTreeLayout verticalGap: 10; layered
 ]
