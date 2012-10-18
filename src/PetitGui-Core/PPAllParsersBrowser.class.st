@@ -28,7 +28,10 @@ PPAllParsersBrowser >> classesIn: composite [
 		title: 'Grammars';
 		format: [ :class | class name ];
 		children: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
-		display: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ]
+		display: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
+		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: list selection ]
+			on: $b
+			entitled: 'Browse (b)'	
 ]
 
 { #category : #opening }

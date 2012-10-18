@@ -53,7 +53,7 @@ PPBrowser >> browseClassesOn: aBrowser [
 			aBrowser entity: self rootClass ]
 			on: $r entitled: 'remove (x)';
 		selectionAct: [
-			StandardToolSet browse: self selectedClass selector: nil ] 
+			self selectedClass browse ] 
 			on: $b entitled: 'browse (b)'
 ]
 
@@ -255,8 +255,8 @@ PPBrowser >> browseSelectorsOn: aBrowser [
 				select: [ :each | class includesSelector: each ])
 				asSortedCollection ];
 		selectionAct: [
-			StandardToolSet 
-				browse: self selectedClass 
+			Smalltalk tools browser 
+				fullOnClass: self selectedClass 
 				selector: self selectedSelector ] 
 			on: $b entitled: 'browse (b)';
 		selectionAct: [
