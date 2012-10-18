@@ -182,8 +182,8 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames on: view [
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBlock on: view [
 	view shape label 
-		color: [:each | (aCollectionOfNames includes: each name) ifTrue: [Color blue] ifFalse: [Color black]];
-		text: [:each |each model displayName]	. 
+		color: [:each | (aCollectionOfNames includes: each name) ifFalse: [Color black] ifTrue: [Color red]];
+		text: [:each |each displayName].
 	view interaction popupText: aBlock.
 	view interaction item: 'Explore' action: #explore.
 	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).

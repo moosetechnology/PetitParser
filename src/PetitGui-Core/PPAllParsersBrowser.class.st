@@ -28,7 +28,7 @@ PPAllParsersBrowser >> classesIn: composite [
 		title: 'Grammars';
 		format: [ :class | class name ];
 		children: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
-		display: [ :class | class allSubclasses asSortedCollection: [ :a :b | a name < b name ] ]
+		display: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ]
 ]
 
 { #category : #opening }
