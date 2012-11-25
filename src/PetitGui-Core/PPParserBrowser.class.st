@@ -1,9 +1,9 @@
 "
-self openOn: PPArithmeticParser
+self new openOn: PPArithmeticParser
 "
 Class {
 	#name : #PPParserBrowser,
-	#superclass : #GLMBrowserTemplate,
+	#superclass : #GLMCompositePresentation,
 	#category : #'PetitGui-Core'
 }
 
@@ -27,6 +27,27 @@ PPParserBrowser >> buildBrowser [
 		when: [:parser | parser name notNil ].
 	browser transmit fromOutsidePort: #productionToSelect; to: #productions port: #selection.
 	^ browser
+]
+
+{ #category : #building }
+PPParserBrowser >> compose [
+	"self openOn: PPArithmeticParser"
+	self title: [:each | each name].
+	self tabulator with: [ :tabulator |
+		tabulator 
+			row: [:r | r column: #productions ; column: #workspace span: 2];
+			row: #inspector.
+		tabulator transmit to: #productions; andShow: [:a | 
+		 	self productionsIn: a ]. 
+		tabulator transmit to: #workspace; fromOutsidePort: #entity; from: #productions; andShow: [:a | 
+			self workspaceIn: a ]. 
+		tabulator transmit to: #inspector; fromOutsidePort: #entity; from: #productions; andShow: [:a |
+			self inspectorIn: a ].
+
+		tabulator transmit from: #workspace; toOutsidePort: #productionToSelect; 
+			transformed: [:parser | parser name ];
+			when: [:parser | parser name notNil ].
+		tabulator transmit fromOutsidePort: #productionToSelect; to: #productions port: #selection ]
 ]
 
 { #category : #'private building' }
@@ -106,7 +127,7 @@ PPParserBrowser >> inspectorIn: composite [
 					wrapperBrowser column: #wrapped.
 					wrapperBrowser transmit
 						to: #wrapped;
-						andShow: [ :a | a custom: PPParserInspector new browser noTitle ].
+						andShow: [ :a | a custom: PPParserInspector new noTitle ].
 					wrapperBrowser startOn: ([(self production: productionSelector from: class) end] on: Error do: [:e | nil]) ]
 ]
 
@@ -194,7 +215,10 @@ PPParserBrowser >> productionsIn: composite [
 			entitled: 'Remove (x)';
 		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: class selector: list selection ]
 			on: $b
-			entitled: 'Browse (b)'	
+			entitled: 'Browse (b)';
+		selectionAct: [ :list :class | (self production: list selection from: class) explore ]
+			on: $I
+			entitled: 'Explore (I)'
 ]
 
 { #category : #'private utilities' }
