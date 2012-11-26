@@ -1,9 +1,9 @@
 "
-self new openOn: PPArithmeticParser
+self openOn: PPArithmeticParser
 "
 Class {
 	#name : #PPParserBrowser,
-	#superclass : #GLMCompositePresentation,
+	#superclass : #GLMBrowserTemplate,
 	#category : #'PetitGui-Core'
 }
 
@@ -19,35 +19,15 @@ PPParserBrowser >> buildBrowser [
 	 	self productionsIn: a ]. 
 	browser transmit to: #workspace; fromOutsidePort: #entity; from: #productions; andShow: [:a | 
 		self workspaceIn: a ]. 
-	browser transmit to: #inspector; fromOutsidePort: #entity; from: #productions; andShow: [:a |
+	browser transmit to: #inspector; fromOutsidePort: #entity; from: #productions; passivelyFrom: #outer port: #sampleText; andShow: [:a |
 		self inspectorIn: a ].
+	browser transmit from: #inspector port: #sampleText; toOutsidePort: #sampleText; when: [:arg | arg notNil ].
 
 	browser transmit from: #workspace; toOutsidePort: #productionToSelect; 
 		transformed: [:parser | parser name ];
 		when: [:parser | parser name notNil ].
 	browser transmit fromOutsidePort: #productionToSelect; to: #productions port: #selection.
 	^ browser
-]
-
-{ #category : #building }
-PPParserBrowser >> compose [
-	"self openOn: PPArithmeticParser"
-	self title: [:each | each name].
-	self tabulator with: [ :tabulator |
-		tabulator 
-			row: [:r | r column: #productions ; column: #workspace span: 2];
-			row: #inspector.
-		tabulator transmit to: #productions; andShow: [:a | 
-		 	self productionsIn: a ]. 
-		tabulator transmit to: #workspace; fromOutsidePort: #entity; from: #productions; andShow: [:a | 
-			self workspaceIn: a ]. 
-		tabulator transmit to: #inspector; fromOutsidePort: #entity; from: #productions; andShow: [:a |
-			self inspectorIn: a ].
-
-		tabulator transmit from: #workspace; toOutsidePort: #productionToSelect; 
-			transformed: [:parser | parser name ];
-			when: [:parser | parser name notNil ].
-		tabulator transmit fromOutsidePort: #productionToSelect; to: #productions port: #selection ]
 ]
 
 { #category : #'private building' }
@@ -120,15 +100,29 @@ PPParserBrowser >> handleWarning: anException [
 PPParserBrowser >> inspectorIn: composite [
 	composite dynamic
 		allowNil;
-		display: [ :class :productionSelector | 
+		display: [ :class :productionSelector :sampleText | 
 					| wrapperBrowser |
 					wrapperBrowser := GLMTabulator new.
 					wrapperBrowser allowNil.
 					wrapperBrowser column: #wrapped.
 					wrapperBrowser transmit
 						to: #wrapped;
-						andShow: [ :a | a custom: PPParserInspector new noTitle ].
-					wrapperBrowser startOn: ([(self production: productionSelector from: class) end] on: Error do: [:e | nil]) ]
+						andShow: [ :a | a custom: (PPParserInspector new browser noTitle) ].
+
+					wrapperBrowser transmit
+						from: #wrapped port: #sampleText;
+						toOutsidePort: #sampleText.
+						
+					wrapperBrowser transmit
+						fromOutsidePort: #sampleText;
+						to: #wrapped port: #sampleText.
+
+					wrapperBrowser startOn: ([(self production: productionSelector from: class) end] on: Error do: [:e | nil]) .
+					(wrapperBrowser pane port: #sampleText) value: (sampleText ifNil: [ '' ] ifNotNil: [ sampleText ]).
+					wrapperBrowser
+					]
+
+				
 ]
 
 { #category : #'private building' }
@@ -215,10 +209,7 @@ PPParserBrowser >> productionsIn: composite [
 			entitled: 'Remove (x)';
 		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: class selector: list selection ]
 			on: $b
-			entitled: 'Browse (b)';
-		selectionAct: [ :list :class | (self production: list selection from: class) explore ]
-			on: $I
-			entitled: 'Explore (I)'
+			entitled: 'Browse (b)'	
 ]
 
 { #category : #'private utilities' }

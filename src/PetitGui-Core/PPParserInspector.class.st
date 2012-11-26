@@ -5,34 +5,39 @@ self openOn: PPArithmeticParser new.
 "
 Class {
 	#name : #PPParserInspector,
-	#superclass : #GLMCompositePresentation,
+	#superclass : #GLMBrowserTemplate,
 	#category : #'PetitGui-Core'
 }
 
 { #category : #building }
-PPParserInspector >> compose [
-	"self new openOn: PPArithmeticParser new"
+PPParserInspector >> buildBrowser [
+	"self openOn: PPArithmeticParser new"
 
-	self title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
-
-	self tabulator with: [ :browser | 
-		browser
-			column: #sample;
-			column: #inspectors.
-		(browser transmit)
-			to: #sample;
-			andShowIfNone: [ :a | self sampleIn: a ].
-		(browser transmit)
-			from: #sample; "result"
-			passivelyFrom: #sample port: #text; "sample text"
-			from: #sample port: #stream; "parser stream"
-			fromOutsidePort: #entity; "parser"  
-			to: #inspectors;
-			andShow: [ :a | self inspectorsIn: a ].
-		browser transmit 
-			from: #inspectors; 
-			to: #sample port: #selectionInterval; 
-			transformed: [:debugResult | debugResult ifNotNil: [debugResult start to: debugResult end] ] ]
+	browser := GLMTabulator new.
+	browser title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
+	browser 
+		column: #sample;
+		column: #inspectors.
+	(browser transmit)
+		fromOutsidePort: #entity;
+		fromOutsidePort: #sampleText;
+		to: #sample;
+		andShowIfNone: [ :a | self sampleIn: a ].
+	(browser transmit) 
+		from: #sample port: #text;
+		toOutsidePort: #sampleText.
+	 (browser transmit)
+		from: #sample; "result"
+		passivelyFrom: #sample port: #text; "sample text"
+		from: #sample port: #stream; "parser stream"
+		fromOutsidePort: #entity; "parser"  
+		to: #inspectors;
+		andShow: [ :a | self inspectorsIn: a ].
+	(browser transmit) 
+		from: #inspectors; 
+		to: #sample port: #selectionInterval; 
+		transformed: [:debugResult | debugResult ifNotNil: [debugResult start to: debugResult end] ].
+	^ browser
 ]
 
 { #category : #'private building' }
@@ -102,7 +107,7 @@ PPParserInspector >> resultIn: composite [
 PPParserInspector >> sampleIn: composite [
 	(composite text)
 		title: 'Sample';
-		display: '';
+		display: [:parser :sample | sample ];
 		populate: #selection
 			icon: GLMUIThemeExtraIcons glamorousPlay
 			on: $s

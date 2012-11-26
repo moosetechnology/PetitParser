@@ -32,7 +32,7 @@ PPParser >> exampleOn: aStream [
 PPParser >> gtInspectorParserInspectorIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	composite custom: (
-		PPParserInspector new 
+		PPParserInspector new browser 
 			title: 'Inspector';
 			startOn: self)
 ]

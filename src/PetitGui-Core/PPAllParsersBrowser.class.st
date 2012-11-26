@@ -3,13 +3,23 @@ self open
 "
 Class {
 	#name : #PPAllParsersBrowser,
-	#superclass : #GLMCompositePresentation,
+	#superclass : #GLMGlobalBrowserTemplate,
 	#category : #'PetitGui-Core'
 }
 
-{ #category : #'as yet unclassified' }
-PPAllParsersBrowser class >> open [ 
-	^ self new openOn: PPCompositeParser
+{ #category : #building }
+PPAllParsersBrowser >> buildBrowser [
+	"self open"
+	browser := GLMTabulator new.
+	browser title: 'PetitParser Browser'.
+	browser 
+		column: #classes;
+		column: #parser span: 3.
+	browser transmit to: #classes; andShow: [:a | 
+		self classesIn: a ]. 
+	browser transmit to: #parser; from: #classes; andShow: [:a | 
+		a custom: PPParserBrowser new browser noTitle ].
+	^ browser
 ]
 
 { #category : #'private building' }
@@ -21,20 +31,10 @@ PPAllParsersBrowser >> classesIn: composite [
 		display: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
 		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: list selection ]
 			on: $b
-			entitled: 'Browse (b)'
+			entitled: 'Browse (b)'	
 ]
 
-{ #category : #building }
-PPAllParsersBrowser >> compose [
-	"self open"
-	self title: 'PetitParser Browser'.
-	self tabulator with: [ :tabulator | 
-		tabulator 
-			column: #classes;
-			column: #parser span: 3.
-		tabulator transmit to: #classes; andShow: [:a | 
-			self classesIn: a ]. 
-		tabulator transmit to: #parser; from: #classes; andShow: [:a | 
-			a custom: PPParserBrowser new noTitle ]
-	]
+{ #category : #opening }
+PPAllParsersBrowser >> entity [
+	^ PPCompositeParser
 ]
