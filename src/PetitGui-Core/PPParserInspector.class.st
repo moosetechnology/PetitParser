@@ -15,37 +15,6 @@ PPParserInspector class >> openOn: aParserInstance [
 ]
 
 { #category : #building }
-PPParserInspector >> buildBrowser [
-	"self openOn: PPArithmeticParser new"
-	| browser |
-	browser := GLMTabulator new.
-	browser title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
-	browser 
-		column: #sample;
-		column: #inspectors.
-	(browser transmit)
-		fromOutsidePort: #entity;
-		fromOutsidePort: #sampleText;
-		to: #sample;
-		andShowIfNone: [ :a | self sampleIn: a ].
-	(browser transmit) 
-		from: #sample port: #text;
-		toOutsidePort: #sampleText.
-	 (browser transmit)
-		from: #sample; "result"
-		passivelyFrom: #sample port: #text; "sample text"
-		from: #sample port: #stream; "parser stream"
-		fromOutsidePort: #entity; "parser"  
-		to: #inspectors;
-		andShow: [ :a | self inspectorsIn: a ].
-	(browser transmit) 
-		from: #inspectors; 
-		to: #sample port: #selectionInterval; 
-		transformed: [:debugResult | debugResult ifNotNil: [debugResult start to: debugResult end] ].
-	^ browser
-]
-
-{ #category : #building }
 PPParserInspector >> compose [
 	"self new openOn: PPArithmeticParser new"
 
@@ -143,7 +112,8 @@ PPParserInspector >> resultIn: composite [
 PPParserInspector >> sampleIn: composite [
 	(composite text)
 		title: 'Sample';
-		display: [:parser :sample | sample ];
+		display: [:parser :sample | sample ifNil: [''] ];
+		allowNil;
 		populate: #selection
 			icon: GLMUIThemeExtraIcons glamorousPlay
 			on: $s

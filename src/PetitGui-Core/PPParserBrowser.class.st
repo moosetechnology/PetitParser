@@ -104,27 +104,6 @@ PPParserBrowser >> graphIn: composite [
 			morph ]
 ]
 
-{ #category : #'private refactoring' }
-PPParserBrowser >> handleError: anException [
-	anException actionBlock isNil
-		ifTrue: [ UIManager default inform: anException messageText ]
-		ifFalse: [ 
-			(UIManager default confirm: anException messageText) 
-				ifTrue: [ anException actionBlock value ] ].
-	anException return
-]
-
-{ #category : #'private refactoring' }
-PPParserBrowser >> handleWarning: anException [ 
-	| message |
-	message := (anException messageText endsWith: '?')
-		ifTrue: [ anException messageText ]
-		ifFalse: [ anException messageText , String cr , 'Do you want to proceed?' ].
-	(UIManager default confirm: message)
-		ifTrue: [ anException resume ]
-		ifFalse: [ anException return ]
-]
-
 { #category : #'private building' }
 PPParserBrowser >> inspectorIn: composite [
 	composite dynamic
@@ -168,24 +147,6 @@ PPParserBrowser >> mapIn: composite [
 
 ]
 
-{ #category : #'private refactoring' }
-PPParserBrowser >> performRefactoring: aRefactoring [
-	[ [ aRefactoring execute ]
-		on: RBRefactoringWarning
-		do: [ :exception | self handleWarning: exception ] ]
-		on: RBRefactoringError
-		do: [ :exception | self handleError: exception ]
-]
-
-{ #category : #'private refactoring' }
-PPParserBrowser >> performRenameProduction: oldName from: class [
-	| refactoring newName |
-	newName := UIManager default request: 'Production name:' initialAnswer: oldName.
-	refactoring := PPRenameProdcutionRefactoring onClass: class rename: oldName to: newName.
-	self performRefactoring: refactoring.
-	^ refactoring
-]
-
 { #category : #'private utilities' }
 PPParserBrowser >> production: selector from: class [
 	| parser |
@@ -225,14 +186,14 @@ PPParserBrowser >> productionsIn: composite [
 		selectionAct: [ :list  :class | 
 					| oldName refactoring |
 					oldName := list selection.
-					refactoring := self performRenameProduction: oldName from: class.
+					refactoring := PPRefactoringUtils new performRenameProduction: oldName from: class.
 					refactoring changes changes notEmpty ifTrue: [
 						list update.
 						list selection: refactoring changes changes first newName asSymbol ] ]
 			on: $r
 			entitled: 'Rename (r)';
 		selectionAct: [ :list :class | 
-					self performRefactoring: (PPRemoveProdcutionRefactoring onClass: class production: list selection).
+					PPRefactoringUtils new performRefactoring: (PPRemoveProdcutionRefactoring onClass: class production: list selection).
 					list pane browser update ]
 			on: $x
 			entitled: 'Remove (x)';
@@ -269,7 +230,7 @@ PPParserBrowser >> sourceIn: composite [
 						production: production
 						interval: text selectionInterval
 						to: selector.
-					self performRefactoring: refactoring.
+					PPRefactoringUtils new performRefactoring: refactoring.
 					text pane browser update.
 					(text pane port: #productionToSelect) value: selector ] ]
 			on: $e
@@ -280,7 +241,7 @@ PPParserBrowser >> sourceIn: composite [
 						onClass: class 
 						source: text text asString 
 						protocols: #(grammar).
-				self performRefactoring: refactoring.
+				PPRefactoringUtils new performRefactoring: refactoring.
 				selector := refactoring changes changes last selector.
 				selector = production 
 					ifTrue: [text update]

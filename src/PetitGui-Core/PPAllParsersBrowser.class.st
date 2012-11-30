@@ -13,15 +13,30 @@ PPAllParsersBrowser class >> open [
 ]
 
 { #category : #'private building' }
+PPAllParsersBrowser >> addNewSubParserOf: class in: list [
+	| refactoring className |
+	className := UIManager default request: 'Parser class name' initialAnswer: '' title: 'Add new parser'.
+	^ className
+		ifNotNil: [ 
+			refactoring := PPAddParserRefactoring name: className asSymbol category: #ParserExample superclass: class.
+			PPRefactoringUtils new performRefactoring: refactoring.
+			list update ]
+]
+
+{ #category : #'private building' }
 PPAllParsersBrowser >> classesIn: composite [
 	composite tree
-		title: 'Grammars';
+		title: 'Parsers';
 		format: [ :class | class name ];
 		children: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
 		display: [ :class | class subclasses asSortedCollection: [ :a :b | a name < b name ] ];
-		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: list selection ]
-			on: $b
-			entitled: 'Browse (b)'
+		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: list selection ] on: $b entitled: 'Browse (b)';
+		selectionAct: [ :list :class | self addNewSubParserOf: list selection in: list ]
+			entitled: 'Add new sub parser';
+		act: [ :list :class | self addNewSubParserOf: class in: list ]
+			icon: GLMUIThemeExtraIcons glamorousAdd
+			on: $+
+			entitled: 'Add new parser'
 ]
 
 { #category : #building }
