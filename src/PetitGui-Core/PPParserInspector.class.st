@@ -9,10 +9,15 @@ Class {
 	#category : #'PetitGui-Core'
 }
 
+{ #category : #'as yet unclassified' }
+PPParserInspector class >> openOn: aParserInstance [
+	^ self new openOn: aParserInstance
+]
+
 { #category : #building }
 PPParserInspector >> buildBrowser [
 	"self openOn: PPArithmeticParser new"
-
+	| browser |
 	browser := GLMTabulator new.
 	browser title: [:each | 'Parser Inspector on ', (each name ifNil: [each class name])].
 	browser 
