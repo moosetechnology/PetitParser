@@ -158,9 +158,9 @@ PPParserBrowser >> production: selector from: class [
 
 { #category : #'private utilities' }
 PPParserBrowser >> productionSelectorsFrom: class [
-	^ (((class allInstVarNames copyWithoutAll: class ignoredNames) 
+	^ (((class allInstVarNames copyWithoutAll: class ignoredNames)
 		collect: [ :each | each asSymbol ])
-			select: [ :each | class includesSelector: each ]) asSortedCollection
+			select: [ :each | class includesSelector: each ]) asSortedCollection add: #start; yourself
 ]
 
 { #category : #'private building' }
