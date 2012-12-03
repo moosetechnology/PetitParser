@@ -207,7 +207,7 @@ PPParserBrowser >> productionsIn: composite [
 
 { #category : #'private utilities' }
 PPParserBrowser >> sourceCodeFrom: class selector: production [
-	^ class sourceCodeAt: (production ifNil: [ #start ]) ifAbsent: [ String new ]
+	^ class ultimateSourceCodeAt: (production ifNil: [ #start ]) ifAbsent: [ String new ]
 ]
 
 { #category : #'private building' }
