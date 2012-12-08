@@ -42,7 +42,7 @@ PPAllParsersBrowser >> classesIn: composite [
 { #category : #building }
 PPAllParsersBrowser >> compose [
 	"self open"
-	self title: 'PetitParser Browser'.
+	self title: self defaultTitle.
 	self tabulator with: [ :tabulator | 
 		tabulator 
 			column: #classes;
@@ -52,4 +52,9 @@ PPAllParsersBrowser >> compose [
 		tabulator transmit to: #parser; from: #classes; andShow: [:a | 
 			a custom: PPParserBrowser new noTitle ]
 	]
+]
+
+{ #category : #building }
+PPAllParsersBrowser >> defaultTitle [
+	^ 'PetitParser Browser'
 ]
