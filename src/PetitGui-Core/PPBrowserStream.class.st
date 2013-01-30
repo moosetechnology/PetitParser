@@ -99,11 +99,7 @@ PPBrowserStream >> mouseDown: anEvent with: aMorph [
 	string := collection 
 		copyFrom: (location x - 5 min: collection size max: 1) asInteger
 		to: (location x + 5 min: collection size max: 1) asInteger.
-	parser := parsers at: location y.
-	Transcript 
-		show: string printString; cr;
-		show: parser displayName; cr;
-		cr
+	parser := parsers at: location y
 ]
 
 { #category : #accessing }

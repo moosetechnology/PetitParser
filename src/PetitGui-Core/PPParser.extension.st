@@ -69,7 +69,6 @@ PPParser >> morphicShapeDefault [
 			borderWidth: 1;
 			layoutInset: 3;
 			color: Color white;
-			on: #click send: #value to: [ Transcript show: self; cr ];
 			addMorphBack: (StringMorph new
 				contents: self displayName;
 				color: self displayColor;

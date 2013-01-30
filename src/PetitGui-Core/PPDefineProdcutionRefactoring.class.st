@@ -37,6 +37,11 @@ PPDefineProdcutionRefactoring >> preconditions [
 		& (RBCondition withBlock: [ self checkSource ] errorString: 'Unable to parse source code')
 ]
 
+{ #category : #accessing }
+PPDefineProdcutionRefactoring >> selector [
+	^ method selector
+]
+
 { #category : #initialization }
 PPDefineProdcutionRefactoring >> setClass: aClass [
 	class := self classObjectFor: aClass
