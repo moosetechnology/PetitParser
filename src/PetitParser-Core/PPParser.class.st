@@ -233,10 +233,10 @@ PPParser >> matchingRangesIn: anObject [
 { #category : #parsing }
 PPParser >> matchingRangesIn: anObject do: aBlock [
 	"Search anObject repeatedly for the matches of the receiver. Evaluate aBlock with the range of each match (index of first character to: index of last character)."
-	
-	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
+
+	self token
 		matchesIn: anObject
-		do: [ :value | aBlock value: (value first to: value last) ]
+		do: [ :token | aBlock value: (token start to: token stop) ]
 ]
 
 { #category : #parsing }
@@ -255,9 +255,9 @@ PPParser >> matchingSkipRangesIn: anObject [
 PPParser >> matchingSkipRangesIn: anObject do: aBlock [
 	"Search anObject repeatedly for the matches of the receiver. Skip over matches. Evaluate aBlock with the range of each match (index of first character to: index of last character)."
 	
-	[ :stream | stream position + 1 ] asParser , self , [ :stream | stream position ] asParser
+	self token
 		matchesSkipIn: anObject
-		do: [ :value | aBlock value: (value first to: value last) ]
+		do: [ :token | aBlock value: (token start to: token stop) ]
 ]
 
 { #category : #'operators-repeating' }

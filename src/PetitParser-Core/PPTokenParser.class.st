@@ -1,5 +1,5 @@
 "
-A parser that answers a token of the range my delegate parses.
+A parser that answers a token with the value of my delegate parses.
 
 Instance Variables:
 	tokenClass	<PPToken class>	The token sub-class to be used.
@@ -14,11 +14,6 @@ Class {
 }
 
 { #category : #private }
-PPTokenParser >> create: aCollection start: aStartInteger stop: aStopInteger [
-	^ self tokenClass on: aCollection start: aStartInteger stop: aStopInteger
-]
-
-{ #category : #private }
 PPTokenParser >> defaultTokenClass [
 	^ PPToken
 ]
@@ -27,6 +22,11 @@ PPTokenParser >> defaultTokenClass [
 PPTokenParser >> initialize [
 	tokenClass := self defaultTokenClass
 	
+]
+
+{ #category : #private }
+PPTokenParser >> on: aCollection start: aStartInteger stop: aStopInteger value: anObject [
+	^ self tokenClass on: aCollection start: aStartInteger stop: aStopInteger value: anObject
 ]
 
 { #category : #accessing }
