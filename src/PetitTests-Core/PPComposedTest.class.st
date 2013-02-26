@@ -149,8 +149,8 @@ PPComposedTest >> testListOfIntegers [
 	"S ::= S , number | number"
 	
 	| number list parser |
-	number := #digit asParser plus token trim
-		==> [ :node | node value asInteger ].
+	number := #digit asParser plus flatten trim
+		==> [ :node | node asInteger ].
 	list := (number separatedBy: $, asParser token trim)
 		==> [ :node | node select: [ :each | each isInteger ] ].
 	parser := list end.
@@ -395,10 +395,10 @@ PPComposedTest >> testParseAnBnCn [
 { #category : #'testing-examples' }
 PPComposedTest >> testReturn [
 	| number spaces return |
-	number := #digit asParser plus token.
+	number := #digit asParser plus flatten.
 	spaces := #space asParser star.
 	return := (spaces , $^ asParser token , spaces , number)
-		==> [ :nodes | Array with: #return with: (nodes at: 4) value ].
+		==> [ :nodes | Array with: #return with: (nodes at: 4) ].
 
 	self assert: return parse: '^1' to: #(return '1').
 	self assert: return parse: '^12' to: #(return '12').
