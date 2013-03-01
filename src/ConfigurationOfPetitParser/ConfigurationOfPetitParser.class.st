@@ -241,12 +241,13 @@ ConfigurationOfPetitParser >> baseline15: spec [
 ]
 
 { #category : #baselines }
-ConfigurationOfPetitParser >> default: spec [ 
-	<version: 'default'>
+ConfigurationOfPetitParser >> baseline16: spec [ 
+	<version: '1.6-baseline'>
 	
 	spec for: #common do: [
 		spec blessing: #baseline.
-		spec repository: 'http://source.lukas-renggli.ch/petit'.
+		spec description: 'Describing all satellite packages. Loads configuration from new repository on SmalltalkHub'.
+		spec repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main'.
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
@@ -260,15 +261,24 @@ ConfigurationOfPetitParser >> default: spec [
 					file: 'ConfigurationOfGlamour';
 					version: 'default';
 					loads: #(Core Morphic);
-					repository: 'http://www.squeaksource.com/Glamour' ].
+					repository: 'http://smalltalkhub.com/mc/Moose/Glamour/main' ].
 	]
+]
+
+{ #category : #baselines }
+ConfigurationOfPetitParser >> default: spec [ 
+	<version: 'default'>
+	
+	self baseline16: spec.
 ]
 
 { #category : #'symbolic versions' }
 ConfigurationOfPetitParser >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '1.5-baseline'
+	spec for: #'pharo1.4.x' version: '1.6-baseline'.
+	spec for: #'pharo2.x' version: '1.6-baseline'.
+
 ]
 
 { #category : #baselines }
@@ -303,6 +313,7 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
+	spec for: #'pharo1.4.x' version: '1.6'.
 	spec for: #'common' version: '1.5'.
 	spec for: #'pharo1.3.x' version: '1.5'
 ]
@@ -414,5 +425,23 @@ ConfigurationOfPetitParser >> version15: spec [
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.39';
 			package: 'PetitGui' with: 'PetitGui-TudorGirba.90';
 			package: 'PetitSmalltalk' with: 'PetitSmalltalk-lr.57'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version16: spec [
+	<version: '1.6' imports: #('1.6-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'development'.
+		spec description: 'releasing a version of petitparser for moose 4.7 release'.
+		spec author: 'usmanbhatti'.
+		spec timestamp: '3/1/2013 18:01'.
+		spec project: 'Glamour for Petit' with: '2.4'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-lr.228';
+			package: 'PetitTests' with: 'PetitTests-lr.43';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.40';
+			package: 'PetitGui' with: 'PetitGui-TudorGirba.116'. ].
 
 ]
