@@ -16,8 +16,8 @@ Class {
 
 { #category : #grammar }
 PPArithmeticParser >> addition [
-	^ (factors separatedBy: ($+ asParser / $- asParser) token trim) 
-		foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]
+	^ (factors separatedBy: ($+ asParser / $- asParser) trim) 
+		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
 { #category : #grammar }
@@ -27,23 +27,26 @@ PPArithmeticParser >> factors [
 
 { #category : #grammar }
 PPArithmeticParser >> multiplication [
-	^ (power separatedBy: ($* asParser / $/ asParser) token trim)
-		foldLeft: [ :a :op :b | a perform: op value asSymbol with: b ]
+	^ (power separatedBy: ($* asParser / $/ asParser) trim)
+		foldLeft: [ :a :op :b | a perform: op asSymbol with: b ]
 ]
 
 { #category : #grammar }
 PPArithmeticParser >> number [
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token trim ==> [ :token | token value asNumber ]
+	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) flatten trim 
+		==> [ :value | value asNumber ]
 ]
 
 { #category : #grammar }
 PPArithmeticParser >> parentheses [
-	^ $( asParser flatten trim , terms , $) asParser flatten trim ==> #second
+	^ $( asParser trim , terms , $) asParser trim
+		==> [ :nodes | nodes second ]
 ]
 
 { #category : #grammar }
 PPArithmeticParser >> power [
-	^ (primary separatedBy: $^ asParser token trim) foldRight: [ :a :op :b | a raisedTo: b ]
+	^ (primary separatedBy: $^ asParser trim)
+		foldRight: [ :a :op :b | a raisedTo: b ]
 ]
 
 { #category : #grammar }

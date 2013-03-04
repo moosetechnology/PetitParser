@@ -52,12 +52,12 @@ PPAbstractParserTest >> assert: aParser parse: aCollection to: anObject [
 ]
 
 { #category : #utilities }
-PPAbstractParserTest >> assert: aParser parse: aParseObject to: aTargetObject end: anInteger [
+PPAbstractParserTest >> assert: aParser parse: aCollection to: aTargetObject end: anInteger [
 	| stream result |
 	self 
 		assert: aParser isPetitParser
 		description: 'Parser invalid'.
-	stream := aParseObject asPetitStream.
+	stream := aCollection asPetitStream.
 	result := aParser parse: stream.
 	aTargetObject isNil
 		ifTrue: [ self deny: result isPetitFailure ]
@@ -69,15 +69,16 @@ PPAbstractParserTest >> assert: aParser parse: aParseObject to: aTargetObject en
 ]
 
 { #category : #utilities }
-PPAbstractParserTest >> assert: aParser parse: aParserObject toToken: from stop: to [
-	| token |
-	token := PPToken on: aParserObject start: from stop: to.
-	^ self assert: aParser parse: aParserObject to: token
+PPAbstractParserTest >> assert: aParser parse: aCollection toToken: aStartInteger stop: aStopInteger [
+	^ self assert: aParser parse: aCollection toToken: aStartInteger stop: aStopInteger end: aCollection size
 ]
 
 { #category : #utilities }
-PPAbstractParserTest >> assert: aParser parse: aParserObject toToken: from stop: to end: end [
+PPAbstractParserTest >> assert: aParser parse: aParserObject toToken: aStartInteger stop: aStopInteger end: anEndInteger [
 	| token |
-	token := PPToken on: aParserObject start: from stop: to.
-	^ self assert: aParser parse: aParserObject to: token end: end
+	token := self assert: aParser parse: aParserObject to: nil end: anEndInteger.
+	self assert: (token isKindOf: PPToken).
+	self assert: (token start = aStartInteger).
+	self assert: (token stop = aStopInteger).
+	^ token
 ]

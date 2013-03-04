@@ -58,6 +58,22 @@ PPTokenTest >> testEquality [
 	self assert: token1 hash = token2 hash.
 ]
 
+{ #category : #testing }
+PPTokenTest >> testInitialize [
+	PPToken initialize
+]
+
+{ #category : #'testing-values' }
+PPTokenTest >> testInputValue [
+	| input result |
+	input := 'foo'.
+	result := self 
+		parse: input
+		using: self identifier.
+	self assert: result inputValue = input.
+	self deny: result inputValue == input
+]
+
 { #category : #'testing-querying' }
 PPTokenTest >> testLine [
 	| input parser result |
@@ -75,11 +91,21 @@ PPTokenTest >> testNew [
 	
 ]
 
+{ #category : #'testing-values' }
+PPTokenTest >> testParsedValue [
+	| input result |
+	input := 'foo'.
+	result := self 
+		parse: input
+		using: self identifier.
+	self assert: result parsedValue = #($f $o $o)
+]
+
 { #category : #testing }
 PPTokenTest >> testPrinting [
 	| result |
 	result := PPToken on: 'var'.
-	self assert: (result printString includesSubstring: 'PPToken(var)')
+	self assert: (result printString includesSubstring: 'PPToken[1,3]')
 ]
 
 { #category : #testing }
@@ -111,11 +137,7 @@ PPTokenTest >> testStop [
 
 { #category : #testing }
 PPTokenTest >> testValue [
-	| input result |
-	input := 'foo'.
-	result := self 
-		parse: input
-		using: self identifier.
-	self assert: result value = input.
-	self deny: result value == input
+	| result |
+	result := PPToken on: 'var'.
+	self should: [ result value ] raise: Notification
 ]
