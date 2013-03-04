@@ -39,7 +39,7 @@ PPMSEArrayParser >> element [
 PPMSEArrayParser >> elementName [
 	^ super elementName
 	
-	==> [:token | token value ]
+	==> [:token | token inputValue ]
 ]
 
 { #category : #accessing }
