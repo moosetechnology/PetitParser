@@ -1,10 +1,11 @@
 "
-PPToken represents a parsed part of the input stream. Contrary to a simple String it remembers where it came from, the original collection and its start and stop position.
+PPToken represents a parsed part of the input stream. Contrary to a simple String it remembers where it came from, the original collection, its start and stop position and its parse value.
 
 Instance Variables:
 	collection	<SequenceableCollection>	The collection this token comes from.
 	start	<Integer>	The start position in the collection.
 	stop	<Integer>	The stop position in the collection.
+	value <Object>	The parse result.
 "
 Class {
 	#name : #PPToken,
@@ -12,7 +13,8 @@ Class {
 	#instVars : [
 		'collection',
 		'start',
-		'stop'
+		'stop',
+		'value'
 	],
 	#classVars : [
 		'NewLineParser'
@@ -34,19 +36,20 @@ PPToken class >> new [
 
 { #category : #'instance creation' }
 PPToken class >> on: aSequenceableCollection [
-	^ self on: aSequenceableCollection start: 1 stop: aSequenceableCollection size
+	^ self on: aSequenceableCollection start: 1 stop: aSequenceableCollection size value: nil
 ]
 
 { #category : #'instance creation' }
-PPToken class >> on: aSequenceableCollection start: aStartInteger stop: aStopInteger [
+PPToken class >> on: aSequenceableCollection start: aStartInteger stop: aStopInteger value: anObject [
 	^ self basicNew 
 		initializeOn: aSequenceableCollection
 		start: aStartInteger stop: aStopInteger
+		value: anObject
 ]
 
 { #category : #comparing }
 PPToken >> = anObject [
-	^ self class = anObject class and: [ self value = anObject value ]
+	^ self class = anObject class and: [ self parsedValue = anObject parsedValue ]
 ]
 
 { #category : #accessing }
@@ -73,19 +76,27 @@ PPToken >> column [
 
 { #category : #copying }
 PPToken >> copyFrom: aStartInteger to: aStopInteger [
-	^ self class on: collection start: start + aStartInteger - 1 stop: stop + aStopInteger - 3
+	^ self class on: collection start: start + aStartInteger - 1 stop: stop + aStopInteger - 3 value: value
 ]
 
 { #category : #comparing }
 PPToken >> hash [
-	^ self value hash
+	^ self parsedValue hash
 ]
 
 { #category : #initialization }
-PPToken >> initializeOn: aSequenceableCollection start: aStartInteger stop: aStopInteger [
+PPToken >> initializeOn: aSequenceableCollection start: aStartInteger stop: aStopInteger value: anObject [
 	collection := aSequenceableCollection.
 	start := aStartInteger.
-	stop := aStopInteger
+	stop := aStopInteger.
+	value := anObject
+]
+
+{ #category : #'accessing-values' }
+PPToken >> inputValue [
+	"Answer the consumed input of this token."
+
+	^ collection copyFrom: start to: stop
 ]
 
 { #category : #querying }
@@ -103,15 +114,23 @@ PPToken >> line [
 	^ line
 ]
 
+{ #category : #'accessing-values' }
+PPToken >> parsedValue [
+	"Answer the parsed value of this token."
+
+	^ value
+]
+
 { #category : #printing }
 PPToken >> printOn: aStream [
 	super printOn: aStream.
-	aStream nextPut: $(; nextPutAll: self value; nextPut: $)
+	aStream nextPut: $[; print: self start; nextPut: $,; print: self stop; nextPut: $].
+	aStream nextPut: $(; print: self parsedValue; nextPut: $)
 ]
 
 { #category : #accessing }
 PPToken >> size [
-	"Answer the size of this token."
+	"Answer the size of this token in the underlying collection."
 
 	^ stop - start + 1
 ]
@@ -130,9 +149,8 @@ PPToken >> stop [
 	^ stop
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing-values' }
 PPToken >> value [
-	"Answer the contents of this token."
-
-	^ collection copyFrom: start to: stop
+	self notify: 'Token>>#value is no longer supported. Instead use Token>>#inputValue or the more pragmatic #parsedValue.'.
+	^ self inputValue
 ]
