@@ -25,7 +25,7 @@ PPMSEArrayParser >> attributeValue [
 PPMSEArrayParser >> boolean [ 
 	^ super boolean 
 	
-	==> [:token | token value = 'true' ifTrue: [true] ifFalse: [token value = 'false' ifTrue: [false] ifFalse: [nil]]] 
+	==> [:token | token inputValue = 'true' ifTrue: [true] ifFalse: [token inputValue = 'false' ifTrue: [false] ifFalse: [nil]]] 
 ]
 
 { #category : #accessing }
@@ -53,7 +53,7 @@ PPMSEArrayParser >> elements [
 PPMSEArrayParser >> id [
 	^ super id
 	
-	==> [:token | Array with: 'id' with: (token at: 3) value asNumber ]
+	==> [:token | Array with: 'id' with: (token at: 3) inputValue asNumber ]
 ]
 
 { #category : #values }
@@ -81,7 +81,7 @@ PPMSEArrayParser >> natural [
 PPMSEArrayParser >> number [
 	^ super number
 	
-	==> [ :token | (token value copyReplaceAll: 'E' with: 'e') asNumber ]
+	==> [ :token | (token inputValue copyReplaceAll: 'E' with: 'e') asNumber ]
 ]
 
 { #category : #values }
@@ -93,7 +93,7 @@ PPMSEArrayParser >> primitive [
 PPMSEArrayParser >> simpleName [
 	^ super simpleName
 	
-	==> [:token | token value ]
+	==> [:token | token inputValue ]
 ]
 
 { #category : #values }
@@ -108,7 +108,7 @@ PPMSEArrayParser >> stringText [
 	^ super stringText
 	
 	==> [:token | 
-		 token value
+		 token inputValue
 			copyReplaceAll: ''''''
 			with: '''' ]
 ]
