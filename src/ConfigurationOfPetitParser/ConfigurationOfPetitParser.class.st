@@ -259,7 +259,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 				spec
 					className: 'ConfigurationOfGlamour';
 					file: 'ConfigurationOfGlamour';
-					version: 'default';
+					version: #development;
 					loads: #(Core Morphic);
 					repository: 'http://smalltalkhub.com/mc/Moose/Glamour/main' ].
 	]
