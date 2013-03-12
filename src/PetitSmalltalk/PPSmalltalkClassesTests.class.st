@@ -1,12 +1,5 @@
 "
 Evalaute the following code to verify the complete image.
-
-PackageOrganizer default packages
-	inject: LAPackagesTests new
-	into: [ :test :package | 
-		[ test verifyPackage: package packageName ]
-			on: TestResult resumableFailure
-			do: [ :err | err resume ] ]
 "
 Class {
 	#name : #PPSmalltalkClassesTests,
