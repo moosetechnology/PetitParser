@@ -75,8 +75,8 @@ PPLambdaParserTest >> testParseOnError [
 	result := self parserClass
 		parse: '\x.'
 		onError: [ :msg :pos | 
-			self assert: (msg includesSubString: '$(').
-			self assert: (msg includesSubString: 'expected').
+			self assert: (msg includesSubstring: '$(').
+			self assert: (msg includesSubstring: 'expected').
 			self assert: (pos = 0).
 			beenHere := true ].
 	self assert: result.

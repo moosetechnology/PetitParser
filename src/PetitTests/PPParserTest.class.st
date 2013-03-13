@@ -830,8 +830,8 @@ PPParserTest >> testParseOnError1 [
 	
 	result := parser parse: 'b' onError: [ :failure | 
 		self assert: (failure position = 0).
-		self assert: (failure message includesSubString: '$a').
-		self assert: (failure message includesSubString: 'expected').
+		self assert: (failure message includesSubstring: '$a').
+		self assert: (failure message includesSubstring: 'expected').
 		seen := true ].
 	self assert: result.
 	self assert: seen
@@ -846,8 +846,8 @@ PPParserTest >> testParseOnError2 [
 	self assert: result = $a.
 
 	result := parser parse: 'b' onError: [ :msg :pos | 
-		self assert: (msg includesSubString: '$a').
-		self assert: (msg includesSubString: 'expected').
+		self assert: (msg includesSubstring: '$a').
+		self assert: (msg includesSubstring: 'expected').
 		self assert: pos = 0.
 		seen := true ].
 	self assert: result.
