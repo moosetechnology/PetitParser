@@ -247,7 +247,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 	spec for: #common do: [
 		spec blessing: #baseline.
 		spec description: 'Describing all satellite packages. Loads configuration from new repository on SmalltalkHub'.
-		spec repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main'.
+		spec repository: 'http://www.smalltalkhub.com/mc/Moose/PetitParser/main'.
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
@@ -261,7 +261,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 					file: 'ConfigurationOfGlamour';
 					version: #development;
 					loads: #(Core Morphic);
-					repository: 'http://smalltalkhub.com/mc/Moose/Glamour/main' ].
+					repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
 	]
 ]
 
