@@ -35,6 +35,36 @@ PPSearcherTest >> testAnyPattern [
 	self assert: result size = 3
 ]
 
+{ #category : #testing }
+PPSearcherTest >> testClassPattern [
+	| result |
+	searcher 
+		matches: (PPPattern class: PPLiteralObjectParser)
+		do: [ :parser :answer | answer add: parser; yourself ].
+
+	result := searcher
+		execute: ($a asParser)
+		initialAnswer: OrderedCollection new.
+	self assert: result size = 1.
+	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ]).
+	
+	result := searcher
+		execute: ('abc' asParser)
+		initialAnswer: OrderedCollection new.
+	self assert: result isEmpty.
+	
+	result := searcher
+		execute: (#any asParser)
+		initialAnswer: OrderedCollection new.
+	self assert: result isEmpty.
+	
+	result := searcher
+		execute: ($a asParser / #any asParser , $b asParser)
+		initialAnswer: OrderedCollection new.
+	self assert: result size = 2.
+	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ])
+]
+
 { #category : #'testing-copy' }
 PPSearcherTest >> testCopyMatchAction [
 	| old new |
@@ -191,7 +221,7 @@ PPSearcherTest >> testCopyMatchRepetitionMinMax [
 PPSearcherTest >> testKindPattern [
 	| result |
 	searcher 
-		matches: (PPPattern kind: PPLiteralObjectParser)
+		matches: (PPPattern kind: PPLiteralParser)
 		do: [ :parser :answer | answer add: parser; yourself ].
 
 	result := searcher
@@ -199,6 +229,12 @@ PPSearcherTest >> testKindPattern [
 		initialAnswer: OrderedCollection new.
 	self assert: result size = 1.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ]).
+	
+	result := searcher
+		execute: ('abc' asParser)
+		initialAnswer: OrderedCollection new.
+	self assert: result size = 1.
+	self assert: (result allSatisfy: [ :each | each class = PPLiteralSequenceParser ]).
 	
 	result := searcher
 		execute: (#any asParser)

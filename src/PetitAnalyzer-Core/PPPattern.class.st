@@ -18,10 +18,17 @@ PPPattern class >> any [
 ]
 
 { #category : #'instance creation' }
-PPPattern class >> kind: aBehavior [
+PPPattern class >> class: aBehavior [
 	"Matches parsers that are of the class aBehavior."
 
 	^ self on: [ :parser :context | parser class = aBehavior ]
+]
+
+{ #category : #'instance creation' }
+PPPattern class >> kind: aBehavior [
+	"Matches parsers that are of the class aBehavior or one of its subclasses."
+
+	^ self on: [ :parser :context | parser isKindOf: aBehavior ]
 ]
 
 { #category : #'instance creation' }

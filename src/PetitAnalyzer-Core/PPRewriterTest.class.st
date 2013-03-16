@@ -50,7 +50,7 @@ PPRewriterTest >> testDuplicationRemoval [
 { #category : #testing }
 PPRewriterTest >> testPatternRemoval [
 	| pattern result |
-	pattern := PPPattern kind: PPLiteralObjectParser.
+	pattern := PPPattern class: PPLiteralObjectParser.
 	rewriter
 		replace: pattern / pattern
 		with: pattern.
@@ -69,7 +69,7 @@ PPRewriterTest >> testPatternRemoval [
 { #category : #testing }
 PPRewriterTest >> testPatternReplacement [
 	| pattern result |
-	pattern := PPPattern kind: PPLiteralObjectParser.
+	pattern := PPPattern class: PPLiteralObjectParser.
 	rewriter
 		replace: pattern
 		with: pattern , pattern.
