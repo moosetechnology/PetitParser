@@ -8,8 +8,18 @@ The start production is defined in the method start. It is aliased to the inst-v
 Class {
 	#name : #PPCompositeParser,
 	#superclass : #PPDelegateParser,
+	#instVars : [
+		'dependencies'
+	],
 	#category : #'PetitParser-Tools'
 }
+
+{ #category : #accessing }
+PPCompositeParser class >> dependencies [
+	"Answer a collection of PPCompositeParser classes that this parser directly dependends on. Override this method in subclasses to declare depndent parsers. The default subclass does not depend on other PPCompositeParser."
+
+	^ #()
+]
 
 { #category : #accessing }
 PPCompositeParser class >> ignoredNames [
@@ -27,9 +37,32 @@ PPCompositeParser class >> new [
 
 { #category : #'instance creation' }
 PPCompositeParser class >> newStartingAt: aSymbol [
-	"Answer a new parser starting at aSymbol."
+	"Answer a new parser starting at aSymbol. The code makes sure to resolve all dependent parsers correctly."
 
-	^ self basicNew initializeStartingAt: aSymbol
+	| parsers remaining |
+	parsers := IdentityDictionary new.
+	remaining := OrderedCollection with: self.
+	[ remaining isEmpty ] whileFalse: [
+		| dependency |
+		dependency := remaining removeLast.
+		(parsers includesKey: dependency) ifFalse: [
+			parsers at: dependency put: dependency basicNew.
+			remaining addAll: dependency dependencies ] ].
+	parsers keysAndValuesDo: [ :class :parser |
+		| dependencies |
+		dependencies := IdentityDictionary new.
+		class dependencies 
+			do: [ :dependency | dependencies at: dependency put: (parsers at: dependency) ].
+		parser 
+			initializeStartingAt: (class == self
+				ifTrue: [ aSymbol ]
+				ifFalse: [ class startSymbol ]) 
+			dependencies: dependencies ].
+	parsers keysAndValuesDo: [ :class :parser |
+		parser setParser: (parser perform: parser children first name).
+		parser productionNames keysAndValuesDo: [ :key :value |
+			(parser instVarAt: key) setParser: (parser perform: value) ] ].
+	^ parsers at: self
 ]
 
 { #category : #parsing }
@@ -59,17 +92,20 @@ PPCompositeParser class >> startSymbol [
 	^ #start
 ]
 
+{ #category : #querying }
+PPCompositeParser >> dependencyAt: aClass [
+	"Answer the dependent parser aClass. Throws an error if this parser class is not declared on the class-side of the receiver."
+	
+	^ dependencies at: aClass ifAbsent: [ self error: 'Undeclared dependency in ' , self class name , ' to ' , aClass name ]
+]
+
 { #category : #initialization }
-PPCompositeParser >> initializeStartingAt: aSymbol [
-	| productionNames |
+PPCompositeParser >> initializeStartingAt: aSymbol dependencies: aDictionary [
 	self initialize.
-	productionNames := self productionNames.
 	parser := PPDelegateParser named: aSymbol.
-	productionNames keysAndValuesDo: [ :key :value |
+	self productionNames keysAndValuesDo: [ :key :value |
 		self instVarAt: key put: (PPDelegateParser named: value) ].
-	parser setParser: (self perform: aSymbol).
-	productionNames keysAndValuesDo: [ :key :value |
-		(self instVarAt: key) setParser: (self perform: value) ]
+	dependencies := aDictionary
 ]
 
 { #category : #querying }
