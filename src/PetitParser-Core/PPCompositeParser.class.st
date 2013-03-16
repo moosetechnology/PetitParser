@@ -16,7 +16,7 @@ Class {
 
 { #category : #accessing }
 PPCompositeParser class >> dependencies [
-	"Answer a collection of PPCompositeParser classes that this parser directly dependends on. Override this method in subclasses to declare depndent parsers. The default subclass does not depend on other PPCompositeParser."
+	"Answer a collection of PPCompositeParser classes that this parser directly dependends on. Override this method in subclasses to declare dependent parsers. The default implementation does not depend on other PPCompositeParser."
 
 	^ #()
 ]
@@ -94,7 +94,7 @@ PPCompositeParser class >> startSymbol [
 
 { #category : #querying }
 PPCompositeParser >> dependencyAt: aClass [
-	"Answer the dependent parser aClass. Throws an error if this parser class is not declared on the class-side of the receiver."
+	"Answer the dependent parser aClass. Throws an error if this parser class is not declared in the method #dependencies on the class-side of the receiver."
 	
 	^ dependencies at: aClass ifAbsent: [ self error: 'Undeclared dependency in ' , self class name , ' to ' , aClass name ]
 ]
