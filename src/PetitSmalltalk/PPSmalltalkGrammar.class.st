@@ -360,7 +360,7 @@ PPSmalltalkGrammar >> nilToken [
 { #category : #primitives }
 PPSmalltalkGrammar >> number [
 	^ ($- asParser optional , #digit asParser) and , [ :stream | 
-		[ Number readFrom: stream ] 
+		[ (SqNumberParser on: stream) nextNumber ] 
 			on: Error
 			do: [ :err | PPFailure message: err messageText at: stream position ] ] 
 				asParser
