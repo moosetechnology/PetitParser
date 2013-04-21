@@ -1,3 +1,6 @@
+"
+self loadDevelopment
+"
 Class {
 	#name : #ConfigurationOfPetitParser,
 	#superclass : #Object,
@@ -26,7 +29,12 @@ ConfigurationOfPetitParser class >> isMetacelloConfig [
 
 { #category : #loading }
 ConfigurationOfPetitParser class >> loadDefault [
-	(self project version: 'default') load
+	self loadDevelopment
+]
+
+{ #category : #loading }
+ConfigurationOfPetitParser class >> loadDevelopment [
+	(self project version: #development) load
 ]
 
 { #category : #loading }
