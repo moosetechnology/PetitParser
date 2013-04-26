@@ -260,7 +260,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 			package: 'PetitParser';
 			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
 			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'];
-			package: 'PetitGui' with: [ spec requires: 'Glamour'].
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
 		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ).
 		spec project: 'Glamour' with: [
