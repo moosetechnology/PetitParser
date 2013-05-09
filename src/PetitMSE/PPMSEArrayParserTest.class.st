@@ -10,9 +10,9 @@ PPMSEArrayParserTest >> parserClass [
 ]
 
 { #category : #tests }
-PPMSEArrayParserTest >> testElementName [ 
+PPMSEArrayParserTest >> testElementName [
 	super testElementName.
-	self assert: result = 'ABC.XYZ'
+	self assert: result equals: 'ABC.XYZ'
 ]
 
 { #category : #'tests-start' }
@@ -25,19 +25,19 @@ PPMSEArrayParserTest >> testEmpty [
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testNatural [
 	super testNatural.
-	self assert: result = 123
+	self assert: result equals: 123
 ]
 
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testNaturalWithSpace [
 	super testNaturalWithSpace.
-	self assert: result = 123
+	self assert: result equals: 123
 ]
 
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testNumberWithE [
 	super testNumberWithE.
-	self assert: result = -1.2345
+	self assert: result equals: -1.2345
 ]
 
 { #category : #'tests-start' }
@@ -92,17 +92,17 @@ PPMSEArrayParserTest >> testOneElementWithSubElement [
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testString [
 	super testString.
-	self assert: result = 'abc'
+	self assert: result equals: 'abc'
 ]
 
 { #category : #'tests-start' }
 PPMSEArrayParserTest >> testStringEscape [
 	super testStringEscape.
-	self assert: result = 'It''s here'.
+	self assert: result equals: 'It''s here'
 ]
 
 { #category : #'tests-basic' }
 PPMSEArrayParserTest >> testStringTextWithEscapeChars [
 	super testStringTextWithEscapeChars.
-	self assert: result = 'a''bc'
+	self assert: result equals: 'a''bc'
 ]
