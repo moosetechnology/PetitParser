@@ -18,22 +18,19 @@ PPTokenTest >> parse: aString using: aParser [
 PPTokenTest >> testCollection [
 	| input result |
 	input := 'foo    '.
-	result := self 
-		parse: input
-		using: self identifier.
-	self assert: (result collection = input).
-	self assert: (result collection == input)
+	result := self parse: input using: self identifier.
+	self assert: result collection equals: input.
+	self assert: result collection == input
 ]
 
 { #category : #'testing-querying' }
 PPTokenTest >> testColumn [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123' , (String with: Character lf) , '1234'.
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123'
+		, (String with: Character lf) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.
-	result 
-		with:  #(1 2 1 2 3 4 1 2 3 4 1 2 3 4)
-		do: [ :token :line | self assert: token column = line ]
+	result with: #(1 2 1 2 3 4 1 2 3 4 1 2 3 4) do: [ :token :line | self assert: token column equals: line ]
 ]
 
 { #category : #'testing-copying' }
@@ -41,21 +38,20 @@ PPTokenTest >> testCopyFromTo [
 	| result other |
 	result := PPToken on: 'abc'.
 	other := result copyFrom: 2 to: 2.
-	
-	self assert: other size = 1.
-	self assert: other start = 2.
-	self assert: other stop = 2.
-	self assert: other collection = result collection
+	self assert: other size equals: 1.
+	self assert: other start equals: 2.
+	self assert: other stop equals: 2.
+	self assert: other collection equals: result collection
 ]
 
 { #category : #'testing-comparing' }
 PPTokenTest >> testEquality [
 	| token1 token2 |
-	token1 := self  parse: 'foo' using: self identifier.
-	token2 := self  parse: 'foo' using: self identifier.
+	token1 := self parse: 'foo' using: self identifier.
+	token2 := self parse: 'foo' using: self identifier.
 	self deny: token1 == token2.
-	self assert: token1 = token2.
-	self assert: token1 hash = token2 hash.
+	self assert: token1 equals: token2.
+	self assert: token1 hash equals: token2 hash
 ]
 
 { #category : #testing }
@@ -67,22 +63,19 @@ PPTokenTest >> testInitialize [
 PPTokenTest >> testInputValue [
 	| input result |
 	input := 'foo'.
-	result := self 
-		parse: input
-		using: self identifier.
-	self assert: result inputValue = input.
+	result := self parse: input using: self identifier.
+	self assert: result inputValue equals: input.
 	self deny: result inputValue == input
 ]
 
 { #category : #'testing-querying' }
 PPTokenTest >> testLine [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123' , (String with: Character lf) , '1234'.
+	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123'
+		, (String with: Character lf) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.
-	result 
-		with: #(1 1 2 2 2 2 3 3 3 3 4 4 4 4) 
-		do: [ :token :line | self assert: token line = line ]
+	result with: #(1 1 2 2 2 2 3 3 3 3 4 4 4 4) do: [ :token :line | self assert: token line equals: line ]
 ]
 
 { #category : #testing }
@@ -95,10 +88,8 @@ PPTokenTest >> testNew [
 PPTokenTest >> testParsedValue [
 	| input result |
 	input := 'foo'.
-	result := self 
-		parse: input
-		using: self identifier.
-	self assert: result parsedValue = #($f $o $o)
+	result := self parse: input using: self identifier.
+	self assert: result parsedValue equals: #($f $o $o)
 ]
 
 { #category : #testing }
@@ -111,28 +102,22 @@ PPTokenTest >> testPrinting [
 { #category : #testing }
 PPTokenTest >> testSize [
 	| result |
-	result := self 
-		parse: 'foo'
-		using: self identifier.
-	self assert: result size = 3
+	result := self parse: 'foo' using: self identifier.
+	self assert: result size equals: 3
 ]
 
 { #category : #testing }
 PPTokenTest >> testStart [
 	| result |
-	result := self 
-		parse: 'foo'
-		using: self identifier.
-	self assert: result start = 1
+	result := self parse: 'foo' using: self identifier.
+	self assert: result start equals: 1
 ]
 
 { #category : #testing }
 PPTokenTest >> testStop [
 	| result |
-	result := self 
-		parse: 'foo'
-		using: self identifier.
-	self assert: result stop = 3
+	result := self parse: 'foo' using: self identifier.
+	self assert: result stop equals: 3
 ]
 
 { #category : #testing }

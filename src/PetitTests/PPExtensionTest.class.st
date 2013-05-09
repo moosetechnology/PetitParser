@@ -48,14 +48,14 @@ PPExtensionTest >> testClosure [
 PPExtensionTest >> testEpsilon [
 	| parser |
 	parser := nil asParser.
-	self assert: parser asParser = parser
+	self assert: parser asParser equals: parser
 ]
 
 { #category : #'testing-parser' }
 PPExtensionTest >> testParser [
 	| parser |
 	parser := $a asParser.
-	self assert: parser asParser = parser
+	self assert: parser asParser equals: parser
 ]
 
 { #category : #'testing-parser' }
@@ -84,13 +84,13 @@ PPExtensionTest >> testSequence [
 PPExtensionTest >> testStream [
 	| stream |
 	stream := 'abc' readStream asPetitStream.
-	self assert: (stream class = PPStream).
-	self assert: (stream printString = '·abc').
-	self assert: (stream peek) = $a.
-	self assert: (stream uncheckedPeek = $a).
-	self assert: (stream next) = $a.
-	self assert: (stream printString = 'a·bc').
-	self assert: (stream asPetitStream = stream)
+	self assert: stream class equals: PPStream.
+	self assert: stream printString equals: '·abc'.
+	self assert: stream peek equals: $a.
+	self assert: stream uncheckedPeek equals: $a.
+	self assert: stream next equals: $a.
+	self assert: stream printString equals: 'a·bc'.
+	self assert: stream asPetitStream equals: stream
 ]
 
 { #category : #'testing-parser' }
@@ -116,5 +116,5 @@ PPExtensionTest >> testSymbol [
 PPExtensionTest >> testText [
 	| stream |
 	stream := 'abc' asText asPetitStream.
-	self assert: stream class = PPStream
+	self assert: stream class equals: PPStream
 ]

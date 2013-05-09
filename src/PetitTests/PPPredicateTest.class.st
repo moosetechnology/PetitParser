@@ -197,12 +197,15 @@ PPPredicateTest >> testOnMessage [
 	| block parser |
 	block := [ :char | char = $* ].
 	parser := PPPredicateObjectParser on: block message: 'starlet'.
-	self assert: parser block = block.
-	self assert: parser message = 'starlet'.
-	
+	self assert: parser block equals: block.
+	self assert: parser message equals: 'starlet'.
 	self assertCharacterSets: parser.
 	self assert: parser parse: '*' to: $*.
-	self assert: parser parse: '**' to: $* end: 1.
+	self
+		assert: parser
+		parse: '**'
+		to: $*
+		end: 1.
 	self assert: parser fail: ''.
 	self assert: parser fail: '1'.
 	self assert: parser fail: 'a'
@@ -223,20 +226,19 @@ PPPredicateTest >> testPunctuation [
 { #category : #'testing-sequence' }
 PPPredicateTest >> testSequenceParser [
 	| parser |
-	parser := PPPredicateSequenceParser 
-		on: [ :value | value first isUppercase ] 
+	parser := PPPredicateSequenceParser
+		on: [ :value | value first isUppercase ]
 		message: 'uppercase 3 letter words'
 		size: 3.
-	self assert: parser size = 3.
+	self assert: parser size equals: 3.
 	self assert: parser parse: 'Abc'.
 	self assert: parser parse: 'ABc'.
 	self assert: parser parse: 'ABC'.
 	self assert: parser fail: 'abc'.
 	self assert: parser fail: 'aBC'.
 	self assert: parser fail: 'Ab'.
-	
 	parser := parser negate.
-	self assert: parser size = 3.
+	self assert: parser size equals: 3.
 	self assert: parser fail: 'Abc'.
 	self assert: parser fail: 'ABc'.
 	self assert: parser fail: 'ABC'.
