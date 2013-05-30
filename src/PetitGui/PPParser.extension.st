@@ -124,26 +124,6 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 			depth: anInteger + 1 ]
 ]
 
-{ #category : #'*petitgui' }
-PPParser >> namedChildren [
-	| children |
-
-	children := OrderedCollection new.
-
-	self children do: [:child |
-		child name isNil ifTrue: 
-		[
-			children addAll: (child namedChildren).
-		]
-		ifFalse: 
-		[
-			children add: child.
-		].
-	].
-
-	^ children
-]
-
 { #category : #'*petitgui-mondrian' }
 PPParser >> namedParsers [
     | result |
