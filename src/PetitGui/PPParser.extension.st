@@ -37,6 +37,30 @@ PPParser >> gtInspectorParserInspectorIn: composite [
 			startOn: self)
 ]
 
+{ #category : #'*petitgui' }
+PPParser >> gtNamedTreeViewIn: composite [
+	<gtInspectorPresentationOrder: 40>
+
+	composite tree
+		title: 'Named Tree View';
+		children: [:n | n namedChildren ];
+		format: [:n| n name ifNil: [ n asString ] ];
+		shouldExpandToLevel: 3;
+		noSelection.
+]
+
+{ #category : #'*petitgui' }
+PPParser >> gtTreeViewIn: composite [
+	<gtInspectorPresentationOrder: 40>
+
+	composite tree
+			title: 'Tree View';
+			children: [:n | n children ];
+			format: [:n| n name ifNil: [ n asString ] ifNotNil: [n name] ];
+			shouldExpandToLevel: 6;
+			noSelection.
+]
+
 { #category : #'*petitgui-morphic' }
 PPParser >> morphicProduction [
 	^ self newRowMorph
@@ -98,6 +122,26 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 		parser 
 			morphicShapeSeen: aSet 
 			depth: anInteger + 1 ]
+]
+
+{ #category : #'*petitgui' }
+PPParser >> namedChildren [
+	| children |
+
+	children := OrderedCollection new.
+
+	self children do: [:child |
+		child name isNil ifTrue: 
+		[
+			children addAll: (child namedChildren).
+		]
+		ifFalse: 
+		[
+			children add: child.
+		].
+	].
+
+	^ children
 ]
 
 { #category : #'*petitgui-mondrian' }
