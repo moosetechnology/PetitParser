@@ -115,7 +115,7 @@ PPParser >> firstSets [
 	| firstSets |
 	firstSets := IdentityDictionary new.
 	self allParsersDo: [ :each |
-		firstSets at: each put: (each isTerminal
+		firstSets at: each put: (each isFirstSetTerminal
 			ifTrue: [ IdentitySet with: each ]
 			ifFalse: [ IdentitySet new ]).
 		each isNullable
@@ -203,6 +203,13 @@ PPParser >> innerChildrenDo: aBlock seen: aSet [
 		each name isNil ifTrue: [
 			aBlock value: each.
 			each innerChildrenDo: aBlock seen: aSet ] ]
+]
+
+{ #category : #'*petitanalyzer-testing' }
+PPParser >> isFirstSetTerminal [
+	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
+
+	^ self children isEmpty
 ]
 
 { #category : #'*petitanalyzer-testing' }
