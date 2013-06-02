@@ -17,51 +17,36 @@ PPSearcherTest >> testAnyPattern [
 	| result |
 	searcher
 		matches: PPPattern any
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: ($a asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
-	
-	result := searcher
-		execute: ($a asParser star)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 2.
-	
-	result := searcher
-		execute: ($a asParser , $b asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 3
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
+	result := searcher execute: $a asParser star initialAnswer: OrderedCollection new.
+	self assert: result size equals: 2.
+	result := searcher execute: $a asParser , $b asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 3
 ]
 
 { #category : #testing }
 PPSearcherTest >> testClassPattern [
 	| result |
-	searcher 
+	searcher
 		matches: (PPPattern class: PPLiteralObjectParser)
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: ($a asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ]).
-	
-	result := searcher
-		execute: ('abc' asParser)
-		initialAnswer: OrderedCollection new.
+	result := searcher execute: 'abc' asParser initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: (#any asParser)
-		initialAnswer: OrderedCollection new.
+	result := searcher execute: #any asParser initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: ($a asParser / #any asParser , $b asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 2.
+	result := searcher execute: $a asParser / #any asParser , $b asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 2.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ])
 ]
 
@@ -220,31 +205,22 @@ PPSearcherTest >> testCopyMatchRepetitionMinMax [
 { #category : #testing }
 PPSearcherTest >> testKindPattern [
 	| result |
-	searcher 
+	searcher
 		matches: (PPPattern kind: PPLiteralParser)
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: ($a asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ]).
-	
-	result := searcher
-		execute: ('abc' asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
+	result := searcher execute: 'abc' asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralSequenceParser ]).
-	
-	result := searcher
-		execute: (#any asParser)
-		initialAnswer: OrderedCollection new.
+	result := searcher execute: #any asParser initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: ($a asParser / #any asParser , $b asParser)
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 2.
+	result := searcher execute: $a asParser / #any asParser , $b asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 2.
 	self assert: (result allSatisfy: [ :each | each class = PPLiteralObjectParser ])
 ]
 
@@ -458,18 +434,15 @@ PPSearcherTest >> testListPrefix [
 PPSearcherTest >> testMatchesAny [
 	| result |
 	searcher
-		matchesAnyOf: (Array 
-			with: $a asParser
-			with: $b asParser)
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: $a asParser , $b asParser , $c asParser
-		initialAnswer: OrderedCollection new.
-	
-	self assert: result size = 2.
-	self assert: result first literal = $a.
-	self assert: result last literal = $b
+		matchesAnyOf: (Array with: $a asParser with: $b asParser)
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser , $b asParser , $c asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 2.
+	self assert: result first literal equals: $a.
+	self assert: result last literal equals: $b
 ]
 
 { #category : #testing }
@@ -477,49 +450,42 @@ PPSearcherTest >> testMultiplePattern [
 	| result |
 	searcher
 		matches: $a asParser
-		do: [ :parser :answer | answer first add: parser. answer ].
+		do: [ :parser :answer | 
+			answer first add: parser.
+			answer ].
 	searcher
 		matches: PPPattern any
-		do: [ :parser :answer | answer second add: parser. answer ].
-
+		do: [ :parser :answer | 
+			answer second add: parser.
+			answer ].
 	result := searcher
 		execute: $a asParser , $a asParser , $b asParser
-		initialAnswer: (Array 
-			with: OrderedCollection new 
-			with: OrderedCollection new).
-	
-	self assert: result first size = 2.
-	self assert: result first first literal = $a.
-	self assert: result first last literal = $a.
-	
-	self assert: result last size = 2.
-	self assert: result last first class = PPSequenceParser.
-	self assert: result last last literal = $b
+		initialAnswer: (Array with: OrderedCollection new with: OrderedCollection new).
+	self assert: result first size equals: 2.
+	self assert: result first first literal equals: $a.
+	self assert: result first last literal equals: $a.
+	self assert: result last size equals: 2.
+	self assert: result last first class equals: PPSequenceParser.
+	self assert: result last last literal equals: $b
 ]
 
 { #category : #testing }
 PPSearcherTest >> testNamePattern [
 	| result |
-	searcher 
+	searcher
 		matches: (PPPattern name: 'foo')
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher 
-		execute: ($a asParser)
-		initialAnswer: OrderedCollection new.
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: ($a asParser name: 'foo')
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
-	self assert: result first name = 'foo'.
-	
-	result := searcher
-		execute: ($a asParser name: 'bar') , ($b asParser name: 'foo')
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
-	self assert: result first name = 'foo'
+	result := searcher execute: ($a asParser name: 'foo') initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
+	self assert: result first name equals: 'foo'.
+	result := searcher execute: ($a asParser name: 'bar') , ($b asParser name: 'foo') initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
+	self assert: result first name equals: 'foo'
 ]
 
 { #category : #testing }
@@ -534,11 +500,8 @@ PPSearcherTest >> testRecursivePattern [
 	| recursive |
 	recursive := PPDelegateParser new.
 	recursive setParser: recursive.
-	searcher 
-		matches: recursive 
-		do: [ :parser :answer | parser ].
-	
-	self assert: (searcher execute: recursive) = recursive.
+	searcher matches: recursive do: [ :parser :answer | parser ].
+	self assert: (searcher execute: recursive) equals: recursive.
 	self assert: (searcher execute: $a asParser) isNil.
 	self assert: (searcher execute: $a asParser / $b asParser star) isNil
 ]
@@ -548,25 +511,16 @@ PPSearcherTest >> testRepeatedPattern [
 	| pattern result |
 	searcher
 		matches: (pattern := PPPattern any) , pattern
-		do: [ :parser :answer | answer add: parser; yourself ].
-
-	result := searcher
-		execute: ($a asParser , $b asParser)
-		initialAnswer: OrderedCollection new.
+		do: [ :parser :answer | 
+			answer
+				add: parser;
+				yourself ].
+	result := searcher execute: $a asParser , $b asParser initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: $a asParser , $a asParser
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1.
-	
-	result := searcher
-		execute: ($a asParser , ($a asParser , $b asParser))
-		initialAnswer: OrderedCollection new.
+	result := searcher execute: $a asParser , $a asParser initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1.
+	result := searcher execute: $a asParser , ($a asParser , $b asParser) initialAnswer: OrderedCollection new.
 	self assert: result isEmpty.
-	
-	result := searcher
-		execute: ($b asParser , ($a asParser , $a asParser))
-		initialAnswer: OrderedCollection new.
-	self assert: result size = 1
+	result := searcher execute: $b asParser , ($a asParser , $a asParser) initialAnswer: OrderedCollection new.
+	self assert: result size equals: 1
 ]

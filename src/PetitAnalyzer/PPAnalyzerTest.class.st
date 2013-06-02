@@ -114,15 +114,15 @@ PPAnalyzerTest >> grammarE [
 { #category : #testing }
 PPAnalyzerTest >> testAllNamedParsers [
 	| p1 p2 p3 |
-	p1 := (#digit asParser name: 'a').
+	p1 := #digit asParser name: 'a'.
 	p2 := (#digit asParser name: 'b') star.
 	p3 := (#digit asParser name: 'c') token end.
-	self assert: p1 allNamedParsers size = 1.
-	self assert: p1 allNamedParsers first name = 'a'.
-	self assert: p2 allNamedParsers size = 1.
-	self assert: p2 allNamedParsers first name = 'b'.
-	self assert: p3 allNamedParsers size = 1.
-	self assert: p3 allNamedParsers first name = 'c'
+	self assert: p1 allNamedParsers size equals: 1.
+	self assert: p1 allNamedParsers first name equals: 'a'.
+	self assert: p2 allNamedParsers size equals: 1.
+	self assert: p2 allNamedParsers first name equals: 'b'.
+	self assert: p3 allNamedParsers size equals: 1.
+	self assert: p3 allNamedParsers first name equals: 'c'
 ]
 
 { #category : #testing }
@@ -132,9 +132,9 @@ PPAnalyzerTest >> testAllParsers [
 	p2 := p1 ==> #asUppercase.
 	p3 := PPUnresolvedParser new.
 	p3 def: p2 / p3.
-	self assert: p1 allParsers size = 1.
-	self assert: p2 allParsers size = 2.
-	self assert: p3 allParsers size = 3
+	self assert: p1 allParsers size equals: 1.
+	self assert: p2 allParsers size equals: 2.
+	self assert: p3 allParsers size equals: 3
 ]
 
 { #category : #'testing-cycleset' }
@@ -152,7 +152,7 @@ PPAnalyzerTest >> testCycleSetGrammarC [
 	| grammar cycleSet |
 	grammar := self grammarC.
 	cycleSet := grammar cycleSet.
-	self assert: (cycleSet size = 2).
+	self assert: cycleSet size equals: 2.
 	self assert: (cycleSet includes: grammar)
 ]
 
@@ -160,19 +160,16 @@ PPAnalyzerTest >> testCycleSetGrammarC [
 PPAnalyzerTest >> testCycleSetGrammarD [
 	| grammar cycleSet |
 	grammar := self grammarD.
-	
 	cycleSet := (grammar at: #S) cycleSet.
-	self assert: (cycleSet size = 4).
+	self assert: cycleSet size equals: 4.
 	self assert: (cycleSet includes: (grammar at: #A)).
 	self assert: (cycleSet includes: (grammar at: #S)).
-	
 	cycleSet := (grammar at: #A) cycleSet.
-	self assert: (cycleSet size = 4).
+	self assert: cycleSet size equals: 4.
 	self assert: (cycleSet includes: (grammar at: #A)).
 	self assert: (cycleSet includes: (grammar at: #S)).
-
 	cycleSet := (grammar at: #B) cycleSet.
-	self assert: (cycleSet size = 2).
+	self assert: cycleSet size equals: 2.
 	self assert: (cycleSet includes: (grammar at: #B))
 ]
 
@@ -181,7 +178,7 @@ PPAnalyzerTest >> testCycleSetGrammarE [
 	| grammar cycleSet |
 	grammar := self grammarE.
 	cycleSet := grammar cycleSet.
-	self assert: (cycleSet size = 1).
+	self assert: cycleSet size equals: 1.
 	self assert: (cycleSet includes: grammar)
 ]
 
@@ -191,14 +188,13 @@ PPAnalyzerTest >> testCycleSetInChoice [
 	parser := PPUnresolvedParser new.
 	parser def: parser / $a asParser.
 	cycleSet := parser cycleSet.
-	self assert: (cycleSet size = 1).
+	self assert: cycleSet size equals: 1.
 	self assert: (cycleSet includes: parser).
-	
 	parser := PPUnresolvedParser new.
 	parser def: $a asParser / parser.
 	cycleSet := parser cycleSet.
-	self assert: (cycleSet size = 1).
-	self assert: (cycleSet includes: parser).
+	self assert: cycleSet size equals: 1.
+	self assert: (cycleSet includes: parser)
 ]
 
 { #category : #'testing-cycleset' }
@@ -207,15 +203,13 @@ PPAnalyzerTest >> testCycleSetInSequence [
 	parser := PPUnresolvedParser new.
 	parser def: parser , $a asParser.
 	cycleSet := parser cycleSet.
-	self assert: (cycleSet size = 1).
+	self assert: cycleSet size equals: 1.
 	self assert: (cycleSet includes: parser).
-	
 	parser := PPUnresolvedParser new.
 	parser def: nil asParser , parser.
 	cycleSet := parser cycleSet.
-	self assert: (cycleSet size = 1).
+	self assert: cycleSet size equals: 1.
 	self assert: (cycleSet includes: parser).
-	
 	parser := PPUnresolvedParser new.
 	parser def: $a asParser , parser.
 	cycleSet := parser cycleSet.
@@ -366,13 +360,13 @@ PPAnalyzerTest >> testFollowSetExampleE [
 { #category : #testing }
 PPAnalyzerTest >> testInnerChildren [
 	| p1 p2 p3 |
-	p1 := (#digit asParser name: 'a').
-	p2 := (#digit asParser star name: 'b').
+	p1 := #digit asParser name: 'a'.
+	p2 := #digit asParser star name: 'b'.
 	p3 := (#digit asParser name: 'c') token star end.
 	self assert: p1 innerChildren isEmpty.
-	self assert: p2 innerChildren size = 1.
+	self assert: p2 innerChildren size equals: 1.
 	self assert: (p2 innerChildren allSatisfy: [ :each | each name isNil ]).
-	self assert: p3 innerChildren size = 2.
+	self assert: p3 innerChildren size equals: 2.
 	self assert: (p3 innerChildren allSatisfy: [ :each | each name isNil ])
 ]
 
@@ -437,17 +431,17 @@ PPAnalyzerTest >> testListReplace [
 { #category : #testing }
 PPAnalyzerTest >> testNamedChildren [
 	| p1 p2 p3 p4 |
-	p1 := (#digit asParser name: 'a').
+	p1 := #digit asParser name: 'a'.
 	p2 := (#digit asParser name: 'b') star.
 	p3 := (#digit asParser name: 'c') token end.
 	p4 := ((#digit asParser name: 'c') token name: 'd') end.
 	self assert: p1 namedChildren isEmpty.
-	self assert: p2 namedChildren size = 1.
-	self assert: p2 namedChildren first name = 'b'.
-	self assert: p3 namedChildren size = 1.
-	self assert: p3 namedChildren first name = 'c'.
-	self assert: p4 namedChildren size = 1.
-	self assert: p4 namedChildren first name = 'd'
+	self assert: p2 namedChildren size equals: 1.
+	self assert: p2 namedChildren first name equals: 'b'.
+	self assert: p3 namedChildren size equals: 1.
+	self assert: p3 namedChildren first name equals: 'c'.
+	self assert: p4 namedChildren size equals: 1.
+	self assert: p4 namedChildren first name equals: 'd'
 ]
 
 { #category : #'testing-transform' }
