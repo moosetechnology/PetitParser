@@ -186,7 +186,6 @@ PPParser >> viewAllNamedParsers [
 	| view |
 	view := ROMondrianViewBuilder new.
 	self viewAllNamedParsersOn: view.
-	view populateBasicNavigationMenu.
 	^ view open setLabel: 'All named parsers'
 ]
 
