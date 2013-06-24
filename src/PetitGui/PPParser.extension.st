@@ -42,11 +42,10 @@ PPParser >> gtNamedTreeViewIn: composite [
 	<gtInspectorPresentationOrder: 40>
 
 	composite tree
-		title: 'Named Tree View';
+		title: 'Named Tree';
 		children: [:n | n namedChildren ];
 		format: [:n| n name ifNil: [ n asString ] ];
-		shouldExpandToLevel: 3;
-		noSelection.
+		shouldExpandToLevel: 3
 ]
 
 { #category : #'*petitgui' }
@@ -54,11 +53,10 @@ PPParser >> gtTreeViewIn: composite [
 	<gtInspectorPresentationOrder: 40>
 
 	composite tree
-			title: 'Tree View';
+			title: 'Tree';
 			children: [:n | n children ];
 			format: [:n| n name ifNil: [ n asString ] ifNotNil: [n name] ];
-			shouldExpandToLevel: 6;
-			noSelection.
+			shouldExpandToLevel: 6
 ]
 
 { #category : #'*petitgui-morphic' }
