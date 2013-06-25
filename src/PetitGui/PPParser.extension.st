@@ -42,10 +42,11 @@ PPParser >> gtNamedTreeViewIn: composite [
 	<gtInspectorPresentationOrder: 40>
 
 	composite tree
-		title: 'Named Tree';
+		title: 'Named Tree View';
 		children: [:n | n namedChildren ];
 		format: [:n| n name ifNil: [ n asString ] ];
-		shouldExpandToLevel: 3
+		shouldExpandToLevel: 3;
+		noSelection.
 ]
 
 { #category : #'*petitgui' }
@@ -53,10 +54,11 @@ PPParser >> gtTreeViewIn: composite [
 	<gtInspectorPresentationOrder: 40>
 
 	composite tree
-			title: 'Tree';
+			title: 'Tree View';
 			children: [:n | n children ];
 			format: [:n| n name ifNil: [ n asString ] ifNotNil: [n name] ];
-			shouldExpandToLevel: 6
+			shouldExpandToLevel: 6;
+			noSelection.
 ]
 
 { #category : #'*petitgui-morphic' }
@@ -184,6 +186,7 @@ PPParser >> viewAllNamedParsers [
 	| view |
 	view := ROMondrianViewBuilder new.
 	self viewAllNamedParsersOn: view.
+	view populateBasicNavigationMenu.
 	^ view open setLabel: 'All named parsers'
 ]
 

@@ -92,6 +92,11 @@ PPBrowserStream >> asTimingTable [
 	^ result
 ]
 
+{ #category : #accessing }
+PPBrowserStream >> displayName [
+	^self class name
+]
+
 { #category : #private }
 PPBrowserStream >> mouseDown: anEvent with: aMorph [
 	| location string parser |
