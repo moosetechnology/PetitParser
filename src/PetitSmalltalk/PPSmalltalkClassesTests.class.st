@@ -16,7 +16,7 @@ PPSmalltalkClassesTests class >> benchmark: aParser [
 	| sources |
 	sources := OrderedCollection new.
 	SequenceableCollection withAllSubclassesDo: [ :class |
-		class selectors do: [ :selector |
+		class selectorsDo: [ :selector |
 			sources add: (class sourceCodeAt: selector) ] ].
 	^ self benchmark: aParser sources: sources asArray
 ]
