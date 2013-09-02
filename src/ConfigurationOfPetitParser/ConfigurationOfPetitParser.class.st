@@ -123,18 +123,17 @@ ConfigurationOfPetitParser >> baseline12: spec [
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [
-				spec requires: #('PetitParser' ). ];
+				spec requires: #('PetitParser' ) ];
 			package: 'PetitAnalyzer' with: [
-				spec requires: #('PetitTests' ). ];
+				spec requires: #('PetitTests' ) ];
 			package: 'PetitGui' with: [
-				spec requires: #('Glamour for Petit' ). ];
+				spec requires: #('Glamour for Petit' ) ];
 			package: 'PetitSmalltalk' with: [
 				spec requires: #( 'AST-Core' 'PetitParser' 'PetitTests') ].
 			"todo: declare all other packages & dependencies here"
-.
 		spec 
 			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
-			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
+			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ) ]
 
 ]
 
@@ -186,7 +185,6 @@ ConfigurationOfPetitParser >> baseline13: spec [
 				spec requires: #('PetitParser' 'PetitTests') ];
 			package: 'Factorial-Language' with: [
 				spec requires: #('PetitParser') ].
-.
 		spec 
 			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
 			group: 'Tests' with: #('PetitTests' 'PetitAnalyzer' ). ].
@@ -239,7 +237,6 @@ ConfigurationOfPetitParser >> baseline15: spec [
 				spec requires: #('PetitParser' 'PetitTests') ];
 			package: 'Factorial-Language' with: [
 				spec requires: #('PetitParser') ].
-.
 		spec 
 			group: 'default' with: #('UI' 'Tests');
 			group: 'Core' with: #('PetitParser' 'PetitAnalyzer' );
@@ -269,8 +266,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 					file: 'ConfigurationOfGlamour';
 					version: #development;
 					loads: #(Core Morphic Roassal);
-					repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
-	]
+					repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ] ]
 ]
 
 { #category : #baselines }
@@ -321,8 +317,7 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'pharo1.4.x' version: '1.6'.
-	spec for: #'common' version: '1.5'.
+	spec for: #'common' version: '1.6'.
 	spec for: #'pharo1.3.x' version: '1.5'
 ]
 
