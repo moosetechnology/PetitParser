@@ -442,9 +442,9 @@ ConfigurationOfPetitParser >> version16: spec [
 		spec timestamp: '3/1/2013 18:01'.
 		spec project: 'Glamour for Petit' with: '2.4'.
 		spec 
-			package: 'PetitParser' with: 'PetitParser-lr.228';
-			package: 'PetitTests' with: 'PetitTests-lr.43';
-			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.40';
-			package: 'PetitGui' with: 'PetitGui-TudorGirba.116'. ].
+			package: 'PetitParser' with: 'PetitParser-YuriyTynchuk.232';
+			package: 'PetitTests' with: 'PetitTests-AndreHora.47';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-DiegoLont.46';
+			package: 'PetitGui' with: 'PetitGui-DiegoLont.125'. ].
 
 ]
