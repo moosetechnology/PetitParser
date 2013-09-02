@@ -256,17 +256,21 @@ ConfigurationOfPetitParser >> baseline16: spec [
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
-			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'];
-			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'].
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
-		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ).
+		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ) ].
+
+	spec for: #( 'squeakCommon' )  do: [
 		spec project: 'Glamour' with: [
-				spec
-					className: 'ConfigurationOfGlamour';
-					file: 'ConfigurationOfGlamour';
-					version: #development;
-					loads: #('Core' 'Morphic' 'Roassal');
-					repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ] ]
+			spec
+				className: 'ConfigurationOfGlamour';
+				file: 'ConfigurationOfGlamour';
+				version: #development;
+				loads: #('Core' 'Morphic' 'Roassal');
+				repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
+		spec 
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+		spec group: 'Gui' with: #( 'PetitGui' ) ]
 ]
 
 { #category : #baselines }
