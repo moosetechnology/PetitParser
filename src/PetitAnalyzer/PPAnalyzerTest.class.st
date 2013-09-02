@@ -80,7 +80,7 @@ PPAnalyzerTest >> grammarC [
 	| grammar |
 	grammar := PPUnresolvedParser new.
 	grammar def: (grammar , $+ asParser , grammar) / $1 asParser.
-	^ grammar
+	^grammar
 ]
 
 { #category : #accessing }
