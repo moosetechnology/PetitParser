@@ -17,5 +17,6 @@ PPXmlElement >> contentNumber [
 
 { #category : #'*petitxpath-extensions' }
 PPXmlElement >> contentText [ 
-	^self firstChild data
+	^ self firstChild 
+		ifNotNil: [ :child | child data ]
 ]
