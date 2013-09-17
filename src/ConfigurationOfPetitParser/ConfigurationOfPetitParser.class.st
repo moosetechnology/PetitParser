@@ -503,5 +503,7 @@ ConfigurationOfPetitParser >> version17snapshot: spec [
 	<version: '1.7-snapshot'>
 
 	spec for: #common do: [
-		self populateSpec: spec with: self snapshot1 ]
+		self populateSpec: spec with: self snapshot1.
+		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
+		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ) ]
 ]
