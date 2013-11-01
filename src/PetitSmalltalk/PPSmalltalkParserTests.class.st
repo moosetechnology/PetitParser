@@ -9,7 +9,7 @@ PPSmalltalkParserTests >> assert: aNode format: aString [
 	aNode isCollection
 		ifFalse: [ ^ self assert: (Array with: aNode) format: (Array with: aString) ].
 	self assert: aNode size equals: aString size.
-	aNode with: aString do: [ :node :string | self assert: (RBFormatter new format: node) equals: string ]
+	aNode with: aString do: [ :node :string | self assert: (RBConfigurableFormatter format: node) equals: string ]
 ]
 
 { #category : #accessing }
@@ -101,21 +101,21 @@ PPSmalltalkParserTests >> testArray4 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral1 [
 	super testArrayLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #()
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral10 [
 	super testArrayLiteral10.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(#(1 2) #(1 2 3))
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral11 [
 	super testArrayLiteral11.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value size equals: 2.
 	self assert: (result value first isKindOf: ByteArray).
 	self assert: result value first size equals: 2.
@@ -126,42 +126,42 @@ PPSmalltalkParserTests >> testArrayLiteral11 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral2 [
 	super testArrayLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(1)
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral3 [
 	super testArrayLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(1 2)
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral4 [
 	super testArrayLiteral4.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(true false nil)
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral5 [
 	super testArrayLiteral5.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #($a)
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral6 [
 	super testArrayLiteral6.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(1.2)
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral7 [
 	super testArrayLiteral7.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(#size #at: #at:put: #==).
 	result value do: [ :each | self assert: each isSymbol ]
 ]
@@ -169,7 +169,7 @@ PPSmalltalkParserTests >> testArrayLiteral7 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral8 [
 	super testArrayLiteral8.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #('baz').
 	self assert: result value first isString.
 	self assert: result value first isSymbol not
@@ -178,14 +178,14 @@ PPSmalltalkParserTests >> testArrayLiteral8 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testArrayLiteral9 [
 	super testArrayLiteral9.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #(#(1) 2)
 ]
 
 { #category : #testing }
 PPSmalltalkParserTests >> testAssignment1 [
 	super testAssignment1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 1
 ]
 
@@ -195,7 +195,7 @@ PPSmalltalkParserTests >> testAssignment2 [
 	self assert: result isAssignment.
 	self assert: result variable isVariable.
 	self assert: result variable name equals: 'a'.
-	self assert: result value isLiteral.
+	self assert: result value isLiteralNode.
 	self assert: result value value equals: 1
 ]
 
@@ -208,7 +208,7 @@ PPSmalltalkParserTests >> testAssignment3 [
 	self assert: result value isAssignment.
 	self assert: result value variable isVariable.
 	self assert: result value variable name equals: 'b'.
-	self assert: result value value isLiteral.
+	self assert: result value value isLiteralNode.
 	self assert: result value value value equals: 1
 ]
 
@@ -220,7 +220,7 @@ PPSmalltalkParserTests >> testAssignment4 [
 	self assert: result isAssignment.
 	self assert: result variable isVariable.
 	self assert: result variable name equals: 'a'.
-	self assert: result value isLiteral.
+	self assert: result value isLiteralNode.
 	self assert: result value value equals: 1
 ]
 
@@ -235,7 +235,7 @@ PPSmalltalkParserTests >> testAssignment5 [
 	self assert: result value isAssignment.
 	self assert: result value variable isVariable.
 	self assert: result value variable name equals: 'b'.
-	self assert: result value value isLiteral.
+	self assert: result value value isLiteralNode.
 	self assert: result value value value equals: 1
 ]
 
@@ -256,10 +256,10 @@ PPSmalltalkParserTests >> testAssignment6 [
 PPSmalltalkParserTests >> testBinaryExpression1 [
 	super testBinaryExpression1.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
 ]
 
@@ -268,13 +268,13 @@ PPSmalltalkParserTests >> testBinaryExpression2 [
 	super testBinaryExpression2.
 	self assert: result isMessage.
 	self assert: result receiver isMessage.
-	self assert: result receiver receiver isLiteral.
+	self assert: result receiver receiver isLiteralNode.
 	self assert: result receiver receiver value equals: 1.
 	self assert: result receiver arguments size equals: 1.
-	self assert: result receiver arguments first isLiteral.
+	self assert: result receiver arguments first isLiteralNode.
 	self assert: result receiver arguments first value equals: 2.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 3
 ]
 
@@ -282,11 +282,11 @@ PPSmalltalkParserTests >> testBinaryExpression2 [
 PPSmalltalkParserTests >> testBinaryExpression3 [
 	super testBinaryExpression3.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #//.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
 ]
 
@@ -294,11 +294,11 @@ PPSmalltalkParserTests >> testBinaryExpression3 [
 PPSmalltalkParserTests >> testBinaryExpression4 [
 	super testBinaryExpression4.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #--.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
 ]
 
@@ -306,11 +306,11 @@ PPSmalltalkParserTests >> testBinaryExpression4 [
 PPSmalltalkParserTests >> testBinaryExpression5 [
 	super testBinaryExpression5.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #==>.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
 ]
 
@@ -377,7 +377,7 @@ PPSmalltalkParserTests >> testBinaryMethod5 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral1 [
 	super testByteLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: (result value isKindOf: ByteArray).
 	self assert: result value isEmpty
 ]
@@ -385,7 +385,7 @@ PPSmalltalkParserTests >> testByteLiteral1 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral2 [
 	super testByteLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: (result value isKindOf: ByteArray).
 	self assert: result value size equals: 1.
 	self assert: result value first equals: 0
@@ -394,7 +394,7 @@ PPSmalltalkParserTests >> testByteLiteral2 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral3 [
 	super testByteLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: (result value isKindOf: ByteArray).
 	self assert: result value size equals: 1.
 	self assert: result value first equals: 255
@@ -403,7 +403,7 @@ PPSmalltalkParserTests >> testByteLiteral3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral4 [
 	super testByteLiteral4.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: (result value isKindOf: ByteArray).
 	self assert: result value size equals: 2.
 	self assert: result value first equals: 1.
@@ -413,7 +413,7 @@ PPSmalltalkParserTests >> testByteLiteral4 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral5 [
 	super testByteLiteral5.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: (result value isKindOf: ByteArray).
 	self assert: result value size equals: 3.
 	self assert: result value first equals: 10.
@@ -425,7 +425,7 @@ PPSmalltalkParserTests >> testByteLiteral5 [
 PPSmalltalkParserTests >> testCascadeExpression1 [
 	super testCascadeExpression1.
 	self assert: result isCascade.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result messages size equals: 2.
 	self assert: result messages first receiver equals: result receiver.
 	self assert: result messages first selector equals: #abs.
@@ -438,7 +438,7 @@ PPSmalltalkParserTests >> testCascadeExpression2 [
 	super testCascadeExpression2.
 	self assert: result isCascade.
 	self assert: result receiver isMessage.
-	self assert: result receiver receiver isLiteral.
+	self assert: result receiver receiver isLiteralNode.
 	self assert: result receiver receiver value equals: 1.
 	self assert: result receiver selector equals: #abs.
 	self assert: result messages size equals: 3.
@@ -454,7 +454,7 @@ PPSmalltalkParserTests >> testCascadeExpression2 [
 PPSmalltalkParserTests >> testCascadeExpression3 [
 	super testCascadeExpression3.
 	self assert: result isCascade.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result messages size equals: 2.
 	self assert: result messages first receiver equals: result receiver.
@@ -468,21 +468,21 @@ PPSmalltalkParserTests >> testCascadeExpression3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testCharLiteral1 [
 	super testCharLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: $a
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testCharLiteral2 [
 	super testCharLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: Character space
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testCharLiteral3 [
 	super testCharLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: $$
 ]
 
@@ -553,11 +553,11 @@ PPSmalltalkParserTests >> testComplexBlock2 [
 PPSmalltalkParserTests >> testKeywordExpression1 [
 	super testKeywordExpression1.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #to:.
 	self assert: result arguments size equals: 1.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
 ]
 
@@ -565,12 +565,12 @@ PPSmalltalkParserTests >> testKeywordExpression1 [
 PPSmalltalkParserTests >> testKeywordExpression2 [
 	super testKeywordExpression2.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #to:by:.
 	self assert: result arguments size equals: 2.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2.
-	self assert: result arguments second isLiteral.
+	self assert: result arguments second isLiteralNode.
 	self assert: result arguments second value equals: 3
 ]
 
@@ -578,14 +578,14 @@ PPSmalltalkParserTests >> testKeywordExpression2 [
 PPSmalltalkParserTests >> testKeywordExpression3 [
 	super testKeywordExpression3.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #to:by:do:.
 	self assert: result arguments size equals: 3.
-	self assert: result arguments first isLiteral.
+	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2.
-	self assert: result arguments second isLiteral.
+	self assert: result arguments second isLiteralNode.
 	self assert: result arguments second value equals: 3.
-	self assert: result arguments third isLiteral.
+	self assert: result arguments third isLiteralNode.
 	self assert: result arguments third value equals: 4
 ]
 
@@ -656,7 +656,7 @@ PPSmalltalkParserTests >> testMethod1 [
 	self assert: result body statements size equals: 1.
 	self assert: result body statements first isReturn.
 	self assert: result body statements first value isMessage.
-	self assert: result body statements first value receiver isLiteral.
+	self assert: result body statements first value receiver isLiteralNode.
 	self assert: result body statements first value selector equals: #-.
 	self assert: result body statements first value arguments size equals: 1.
 	self assert: result body statements first value arguments first isVariable
@@ -671,7 +671,7 @@ PPSmalltalkParserTests >> testMethod2 [
 	self assert: result body statements size equals: 1.
 	self assert: result body statements first isReturn.
 	self assert: result body statements first value isMessage.
-	self assert: result body statements first value receiver isLiteral.
+	self assert: result body statements first value receiver isLiteralNode.
 	self assert: result body statements first value selector equals: #-.
 	self assert: result body statements first value arguments size equals: 1.
 	self assert: result body statements first value arguments first isVariable
@@ -686,7 +686,7 @@ PPSmalltalkParserTests >> testMethod3 [
 	self assert: result body statements size equals: 1.
 	self assert: result body statements first isReturn.
 	self assert: result body statements first value isMessage.
-	self assert: result body statements first value receiver isLiteral.
+	self assert: result body statements first value receiver isLiteralNode.
 	self assert: result body statements first value selector equals: #-.
 	self assert: result body statements first value arguments size equals: 1.
 	self assert: result body statements first value arguments first isVariable
@@ -695,7 +695,7 @@ PPSmalltalkParserTests >> testMethod3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral1 [
 	super testNumberLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 0.
 	self assert: result value isInteger
 ]
@@ -703,7 +703,7 @@ PPSmalltalkParserTests >> testNumberLiteral1 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral10 [
 	super testNumberLiteral10.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 10.
 	self assert: result value isInteger
 ]
@@ -711,7 +711,7 @@ PPSmalltalkParserTests >> testNumberLiteral10 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral11 [
 	super testNumberLiteral11.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 511.
 	self assert: result value isInteger
 ]
@@ -719,7 +719,7 @@ PPSmalltalkParserTests >> testNumberLiteral11 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral12 [
 	super testNumberLiteral12.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 175.
 	self assert: result value isInteger
 ]
@@ -727,7 +727,7 @@ PPSmalltalkParserTests >> testNumberLiteral12 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral13 [
 	super testNumberLiteral13.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 202.9921875.
 	self assert: result value isFloat
 ]
@@ -735,7 +735,7 @@ PPSmalltalkParserTests >> testNumberLiteral13 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral14 [
 	super testNumberLiteral14.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value floor equals: -9.
 	self assert: result value isFloat
 ]
@@ -743,14 +743,14 @@ PPSmalltalkParserTests >> testNumberLiteral14 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral15 [
 	super testNumberLiteral15.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 1 / 2
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral2 [
 	super testNumberLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 0.1.
 	self assert: result value isFloat
 ]
@@ -758,7 +758,7 @@ PPSmalltalkParserTests >> testNumberLiteral2 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral3 [
 	super testNumberLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 123.
 	self assert: result value isInteger
 ]
@@ -766,7 +766,7 @@ PPSmalltalkParserTests >> testNumberLiteral3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral4 [
 	super testNumberLiteral4.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 123.456.
 	self assert: result value isFloat
 ]
@@ -774,7 +774,7 @@ PPSmalltalkParserTests >> testNumberLiteral4 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral5 [
 	super testNumberLiteral5.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 0.
 	self assert: result value isInteger
 ]
@@ -782,7 +782,7 @@ PPSmalltalkParserTests >> testNumberLiteral5 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral6 [
 	super testNumberLiteral6.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: -0.1.
 	self assert: result value isFloat
 ]
@@ -790,7 +790,7 @@ PPSmalltalkParserTests >> testNumberLiteral6 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral7 [
 	super testNumberLiteral7.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: -123.
 	self assert: result value isInteger
 ]
@@ -798,7 +798,7 @@ PPSmalltalkParserTests >> testNumberLiteral7 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral8 [
 	super testNumberLiteral8.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: -123.
 	self assert: result value isInteger
 ]
@@ -806,7 +806,7 @@ PPSmalltalkParserTests >> testNumberLiteral8 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testNumberLiteral9 [
 	super testNumberLiteral9.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: -123.456.
 	self assert: result value isFloat
 ]
@@ -973,9 +973,9 @@ PPSmalltalkParserTests >> testSequence1 [
 	self assert: result temporaries first isVariable.
 	self assert: result temporaries first name equals: 'a'.
 	self assert: result statements size equals: 2.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2
 ]
 
@@ -1009,21 +1009,21 @@ PPSmalltalkParserTests >> testSimpleBlock3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSpecialLiteral1 [
 	super testSpecialLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: true
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSpecialLiteral2 [
 	super testSpecialLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: false
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSpecialLiteral3 [
 	super testSpecialLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: nil
 ]
 
@@ -1060,7 +1060,7 @@ PPSmalltalkParserTests >> testStatements1 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 1.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger
 ]
@@ -1071,10 +1071,10 @@ PPSmalltalkParserTests >> testStatements2 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 2.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2.
 	self assert: result statements second value isInteger
 ]
@@ -1085,13 +1085,13 @@ PPSmalltalkParserTests >> testStatements3 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 3.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2.
 	self assert: result statements second value isInteger.
-	self assert: result statements third isLiteral.
+	self assert: result statements third isLiteralNode.
 	self assert: result statements third value equals: 3.
 	self assert: result statements third value isInteger
 ]
@@ -1102,13 +1102,13 @@ PPSmalltalkParserTests >> testStatements4 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 3.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2.
 	self assert: result statements second value isInteger.
-	self assert: result statements third isLiteral.
+	self assert: result statements third isLiteralNode.
 	self assert: result statements third value equals: 3.
 	self assert: result statements third value isInteger
 ]
@@ -1119,10 +1119,10 @@ PPSmalltalkParserTests >> testStatements5 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 2.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2.
 	self assert: result statements second value isInteger
 ]
@@ -1133,10 +1133,10 @@ PPSmalltalkParserTests >> testStatements6 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 2.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger.
-	self assert: result statements second isLiteral.
+	self assert: result statements second isLiteralNode.
 	self assert: result statements second value equals: 2.
 	self assert: result statements second value isInteger
 ]
@@ -1147,7 +1147,7 @@ PPSmalltalkParserTests >> testStatements7 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 1.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger
 ]
@@ -1158,7 +1158,7 @@ PPSmalltalkParserTests >> testStatements8 [
 	self assert: result isSequence.
 	self assert: result temporaries isEmpty.
 	self assert: result statements size equals: 1.
-	self assert: result statements first isLiteral.
+	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger
 ]
@@ -1166,28 +1166,28 @@ PPSmalltalkParserTests >> testStatements8 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testStringLiteral1 [
 	super testStringLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: ''
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testStringLiteral2 [
 	super testStringLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 'ab'
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testStringLiteral3 [
 	super testStringLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: 'ab''cd'
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral1 [
 	super testSymbolLiteral1.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #foo.
 	self assert: result value isSymbol
 ]
@@ -1195,7 +1195,7 @@ PPSmalltalkParserTests >> testSymbolLiteral1 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral2 [
 	super testSymbolLiteral2.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #+.
 	self assert: result value isSymbol
 ]
@@ -1203,7 +1203,7 @@ PPSmalltalkParserTests >> testSymbolLiteral2 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral3 [
 	super testSymbolLiteral3.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #key:.
 	self assert: result value isSymbol
 ]
@@ -1211,7 +1211,7 @@ PPSmalltalkParserTests >> testSymbolLiteral3 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral4 [
 	super testSymbolLiteral4.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #key:value:.
 	self assert: result value isSymbol
 ]
@@ -1219,7 +1219,7 @@ PPSmalltalkParserTests >> testSymbolLiteral4 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral5 [
 	super testSymbolLiteral5.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #'testing-result'.
 	self assert: result value isSymbol
 ]
@@ -1229,15 +1229,15 @@ PPSmalltalkParserTests >> testSymbolLiteral6 [
 	super testSymbolLiteral6.
 	PPSmalltalkGrammar allowUnderscoreAssignment
 		ifTrue: [ ^ self ].
-	self assert: result isLiteral.
-	self assert: result value equals: #__gen__binding.
+	self assert: result isLiteralNode.
+	self assert: result value equals: #'__gen__binding'.
 	self assert: result value isSymbol
 ]
 
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral7 [
 	super testSymbolLiteral7.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #fucker.
 	self assert: result value isSymbol
 ]
@@ -1245,7 +1245,7 @@ PPSmalltalkParserTests >> testSymbolLiteral7 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral8 [
 	super testSymbolLiteral8.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #fucker.
 	self assert: result value isSymbol
 ]
@@ -1253,7 +1253,7 @@ PPSmalltalkParserTests >> testSymbolLiteral8 [
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testSymbolLiteral9 [
 	super testSymbolLiteral9.
-	self assert: result isLiteral.
+	self assert: result isLiteralNode.
 	self assert: result value equals: #fucker.
 	self assert: result value isSymbol
 ]
@@ -1298,7 +1298,7 @@ PPSmalltalkParserTests >> testTemporaries3 [
 PPSmalltalkParserTests >> testUnaryExpression1 [
 	super testUnaryExpression1.
 	self assert: result isMessage.
-	self assert: result receiver isLiteral.
+	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #abs.
 	self assert: result arguments isEmpty
 ]
@@ -1308,7 +1308,7 @@ PPSmalltalkParserTests >> testUnaryExpression2 [
 	super testUnaryExpression2.
 	self assert: result isMessage.
 	self assert: result receiver isMessage.
-	self assert: result receiver receiver isLiteral.
+	self assert: result receiver receiver isLiteralNode.
 	self assert: result receiver receiver value equals: 1.
 	self assert: result receiver selector equals: #abs.
 	self assert: result receiver arguments isEmpty.
