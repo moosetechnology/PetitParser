@@ -103,7 +103,7 @@ PPParserDebuggerResult >> parser: anObject [
 { #category : #printing }
 PPParserDebuggerResult >> printOn: aStream [ 
 	aStream 
-		nextPutAll: self parser name;
+		nextPutAll: self parser displayName;
 		nextPutAll: ' - ';   
 		nextPutAll: self result printString
 ]
