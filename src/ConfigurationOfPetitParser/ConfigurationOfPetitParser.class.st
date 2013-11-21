@@ -543,6 +543,10 @@ ConfigurationOfPetitParser >> version18snapshot: spec [
 	<version: '1.8-snapshot'>
 
 	spec for: #common do: [
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
+			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'].
 		self populateSpec: spec with: self snapshot2.
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
 		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ) ]
