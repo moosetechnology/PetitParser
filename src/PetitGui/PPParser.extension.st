@@ -33,7 +33,7 @@ PPParser >> gtInspectorParserInspectorIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	composite custom: (
 		PPParserInspector new 
-			title: 'Inspector';
+			title: 'Sampler';
 			startOn: self)
 ]
 
