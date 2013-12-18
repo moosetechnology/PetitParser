@@ -49,3 +49,8 @@ PPChoiceParser >> morphicShapeSeen: aSet depth: anInteger [
 				yourself);
 			yourself ]
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPChoiceParser >> visualizationGraphType [
+	^ '/'
+]

@@ -15,3 +15,8 @@ PPSequenceParser >> morphicShapeSeen: aSet depth: anInteger [
 					addMorphBack: (cc value: each);
 					yourself ] ]
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPSequenceParser >> visualizationGraphType [
+	^ ','
+]

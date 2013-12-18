@@ -4,3 +4,8 @@ Extension { #name : #PPLiteralParser }
 PPLiteralParser >> displayName [
 	^ literal printString
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPLiteralParser >> visualizationGraphType [
+	^ literal printString
+]

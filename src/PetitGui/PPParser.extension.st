@@ -29,6 +29,17 @@ PPParser >> exampleOn: aStream [
 ]
 
 { #category : #'*petitgui' }
+PPParser >> gtGraphViewIn: composite [
+	<gtInspectorPresentationOrder: 50>
+
+	composite roassal
+		title: 'Graph'; 
+		painting: [ :view |
+			self visualizeStructureInGraphOn: view.	
+		].
+]
+
+{ #category : #'*petitgui' }
 PPParser >> gtInspectorParserInspectorIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	composite custom: (
@@ -210,4 +221,64 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBl
 	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
 	view edges: (self allParsers select: [:each |  each name isEmptyOrNil not ])from: #yourself toAll: #namedParsers.
 	view horizontalDominanceTreeLayout verticalGap: 10; layered
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> visualizationGraphType [
+	^ nil
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> visualizeStructureInGraph [
+
+	"
+	PPSmalltalkParser new visualize
+	
+	
+	"
+	| view |
+	
+	view := ROMondrianViewBuilder new.
+	self visualizeStructureInGraphOn: view.
+	view open.
+	^ view
+]
+
+{ #category : #'*petitgui-mondrian' }
+PPParser >> visualizeStructureInGraphOn: view [
+	view shape rectangle 
+		borderWidth: 1;
+		if: [ :p | p name isNil ] fillColor: Color lightGray.
+	
+	view interaction
+		item: 'Explore' action: #explore;
+		highlightWhenOver: [ :p | 
+			self allParsers select: [ :ch | ch children includes: p ]
+		] color: Color orange muchLighter;
+		highlightWhenOver: [ :p | |children|
+			children := p namedChildren.
+		] color: Color orange muchDarker;
+		highlightWhenOver: [ :p | Array with: p ] color: Color orange;
+		popupText: [:p | p class name asString ].
+	
+	view
+		nodes: self allParsers
+		forEach: [ :aParser | |labels|
+			labels := OrderedCollection new.
+			aParser name notNil ifTrue: [ labels add: aParser name ].
+			aParser visualizationGraphType notNil ifTrue: [ labels add: aParser visualizationGraphType ].
+			labels isEmpty ifFalse: [ 
+					view shape label.
+					view interaction forwarder.
+					view nodes: labels asArray ].
+		].
+	
+	view shape: (ROLine new add: (ROArrow new size: 4) offset: 0.1).
+	view edgesToAll: #children.	
+	view treeLayout
+		layered;
+		on: ROLayoutEnd do: [ :evt | ROFocusView on: (view raw elementFromModel: self) ].
+		
+	view zoomInButton.
+	view zoomOutButton.
 ]

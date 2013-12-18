@@ -21,3 +21,8 @@ PPRepeatingParser >> exampleOn: aStream [
 			ifTrue: [ ^ self ].
 		super exampleOn: aStream ]
 ]
+
+{ #category : #'*petitgui-mondrian' }
+PPRepeatingParser >> visualizationGraphType [
+	^ '*'
+]
