@@ -5,6 +5,13 @@ PPParser >> backgroundForDepth: anInteger [
 	^ Color gray: 1.0 - (anInteger / 20.0)
 ]
 
+{ #category : #'*petitgui-debug' }
+PPParser >> debug: anObject [
+	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
+	
+	^ self enableDebug parseOn: anObject asPetitStream
+]
+
 { #category : #'*petitgui-accessing' }
 PPParser >> displayColor [
 	^ self isTerminal
@@ -17,6 +24,28 @@ PPParser >> displayName [
 	^ self name isNil
 		ifFalse: [ self name asString ]
 		ifTrue: [ self class name asString ]
+]
+
+{ #category : #'*petitgui-debug' }
+PPParser >> enableDebug [
+   | root newParser |
+	root := PPParserDebuggerResult new.
+	newParser := self transform: [:each |
+		each >=> [:stream :continuation | 
+			| result child |
+			child := PPParserDebuggerResult new 
+					parser: each;
+					parent: root.
+			root := root children add: child.
+			child start: stream position + 1.
+			result := continuation value.
+			child end: stream position.
+			root result: result.
+			root := root parent.
+			result ]].
+	
+	^ PPDebugParser on: newParser root: root.
+
 ]
 
 { #category : #'*petitgui-accessing' }
