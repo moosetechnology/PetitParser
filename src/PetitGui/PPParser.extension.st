@@ -229,8 +229,10 @@ PPParser >> viewAllNamedParsers [
 
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersOn: view [
-	view shape rectangleWithoutBorder; withText: #displayName.
-	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
+	view shape
+		rectangleWithoutBorder;
+		withText: #displayName.
+	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
 	view edgesToAll: #namedParsers.
 	view horizontalDominanceTreeLayout layered
 ]
@@ -242,14 +244,19 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames on: view [
 
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBlock on: view [
-	view shape label 
-		color: [:each | (aCollectionOfNames includes: each name) ifFalse: [Color black] ifTrue: [Color red]];
-		text: [:each |each displayName].
+	view shape label
+		color: [ :each | 
+					(aCollectionOfNames includes: each name)
+						ifFalse: [ Color black ]
+						ifTrue: [ Color red ] ];
+		text: [ :each | each displayName ].
 	view interaction popupText: aBlock.
 	view interaction item: 'Explore' action: #explore.
-	view nodes: (self allParsers select: [:each |  each name isEmptyOrNil not ]).
-	view edges: (self allParsers select: [:each |  each name isEmptyOrNil not ])from: #yourself toAll: #namedParsers.
-	view horizontalDominanceTreeLayout verticalGap: 10; layered
+	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
+	view edges: (self allParsers reject: [ :each | each name isEmptyOrNil ]) from: #yourself toAll: #namedParsers.
+	view horizontalDominanceTreeLayout
+		verticalGap: 10;
+		layered
 ]
 
 { #category : #'*petitgui-mondrian' }
