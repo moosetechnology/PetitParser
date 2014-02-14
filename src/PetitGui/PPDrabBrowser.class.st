@@ -23,7 +23,7 @@ PPDrabBrowser >> browseClassesOn: aBrowser [
 				request: 'Class name' 
 				initialAnswer: '' 
 				title: 'New Parser'.
-			className isNil ifFalse: [ 
+			className ifNotNil: [ 
 				PPRefactoringUtils new 
 					performRefactoring: (PPAddParserRefactoring
 						name: className asSymbol
@@ -235,7 +235,7 @@ PPDrabBrowser >> browseSelectorsOn: aBrowser [
 				request: 'Production name' 
 				initialAnswer: self selectedSelector
 				title: 'New production'.
-			selector isNil ifFalse: [ 
+			selector ifNotNil: [ 
 				self performRefactoring: (PPRenameProdcutionRefactoring
 					onClass: self selectedClass
 					rename: self selectedSelector
