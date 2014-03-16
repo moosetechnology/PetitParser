@@ -12,6 +12,23 @@ PPParser >> debug: anObject [
 	^ self enableDebug parse: anObject asPetitStream
 ]
 
+{ #category : #'*petitgui-debug' }
+PPParser >> debuggerOutput [
+	^ self propertyAt: #debuggerOutput ifAbsentPut: true.
+]
+
+{ #category : #'*petitgui-debug' }
+PPParser >> debuggerOutput: aBoolean [
+	self propertyAt: #debuggerOutput put: aBoolean
+]
+
+{ #category : #'*petitgui-debug' }
+PPParser >> disableDebuggerOutput [ 
+	self debuggerOutput: false.
+	self allParsersDo: [ :p | p debuggerOutput: false ].
+	
+]
+
 { #category : #'*petitgui-accessing' }
 PPParser >> displayColor [
 	^ self isTerminal
@@ -32,19 +49,33 @@ PPParser >> enableDebug [
 	root := PPParserDebuggerResult new.
 	newParser := self transform: [:each |
 		each >=> [:stream :continuation | 
+			Halt ifShiftPressed.
+			each debuggerOutput ifTrue: [ 
 			| result child |
-			child := PPParserDebuggerResult new 
-					parser: each;
-					parent: root.
-			root := root children add: child.
-			child start: stream position + 1.
-			result := continuation value.
-			child end: stream position.
-			root result: result.
-			root := root parent.
-			result ]].
+				child := PPParserDebuggerResult new 
+						parser: each;
+						parent: root.
+				root := root children add: child.
+				child start: stream position + 1.
+				result := continuation value.
+				child end: stream position.
+				root result: result.
+				root := root parent.
+				result 
+			] ifFalse: [ 
+				continuation value.
+			]
+		]
+	].
 	
 	^ PPDebugParser on: newParser root: root.
+
+]
+
+{ #category : #'*petitgui-debug' }
+PPParser >> enableDebuggerOutput [ 
+	self debuggerOutput: true.
+	self allParsersDo: [ :p | p debuggerOutput: true ].
 
 ]
 
