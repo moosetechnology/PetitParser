@@ -20,7 +20,8 @@ Class {
 		'parent',
 		'start',
 		'end',
-		'stream'
+		'stream',
+		'showChildren'
 	],
 	#category : #'PetitGui-Core'
 }
@@ -67,6 +68,13 @@ PPParserDebuggerResult >> end [
 { #category : #accessing }
 PPParserDebuggerResult >> end: anObject [
 	end := anObject
+]
+
+{ #category : #'*petitgui' }
+PPParserDebuggerResult >> findStream [
+	
+	stream ifNil: [ ^ parent findStream ].
+	^ stream
 ]
 
 { #category : #printing }
@@ -154,8 +162,22 @@ PPParserDebuggerResult >> sampleIn: composite [
 
 	(composite text)
 		title: 'Sample';
-		display: [:res | res stream contents ifNil: [''] ];
+		display: [:res | res findStream contents ifNil: [''] ];
 		allowNil.
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> showChildren [
+	showChildren ifNil: [ 
+		showChildren := true.
+	].
+
+	^ showChildren
+]
+
+{ #category : #accessing }
+PPParserDebuggerResult >> showChildren: aBoolean [
+	showChildren := aBoolean
 ]
 
 { #category : #accessing }
@@ -186,5 +208,7 @@ PPParserDebuggerResult >> treeViewIn: composite [
 		title: 'Execution Traces';
 		format: [:resultNode | resultNode formattedText ];
 	"	display: [ :res | context resultTraces resultFor: context root ];"
-		children: [:resultNode | resultNode children ]. 
+		children: [:resultNode | resultNode showChildren 
+											ifTrue: [ resultNode children ] 
+											ifFalse: [ #() ] ]. 
 ]

@@ -1,6 +1,13 @@
 Extension { #name : #PPParserDebuggerResult }
 
 { #category : #'*petitgui' }
+PPParserDebuggerResult >> findStream [
+	
+	stream ifNil: [ ^ parent findStream ].
+	^ stream
+]
+
+{ #category : #'*petitgui' }
 PPParserDebuggerResult >> gtDebugView: composite [
 	<gtInspectorPresentationOrder: 40>
 
@@ -35,7 +42,7 @@ PPParserDebuggerResult >> sampleIn: composite [
 
 	(composite text)
 		title: 'Sample';
-		display: [:res | res stream contents ifNil: [''] ];
+		display: [:res | res findStream contents ifNil: [''] ];
 		allowNil.
 ]
 
@@ -57,5 +64,7 @@ PPParserDebuggerResult >> treeViewIn: composite [
 		title: 'Execution Traces';
 		format: [:resultNode | resultNode formattedText ];
 	"	display: [ :res | context resultTraces resultFor: context root ];"
-		children: [:resultNode | resultNode children ]. 
+		children: [:resultNode | resultNode showChildren 
+											ifTrue: [ resultNode children ] 
+											ifFalse: [ #() ] ]. 
 ]

@@ -24,9 +24,7 @@ PPParser >> debuggerOutput: aBoolean [
 
 { #category : #'*petitgui-debug' }
 PPParser >> disableDebuggerOutput [ 
-	self debuggerOutput: false.
-	self allParsersDo: [ :p | p debuggerOutput: false ].
-	
+	self debuggerOutput: false.	
 ]
 
 { #category : #'*petitgui-accessing' }
@@ -45,26 +43,23 @@ PPParser >> displayName [
 
 { #category : #'*petitgui-debug' }
 PPParser >> enableDebug [
-   | root newParser |
+   | root newParser  |
 	root := PPParserDebuggerResult new.
+	
 	newParser := self transform: [:each |
 		each >=> [:stream :continuation | 
-			Halt ifShiftPressed.
-			each debuggerOutput ifTrue: [ 
 			| result child |
-				child := PPParserDebuggerResult new 
-						parser: each;
-						parent: root.
-				root := root children add: child.
-				child start: stream position + 1.
-				result := continuation value.
-				child end: stream position.
-				root result: result.
-				root := root parent.
-				result 
-			] ifFalse: [ 
-				continuation value.
-			]
+			child := PPParserDebuggerResult new 
+					parser: each;
+					parent: root.
+			root := root children add: child.
+ 			child start: stream position + 1.
+			child showChildren: each debuggerOutput.
+			result := continuation value.
+			child end: stream position.
+			root result: result.
+			root := root parent.
+			result 
 		]
 	].
 	
@@ -75,8 +70,6 @@ PPParser >> enableDebug [
 { #category : #'*petitgui-debug' }
 PPParser >> enableDebuggerOutput [ 
 	self debuggerOutput: true.
-	self allParsersDo: [ :p | p debuggerOutput: true ].
-
 ]
 
 { #category : #'*petitgui-accessing' }
