@@ -111,18 +111,21 @@ ConfigurationOfPetitSmalltalk class >> validate [
 { #category : #baselines }
 ConfigurationOfPetitSmalltalk >> baseline01: spec [
 	<version: '0.1-baseline'>
-
-	spec for: #'common' do: [
-		spec blessing: #'baseline'.
-		spec project: 'PetitParser' with: [
-				spec
-					className: #ConfigurationOfPetitParser;
-					versionString: #'development';
-					loads: #('Core' );
-					repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/' ].
-		spec package: 'PetitSmalltalk' with: [
-				spec requires: #('PetitParser' ). ]. ].
-
+	spec
+		for: #common
+		do: [ 
+			spec
+				blessing: #baseline;
+				repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/'.
+			spec
+				project: 'PetitParser'
+				with: [ 
+					spec
+						className: #ConfigurationOfPetitParser;
+						versionString: #development;
+						loads: #('Core');
+						repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/' ].
+			spec package: 'PetitSmalltalk' with: [ spec requires: #('PetitParser') ] ]
 ]
 
 { #category : #accessing }
