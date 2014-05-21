@@ -256,7 +256,25 @@ ConfigurationOfPetitParser >> baseline16: spec [
 		spec 
 			package: 'PetitParser';
 			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
-			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'].
+			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'];
+			package: 'PetitSmalltalk' with: [
+				spec requires: #( 'PetitParser' 'PetitTests') ];
+			package: 'PetitCSV' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitJson' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitMSE' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitManifestMf' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitRegex' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitXPath' with: [
+				spec requires: #('PetitParser' 'PetitXml') ];
+			package: 'PetitXml' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'Factorial-Language' with: [
+				spec requires: #('PetitParser') ].
 		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
 		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ) ].
 
