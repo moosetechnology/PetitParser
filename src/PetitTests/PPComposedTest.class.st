@@ -62,7 +62,7 @@ PPComposedTest >> testEvenNumber [
 		as := bs := 0.
 		cc value.
 		(as even and: [ bs even ])
-			ifFalse: [ PPFailure message: 'Even number of a and b expected' at: 0 ] ].
+			ifFalse: [ PPFailure message: 'Even number of a and b expected' context: stream at: 0 ] ].
 
 	self assert: s fail: 'a' end: 1.
 	self assert: s fail: 'b' end: 1.

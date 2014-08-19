@@ -37,7 +37,7 @@ PPExtensionTest >> testClosure [
 	self assert: parser parse: 'sa' to: '' end: 1.
 	self assert: parser parse: 'saa' to: '' end: 1.
 	
-	parser := [ :stream | stream upTo: $s. PPFailure message: 'stream' at: stream position ] asParser.
+	parser := [ :stream | stream upTo: $s. PPFailure message: 'stream' context: stream ] asParser.
 	self assert: parser fail: ''.
 	self assert: parser fail: 's'.
 	self assert: parser fail: 'as'

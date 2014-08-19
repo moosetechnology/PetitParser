@@ -37,7 +37,7 @@ PPObjectTest >> testFibonacci [
 			result := continuation value.
 			(result isPetitFailure or: [ result first + result last first ~= result last last ])
 				ifFalse: [ parser parseOn: stream ]
-				ifTrue: [ PPFailure message: 'invalid fibonacci sequence' at: stream position ] ]).
+				ifTrue: [ PPFailure message: 'invalid fibonacci sequence' context: stream ] ]).
 	self assert: parser parse: #(1 1) to: 2.
 	self assert: parser parse: #(1 1 2) to: 3.
 	self assert: parser parse: #(1 1 2 3) to: 5.

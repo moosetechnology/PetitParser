@@ -170,7 +170,7 @@ PPParserTest >> testFailing [
 { #category : #'testing-utilities' }
 PPParserTest >> testFailure [
 	| failure |
-	failure := PPFailure message: 'Error' at: 3.
+	failure := PPFailure message: 'Error' context: nil at: 3.
 	self assert: failure message equals: 'Error'.
 	self assert: failure position equals: 3.
 	self assert: failure isPetitFailure.
