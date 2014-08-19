@@ -23,9 +23,9 @@ PPContext >> atEnd [
 	^ stream atEnd
 ]
 
-{ #category : #stream }
+{ #category : #'stream mimicry' }
 PPContext >> collection [
-	^ self stream collection  
+	^ stream collection  
 ]
 
 { #category : #'accessing-properties' }
@@ -166,9 +166,9 @@ PPContext >> root: aPPParser [
 	root := aPPParser 
 ]
 
-{ #category : #stram }
+{ #category : #'stream mimicry' }
 PPContext >> skip: anInteger [ 
-	self stream skip: anInteger 
+	^ stream skip: anInteger 
 ]
 
 { #category : #acessing }
@@ -183,7 +183,7 @@ PPContext >> stream: aStream [
 
 { #category : #'stream mimicry' }
 PPContext >> uncheckedPeek [
-	^ self stream uncheckedPeek
+	^ stream uncheckedPeek
 ]
 
 { #category : #'stream mimicry' }
