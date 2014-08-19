@@ -21,32 +21,32 @@ PPSmalltalkTokenParser >> defaultTokenClass [
 ]
 
 { #category : #parsing }
-PPSmalltalkTokenParser >> parseComments: anArray on: aStream [
+PPSmalltalkTokenParser >> parseComments: anArray on: aPPContext [
 	| start comments |
 	comments := anArray.
-	[ [ aStream atEnd not and: [ SeparatorPredicate value: aStream uncheckedPeek ] ]
-		whileTrue: [ aStream next ].
-	 aStream atEnd not and: [ aStream uncheckedPeek = $" ] ] whileTrue: [
-		aStream next.
-		start := aStream position.
-		aStream upTo: $".
-		comments := comments copyWith: (start to: aStream position) ].
+	[ [ aPPContext atEnd not and: [ SeparatorPredicate value: aPPContext uncheckedPeek ] ]
+		whileTrue: [ aPPContext next ].
+	 aPPContext atEnd not and: [ aPPContext uncheckedPeek = $" ] ] whileTrue: [
+		aPPContext next.
+		start := aPPContext position.
+		aPPContext upTo: $".
+		comments := comments copyWith: (start to: aPPContext position) ].
 	^ comments
 ]
 
 { #category : #parsing }
-PPSmalltalkTokenParser >> parseOn: aStream [
-	| start comments token |
-	start := aStream position.
+PPSmalltalkTokenParser >> parseOn: aPPContext [
+	| memento comments token |
+	memento := aPPContext remember.
 	comments := self
 		parseComments: #()
-		on: aStream.
-	token := super parseOn: aStream.
+		on: aPPContext.
+	token := super parseOn: aPPContext.
 	token isPetitFailure ifTrue: [
-		aStream position: start.
+		aPPContext restore: memento.
 		^ token ].
 	comments := self
 		parseComments: comments
-		on: aStream.
+		on: aPPContext.
 	^ token comments: comments
 ]

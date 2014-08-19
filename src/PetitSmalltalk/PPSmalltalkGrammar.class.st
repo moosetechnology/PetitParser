@@ -359,10 +359,10 @@ PPSmalltalkGrammar >> nilToken [
 
 { #category : #primitives }
 PPSmalltalkGrammar >> number [
-	^ ($- asParser optional , #digit asParser) and , [ :stream | 
-		[ (NumberParser on: stream) nextNumber ] 
+	^ ($- asParser optional , #digit asParser) and , [ :context | 
+		[ (NumberParser on: context stream) nextNumber ] 
 			on: Error
-			do: [ :err | PPFailure message: err messageText at: stream position ] ] 
+			do: [ :err | PPFailure message: err messageText at: context position ] ] 
 				asParser
 ]
 
