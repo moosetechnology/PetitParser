@@ -18,17 +18,17 @@ PPTrimmingParser class >> on: aParser trimmer: aTrimParser [
 		yourself
 ]
 
-{ #category : #parsing }
-PPTrimmingParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPTrimmingParser >> parseOn: aPPContext [
 	| position element |
-	position := aStream position.
-	[ (trimmer parseOn: aStream) isPetitFailure ]
+	position := aPPContext remember.
+	[ (trimmer parseOn: aPPContext) isPetitFailure ]
 		whileFalse.
-	element := parser parseOn: aStream.
+	element := parser parseOn: aPPContext.
 	element isPetitFailure ifTrue: [
-		aStream position: position.
+		aPPContext restore: position.
 		^ element ].
-	[ (trimmer parseOn: aStream) isPetitFailure ]
+	[ (trimmer parseOn: aPPContext) isPetitFailure ]
 		whileFalse.
 	^ element
 ]

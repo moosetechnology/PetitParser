@@ -16,23 +16,23 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPLazyRepeatingParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPLazyRepeatingParser >> parseOn: aPPContext [
 	| start element elements |
-	start := aStream position.
+	start := aPPContext remember.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [
-		(element := parser parseOn: aStream) isPetitFailure ifTrue: [
-			aStream position: start.
+		(element := parser parseOn: aPPContext) isPetitFailure ifTrue: [
+			aPPContext restore: start.
 			^ element ].
 		elements addLast: element ].
-	[ self matchesLimitOn: aStream ] whileFalse: [
+	[ self matchesLimitOn: aPPContext ] whileFalse: [
 		elements size < max ifFalse: [
-			aStream position: start.
+			aPPContext restore: start.
 			^ PPFailure message: 'overflow' at: start ].
-		element := parser parseOn: aStream.
+		element := parser parseOn: aPPContext.
 		element isPetitFailure ifTrue: [
-			aStream position: start.
+			aPPContext restore: start.
 			^ element ].
 		elements addLast: element ].
 	^ elements asArray

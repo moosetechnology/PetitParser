@@ -30,12 +30,12 @@ PPLimitedRepeatingParser >> limit [
 	^ limit
 ]
 
-{ #category : #private }
-PPLimitedRepeatingParser >> matchesLimitOn: aStream [
+{ #category : #'pp-context' }
+PPLimitedRepeatingParser >> matchesLimitOn: aPPContext [
 	| element position |
-	position := aStream position.
-	element := limit parseOn: aStream.
-	aStream position: position.
+	position := aPPContext remember.
+	element := limit parseOn: aPPContext.
+	aPPContext restore: position.
 	^ element isPetitFailure not
 ]
 

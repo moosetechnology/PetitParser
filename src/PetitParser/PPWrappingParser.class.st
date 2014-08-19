@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPWrappingParser >> parseOn: aStream [
-	^ block value: aStream value: [ parser parseOn: aStream ]
+{ #category : #'pp-context' }
+PPWrappingParser >> parseOn: aPPContext [
+	^ block value: aPPContext value: [ parser parseOn: aPPContext ]
 ]

@@ -12,16 +12,16 @@ PPEndOfInputParser >> end [
 	^ self
 ]
 
-{ #category : #parsing }
-PPEndOfInputParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPEndOfInputParser >> parseOn: aPPContext [
 	| position result |
-	position := aStream position.
-	result := parser parseOn: aStream.
-	(result isPetitFailure or: [ aStream atEnd ])
+	position := aPPContext remember.
+	result := parser parseOn: aPPContext.
+	(result isPetitFailure or: [ aPPContext stream atEnd ])
 		ifTrue: [ ^ result ].
 	result := PPFailure
 		message: 'end of input expected'
-		at: aStream position.
-	aStream position: position.
+		at: aPPContext stream position.
+	aPPContext restore: position.
 	^ result
 ]

@@ -12,7 +12,7 @@ Class {
 	#instVars : [
 		'result',
 		'count',
-		'position'
+		'context'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -20,6 +20,17 @@ Class {
 { #category : #'instance creation' }
 PPMemento class >> new [
 	^ self basicNew initialize
+]
+
+{ #category : #accessing }
+PPMemento >> contextMemento [
+	^ context
+]
+
+{ #category : #accessing }
+PPMemento >> contextMemento: aPPContextMemento [
+	context  := aPPContextMemento 
+
 ]
 
 { #category : #'accessing-readonly' }
@@ -36,16 +47,6 @@ PPMemento >> increment [
 PPMemento >> initialize [
 	count := 0
 	
-]
-
-{ #category : #accessing }
-PPMemento >> position [
-	^ position
-]
-
-{ #category : #accessing }
-PPMemento >> position: anInteger [
-	position := anInteger
 ]
 
 { #category : #accessing }

@@ -12,11 +12,11 @@ PPAndParser >> and [
 	^ self
 ]
 
-{ #category : #parsing }
-PPAndParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPAndParser >> parseOn: aPPContext [
 	| element position |
-	position := aStream position.
-	element := parser parseOn: aStream.
-	aStream position: position.
+	position := aPPContext remember.
+	element := parser parseOn: aPPContext.
+	aPPContext restore: position.
 	^ element
 ]

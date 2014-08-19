@@ -7,9 +7,9 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPOptionalParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPOptionalParser >> parseOn: aPPContext [
 	| element |
-	element := parser parseOn: aStream.
+	element := parser parseOn: aPPContext.
 	^ element isPetitFailure ifFalse: [ element ]
 ]

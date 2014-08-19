@@ -26,10 +26,10 @@ PPActionParser >> block [
 	^ block
 ]
 
-{ #category : #parsing }
-PPActionParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPActionParser >> parseOn: aPPContext [
 	| element |
-	^ (element := parser parseOn: aStream) isPetitFailure
+	^ (element := parser parseOn: aPPContext) isPetitFailure
 		ifFalse: [ block value: element ]
 		ifTrue: [ element ]
 ]

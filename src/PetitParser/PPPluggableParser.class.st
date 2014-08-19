@@ -31,12 +31,12 @@ PPPluggableParser >> initializeOn: aBlock [
 	block := aBlock
 ]
 
-{ #category : #parsing }
-PPPluggableParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPPluggableParser >> parseOn: aPPContext [
 	| position result |
-	position := aStream position.
-	result := block value: aStream.
+	position := aPPContext remember.
+	result := block value: aPPContext.
 	result isPetitFailure
-		ifTrue: [ aStream position: position ].
+		ifTrue: [ aPPContext restore: position ].
 	^ result
 ]

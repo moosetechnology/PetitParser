@@ -79,6 +79,12 @@ PPParser >> children [
 	^ #()
 ]
 
+{ #category : #'pp-context' }
+PPParser >> debugWithContext: aPPContext [
+	
+	^ self enableDebug parseWithContext: aPPContext 
+]
+
 { #category : #operators }
 PPParser >> def: aParser [
 	"Redefine the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPUnresolvedParser and later redefine it with another one."
@@ -363,11 +369,11 @@ PPParser >> optional [
 	^ PPOptionalParser on: self
 ]
 
-{ #category : #parsing }
+{ #category : #'pp-context' }
 PPParser >> parse: anObject [
 	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
-	
-	^ self parseOn: anObject asPetitStream
+
+	^ self parse: anObject withContext: PPContext new
 ]
 
 { #category : #parsing }
@@ -385,11 +391,27 @@ PPParser >> parse: anObject onError: aBlock [
 	^ aBlock value: result message value: result position
 ]
 
-{ #category : #parsing }
-PPParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPParser >> parse: anObject withContext: aPPContext [
+	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
+
+	aPPContext stream: anObject asPetitStream.
+	^ self parseWithContext: aPPContext.
+
+]
+
+{ #category : #'pp-context' }
+PPParser >> parseOn: aPPContext [
 	"Parse aStream with the receiving parser and answer the parse-result or an instance of PPFailure. Override this method in subclasses to specify custom parse behavior. Do not call this method from outside, instead use #parse:."
 	
 	self subclassResponsibility
+]
+
+{ #category : #'pp-context' }
+PPParser >> parseWithContext: context [
+	context root: self.
+	self updateContext: context.
+	^ self parseOn: context
 ]
 
 { #category : #'operators-repeating' }
@@ -564,6 +586,11 @@ PPParser >> trimSpaces [
 	"Answer a new parser that consumes spaces before and after the receiving parser."
 	
 	^ self trim: #space asParser
+]
+
+{ #category : #'pp-context' }
+PPParser >> updateContext: aPPContext [
+	"nothing to do"
 ]
 
 { #category : #'operators-convenience' }

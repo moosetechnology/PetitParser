@@ -7,12 +7,12 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPNotParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPNotParser >> parseOn: aPPContext [
 	| element position |
-	position := aStream position.
-	element := parser parseOn: aStream.
-	aStream position: position.
+	position := aPPContext remember.
+	element := parser parseOn: aPPContext.
+	aPPContext restore: position.
 	^ element isPetitFailure
-		ifFalse: [ PPFailure message: '' at: aStream position ]
+		ifFalse: [ PPFailure message: '' at: aPPContext position ]
 ]

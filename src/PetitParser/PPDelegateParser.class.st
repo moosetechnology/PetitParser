@@ -23,9 +23,9 @@ PPDelegateParser >> children [
 	^ Array with: parser
 ]
 
-{ #category : #parsing }
-PPDelegateParser >> parseOn: aStream [
-	^ parser parseOn: aStream
+{ #category : #'pp-context' }
+PPDelegateParser >> parseOn: aPPContext [
+	^ parser parseOn: aPPContext
 ]
 
 { #category : #initialization }

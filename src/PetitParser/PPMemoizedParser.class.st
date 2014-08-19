@@ -10,8 +10,8 @@ Class {
 	#name : #PPMemoizedParser,
 	#superclass : #PPDelegateParser,
 	#instVars : [
-		'stream',
-		'buffer'
+		'buffer',
+		'context'
 	],
 	#category : #'PetitParser-Parsers'
 }
@@ -23,25 +23,29 @@ PPMemoizedParser >> memoized [
 	^ self
 ]
 
-{ #category : #parsing }
-PPMemoizedParser >> parseOn: aStream [
-	| memento |
-	stream == aStream
-		ifFalse: [ self reset: aStream ].
-	memento := (buffer at: stream position + 1)
-		ifNil: [ buffer at: stream position + 1 put: PPMemento new ].
-	memento position isNil
+{ #category : #'pp-context' }
+PPMemoizedParser >> parseOn: aPPContext [
+	| memento contextMemento  aStream |
+	"TODO: JK memoizing needs review!"
+	
+	contextMemento := aPPContext remember.
+	context == aPPContext
+		ifFalse: [ self reset: aPPContext ].
+	memento := (buffer at: contextMemento ifAbsentPut: [ PPMemento new ]).
+	
+	memento contextMemento isNil
 		ifTrue: [
-			memento result: (stream size - stream position + 2 < memento count
-				ifTrue: [ PPFailure message: 'overflow' at: stream position ]
-				ifFalse: [ memento increment. parser parseOn: stream ]).
-			memento position: stream position ]
-		ifFalse: [ stream position: memento position ].
-	^ memento result
+			aStream := aPPContext stream.
+			memento result: (aStream size - aStream position + 2 < memento count
+				ifTrue: [ PPFailure message: 'overflow' at: aStream position ]
+				ifFalse: [ memento increment. parser parseOn: aPPContext ]).
+			memento contextMemento: aPPContext remember ]
+		ifFalse: [ context restore: memento contextMemento ].
+	^ memento result.
 ]
 
-{ #category : #private }
-PPMemoizedParser >> reset: aStream [
-	stream := aStream.
-	buffer := Array new: aStream size + 1
+{ #category : #'pp-context' }
+PPMemoizedParser >> reset: aPPContext [
+	context := aPPContext.
+	buffer := Dictionary new.
 ]

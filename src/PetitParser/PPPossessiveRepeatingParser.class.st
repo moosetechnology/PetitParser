@@ -7,18 +7,18 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPPossessiveRepeatingParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPPossessiveRepeatingParser >> parseOn: aPPContext [
 	| start element elements |
-	start := aStream position.
+	start := aPPContext remember.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [
-		(element := parser parseOn: aStream) isPetitFailure ifTrue: [
-			aStream position: start.
+		(element := parser parseOn: aPPContext) isPetitFailure ifTrue: [
+			aPPContext restore: start.
 			^ element ].
 		elements addLast: element ].
 	[ elements size < max ] whileTrue: [
-	 	(element := parser parseOn: aStream) isPetitFailure
+	 	(element := parser parseOn: aPPContext) isPetitFailure
 			ifTrue: [ ^ elements asArray ].
 		elements addLast: element ].
 	^ elements asArray

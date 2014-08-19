@@ -42,15 +42,15 @@ PPPredicateSequenceParser >> negate [
 		size: size
 ]
 
-{ #category : #parsing }
-PPPredicateSequenceParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPPredicateSequenceParser >> parseOn: aPPContext [
 	| position result |
-	position := aStream position.
-	result := aStream next: size.
+	position := aPPContext remember.
+	result := aPPContext stream next: size.
 	(result size = size and: [ predicate value: result ])
 		ifTrue: [ ^ result ].
-	aStream position: position.
-	^ PPFailure message: predicateMessage at: aStream position
+	aPPContext restore: position.
+	^ PPFailure message: predicateMessage at: aPPContext stream position
 ]
 
 { #category : #accessing }

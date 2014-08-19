@@ -24,14 +24,14 @@ PPLiteralSequenceParser >> initializeOn: anObject message: aString [
 	size := literal size
 ]
 
-{ #category : #parsing }
-PPLiteralSequenceParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPLiteralSequenceParser >> parseOn: aPPContext [
 	| position result |
-	position := aStream position.
-	result := aStream next: size.
+	position := aPPContext remember.
+	result := aPPContext stream next: size.
 	literal = result ifTrue: [ ^ result ].
-	aStream position: position.
-	^ PPFailure message: message at: aStream position
+	aPPContext restore: position.
+	^ PPFailure message: message at: aPPContext stream position
 ]
 
 { #category : #accessing }

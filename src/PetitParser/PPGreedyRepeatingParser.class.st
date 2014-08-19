@@ -16,31 +16,31 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #parsing }
-PPGreedyRepeatingParser >> parseOn: aStream [
+{ #category : #'pp-context' }
+PPGreedyRepeatingParser >> parseOn: aPPContext [
 	| start element elements positions |
-	start := aStream position.
+	start := aPPContext remember.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [ 
-		(element := parser parseOn: aStream) isPetitFailure ifTrue: [ 
-			aStream position: start.
+		(element := parser parseOn: aPPContext) isPetitFailure ifTrue: [ 
+			aPPContext restore: start.
 			^ element ].
 		elements addLast: element ].
-	positions := OrderedCollection with: aStream position.
-	[ elements size < max and: [ (element := parser parseOn: aStream) isPetitFailure not ] ] whileTrue: [
+	positions := OrderedCollection with: aPPContext remember.
+	[ elements size < max and: [ (element := parser parseOn: aPPContext) isPetitFailure not ] ] whileTrue: [
 		elements addLast: element.
-		positions addLast: aStream position ].
+		positions addLast: aPPContext remember ].
 	[ positions isEmpty ] whileFalse: [
-		aStream position: positions last.
-		element := limit parseOn: aStream.
+		aPPContext restore: positions last.
+		element := limit parseOn: aPPContext.
 		element isPetitFailure ifFalse: [
-			aStream position: positions last.
+			aPPContext restore: positions last.
 			^ elements asArray ].
 		elements isEmpty ifTrue: [
-			aStream position: start.
+			aPPContext restore: start.
 			^ element ].
 		elements removeLast.
 		positions removeLast ].
-	aStream position: start.
+	aPPContext restore: start.
 	^ PPFailure message: 'overflow' at: start
 ]
