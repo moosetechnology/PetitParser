@@ -25,12 +25,12 @@ PPDebugParser class >> on: aPPParser root: debugResult [
 ]
 
 { #category : #parsing }
-PPDebugParser >> parseOn: aStream [
-	parser parseOn: aStream.
+PPDebugParser >> parseOn: aPPContext [
+	parser parseOn: aPPContext.
 	root parser: self.
-	root stream: aStream.
+	root stream: aPPContext stream.
 	root start: 0.
-	root end: aStream position.
+	root end: aPPContext position.
 	^ root
 ]
 

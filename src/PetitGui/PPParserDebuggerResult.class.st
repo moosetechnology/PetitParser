@@ -207,7 +207,6 @@ PPParserDebuggerResult >> treeViewIn: composite [
 	composite tree
 		title: 'Execution Traces';
 		format: [:resultNode | resultNode formattedText ];
-	"	display: [ :res | context resultTraces resultFor: context root ];"
 		children: [:resultNode | resultNode showChildren 
 											ifTrue: [ resultNode children ] 
 											ifFalse: [ #() ] ]. 
