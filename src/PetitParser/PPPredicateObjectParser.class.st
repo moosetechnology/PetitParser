@@ -162,6 +162,6 @@ PPPredicateObjectParser >> negate [
 { #category : #'pp-context' }
 PPPredicateObjectParser >> parseOn: aPPContext [
 	^ (aPPContext stream atEnd not and: [ predicate value: aPPContext stream uncheckedPeek ])
-		ifFalse: [ PPFailure message: predicateMessage at: aPPContext stream position ]
+		ifFalse: [ PPFailure message: predicateMessage context: aPPContext ]
 		ifTrue: [ aPPContext stream next ]
 ]

@@ -27,7 +27,7 @@ PPFailingParser >> message [
 
 { #category : #'pp-context' }
 PPFailingParser >> parseOn: aPPContext [
-	^ PPFailure message: message at: aPPContext stream position
+	^ PPFailure message: message context: aPPContext
 ]
 
 { #category : #printing }

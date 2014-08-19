@@ -28,21 +28,6 @@ PPContext >> collection [
 	^ stream collection  
 ]
 
-{ #category : #'handling DNU' }
-PPContext >> doesNotUnderstand: aMessage [
-	aMessage arguments size = 0 ifTrue: [  
-		^ self propertyAt: aMessage selector.
-	].
-
-	(aMessage arguments size = 1) ifTrue: [  
-		| name |
-		name := aMessage selector copyFrom: 1 to: (aMessage selector size - 1).
-		^ self propertyAt: name put: aMessage arguments first.
-	].
-	
-	^ super doesNotUnderstand: aMessage
-]
-
 { #category : #'accessing-properties' }
 PPContext >> hasProperty: aKey [
 	"Test if the property aKey is present."

@@ -37,7 +37,7 @@ PPMemoizedParser >> parseOn: aPPContext [
 		ifTrue: [
 			aStream := aPPContext stream.
 			memento result: (aStream size - aStream position + 2 < memento count
-				ifTrue: [ PPFailure message: 'overflow' at: aStream position ]
+				ifTrue: [ PPFailure message: 'overflow' context: aPPContext ]
 				ifFalse: [ memento increment. parser parseOn: aPPContext ]).
 			memento contextMemento: aPPContext remember ]
 		ifFalse: [ context restore: memento contextMemento ].

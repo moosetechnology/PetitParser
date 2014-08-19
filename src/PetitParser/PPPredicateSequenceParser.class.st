@@ -50,7 +50,7 @@ PPPredicateSequenceParser >> parseOn: aPPContext [
 	(result size = size and: [ predicate value: result ])
 		ifTrue: [ ^ result ].
 	aPPContext restore: position.
-	^ PPFailure message: predicateMessage at: aPPContext stream position
+	^ PPFailure message: predicateMessage context: aPPContext
 ]
 
 { #category : #accessing }

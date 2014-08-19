@@ -14,5 +14,5 @@ PPNotParser >> parseOn: aPPContext [
 	element := parser parseOn: aPPContext.
 	aPPContext restore: position.
 	^ element isPetitFailure
-		ifFalse: [ PPFailure message: '' at: aPPContext position ]
+		ifFalse: [ PPFailure message: '' context: aPPContext ]
 ]

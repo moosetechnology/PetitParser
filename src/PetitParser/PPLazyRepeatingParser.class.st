@@ -29,7 +29,7 @@ PPLazyRepeatingParser >> parseOn: aPPContext [
 	[ self matchesLimitOn: aPPContext ] whileFalse: [
 		elements size < max ifFalse: [
 			aPPContext restore: start.
-			^ PPFailure message: 'overflow' at: start ].
+			^ PPFailure message: 'overflow' context: aPPContext at: start ].
 		element := parser parseOn: aPPContext.
 		element isPetitFailure ifTrue: [
 			aPPContext restore: start.

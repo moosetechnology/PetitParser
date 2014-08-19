@@ -23,6 +23,6 @@ PPLiteralObjectParser >> negate [
 { #category : #'pp-context' }
 PPLiteralObjectParser >> parseOn: aPPContext [
 	^ (aPPContext stream atEnd not and: [ literal = aPPContext stream uncheckedPeek ])
-		ifFalse: [ PPFailure message: message at: aPPContext stream position ]
+		ifFalse: [ PPFailure message: message context: aPPContext ]
 		ifTrue: [ aPPContext stream next ]
 ]

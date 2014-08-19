@@ -21,7 +21,7 @@ PPEndOfInputParser >> parseOn: aPPContext [
 		ifTrue: [ ^ result ].
 	result := PPFailure
 		message: 'end of input expected'
-		at: aPPContext stream position.
+		context: aPPContext.
 	aPPContext restore: position.
 	^ result
 ]

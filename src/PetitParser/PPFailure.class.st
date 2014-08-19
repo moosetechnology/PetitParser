@@ -11,6 +11,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'message',
+		'context',
 		'position'
 	],
 	#category : #'PetitParser-Core'
@@ -18,13 +19,35 @@ Class {
 
 { #category : #'instance creation' }
 PPFailure class >> message: aString at: anInteger [
+	self halt: 'deprecated, use message:context:'.
 	^ self basicNew initializeMessage: aString at: anInteger
+]
+
+{ #category : #'instance creation' }
+PPFailure class >> message: aString context: aPPContext [
+	^ self basicNew initializeMessage: aString context: aPPContext
+]
+
+{ #category : #'instance creation' }
+PPFailure class >> message: aString context: aPPContext at: position [
+	^ self basicNew initializeMessage: aString context: aPPContext position: position
 ]
 
 { #category : #initialization }
 PPFailure >> initializeMessage: aString at: anInteger [
+	self halt: 'deprecated'.
+]
+
+{ #category : #initialization }
+PPFailure >> initializeMessage: aString context: aPPContext [
+	self initializeMessage: aString context:  aPPContext position: aPPContext position
+]
+
+{ #category : #initialization }
+PPFailure >> initializeMessage: aString context: aPPContext position: position [
 	message := aString.
-	position := anInteger
+	context := aPPContext.
+	position := position.
 ]
 
 { #category : #testing }
@@ -50,5 +73,5 @@ PPFailure >> position [
 
 { #category : #printing }
 PPFailure >> printOn: aStream [
-	aStream nextPutAll: self message; nextPutAll: ' at '; print: position
+	aStream nextPutAll: self message; nextPutAll: ' at '; print: self position
 ]

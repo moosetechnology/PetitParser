@@ -42,5 +42,5 @@ PPGreedyRepeatingParser >> parseOn: aPPContext [
 		elements removeLast.
 		positions removeLast ].
 	aPPContext restore: start.
-	^ PPFailure message: 'overflow' at: start
+	^ PPFailure message: 'overflow' context: aPPContext at: start
 ]
