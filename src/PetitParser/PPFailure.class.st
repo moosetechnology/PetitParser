@@ -44,10 +44,10 @@ PPFailure >> initializeMessage: aString context: aPPContext [
 ]
 
 { #category : #initialization }
-PPFailure >> initializeMessage: aString context: aPPContext position: position [
+PPFailure >> initializeMessage: aString context: aPPContext position: anInteger [
 	message := aString.
 	context := aPPContext.
-	position := position.
+	position := anInteger.
 ]
 
 { #category : #testing }
