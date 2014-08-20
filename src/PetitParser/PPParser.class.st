@@ -79,12 +79,6 @@ PPParser >> children [
 	^ #()
 ]
 
-{ #category : #'pp-context' }
-PPParser >> debugWithContext: aPPContext [
-	
-	^ self enableDebug parseWithContext: aPPContext 
-]
-
 { #category : #operators }
 PPParser >> def: aParser [
 	"Redefine the receiver as the argument aParser. This method is useful when defining recursive parsers: instantiate a PPUnresolvedParser and later redefine it with another one."
@@ -369,7 +363,7 @@ PPParser >> optional [
 	^ PPOptionalParser on: self
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPParser >> parse: anObject [
 	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
 
@@ -391,7 +385,7 @@ PPParser >> parse: anObject onError: aBlock [
 	^ aBlock value: result message value: result position
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPParser >> parse: anObject withContext: aPPContext [
 	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
 
@@ -400,14 +394,14 @@ PPParser >> parse: anObject withContext: aPPContext [
 
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPParser >> parseOn: aPPContext [
 	"Parse aStream with the receiving parser and answer the parse-result or an instance of PPFailure. Override this method in subclasses to specify custom parse behavior. Do not call this method from outside, instead use #parse:."
 	
 	self subclassResponsibility
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPParser >> parseWithContext: context [
 	context root: self.
 	self updateContext: context.
@@ -588,7 +582,7 @@ PPParser >> trimSpaces [
 	^ self trim: #space asParser
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPParser >> updateContext: aPPContext [
 	"nothing to do"
 ]
