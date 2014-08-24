@@ -1,9 +1,3 @@
-"
-An abstract parser for all parsers in PetitParser. Subclasses implement #parseOn: to perform the actual recursive-descent parsing. All parsers support a variety of methods to perform an actual parse, see the methods in the #parsing protocol. Parsers are combined with a series of operators that can be found in the #operations protocol.
-
-Instance Variables:
-	properties	<Dictionary>	Stores additional state in the parser object.
-"
 Class {
 	#name : #PPParser,
 	#superclass : #Object,
@@ -385,7 +379,7 @@ PPParser >> parse: anObject onError: aBlock [
 	^ aBlock value: result message value: result position
 ]
 
-{ #category : #parsing }
+{ #category : #context }
 PPParser >> parse: anObject withContext: aPPContext [
 	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
 
@@ -401,7 +395,7 @@ PPParser >> parseOn: aPPContext [
 	self subclassResponsibility
 ]
 
-{ #category : #parsing }
+{ #category : #context }
 PPParser >> parseWithContext: context [
 	context root: self.
 	self updateContext: context.
@@ -582,7 +576,7 @@ PPParser >> trimSpaces [
 	^ self trim: #space asParser
 ]
 
-{ #category : #parsing }
+{ #category : #context }
 PPParser >> updateContext: aPPContext [
 	"nothing to do"
 ]

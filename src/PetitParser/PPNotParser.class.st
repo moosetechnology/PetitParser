@@ -7,12 +7,12 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPNotParser >> parseOn: aPPContext [
-	| element position |
-	position := aPPContext remember.
+	| element memento |
+	memento := aPPContext remember.
 	element := parser parseOn: aPPContext.
-	aPPContext restore: position.
+	aPPContext restore: memento.
 	^ element isPetitFailure
 		ifFalse: [ PPFailure message: '' context: aPPContext ]
 ]

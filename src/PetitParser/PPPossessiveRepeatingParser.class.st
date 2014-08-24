@@ -7,14 +7,14 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPPossessiveRepeatingParser >> parseOn: aPPContext [
-	| start element elements |
-	start := aPPContext remember.
+	| memento element elements |
+	memento := aPPContext remember.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [
 		(element := parser parseOn: aPPContext) isPetitFailure ifTrue: [
-			aPPContext restore: start.
+			aPPContext restore: memento.
 			^ element ].
 		elements addLast: element ].
 	[ elements size < max ] whileTrue: [

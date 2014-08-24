@@ -12,11 +12,11 @@ PPAndParser >> and [
 	^ self
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPAndParser >> parseOn: aPPContext [
-	| element position |
-	position := aPPContext remember.
+	| element memento |
+	memento := aPPContext remember.
 	element := parser parseOn: aPPContext.
-	aPPContext restore: position.
+	aPPContext restore: memento.
 	^ element
 ]

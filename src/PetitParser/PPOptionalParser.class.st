@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPOptionalParser >> parseOn: aPPContext [
 	| element |
 	element := parser parseOn: aPPContext.

@@ -16,14 +16,14 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPGreedyRepeatingParser >> parseOn: aPPContext [
-	| start element elements positions |
-	start := aPPContext remember.
+	| memento element elements positions |
+	memento := aPPContext remember.
 	elements := OrderedCollection new.
 	[ elements size < min ] whileTrue: [ 
 		(element := parser parseOn: aPPContext) isPetitFailure ifTrue: [ 
-			aPPContext restore: start.
+			aPPContext restore: memento.
 			^ element ].
 		elements addLast: element ].
 	positions := OrderedCollection with: aPPContext remember.
@@ -37,10 +37,10 @@ PPGreedyRepeatingParser >> parseOn: aPPContext [
 			aPPContext restore: positions last.
 			^ elements asArray ].
 		elements isEmpty ifTrue: [
-			aPPContext restore: start.
+			aPPContext restore: memento.
 			^ element ].
 		elements removeLast.
 		positions removeLast ].
-	aPPContext restore: start.
-	^ PPFailure message: 'overflow' context: aPPContext at: start
+	aPPContext restore: memento.
+	^ PPFailure message: 'overflow' context: aPPContext at: memento position
 ]

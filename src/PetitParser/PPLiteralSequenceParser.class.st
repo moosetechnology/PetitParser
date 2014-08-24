@@ -24,7 +24,7 @@ PPLiteralSequenceParser >> initializeOn: anObject message: aString [
 	size := literal size
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPLiteralSequenceParser >> parseOn: aPPContext [
 	| memento result |
 	memento := aPPContext remember.

@@ -20,7 +20,7 @@ PPLiteralObjectParser >> negate [
 	^ (PPPredicateObjectParser expect: literal message: message) negate
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPLiteralObjectParser >> parseOn: aPPContext [
 	^ (aPPContext stream atEnd not and: [ literal = aPPContext stream uncheckedPeek ])
 		ifFalse: [ PPFailure message: message context: aPPContext ]

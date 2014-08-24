@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'stream',
 		'root',
-		'properties'
+		'properties',
+		'rememberSelectors',
+		'restoreSelectors'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -21,6 +23,24 @@ PPContext class >> on: aPPParser stream: aStream [
 { #category : #'stream mimicry' }
 PPContext >> atEnd [
 	^ stream atEnd
+]
+
+{ #category : #memoization }
+PPContext >> cachedRememberSelectors [
+	rememberSelectors ifNil: [ 
+		rememberSelectors := PPContextMemento selectors select: [ :each | each beginsWith: 'remember' ].
+	].
+
+	^ rememberSelectors.
+]
+
+{ #category : #memoization }
+PPContext >> cachedRestoreSelectors [
+	restoreSelectors ifNil: [ 
+		restoreSelectors := PPContextMemento selectors select: [ :each | each beginsWith: 'restore' ].
+	].
+
+	^ restoreSelectors.
 ]
 
 { #category : #'stream mimicry' }
@@ -111,10 +131,11 @@ PPContext >> remember [
 
 { #category : #memoization }
 PPContext >> rememberProperties: aPPContextMemento [
-	aPPContextMemento class selectorsAndMethodsDo: [ :selector :method |
-		(selector beginsWith: 'remember') ifTrue: [ 
-			aPPContextMemento withArgs: (Array with: self) executeMethod: method.
-		]	
+
+	self cachedRememberSelectors isEmpty ifTrue: [ ^ self ].
+	
+	self cachedRememberSelectors do: [ :selector |
+		aPPContextMemento perform: selector with: self.
 	]
 
 ]
@@ -148,12 +169,11 @@ PPContext >> restore: aPPContextMemento [
 { #category : #memoization }
 PPContext >> restoreProperties: aPPContextMemento [
 	aPPContextMemento stream == stream ifFalse: [ self error: 'Oops!' ].
-
-	aPPContextMemento class selectorsAndMethodsDo: [ :selector :method |
-		(selector beginsWith: 'restore') ifTrue: [ 
-			aPPContextMemento withArgs: (Array with: self) executeMethod: method.
-		]	
-	]
+	self cachedRestoreSelectors isEmpty ifTrue: [ ^ self ].
+	
+	self cachedRestoreSelectors do: [ :selector |
+		aPPContextMemento perform: selector with: self.
+	].	
 ]
 
 { #category : #acessing }

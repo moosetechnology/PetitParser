@@ -23,7 +23,7 @@ PPMemoizedParser >> memoized [
 	^ self
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPMemoizedParser >> parseOn: aPPContext [
 	| memento contextMemento  aStream |
 	"TODO: JK memoizing needs review!"
@@ -44,7 +44,7 @@ PPMemoizedParser >> parseOn: aPPContext [
 	^ memento result.
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPMemoizedParser >> reset: aPPContext [
 	context := aPPContext.
 	buffer := Dictionary new.

@@ -7,7 +7,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPWrappingParser >> parseOn: aPPContext [
 	^ block value: aPPContext value: [ parser parseOn: aPPContext ]
 ]

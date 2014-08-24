@@ -12,7 +12,7 @@ PPChoiceParser >> / aRule [
 	^ self copyWith: aRule
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPChoiceParser >> parseOn: aPPContext [
 	"This is optimized code that avoids unnecessary block activations, do not change. When all choices fail, the last failure is answered."
 

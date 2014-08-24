@@ -1,10 +1,3 @@
-"
-A pluggable parser that passes the parser stream into a block. This enables users to perform manual parsing or to embed other parser frameworks into PetitParser.
-
-Instance Variables:
-	block	<BlockClosure>	The pluggable one-argument block.
-
-"
 Class {
 	#name : #PPPluggableParser,
 	#superclass : #PPParser,
@@ -31,12 +24,12 @@ PPPluggableParser >> initializeOn: aBlock [
 	block := aBlock
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPPluggableParser >> parseOn: aPPContext [
-	| position result |
-	position := aPPContext remember.
+	| memento result |
+	memento := aPPContext remember.
 	result := block value: aPPContext.
 	result isPetitFailure
-		ifTrue: [ aPPContext restore: position ].
+		ifTrue: [ aPPContext restore: memento ].
 	^ result
 ]

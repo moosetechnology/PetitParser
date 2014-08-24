@@ -12,11 +12,11 @@ PPFlattenParser >> on: aCollection start: aStartInteger stop: aStopInteger value
 	^ aCollection copyFrom: aStartInteger to: aStopInteger
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPFlattenParser >> parseOn: aPPContext [
 	| start element |
-	start := aPPContext stream position.
+	start := aPPContext position.
 	element := parser parseOn: aPPContext.
 	element isPetitFailure ifTrue: [ ^ element ].
-	^ self on: aPPContext stream collection start: start + 1 stop: aPPContext stream position value: element
+	^ self on: aPPContext stream collection start: start + 1 stop: aPPContext position value: element
 ]

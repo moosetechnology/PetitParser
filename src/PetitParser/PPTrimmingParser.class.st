@@ -1,6 +1,3 @@
-"
-A parser that silently consumes spaces before and after the delegate parser.
-"
 Class {
 	#name : #PPTrimmingParser,
 	#superclass : #PPDelegateParser,
@@ -18,15 +15,15 @@ PPTrimmingParser class >> on: aParser trimmer: aTrimParser [
 		yourself
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPTrimmingParser >> parseOn: aPPContext [
-	| position element |
-	position := aPPContext remember.
+	| memento element |
+	memento := aPPContext remember.
 	[ (trimmer parseOn: aPPContext) isPetitFailure ]
 		whileFalse.
 	element := parser parseOn: aPPContext.
 	element isPetitFailure ifTrue: [
-		aPPContext restore: position.
+		aPPContext restore: memento.
 		^ element ].
 	[ (trimmer parseOn: aPPContext) isPetitFailure ]
 		whileFalse.

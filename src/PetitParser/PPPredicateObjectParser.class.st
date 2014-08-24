@@ -1,6 +1,3 @@
-"
-A parser that accepts if a given predicate on one element of the input sequence holds.
-"
 Class {
 	#name : #PPPredicateObjectParser,
 	#superclass : #PPPredicateParser,
@@ -159,9 +156,9 @@ PPPredicateObjectParser >> negate [
 		negated: predicate message: predicateMessage
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPPredicateObjectParser >> parseOn: aPPContext [
-	^ (aPPContext stream atEnd not and: [ predicate value: aPPContext stream uncheckedPeek ])
+	^ (aPPContext atEnd not and: [ predicate value: aPPContext uncheckedPeek ])
 		ifFalse: [ PPFailure message: predicateMessage context: aPPContext ]
-		ifTrue: [ aPPContext stream next ]
+		ifTrue: [ aPPContext next ]
 ]

@@ -1,9 +1,3 @@
-"
-A parser that delegates to another parser.
-
-Instance Variables:
-	parser	<PPParser>	The parser to delegate to.
-"
 Class {
 	#name : #PPDelegateParser,
 	#superclass : #PPParser,
@@ -23,7 +17,7 @@ PPDelegateParser >> children [
 	^ Array with: parser
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPDelegateParser >> parseOn: aPPContext [
 	^ parser parseOn: aPPContext
 ]

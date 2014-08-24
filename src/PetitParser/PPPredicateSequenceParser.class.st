@@ -1,9 +1,3 @@
-"
-A parser that accepts if a given predicate on an arbitrary number of elements of the input sequence holds.
-
-Instance Variables:
-	size	<Integer>	The number of elements to consume.
-"
 Class {
 	#name : #PPPredicateSequenceParser,
 	#superclass : #PPPredicateParser,
@@ -42,14 +36,14 @@ PPPredicateSequenceParser >> negate [
 		size: size
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPPredicateSequenceParser >> parseOn: aPPContext [
-	| position result |
-	position := aPPContext remember.
+	| memento result |
+	memento := aPPContext remember.
 	result := aPPContext stream next: size.
 	(result size = size and: [ predicate value: result ])
 		ifTrue: [ ^ result ].
-	aPPContext restore: position.
+	aPPContext restore: memento.
 	^ PPFailure message: predicateMessage context: aPPContext
 ]
 

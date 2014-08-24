@@ -19,18 +19,18 @@ PPSequenceParser >> map: aBlock [
 		ifFalse: [ self error: aBlock numArgs asString , ' arguments expected.' ]
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPSequenceParser >> parseOn: aPPContext [
 	"This is optimized code that avoids unnecessary block activations, do not change."
 	
-	| start elements element |
-	start := aPPContext remember.
+	| memento elements element |
+	memento := aPPContext remember.
 	elements := Array new: parsers size.
 	1 to: parsers size do: [ :index |
 		element := (parsers at: index) 
 			parseOn: aPPContext.
 		element isPetitFailure ifTrue: [
-			aPPContext restore: start.
+			aPPContext restore: memento.
 			^ element ].
 		elements at: index put: element ].
 	^ elements
