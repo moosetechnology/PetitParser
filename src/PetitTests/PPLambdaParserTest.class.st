@@ -63,16 +63,16 @@ PPLambdaParserTest >> testParseOnError [
 			beenHere := true.
 			fail ].
 	self assert: beenHere.
-	self assert: (result message includesSubstring: '$(').
+	self assert: (result message includesSubstring: 'separator').
 	self assert: (result message includesSubstring: 'expected').
-	self assert: result position equals: 0.
+	self assert: result position equals: 3.
 	beenHere := false.
 	result := self parserClass
 		parse: '\x.'
 		onError: [ :msg :pos | 
-			self assert: (msg includesSubstring: '$(').
+			self assert: (msg includesSubstring: 'separator').
 			self assert: (msg includesSubstring: 'expected').
-			self assert: pos equals: 0.
+			self assert: pos equals: 3.
 			beenHere := true ].
 	self assert: result.
 	self assert: beenHere
@@ -94,14 +94,14 @@ PPLambdaParserTest >> testParseStartingAtOnError [
 			beenHere := true.
 			fail ].
 	self assert: beenHere.
-	self assert: result message equals: 'letter expected'.
+	self assert: result message equals: 'separator expected'.
 	self assert: result position equals: 0.
 	beenHere := false.
 	result := self parserClass
 		parse: '\'
 		startingAt: #variable
 		onError: [ :msg :pos | 
-			self assert: msg equals: 'letter expected'.
+			self assert: msg equals: 'separator expected'.
 			self assert: pos equals: 0.
 			beenHere := true ].
 	self assert: beenHere
