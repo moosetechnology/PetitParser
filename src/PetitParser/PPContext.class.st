@@ -48,6 +48,13 @@ PPContext >> collection [
 	^ stream collection  
 ]
 
+{ #category : #failures }
+PPContext >> furthestFailure [
+	" the furthest failure encountered while parsing the input stream "
+	
+	^ self propertyAt: #furthestFailure ifAbsent: [ nil ]
+]
+
 { #category : #'accessing-properties' }
 PPContext >> hasProperty: aKey [
 	"Test if the property aKey is present."
@@ -65,10 +72,14 @@ PPContext >> next [
 	^ stream next
 ]
 
-{ #category : #'as yet unclassified' }
-PPContext >> parsed: aPPParser at: anInteger result: anObject [
-	self halt.
-	^ anObject
+{ #category : #failures }
+PPContext >> noteFailure: aPPFailure [
+	"record the furthest failure encountered while parsing the input stream "
+
+	| furthestFailure |
+	furthestFailure := self furthestFailure.
+	( furthestFailure isNil or: [ aPPFailure position > furthestFailure position ]) 
+		ifTrue: [ self propertyAt: #furthestFailure put: aPPFailure ].
 ]
 
 { #category : #'stream mimicry' }

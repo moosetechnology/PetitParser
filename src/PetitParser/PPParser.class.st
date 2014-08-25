@@ -397,9 +397,15 @@ PPParser >> parseOn: aPPContext [
 
 { #category : #context }
 PPParser >> parseWithContext: context [
+	| result |
 	context root: self.
 	self updateContext: context.
-	^ self parseOn: context
+	result := self parseOn: context.
+	
+	"Return the furthest failure, it gives better results than the last failure"
+	result isPetitFailure ifTrue: [ ^ context furthestFailure ].
+	^ result
+	
 ]
 
 { #category : #'operators-repeating' }
