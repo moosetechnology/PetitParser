@@ -41,7 +41,6 @@ PPContextTest >> testMemoization [
 	memento := context remember.
 	
 	self assert: memento isNil not.
-	self assert: memento stream == stream.
 	
 	context next.
 	collection add: #element.
