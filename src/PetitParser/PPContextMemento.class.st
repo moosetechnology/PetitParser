@@ -17,7 +17,13 @@ PPContextMemento >> = anObject [
 	
 	(anObject stream == stream) ifFalse: [ ^ false ].
 	(anObject position = position) ifFalse: [ ^ false ].
-	(anObject properties = properties) ifFalse: [ ^ false ].
+
+	(self propertiesSize = anObject propertiesSize) ifFalse: [ ^ false ].
+
+	self keysAndValuesDo: [ :key :value |
+		(anObject hasProperty: key) ifFalse: [ ^ false ].
+		((anObject propertyAt: key) = value) ifFalse: [ ^ false ]. 
+ 	].
 	
 	^ true.
 
@@ -35,19 +41,26 @@ PPContextMemento >> hash [
 	^ (position hash bitXor: stream hash) bitXor: properties hash.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
+PPContextMemento >> keysAndValuesDo: aBlock [
+	properties ifNil: [ ^ self ].
+	properties keysAndValuesDo: [ :key :value | aBlock value: key value: value copy ] 
+]
+
+{ #category : #accessing }
 PPContextMemento >> position [
 	^ position
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPContextMemento >> position: anInteger [
 	position := anInteger 
 ]
 
 { #category : #'accessing - properties' }
-PPContextMemento >> properties [
-	^ properties 
+PPContextMemento >> propertiesSize [
+	properties ifNil: [ ^ 0 ].
+	^ properties size.
 ]
 
 { #category : #'accessing - properties' }
@@ -63,7 +76,12 @@ PPContextMemento >> propertyAt: aKey ifAbsent: aBlock [
 	
 	^ properties isNil
 		ifTrue: [ aBlock value ]
-		ifFalse: [ properties at: aKey ifAbsent: aBlock ]
+		ifFalse: [ 
+			(properties includesKey: aKey) ifTrue: [ 
+				^ (properties at: aKey) copy
+			].
+			^ aBlock value
+		]
 ]
 
 { #category : #'accessing - properties' }
@@ -78,7 +96,7 @@ PPContextMemento >> propertyAt: aKey put: anObject [
 	"Set the property at aKey to be anObject. If aKey is not found, create a new entry for aKey and set is value to anObject. Answer anObject."
 
 	^ (properties ifNil: [ properties := Dictionary new: 1 ])
-		at: aKey put: anObject
+		at: aKey put: (anObject copy)
 ]
 
 { #category : #'accessing - properties' }
@@ -99,12 +117,12 @@ PPContextMemento >> removeProperty: aKey ifAbsent: aBlock [
 	^ answer
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPContextMemento >> stream [
 	^ stream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPContextMemento >> stream: aStream [
 	stream := aStream
 ]

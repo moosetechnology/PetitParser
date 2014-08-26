@@ -1,3 +1,25 @@
+"
+A PPContext is provides contextual information to the parsing function.
+
+Instance Variables
+	globals:		<Dictionary>
+	properties:		<Dictionar>
+	root:		<PPParser>
+	stream:		<PPStream>
+
+globals
+	- properties that are not restored after backtracking
+
+properties
+	- properties that are restored after backtracking
+
+root
+	- the root parser
+
+stream
+	- input stream
+
+"
 Class {
 	#name : #PPContext,
 	#superclass : #Object,
@@ -5,8 +27,7 @@ Class {
 		'stream',
 		'root',
 		'properties',
-		'rememberSelectors',
-		'restoreSelectors'
+		'globals'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -25,24 +46,6 @@ PPContext >> atEnd [
 	^ stream atEnd
 ]
 
-{ #category : #memoization }
-PPContext >> cachedRememberSelectors [
-	rememberSelectors ifNil: [ 
-		rememberSelectors := PPContextMemento selectors select: [ :each | each beginsWith: 'remember' ].
-	].
-
-	^ rememberSelectors.
-]
-
-{ #category : #memoization }
-PPContext >> cachedRestoreSelectors [
-	restoreSelectors ifNil: [ 
-		restoreSelectors := PPContextMemento selectors select: [ :each | each beginsWith: 'restore' ].
-	].
-
-	^ restoreSelectors.
-]
-
 { #category : #'stream mimicry' }
 PPContext >> collection [
 	^ stream collection  
@@ -52,7 +55,45 @@ PPContext >> collection [
 PPContext >> furthestFailure [
 	" the furthest failure encountered while parsing the input stream "
 	
-	^ self propertyAt: #furthestFailure ifAbsent: [ nil ]
+	^ self globalAt: #furthestFailure ifAbsent: [ nil ]
+]
+
+{ #category : #'accessing-globals' }
+PPContext >> globalAt: aKey [
+	"Answer the global property value associated with aKey."
+	
+	^ self globalAt: aKey ifAbsent: [ self error: 'Property not found' ]
+]
+
+{ #category : #'accessing-globals' }
+PPContext >> globalAt: aKey ifAbsent: aBlock [
+	"Answer the global property value associated with aKey or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	^ globals isNil
+		ifTrue: [ aBlock value ]
+		ifFalse: [ globals at: aKey ifAbsent: aBlock ]
+]
+
+{ #category : #'accessing-globals' }
+PPContext >> globalAt: aKey ifAbsentPut: aBlock [
+	"Answer the global property associated with aKey or, if aKey isn't found store the result of evaluating aBlock as new value."
+	
+	^ self globalAt: aKey ifAbsent: [ self globalAt: aKey put: aBlock value ]
+]
+
+{ #category : #'accessing-globals' }
+PPContext >> globalAt: aKey put: anObject [
+	"Set the global property at aKey to be anObject. If aKey is not found, create a new entry for aKey and set is value to anObject. Answer anObject."
+
+	^ (globals ifNil: [ globals := Dictionary new: 1 ])
+		at: aKey put: anObject
+]
+
+{ #category : #'accessing-globals' }
+PPContext >> hasGlobal: aKey [
+	"Test if the global property aKey is present."
+	
+	^ globals notNil and: [ globals includesKey: aKey ]
 ]
 
 { #category : #'accessing-properties' }
@@ -72,6 +113,11 @@ PPContext >> next [
 	^ stream next
 ]
 
+{ #category : #'stream mimicry' }
+PPContext >> next: anInteger [
+	^ stream next: anInteger
+]
+
 { #category : #failures }
 PPContext >> noteFailure: aPPFailure [
 	"record the furthest failure encountered while parsing the input stream "
@@ -79,7 +125,7 @@ PPContext >> noteFailure: aPPFailure [
 	| furthestFailure |
 	furthestFailure := self furthestFailure.
 	( furthestFailure isNil or: [ aPPFailure position > furthestFailure position ]) 
-		ifTrue: [ self propertyAt: #furthestFailure put: aPPFailure ].
+		ifTrue: [ self globalAt: #furthestFailure put: aPPFailure ].
 ]
 
 { #category : #'stream mimicry' }
@@ -143,12 +189,29 @@ PPContext >> remember [
 { #category : #memoization }
 PPContext >> rememberProperties: aPPContextMemento [
 
-	self cachedRememberSelectors isEmpty ifTrue: [ ^ self ].
+	properties ifNil: [ ^ self ].
 	
-	self cachedRememberSelectors do: [ :selector |
-		aPPContextMemento perform: selector with: self.
-	]
+	properties keysAndValuesDo: [ :key :value |
+		aPPContextMemento propertyAt: key put: value
+	].
+]
 
+{ #category : #'accessing-properties' }
+PPContext >> removeGlobal: aKey [
+	"Remove the property with aKey. Answer the property or raise an error if aKey isn't found."
+	
+	^ self removeGlobal: aKey ifAbsent: [ self error: 'Property not found' ]
+]
+
+{ #category : #'accessing-properties' }
+PPContext >> removeGlobal: aKey ifAbsent: aBlock [
+	"Remove the global property with aKey. Answer the value or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	| answer |
+	globals isNil ifTrue: [ ^ aBlock value ].
+	answer := globals removeKey: aKey ifAbsent: aBlock.
+	globals isEmpty ifTrue: [ globals := nil ].
+	^ answer
 ]
 
 { #category : #'accessing-properties' }
@@ -180,11 +243,10 @@ PPContext >> restore: aPPContextMemento [
 { #category : #memoization }
 PPContext >> restoreProperties: aPPContextMemento [
 	aPPContextMemento stream == stream ifFalse: [ self error: 'Oops!' ].
-	self cachedRestoreSelectors isEmpty ifTrue: [ ^ self ].
 	
-	self cachedRestoreSelectors do: [ :selector |
-		aPPContextMemento perform: selector with: self.
-	].	
+	aPPContextMemento keysAndValuesDo: [ :key :value |
+		self propertyAt: key put: value
+	].
 ]
 
 { #category : #acessing }
