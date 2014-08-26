@@ -188,7 +188,6 @@ PPContext >> remember [
 
 { #category : #memoization }
 PPContext >> rememberProperties: aPPContextMemento [
-
 	properties ifNil: [ ^ self ].
 	
 	properties keysAndValuesDo: [ :key :value |
@@ -196,14 +195,14 @@ PPContext >> rememberProperties: aPPContextMemento [
 	].
 ]
 
-{ #category : #'accessing-properties' }
+{ #category : #'accessing-globals' }
 PPContext >> removeGlobal: aKey [
 	"Remove the property with aKey. Answer the property or raise an error if aKey isn't found."
 	
 	^ self removeGlobal: aKey ifAbsent: [ self error: 'Property not found' ]
 ]
 
-{ #category : #'accessing-properties' }
+{ #category : #'accessing-globals' }
 PPContext >> removeGlobal: aKey ifAbsent: aBlock [
 	"Remove the global property with aKey. Answer the value or, if aKey isn't found, answer the result of evaluating aBlock."
 	
