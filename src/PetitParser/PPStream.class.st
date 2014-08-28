@@ -19,6 +19,13 @@ PPStream >> collection [
 	^ collection
 ]
 
+{ #category : #queries }
+PPStream >> isStartOfLine [
+	(position = 0) ifTrue: [ ^ true ].
+
+	^ (collection at: position) = Character cr.
+]
+
 { #category : #accessing }
 PPStream >> peek [
 	"An improved version of peek, that is slightly faster than the built in version."

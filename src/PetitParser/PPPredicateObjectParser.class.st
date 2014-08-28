@@ -124,6 +124,12 @@ PPPredicateObjectParser class >> space [
 	^ self on: (PPCharSetPredicate on: [ :char | char isSeparator ]) message: 'separator expected'
 ]
 
+{ #category : #'instance creation' }
+PPPredicateObjectParser class >> startOfLine [
+	
+	^ PPStartOfLine new.
+]
+
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> tab [
 	^ self char: Character tab message: 'tab expected'

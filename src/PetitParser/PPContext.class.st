@@ -109,6 +109,11 @@ PPContext >> initialize [
 ]
 
 { #category : #'stream mimicry' }
+PPContext >> isStartOfLine [
+	^ stream isStartOfLine
+]
+
+{ #category : #'stream mimicry' }
 PPContext >> next [
 	^ stream next
 ]
