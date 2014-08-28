@@ -259,6 +259,21 @@ PPPredicateTest >> testSpace [
 ]
 
 { #category : #'testing-chars' }
+PPPredicateTest >> testStartOfLIne [
+	| parser |
+	parser := #startOfLine asParser, #any asParser star.
+	
+	self assert: parser parse: 'lorem ipsum'.
+	
+	parser := #any asParser, #startOfLine asParser, #any asParser star.
+	self assert: parser fail: 'lorem ipsum'.
+	
+	parser := #startOfLine asParser, #any asParser, #startOfLine asParser, #any asParser star.
+	self assert: parser parse: '
+	lorem ipsum'.
+]
+
+{ #category : #'testing-chars' }
 PPPredicateTest >> testTab [
 	| parser |
 	parser := #tab asParser.

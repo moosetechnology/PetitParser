@@ -7,17 +7,17 @@ Class {
 	#category : #'PetitTests-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPContextMementoTest >> memento [
 	^ PPContextMemento new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 PPContextMementoTest >> setUp [
 	memento := self memento.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testEquality [
 	| m1 m2  |
 	m1 := self memento.
@@ -33,7 +33,7 @@ PPContextMementoTest >> testEquality [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testEquality2 [
 	| m1 m2  |
 	m1 := self memento.
@@ -49,7 +49,7 @@ PPContextMementoTest >> testEquality2 [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testGetProperty [
 	
 	| c retval retval2 |
@@ -74,7 +74,7 @@ PPContextMementoTest >> testGetProperty [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testKeysAndValuesDo [
 	|   |
 	memento keysAndValuesDo: [ :key :value |
@@ -82,7 +82,7 @@ PPContextMementoTest >> testKeysAndValuesDo [
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testKeysAndValuesDo2 [
 	| c1 c2   |
 	c1 := OrderedCollection new.
@@ -97,7 +97,7 @@ PPContextMementoTest >> testKeysAndValuesDo2 [
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPContextMementoTest >> testPutProperty [
 	| c retval  |
 	c := OrderedCollection new.
