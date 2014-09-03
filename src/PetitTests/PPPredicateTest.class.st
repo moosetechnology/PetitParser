@@ -259,7 +259,7 @@ PPPredicateTest >> testSpace [
 ]
 
 { #category : #'testing-chars' }
-PPPredicateTest >> testStartOfLIne [
+PPPredicateTest >> testStartOfLine [
 	| parser |
 	parser := #startOfLine asParser, #any asParser star.
 	
@@ -269,8 +269,17 @@ PPPredicateTest >> testStartOfLIne [
 	self assert: parser fail: 'lorem ipsum'.
 	
 	parser := #startOfLine asParser, #any asParser, #startOfLine asParser, #any asParser star.
-	self assert: parser parse: '
-	lorem ipsum'.
+	self assert: parser parse: String cr, 'lorem ipsum'.
+	self assert: parser parse: String lf, 'lorem ipsum'.	
+	self assert: parser fail: String crlf, 'lorem ipsum'.	
+	
+	self assert: parser fail: String crlf.
+	self assert: parser parse: String cr.
+	self assert: parser parse: String lf.
+	
+	parser := #startOfLine asParser, #any asParser, #any asParser, #startOfLine asParser, #any asParser star.
+	self assert: parser parse: String crlf, 'lorem ipsum'.
+	self assert: parser parse: String crlf.
 ]
 
 { #category : #'testing-chars' }
