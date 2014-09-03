@@ -20,10 +20,19 @@ PPStream >> collection [
 ]
 
 { #category : #queries }
+PPStream >> insideCRLF [
+	(position < 1) ifTrue: [ ^ false ].
+	
+	^ (self peek = Character lf) and: [ self peekBack = Character cr ]
+]
+
+{ #category : #queries }
 PPStream >> isStartOfLine [
 	(position = 0) ifTrue: [ ^ true ].
 
-	^ (collection at: position) = Character cr.
+	self insideCRLF ifTrue: [ ^ false ].
+	
+	^ (self peekBack = Character cr) or: [ self peekBack = Character lf].
 ]
 
 { #category : #accessing }
