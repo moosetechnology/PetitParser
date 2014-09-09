@@ -11,7 +11,8 @@ Class {
 	#superclass : #PPDelegateParser,
 	#instVars : [
 		'buffer',
-		'context'
+		'context',
+		'hash'
 	],
 	#category : #'PetitParser-Parsers'
 }
@@ -29,7 +30,7 @@ PPMemoizedParser >> parseOn: aPPContext [
 	"TODO: JK memoizing needs review!"
 	
 	contextMemento := aPPContext remember.
-	context == aPPContext
+	(hash == aPPContext hash)
 		ifFalse: [ self reset: aPPContext ].
 	memento := (buffer at: contextMemento ifAbsentPut: [ PPMemento new ]).
 	
@@ -46,6 +47,7 @@ PPMemoizedParser >> parseOn: aPPContext [
 
 { #category : #parsing }
 PPMemoizedParser >> reset: aPPContext [
+	hash := aPPContext hash.
 	context := aPPContext.
 	buffer := Dictionary new.
 ]

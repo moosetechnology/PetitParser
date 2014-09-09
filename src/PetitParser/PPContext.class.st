@@ -47,6 +47,11 @@ PPContext >> atEnd [
 ]
 
 { #category : #'stream mimicry' }
+PPContext >> back [
+	^ stream back
+]
+
+{ #category : #'stream mimicry' }
 PPContext >> collection [
 	^ stream collection  
 ]
