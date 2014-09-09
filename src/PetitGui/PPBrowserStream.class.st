@@ -29,8 +29,9 @@ PPBrowserStream >> asExecutionTrace [
 PPBrowserStream >> asFrequencyTable [
 	| bag total result |
 	bag := parsers asBag.
-	total := 100.0 / bag size.
 	result := OrderedCollection new.
+	bag isEmpty ifTrue: [ ^ result ].
+	total := 100.0 / bag size.
 	bag sortedCounts 
 		do: [ :each | result addLast: (Array with: each value with: each key with: total * each key) ].
 	^ result
@@ -157,5 +158,6 @@ PPBrowserStream >> stamps [
 PPBrowserStream >> step [
 	positions addLast: position.
 	stamps addLast: Time millisecondClockValue.
-	parsers addLast: thisContext sender sender receiver
+	(thisContext findContextSuchThat: [ :ctxt | ctxt receiver isKindOf: PPParser ])
+		ifNotNil: [ :aContext | parsers addLast: aContext receiver ].
 ]
