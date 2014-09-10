@@ -22,8 +22,10 @@ PPParserDebuggerResult >> gtDebugView: composite [
 	browser transmit 
 		from: #tree;
 		to: #source port: #selectionInterval;
-		transformed: [:debuggingResult | debuggingResult ifNotNil: [
-			debuggingResult start to: debuggingResult end]
+		transformed: [:debuggingResult | 
+			(debuggingResult isNil or: [ debuggingResult start isNil or: [ debuggingResult end isNil ] ])
+			ifTrue: [ 1 to: 0 ]
+			ifFalse: [debuggingResult start to: debuggingResult end]
 		].
 
 	browser transmit
