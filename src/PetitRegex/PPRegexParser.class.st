@@ -116,12 +116,12 @@ PPRegexParser class >> initializeEscapeMap [
 
 { #category : #initialization }
 PPRegexParser class >> initializeOther [
-	BeginOfLineParser := [ :stream | 
-		(stream position = 0 or: [ (stream skip: -1; next) = Character cr ])
-			ifFalse: [ PPFailure message: '^ not expected' context: nil at: stream position ] ] asParser.
-	EndOfLineParser := [ :stream | 
-		(stream atEnd or: [ stream peek = Character cr ])
-			ifFalse: [ PPFailure message: '$ not expected' at: stream position ] ] asParser
+	BeginOfLineParser := [ :context | 
+		(context position = 0 or: [ (context skip: -1; next) = Character cr ])
+			ifFalse: [ PPFailure message: '^ not expected' context: context ] ] asParser.
+	EndOfLineParser := [ :context | 
+		(context atEnd or: [ context peek = Character cr ])
+			ifFalse: [ PPFailure message: '$ not expected' context: context  ] ] asParser
 ]
 
 { #category : #private }
