@@ -104,7 +104,7 @@ PPContextMementoTest >> testPutProperty [
 	self assert: (memento hasProperty: #foo) not.
 	self assert: (memento hasProperty: #bar) not.	
 	
-	self assertBlock: [ memento propertyAt: #foo ] raises: Error.
+	self should: [ memento propertyAt: #foo ] raise: Error.
 	self assert: (memento propertyAt: #foo ifAbsent: [ c ]) == c.
 	
 	retval := memento propertyAt: #foo ifAbsentPut: [ c ].
