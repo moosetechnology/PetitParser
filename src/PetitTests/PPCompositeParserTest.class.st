@@ -45,12 +45,9 @@ PPCompositeParserTest >> parse: aString [
 
 { #category : #parsing }
 PPCompositeParserTest >> parse: aString rule: aSymbol [
-	| production context |
+	| production |
 	production := self parserInstanceFor: aSymbol.
-	context := PPContext new.
-	self parserInstance updateContext: context.
-	
-	result := production end parse: aString withContext: context.
+	result := production end parse: aString.
 	self
 		deny: result isPetitFailure
 		description: 'Unable to parse ' , aString printString.

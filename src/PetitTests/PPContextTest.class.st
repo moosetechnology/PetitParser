@@ -79,7 +79,7 @@ PPContextTest >> testPutGlobals [
 	self assert: (context hasGlobal: #foo) not.
 	self assert: (context hasGlobal: #bar) not.	
 	
-	self assertBlock: [ context globalAt: #foo ] raises: Error.
+	self should: [ context globalAt: #foo ] raise: Error.
 	self assert: (context globalAt: #foo ifAbsent: [ #bar ]) = #bar.
 	
 	self assert: (context globalAt: #foo ifAbsentPut: [ #bar ]) = #bar.	
@@ -97,7 +97,7 @@ PPContextTest >> testPutGlobals [
 	self assert: (context hasGlobal: #bar) not.	
 	self assert: (context globalAt: #foo) = #zorg.
 	
-	self assertBlock: [ context globalAt: #bar ] raises: Error.
+	self should: [ context globalAt: #bar ] raise: Error.
 	self assert: (context globalAt: #bar put: #foo) = #foo.
 	self assert: (context globalAt: #foo) = #zorg.
 	self assert: (context globalAt: #bar) = #foo.
@@ -110,7 +110,7 @@ PPContextTest >> testPutProperties [
 	self assert: (context hasProperty: #foo) not.
 	self assert: (context hasProperty: #bar) not.	
 	
-	self assertBlock: [ context propertyAt: #foo ] raises: Error.
+	self should: [ context propertyAt: #foo ] raise: Error.
 	self assert: (context propertyAt: #foo ifAbsent: [ #bar ]) = #bar.
 	
 	self assert: (context propertyAt: #foo ifAbsentPut: [ #bar ]) = #bar.	
@@ -128,7 +128,7 @@ PPContextTest >> testPutProperties [
 	self assert: (context hasProperty: #bar) not.	
 	self assert: (context propertyAt: #foo) = #zorg.
 	
-	self assertBlock: [ context propertyAt: #bar ] raises: Error.
+	self should: [ context propertyAt: #bar ] raise: Error.
 	self assert: (context propertyAt: #bar put: #foo) = #foo.
 	self assert: (context propertyAt: #foo) = #zorg.
 	self assert: (context propertyAt: #bar) = #foo.
@@ -144,7 +144,7 @@ PPContextTest >> testRemoveGlobals [
 	self assert: (context removeGlobal: #foo) = #zorg.
 	self assert: (context removeGlobal: #bar) = #qwark.
 	
-	self assertBlock: [context removeGlobal: #foo] raises: Error.
+	self should: [context removeGlobal: #foo] raise: Error.
 	self assert: (context removeGlobal: #bar ifAbsent: [ #foobar ]) = #foobar.
 
 ]
@@ -157,7 +157,7 @@ PPContextTest >> testRemoveProperties [
 	self assert: (context removeProperty: #foo) = #zorg.
 	self assert: (context removeProperty: #bar) = #qwark.
 	
-	self assertBlock: [context removeProperty: #foo] raises: Error.
+	self should: [context removeProperty: #foo] raise: Error.
 	self assert: (context removeProperty: #bar ifAbsent: [ #foobar ]) = #foobar.
 
 ]
