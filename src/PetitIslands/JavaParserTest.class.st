@@ -2,7 +2,8 @@ Class {
 	#name : #JavaParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
-		'debugResult'
+		'debugResult',
+		'context'
 	],
 	#category : #'PetitIslands-Examples'
 }
@@ -4059,6 +4060,17 @@ public class Object {
 ]
 
 { #category : #'as yet unclassified' }
+JavaParserTest >> context [
+	context ifNil: [ 
+		context := PPContext new.
+		self parserInstance updateContext: context.
+	].
+	^ context 
+
+	
+]
+
+{ #category : #'as yet unclassified' }
 JavaParserTest >> createContext: anInput [
 	| context |
 	context := PPContext on: self parserInstance stream: anInput asPetitStream.
@@ -5278,6 +5290,12 @@ JavaParserTest >> parserClass [
 	^ JavaParser
 ]
 
+{ #category : #'as yet unclassified' }
+JavaParserTest >> setUp [
+	super setUp.
+	context := nil.
+]
+
 { #category : #tests }
 JavaParserTest >> test1 [
 	self parse: self file1.
@@ -5693,14 +5711,13 @@ JavaParserTest >> testMethod5 [
 
 { #category : #tests }
 JavaParserTest >> testMethod6 [
-	self parse: 'private InnerClass {  }
+	self fail: 'private InnerClass {  }
 	
 	   public void methodA() 
 		{ 
 		}' 
 	rule: #methodDef.
 	
-	self assert: result isPetitFailure.
 ]
 
 { #category : #tests }
@@ -5712,17 +5729,6 @@ JavaParserTest >> testMethod7 [
 	
 	self assert: result isPetitFailure not.
 	self assert: result = 'read'.
-]
-
-{ #category : #tests }
-JavaParserTest >> testMethod8 [
-	self parse: '// some comment
-		public void methodA() 
-		{ 
-		}' 
-	rule: #methodDef.
-	
-	self assert: result isPetitFailure.
 ]
 
 { #category : #tests }

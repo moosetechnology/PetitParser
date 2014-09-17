@@ -70,6 +70,12 @@ PPIslandTest >> nilIsland [
 	^ nilIsland
 ]
 
+{ #category : #'as yet unclassified' }
+PPIslandTest >> setUp [
+	super setUp.
+	context := nil
+]
+
 { #category : #'tests - water objects' }
 PPIslandTest >> singleCommentParser [
 	| nl |
