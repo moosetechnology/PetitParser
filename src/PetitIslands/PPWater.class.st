@@ -28,6 +28,10 @@ PPWater >> parseOn: aPPContext [
 		"TODO: probably can be rewritten with test in the end!"
 		result := parser parseOn: aPPContext.
 		[result isPetitFailure] whileFalse: [ 
+			"
+				Hack alert, using parseWithContext: instead of parseOn: because 
+				waterToken is not accessible from aPPContext root!
+			"
 			waterToken parseWithContext: aPPContext.
 			aPPContext root: root.
 			aPPContext waterPosition: aPPContext position.

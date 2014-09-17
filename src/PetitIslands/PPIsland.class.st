@@ -50,14 +50,15 @@ Class {
 		'afterWaterParser',
 		'beforeWaterParser',
 		'context',
-		'bwp',
-		'awp'
+		'afterWaterDelegate',
+		'beforeWaterDelegate'
 	],
 	#category : #'PetitIslands-Parsers'
 }
 
 { #category : #queries }
 PPIsland >> acceptsEpsilon [
+	"JK: Hack alert?"
 	"Let us suppose island is always nullable, it helps to sequences of islands"
 	^ true
 	"^ island isNullableOpenSet: (IdentitySet with: self)"
@@ -65,6 +66,7 @@ PPIsland >> acceptsEpsilon [
 
 { #category : #queries }
 PPIsland >> acceptsEpsilonOpenSet: set [
+	"JK: Hack alert?"
 	^ true
 "	^ island isNullableOpenSet: set"
 ]
@@ -75,9 +77,9 @@ PPIsland >> afterWaterParser: aPPContext [
 
 	afterWaterParser ifNil: [
 		afterWaterParser := self createAfterWaterParser: aPPContext.
-		awp setParser: afterWaterParser.
+		afterWaterDelegate setParser: afterWaterParser.
 	].
-	^ awp
+	^ afterWaterDelegate
 ]
 
 { #category : #parsing }
@@ -86,24 +88,25 @@ PPIsland >> beforeWaterParser: aPPContext [
 
 	beforeWaterParser ifNil: [
 		beforeWaterParser := self createBeforeWaterParser: aPPContext.
-		bwp setParser: beforeWaterParser.
+		beforeWaterDelegate setParser: beforeWaterParser.
 	].
-	^ bwp
+	^ beforeWaterDelegate
 ]
 
 { #category : #accessing }
 PPIsland >> children [
 	"
-		this all thing with bwp, awp and children
-		is a bit hack for debugging purposes
+		the delegates are for nicer view in debugger. Because before/after water parsers
+		are created on-demand during parsing, we hide them behind the delegate, that
+		is created before parsing.
 	"
-	^ Array with: bwp with: island with: awp
+	^ Array with: beforeWaterDelegate with: island with: afterWaterDelegate
 ]
 
 { #category : #parsing }
 PPIsland >> createAfterWaterParser: aPPContext [
 	|  nextSet  p |
-	
+
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
 	nextSet add: PPInputEnds new.
@@ -112,6 +115,19 @@ PPIsland >> createAfterWaterParser: aPPContext [
 	
 	p := (PPChoiceParser withAll: nextSet) not.
 	^ PPWater on: p
+]
+
+{ #category : #parsing }
+PPIsland >> createBeforeWaterParser: aPPContext [
+	| nextSet p |
+	nextSet := Set new.
+	nextSet addAll: (self nextSet: aPPContext).
+	nextSet add: PPInputEnds new.
+	
+	nextSet := nextSet collect: [:e | PPNonEmptyParser on: e].
+	
+	p := (PPChoiceParser withAll: nextSet) not, (PPNonEmptyParser on: island) not.
+	^ PPWater on: p.
 ]
 
 { #category : #parsing }
@@ -130,10 +146,10 @@ PPIsland >> followSet: aPPContext [
 { #category : #accessing }
 PPIsland >> initialize [ 
 	super initialize.
-	bwp := PPDelegateParser on: nil asParser.
-	bwp disableDebuggerOutput.
-	awp := PPDelegateParser on: nil asParser.
-	awp disableDebuggerOutput.
+	beforeWaterDelegate := PPDelegateParser on: nil asParser.
+	beforeWaterDelegate disableDebuggerOutput.
+	afterWaterDelegate := PPDelegateParser on: nil asParser.
+	afterWaterDelegate disableDebuggerOutput.
 ]
 
 { #category : #accessing }
@@ -145,7 +161,6 @@ PPIsland >> island [
 { #category : #accessing }
 PPIsland >> island: anObject [
 	island := anObject.
-"	anObject parent: self."
 ]
 
 { #category : #memoization }
@@ -168,21 +183,12 @@ PPIsland >> nextSet: aPPContext [
 
 { #category : #parsing }
 PPIsland >> parseAfterWater: aPPContext [
-	| awr  |
-
-	awr := (self afterWaterParser: aPPContext) parseOn: aPPContext .
-	
-	^ awr
+	^ (self afterWaterParser: aPPContext) parseOn: aPPContext .
 ]
 
 { #category : #parsing }
 PPIsland >> parseBeforeWater: aPPContext [
-	| bwr    |
-
-	bwr := (self beforeWaterParser: aPPContext) parseOn: aPPContext.
-	
-	^ bwr
-
+	^ (self beforeWaterParser: aPPContext) parseOn: aPPContext.
 ]
 
 { #category : #parsing }
@@ -216,7 +222,7 @@ PPIsland >> parseOn: aPPContext [
 	awr := self parseAfterWater: aPPContext.	
 	awr isPetitFailure ifTrue: 
 	[
-		retval := PPFailure message: 'island found, but follow not :(' at: aPPContext position.
+		retval := PPFailure message: 'IMO should not happen :(' context: aPPContext.
 		aPPContext restore: memento.
 		^ retval.
 	].
@@ -232,12 +238,10 @@ PPIsland >> parseOn: aPPContext [
 PPIsland >> replace: parser with: anotherParser [ 
 	super replace: parser with: anotherParser.
 	
-	(bwp == parser) ifTrue: [ bwp := anotherParser ].
-	(awp == parser) ifTrue: [ awp := anotherParser ].
+	(beforeWaterDelegate == parser) ifTrue: [ beforeWaterDelegate := anotherParser ].
+	(afterWaterDelegate == parser) ifTrue: [ afterWaterDelegate := anotherParser ].
 	
-	(island == parser) ifTrue: [
-		island := anotherParser.
-	].
+	(island == parser) ifTrue: [ island := anotherParser ].
 ]
 
 { #category : #memoization }
