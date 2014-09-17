@@ -697,16 +697,19 @@ PPIslandTest >> testWaterObjects [
 	
 	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)) star.
 
-
 	self assert: parser parse: ' /* hello there */ class Foo endclass'.
 	self assert: result size = 1.
 	self assert: result first second = 'Foo'.
 	
+	context := PPContext new.
+	context globalAt: #waterObjects put: OrderedCollection new.
+
 	self assert: parser parse: ' /* class Bar endclass */ class Foo endclass'.
 	self assert: result size = 2.
 	self assert: result first second = 'Bar'.
 	self assert: result second second = 'Foo'.
 	
+	context := PPContext new.
 	context globalAt: #waterObjects put: (OrderedCollection with: self multilineCommentParser).
 	self assert: parser parse: ' /* class Bar endclass */ class Foo endclass'.
 	self assert: result size = 1.
