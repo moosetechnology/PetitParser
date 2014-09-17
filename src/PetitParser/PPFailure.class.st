@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+PPFailure class >> message: aString [
+	^ self basicNew initializeMessage: aString 
+]
+
+{ #category : #'instance creation' }
 PPFailure class >> message: aString at: anInteger [
 	self halt: 'deprecated, use message:context:'.
 	^ self basicNew initializeMessage: aString at: anInteger
@@ -23,6 +28,12 @@ PPFailure class >> message: aString context: aPPContext [
 { #category : #'instance creation' }
 PPFailure class >> message: aString context: aPPContext at: position [
 	^ self basicNew initializeMessage: aString context: aPPContext position: position
+]
+
+{ #category : #initialization }
+PPFailure >> initializeMessage: aString [	
+	message := aString.
+
 ]
 
 { #category : #initialization }
