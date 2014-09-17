@@ -136,7 +136,7 @@ XmlFeedParser >> simpleElement [
 	) ==> [ :elements |
 		(elements first = elements third) 
 		ifTrue: [ Array with: elements first with: elements second ]
-		ifFalse: [ PPFailure message: 'malformed element' context: nil at: 'todo' ]
+		ifFalse: [ PPFailure message: 'malformed element' ]
  	]
 ]
 

@@ -4080,7 +4080,7 @@ JavaParserTest >> debug: aString rule: aSymbol [
 	production := self parserInstanceFor: aSymbol.
 	
 	context := self createContext: aString.
-	debugResult := production end debugWithContext: context.
+	debugResult := production end enableDebug parseWithContext: context.
 	result := debugResult children first result.
 	self
 		deny: result isPetitFailure
@@ -5414,7 +5414,7 @@ JavaParserTest >> testClass3 [
 
 { #category : #tests }
 JavaParserTest >> testClassBody1 [
-	self debug: '{
+	self parse: '{
 		// some comment
 		public void methodA() 
 		{ 
@@ -5427,7 +5427,7 @@ JavaParserTest >> testClassBody1 [
 
 { #category : #tests }
 JavaParserTest >> testClassBody10 [
-	self debug: '{
+	self parse: '{
     private static final int SKIP_BUFFER_SIZE = 2048;
    	 public int read(byte b[]) throws IOException {
 		return read(b, 0, b.length);
@@ -5435,7 +5435,6 @@ JavaParserTest >> testClassBody10 [
 }' 
 	rule: #classBody.
 	
-	"debugResult inspect."
 	self assert: result isPetitFailure not.
 	self assert: result size = 1.
 	self assert: result first = 'read'.
@@ -5443,7 +5442,7 @@ JavaParserTest >> testClassBody10 [
 
 { #category : #tests }
 JavaParserTest >> testClassBody2 [
-	self debug: '{
+	self parse: '{
 		// some comment
 		public void methodA() { 
 		}
@@ -5484,7 +5483,7 @@ JavaParserTest >> testClassBody3 [
 
 { #category : #tests }
 JavaParserTest >> testClassBody4 [
-	self debug: '{
+	self parse: '{
 		public void methodA() {
 			System.out.println();
 		}
@@ -5503,7 +5502,7 @@ JavaParserTest >> testClassBody4 [
 
 { #category : #tests }
 JavaParserTest >> testClassBody5 [
-	self debug: '{
+	self parse: '{
 	// I am only empty class
 }' 
 	rule: #classBody.
@@ -5684,7 +5683,7 @@ JavaParserTest >> testMethod4 [
 
 { #category : #tests }
 JavaParserTest >> testMethod5 [
-	self debug: 'public void methodA() 
+	self parse: 'public void methodA() 
 		{ 
 		}' 
 	rule: #methodDef.
@@ -5694,7 +5693,7 @@ JavaParserTest >> testMethod5 [
 
 { #category : #tests }
 JavaParserTest >> testMethod6 [
-	self debug: 'private InnerClass {  }
+	self parse: 'private InnerClass {  }
 	
 	   public void methodA() 
 		{ 
@@ -5706,7 +5705,7 @@ JavaParserTest >> testMethod6 [
 
 { #category : #tests }
 JavaParserTest >> testMethod7 [
-	self debug: 'public int read(byte b) throws IOException {
+	self parse: 'public int read(byte b) throws IOException {
 		return b;
     }' 
 	rule: #methodDef.
@@ -5717,7 +5716,7 @@ JavaParserTest >> testMethod7 [
 
 { #category : #tests }
 JavaParserTest >> testMethod8 [
-	self debug: '// some comment
+	self parse: '// some comment
 		public void methodA() 
 		{ 
 		}' 
