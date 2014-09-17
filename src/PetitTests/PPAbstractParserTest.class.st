@@ -53,14 +53,17 @@ PPAbstractParserTest >> assert: aParser parse: aCollection to: anObject [
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser parse: aCollection to: aTargetObject end: anInteger [
-	| stream result |
+	| stream result context |
+
 	self assert: aParser isPetitParser description: 'Parser invalid'.
 	stream := aCollection asPetitStream.
-	result := aParser parse: stream.
+	context := self context.
+	
+	result := aParser parse: stream withContext: context.
 	aTargetObject isNil
 		ifTrue: [ self deny: result isPetitFailure ]
 		ifFalse: [ self assert: result equals: aTargetObject ].
-	self assert: stream position = anInteger description: 'Parser accepted at wrong position'.
+	self assert: context position = anInteger description: 'Parser accepted at wrong position'.
 	^ result
 ]
 
@@ -81,4 +84,9 @@ PPAbstractParserTest >> assert: aParser parse: aParserObject toToken: aStartInte
 	self assert: token start equals: aStartInteger.
 	self assert: token stop equals: aStopInteger.
 	^ token
+]
+
+{ #category : #context }
+PPAbstractParserTest >> context [
+	^ PPContext new
 ]
