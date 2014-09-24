@@ -21,17 +21,20 @@ PPAbstractParserTest >> assert: aParser fail: aCollection [
 
 { #category : #utilities }
 PPAbstractParserTest >> assert: aParser fail: aCollection end: anInteger [
-	| stream result |
+	| stream result context |
 	self 
 		assert: aParser isPetitParser
 		description: 'Parser invalid'.
 	stream := aCollection asPetitStream.
-	result := aParser parse: stream.
+	context := self context.
+	
+	
+	result := aParser parse: stream withContext: context.
 	self 
 		assert: result isPetitFailure
 		description: 'Parser did not fail'.
 	self
-		assert: stream position = anInteger
+		assert: context position = anInteger
 		description: 'Parser failed at wrong position'.
 	^ result
 ]
