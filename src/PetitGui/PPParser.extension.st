@@ -253,9 +253,7 @@ PPParser >> viewAllNamedParsers [
 
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersOn: view [
-
-	view shape rectangle
-		+ ( RTLabel new text: #displayName ).
+	view shape label text: #displayName; height: 10.
 	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
 	view edgesToAll: #namedParsers.
 	view horizontalTreeLayout layered
@@ -297,8 +295,7 @@ PPParser >> visualizeStructureInGraph [
 	
 	"
 	| view |
-	
-	view := ROMondrianViewBuilder new.
+	view := RTMondrianViewBuilder new.
 	self visualizeStructureInGraphOn: view.
 	view open.
 	^ view
@@ -307,7 +304,7 @@ PPParser >> visualizeStructureInGraph [
 { #category : #'*petitgui-mondrian' }
 PPParser >> visualizeStructureInGraphOn: view [
 	view shape rectangle 
-		borderWidth: 1;
+		"borderWidth: 1";
 		if: [ :p | p name isNil ] fillColor: Color lightGray.
 	
 	view interaction
