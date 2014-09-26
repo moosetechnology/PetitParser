@@ -256,7 +256,7 @@ PPParser >> viewAllNamedParsersOn: view [
 	view shape label text: #displayName; height: 10.
 	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
 	view edgesToAll: #namedParsers.
-	view horizontalTreeLayout layered
+	view horizontalDominanceTreeLayout layered
 ]
 
 { #category : #'*petitgui-mondrian' }
