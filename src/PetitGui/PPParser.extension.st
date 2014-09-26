@@ -246,19 +246,19 @@ PPParser >> newSpacerMorph [
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsers [
 	| view |
-	view := ROMondrianViewBuilder new.
+	view := RTMondrianViewBuilder new.
 	self viewAllNamedParsersOn: view.
 	^ view open setLabel: 'All named parsers'
 ]
 
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersOn: view [
-	view shape
-		rectangleWithoutBorder;
-		withText: #displayName.
+
+	view shape rectangle
+		+ ( RTLabel new text: #displayName ).
 	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
 	view edgesToAll: #namedParsers.
-	view horizontalDominanceTreeLayout layered
+	view horizontalTreeLayout layered
 ]
 
 { #category : #'*petitgui-mondrian' }
