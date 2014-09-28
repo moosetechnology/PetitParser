@@ -192,6 +192,52 @@ ConfigurationOfPetitParser >> baseline13: spec [
 ]
 
 { #category : #baselines }
+ConfigurationOfPetitParser >> baseline151: spec [ 
+	<version: '1.51-baseline'>
+	
+	spec for: #common do: [
+		spec blessing: #baseline.
+		spec description: 'petitparser project description that loads the version before the changes regarding integration of the island grammar and context by Jan Kurs'.
+		spec repository: 'http://www.smalltalkhub.com/mc/Moose/PetitParser/main'.
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
+			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'];
+			package: 'PetitSmalltalk' with: [
+				spec requires: #( 'PetitParser' 'PetitTests') ];
+			package: 'PetitCSV' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitJson' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitMSE' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitManifestMf' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitRegex' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitXPath' with: [
+				spec requires: #('PetitParser' 'PetitXml') ];
+			package: 'PetitXml' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'Factorial-Language' with: [
+				spec requires: #('PetitParser') ].
+		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
+		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' ) ].
+
+	spec for: #( 'squeakCommon' )  do: [
+		spec project: 'Glamour' with: [
+			spec
+				className: 'ConfigurationOfGlamour';
+				file: 'ConfigurationOfGlamour';
+				version: #development;
+				loads: #('Core' 'Morphic' 'Roassal');
+				repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
+		spec 
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+		spec group: 'Gui' with: #( 'PetitGui' ) ]
+]
+
+{ #category : #baselines }
 ConfigurationOfPetitParser >> baseline15: spec [
 	<version: '1.5-baseline'>
 
@@ -507,6 +553,27 @@ ConfigurationOfPetitParser >> version14: spec [
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-lr.39';
 			package: 'PetitGui' with: 'PetitGui-TudorGirba.65';
 			package: 'PetitSmalltalk' with: 'PetitSmalltalk-lr.47'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version151: spec [
+	<version: '1.51' imports: #('1.51-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'development'.
+		spec description: 'releasing a version for petit parser before changes regarding integration of the parsing context and island grammar by Jan Kurs for backward compatibility'.
+		spec author: 'usmanbhatti'.
+		spec timestamp: '26/9/2014 18:27'.
+		
+		spec 
+			package: 'PetitParser' with: 'PetitParser-DiegoLont.233';
+			package: 'PetitTests' with: 'PetitTests-AndreHora.47';
+			package: 'PetitXml' with: 'PetitXml-lr.35';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-DiegoLont.46';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-DamienCassou.70';
+			package: 'PetitRegex' with: 'PetitRegex-lr.27';
+			package: 'PetitGui' with: 'PetitGui-AndreiChis.140'].
 
 ]
 
