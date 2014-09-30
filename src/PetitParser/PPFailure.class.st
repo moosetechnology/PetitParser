@@ -16,7 +16,7 @@ PPFailure class >> message: aString [
 
 { #category : #'instance creation' }
 PPFailure class >> message: aString at: anInteger [
-	self halt: 'deprecated, use message:context:'.
+	"One should not use this method if the furthest failure is supposed to be reported correctly"
 	^ self basicNew initializeMessage: aString at: anInteger
 ]
 
@@ -38,7 +38,9 @@ PPFailure >> initializeMessage: aString [
 
 { #category : #initialization }
 PPFailure >> initializeMessage: aString at: anInteger [
-	self halt: 'deprecated'.
+	"One should not use this method if the furthest failure is supposed to be reported correctly"
+	message := aString.
+	position := anInteger.
 ]
 
 { #category : #initialization }
