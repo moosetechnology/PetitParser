@@ -56,6 +56,11 @@ PPContext >> collection [
 	^ stream collection  
 ]
 
+{ #category : #'stream mimicry' }
+PPContext >> contents [ 
+	^ stream contents
+]
+
 { #category : #failures }
 PPContext >> furthestFailure [
 	" the furthest failure encountered while parsing the input stream "
@@ -151,6 +156,11 @@ PPContext >> peekTwice [
 { #category : #'stream mimicry' }
 PPContext >> position [
 	^ stream position
+]
+
+{ #category : #'stream mimicry' }
+PPContext >> position: anInteger [
+	^ stream position: anInteger
 ]
 
 { #category : #'accessing-properties' }
