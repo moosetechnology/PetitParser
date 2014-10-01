@@ -118,6 +118,16 @@ PPContext >> initialize [
 	stream := nil.
 ]
 
+{ #category : #initialization }
+PPContext >> initializeFor: parser [
+	parser == root ifTrue: [ ^ self ].
+	
+	root := parser.
+	root allParsersDo: [ :p | 
+		p updateContext: self
+	]
+]
+
 { #category : #'stream mimicry' }
 PPContext >> isStartOfLine [
 	^ stream isStartOfLine
@@ -271,11 +281,6 @@ PPContext >> restoreProperties: aPPContextMemento [
 { #category : #acessing }
 PPContext >> root [
 	^ root 
-]
-
-{ #category : #acessing }
-PPContext >> root: aPPParser [
-	root := aPPParser 
 ]
 
 { #category : #'stream mimicry' }

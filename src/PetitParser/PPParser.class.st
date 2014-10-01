@@ -398,8 +398,7 @@ PPParser >> parseOn: aPPContext [
 { #category : #context }
 PPParser >> parseWithContext: context [
 	| result |
-	context root: self.
-	self updateContext: context.
+	context initializeFor: self.
 	result := self parseOn: context.
 	
 	"Return the furthest failure, it gives better results than the last failure"
