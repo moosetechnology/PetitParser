@@ -332,7 +332,7 @@ ConfigurationOfPetitParser >> baseline16: spec [
 				className: 'ConfigurationOfGlamour';
 				file: 'ConfigurationOfGlamour';
 				version: #development;
-				loads: #('Core' 'Morphic' 'Roassal');
+				loads: #('Core' 'Morphic' 'Roassal2');
 				repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
 		spec 
 			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
