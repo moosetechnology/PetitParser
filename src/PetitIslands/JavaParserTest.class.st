@@ -4063,7 +4063,6 @@ public class Object {
 JavaParserTest >> context [
 	context ifNil: [ 
 		context := PPContext new.
-		self parserInstance updateContext: context.
 	].
 	^ context 
 
@@ -4079,25 +4078,6 @@ JavaParserTest >> createContext: anInput [
 	^ context 
 
 	
-]
-
-{ #category : #'as yet unclassified' }
-JavaParserTest >> debug: aString [ 
-	^ self debug: aString rule: #start
-]
-
-{ #category : #'as yet unclassified' }
-JavaParserTest >> debug: aString rule: aSymbol [
-	| production context |
-	production := self parserInstanceFor: aSymbol.
-	
-	context := self createContext: aString.
-	debugResult := production end enableDebug parseWithContext: context.
-	result := debugResult children first result.
-	self
-		deny: result isPetitFailure
-		description: 'Unable to parse ' , aString printString.
-	^ result
 ]
 
 { #category : #src }
@@ -5270,19 +5250,6 @@ public final
         return annotationType;
     }
 }'
-]
-
-{ #category : #'as yet unclassified' }
-JavaParserTest >> parse: aString rule: aSymbol [
-	| production context |
-	production := self parserInstanceFor: aSymbol.
-
-	context := self createContext: aString.	
-	result := production end parseWithContext: context.
-	self
-		deny: result isPetitFailure
-		description: 'Unable to parse ' , aString printString.
-	^ result
 ]
 
 { #category : #'as yet unclassified' }

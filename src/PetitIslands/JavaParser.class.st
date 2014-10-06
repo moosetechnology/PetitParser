@@ -82,7 +82,11 @@ Class {
 		'throws',
 		'javaClassIsland',
 		'methodModifiers',
-		'semicolon'
+		'semicolon',
+		'comment',
+		'singleLineComment',
+		'string',
+		'water'
 	],
 	#category : #'PetitIslands-Examples'
 }
@@ -95,7 +99,7 @@ JavaParser >> arguments [
 { #category : #class }
 JavaParser >> block [
 	^ (${ asParser,
-		(block island plus / nil asParser island),
+		((block island: water) plus / nil asParser island),
 	$} asParser) ==> [:tokens | nil ]
 		
 ]
@@ -105,8 +109,8 @@ JavaParser >> classBody [
 	 ^ 
 	(${ asParser,
 		(
-		(methodDef island ==> [:tokens | tokens second]) plus /
-		(nil asParser island ==> [ :tokens | OrderedCollection new ])
+		((methodDef island: water) ==> [:tokens | tokens second]) plus /
+		((nil asParser island: water) ==> [ :tokens | OrderedCollection new ])
 		),
 	$} asParser) ==> [:tokens | tokens second select: [:e | e isNil not ]]
 ]
@@ -126,18 +130,16 @@ JavaParser >> comment [
 	| end |
 	end := '*/' asParser.
 	^ ('/*' asParser, (#any asParser starLazy: end), end)
-		name: 'comment';
-		yourself.
 ]
 
 { #category : #class }
 JavaParser >> javaClass [
-	^ classDef, (classBody island ==> [:tokens | tokens second ])
+	^ classDef, ((classBody island:water) ==> [:tokens | tokens second ])
 ]
 
 { #category : #class }
 JavaParser >> javaClassIsland [
-	^ javaClass island ==> [:tokens | tokens second]
+	^ (javaClass island: water) ==> [:tokens | tokens second]
 ]
 
 { #category : #method }
@@ -147,7 +149,7 @@ JavaParser >> methodBody [
 
 { #category : #method }
 JavaParser >> methodDef [
-	^ methodModifiers, type island, methodName island, arguments island, methodBody ==> [:tokens | tokens third second ]
+	^ methodModifiers, (type island: water), (methodName island:water), (arguments island:water), methodBody ==> [:tokens | tokens third second ]
 ]
 
 { #category : #class }
@@ -180,8 +182,6 @@ JavaParser >> singleLineComment [
 	| end |
 	end := #newline asParser.
 	^ ('//' asParser, (#any asParser starLazy: end), end)
-		name: 'single line comment';
-		yourself.
 ]
 
 { #category : #'as yet unclassified' }
@@ -211,14 +211,22 @@ JavaParser >> type [
 { #category : #context }
 JavaParser >> updateContext: aPPContext [
 	super updateContext: aPPContext.
-	
-	"
-		This will allow to skip String, Comments and block to be skipped if not recognized as a part of grammar.
-		Obviously this improves the precision of the island grammar.
-	"
-	aPPContext globalAt: #waterObjects put: (OrderedCollection 
+"	aPPContext globalAt: #waterObjects put: (OrderedCollection 
 			with: self comment 
 			with: self singleLineComment
 			with: self string
-			with: self block).
+			with: self block)."
+]
+
+{ #category : #method }
+JavaParser >> water [
+	"
+		This will allow to skip over
+			- Strings, 
+			- Comments 
+			- and blocks 
+		when parsing water. This way, comments and strings cannot confuse the result.
+	"
+
+	^ comment / string / singleLineComment / block / #any asParser
 ]

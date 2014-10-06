@@ -23,6 +23,16 @@ PPParser >> island [
 ]
 
 { #category : #'*petitislands' }
+PPParser >> island: water [
+	^ PPIsland new
+		island: self;
+		water: water;
+		yourself;
+		memoized
+
+]
+
+{ #category : #'*petitislands' }
 PPParser >> nextSets [
 	| nextSets |
 	

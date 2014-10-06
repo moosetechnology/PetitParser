@@ -51,7 +51,8 @@ Class {
 		'beforeWaterParser',
 		'context',
 		'afterWaterDelegate',
-		'beforeWaterDelegate'
+		'beforeWaterDelegate',
+		'water'
 	],
 	#category : #'PetitIslands-Parsers'
 }
@@ -77,9 +78,9 @@ PPIsland >> afterWaterParser: aPPContext [
 
 	afterWaterParser ifNil: [
 		afterWaterParser := self createAfterWaterParser: aPPContext.
-		afterWaterDelegate setParser: afterWaterParser.
 	].
-	^ afterWaterDelegate
+	^ afterWaterParser
+
 ]
 
 { #category : #parsing }
@@ -88,19 +89,16 @@ PPIsland >> beforeWaterParser: aPPContext [
 
 	beforeWaterParser ifNil: [
 		beforeWaterParser := self createBeforeWaterParser: aPPContext.
-		beforeWaterDelegate setParser: beforeWaterParser.
 	].
-	^ beforeWaterDelegate
+	^ beforeWaterParser
+
 ]
 
 { #category : #accessing }
 PPIsland >> children [
-	"
-		the delegates are for nicer view in debugger. Because before/after water parsers
-		are created on-demand during parsing, we hide them behind the delegate, that
-		is created before parsing.
-	"
-	^ Array with: beforeWaterDelegate with: island with: afterWaterDelegate
+
+	^ Array with: water with: island with: water
+
 ]
 
 { #category : #parsing }
@@ -114,7 +112,7 @@ PPIsland >> createAfterWaterParser: aPPContext [
 	nextSet := nextSet collect: [ :e | PPNonEmptyParser on: e ].
 	
 	p := (PPChoiceParser withAll: nextSet) not.
-	^ PPWater on: p
+	^ PPWater on: p waterToken: water
 ]
 
 { #category : #parsing }
@@ -127,7 +125,7 @@ PPIsland >> createBeforeWaterParser: aPPContext [
 	nextSet := nextSet collect: [:e | PPNonEmptyParser on: e].
 	
 	p := (PPChoiceParser withAll: nextSet) not, (PPNonEmptyParser on: island) not.
-	^ PPWater on: p.
+	^ PPWater on: p waterToken: water.
 ]
 
 { #category : #parsing }
@@ -146,10 +144,8 @@ PPIsland >> followSet: aPPContext [
 { #category : #accessing }
 PPIsland >> initialize [ 
 	super initialize.
-	beforeWaterDelegate := PPDelegateParser on: nil asParser.
-	beforeWaterDelegate disableDebuggerOutput.
-	afterWaterDelegate := PPDelegateParser on: nil asParser.
-	afterWaterDelegate disableDebuggerOutput.
+	water := #any asParser name: 'water'; yourself.
+
 ]
 
 { #category : #accessing }
@@ -167,6 +163,7 @@ PPIsland >> island: anObject [
 PPIsland >> memoized [ 
 	^ PPMemoizingIsland new
 		island: self island;
+		water: water;
 		yourself
 ]
 
@@ -238,9 +235,7 @@ PPIsland >> parseOn: aPPContext [
 PPIsland >> replace: parser with: anotherParser [ 
 	super replace: parser with: anotherParser.
 	
-	(beforeWaterDelegate == parser) ifTrue: [ beforeWaterDelegate := anotherParser ].
-	(afterWaterDelegate == parser) ifTrue: [ afterWaterDelegate := anotherParser ].
-	
+	(water == parser) ifTrue: [ water := anotherParser ].
 	(island == parser) ifTrue: [ island := anotherParser ].
 ]
 
@@ -251,9 +246,20 @@ PPIsland >> reset: aPPContext [
 	afterWaterParser := nil.
 ]
 
+{ #category : #accessing }
+PPIsland >> water [
+	^ water
+]
+
+{ #category : #accessing }
+PPIsland >> water: aPPParser [
+	water := aPPParser
+]
+
 { #category : #parsing }
 PPIsland >> waterToken [
 	| waterObjects |
+	self halt: 'deprecated?'.
 	waterObjects := self globalAt: #waterObjects ifAbsent: [ OrderedCollection new ].
 	waterObjects add: #any asParser.
 	^ PPChoiceParser withAll: waterObjects.
