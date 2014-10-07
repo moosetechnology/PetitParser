@@ -252,6 +252,13 @@ PPSmalltalkGrammarTests >> testBinaryMethod5 [
 		rule: #method
 ]
 
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testBlock1 [
+	self 
+		parse: '[]'
+		rule: #block
+]
+
 { #category : #'testing-literals' }
 PPSmalltalkGrammarTests >> testByteLiteral1 [
 	self 
@@ -802,6 +809,13 @@ PPSmalltalkGrammarTests >> testStatements8 [
 	self 
 		parse: '.1'
 		rule: #sequence
+]
+
+{ #category : #testing }
+PPSmalltalkGrammarTests >> testStatements9 [
+	self 
+		parse: ''
+		rule: #statements
 ]
 
 { #category : #'testing-literals' }
