@@ -374,6 +374,15 @@ PPSmalltalkParserTests >> testBinaryMethod5 [
 	self assert: result body statements isEmpty
 ]
 
+{ #category : #'testing-blocks' }
+PPSmalltalkParserTests >> testBlock1 [
+	super testBlock1.
+	self assert: result isBlock.
+	self assert: result arguments size equals: 0.
+	self assert: result body temporaries isEmpty.
+	self assert: result body statements isEmpty
+]
+
 { #category : #'testing-literals' }
 PPSmalltalkParserTests >> testByteLiteral1 [
 	super testByteLiteral1.
@@ -1161,6 +1170,12 @@ PPSmalltalkParserTests >> testStatements8 [
 	self assert: result statements first isLiteralNode.
 	self assert: result statements first value equals: 1.
 	self assert: result statements first value isInteger
+]
+
+{ #category : #testing }
+PPSmalltalkParserTests >> testStatements9 [
+	super testStatements9.
+	self assert: result isEmpty.
 ]
 
 { #category : #'testing-literals' }
