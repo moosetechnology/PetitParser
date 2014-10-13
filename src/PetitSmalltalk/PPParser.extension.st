@@ -2,5 +2,9 @@ Extension { #name : #PPParser }
 
 { #category : #'*petitsmalltalk-operations' }
 PPParser >> smalltalkToken [
-	^ PPSmalltalkTokenParser on: self
+	| ws |
+	ws := PPSmalltalkWhitespaceParser new.
+	^ ((ws, ((PPTokenParser on: self) tokenClass: PPSmalltalkToken; yourself), ws) ==> #second)
+		name: 'trimmingToken';
+		yourself
 ]
