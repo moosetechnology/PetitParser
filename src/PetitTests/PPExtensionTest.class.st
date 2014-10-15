@@ -1,7 +1,7 @@
 Class {
 	#name : #PPExtensionTest,
 	#superclass : #PPAbstractParserTest,
-	#category : #'PetitTests-Tests'
+	#category : 'PetitTests-Tests'
 }
 
 { #category : #'testing-parser' }
@@ -61,7 +61,7 @@ PPExtensionTest >> testParser [
 { #category : #'testing-parser' }
 PPExtensionTest >> testRange [
 	| parser |
-	parser := $a - $c.
+	parser := ($a to: $c) asParser.
 	self assert: parser parse: 'a' to: $a.
 	self assert: parser parse: 'b' to: $b.
 	self assert: parser parse: 'c' to: $c.

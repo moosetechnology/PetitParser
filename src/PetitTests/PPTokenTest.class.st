@@ -1,7 +1,7 @@
 Class {
 	#name : #PPTokenTest,
 	#superclass : #PPAbstractParserTest,
-	#category : #'PetitTests-Tests'
+	#category : 'PetitTests-Tests'
 }
 
 { #category : #accessing }
@@ -26,8 +26,8 @@ PPTokenTest >> testCollection [
 { #category : #'testing-querying' }
 PPTokenTest >> testColumn [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123'
-		, (String with: Character lf) , '1234'.
+	input := '1' , (String with: (Character codePoint: 13)) , '12' , (String with: (Character codePoint: 13) with: (Character codePoint: 10)) , '123'
+		, (String with: (Character codePoint: 10)) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.
 	result with: #(1 2 1 2 3 4 1 2 3 4 1 2 3 4) do: [ :token :line | self assert: token column equals: line ]
@@ -71,7 +71,7 @@ PPTokenTest >> testInputValue [
 { #category : #'testing-querying' }
 PPTokenTest >> testLine [
 	| input parser result |
-	input := '1' , (String with: Character cr) , '12' , (String with: Character cr with: Character lf) , '123'
+	input := '1' , (String with: (Character codePoint: 13)) , '12' , (String with: (Character codePoint: 13) with: (Character codePoint: 10)) , '123'
 		, (String with: Character lf) , '1234'.
 	parser := #any asParser token star.
 	result := parser parse: input.

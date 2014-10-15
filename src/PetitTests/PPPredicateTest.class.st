@@ -1,7 +1,7 @@
 Class {
 	#name : #PPPredicateTest,
 	#superclass : #PPAbstractParserTest,
-	#category : #'PetitTests-Tests'
+	#category : 'PetitTests-Tests'
 }
 
 { #category : #utilities }
@@ -29,7 +29,7 @@ PPPredicateTest >> charactersDo: aBlock [
 { #category : #utilities }
 PPPredicateTest >> parsedCharacterSet: aParser [
 	| result |
-	result := WriteStream on: String new.
+	result := String new writeStream.
 	self charactersDo: [ :char |
 		(aParser matches: (String with: char))
 			ifTrue: [ result nextPut: char ] ].
@@ -109,7 +109,7 @@ PPPredicateTest >> testCr [
 	| parser |
 	parser := #cr asParser.
 	self assertCharacterSets: parser.
-	self assert: parser parse: (String with: Character cr) to: Character cr
+	self assert: parser parse: (String with: (Character codePoint: 13)) to: (Character codePoint: 13)
 ]
 
 { #category : #'testing-chars' }

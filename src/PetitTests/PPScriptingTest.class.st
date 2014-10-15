@@ -16,7 +16,7 @@ PPScriptingTest >> expressionInterpreter [
 	add := PPUnresolvedParser new.
 	mul := PPUnresolvedParser new.
 	prim := PPUnresolvedParser new.
-	dec := ($0 - $9) ==> [ :token | token codePoint - $0 codePoint ].
+	dec := ($0 to: $9) asParser ==> [ :token | token codePoint - $0 codePoint ].
 	add def: ((mul , $+ asParser , add) ==> [ :nodes | (nodes at: 1) + (nodes at: 3) ])
 		/ mul.
 	mul def: ((prim , $* asParser , mul) ==> [ :nodes | (nodes at: 1) * (nodes at: 3) ])
@@ -34,7 +34,7 @@ PPScriptingTest >> expressionParser [
 	add := PPUnresolvedParser new.
 	mul := PPUnresolvedParser new.
 	prim := PPUnresolvedParser new.
-	dec := ($0 - $9).
+	dec := ($0 to: $9) asParser.
 	add def: (mul , $+ asParser , add)
 		/ mul.
 	mul def: (prim , $* asParser , mul)
@@ -55,11 +55,11 @@ PPScriptingTest >> straightLineParser [
 	mulExp := PPUnresolvedParser new.
 	primExp := PPUnresolvedParser new.
 	
-	lower := $a - $z.
-	upper := $A - $Z.
+	lower := ($a to: $z) asParser.
+	upper := ($A to: $Z) asParser.
 	char := lower / upper.
-	nonzero := $1 - $9.
-	dec := $0 - $9.
+	nonzero := ($1 to: $9) asParser.
+	dec := ($0 to: $9) asParser.
 	id := char, ( char / dec ) star.
 	num := $0 asParser / ( nonzero, dec star).
 

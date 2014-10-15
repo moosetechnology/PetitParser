@@ -1,7 +1,7 @@
 Class {
 	#name : #PPParserTest,
 	#superclass : #PPAbstractParserTest,
-	#category : #'PetitTests-Tests'
+	#category : 'PetitTests-Tests'
 }
 
 { #category : #'testing-mapping' }
@@ -783,12 +783,12 @@ PPParserTest >> testParse [
 	parser := $a asParser.
 	self assert: (parser parse: 'a') equals: $a.
 	self assert: (result := parser parse: 'b') isPetitFailure.
-	self assert: (result message includesSubstring: '$a').
+	self assert: (result message includesSubstring: $a printString).
 	self assert: (result message includesSubstring: 'expected').
 	self assert: result position equals: 0.
 	self assert: (parser parse: 'a' readStream) equals: $a.
 	self assert: (result := parser parse: 'b' readStream) isPetitFailure.
-	self assert: (result message includesSubstring: '$a').
+	self assert: (result message includesSubstring: $a printString).
 	self assert: (result message includesSubstring: 'expected').
 	self assert: result position equals: 0
 ]
@@ -814,7 +814,7 @@ PPParserTest >> testParseOnError1 [
 		parse: 'b'
 		onError: [ :failure | 
 			self assert: failure position equals: 0.
-			self assert: (failure message includesSubstring: '$a').
+			self assert: (failure message includesSubstring: $a printString).
 			self assert: (failure message includesSubstring: 'expected').
 			seen := true ].
 	self assert: result.
@@ -830,7 +830,7 @@ PPParserTest >> testParseOnError2 [
 	result := parser
 		parse: 'b'
 		onError: [ :msg :pos | 
-			self assert: (msg includesSubstring: '$a').
+			self assert: (msg includesSubstring: $a printString).
 			self assert: (msg includesSubstring: 'expected').
 			self assert: pos equals: 0.
 			seen := true ].
@@ -1046,7 +1046,7 @@ PPParserTest >> testPrint [
 	self assert: (parser printString includesSubstring: 'PPParser(choice').
 	
 	parser := PPLiteralObjectParser on: $a.
-	self assert: (parser printString includesSubstring: '$a').
+	self assert: (parser printString includesSubstring: $a printString).
 	
 	parser := PPFailingParser message: 'error'.
 	self assert: (parser printString includesSubstring: 'error').
