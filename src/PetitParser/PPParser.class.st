@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'properties'
 	],
-	#category : #'PetitParser-Parsers'
+	#category : 'PetitParser-Parsers'
 }
 
 { #category : #'instance creation' }
@@ -43,6 +43,35 @@ PPParser >> >=> aBlock [
 	"Answer a new parser that wraps the receiving parser with a two argument block. The first argument is the parsed stream, the second argument a continuation block on the delegate parser."
 
 	^ PPWrappingParser on: self block: aBlock
+]
+
+{ #category : #enumerating }
+PPParser >> allParsers [
+	"Answer all the parse nodes of the receiver."
+
+	| result |
+	result := OrderedCollection new.
+	self allParsersDo: [ :parser | result addLast: parser ].
+	^ result
+]
+
+{ #category : #enumerating }
+PPParser >> allParsersDo: aBlock [
+	"Iterate over all the parse nodes of the receiver."
+
+	self allParsersDo: aBlock seen: IdentitySet new
+]
+
+{ #category : #enumerating }
+PPParser >> allParsersDo: aBlock seen: aSet [
+	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
+
+	(aSet includes: self)
+		ifTrue: [ ^ self ].
+	aSet add: self.
+	aBlock value: self.
+	self children
+		do: [ :each | each allParsersDo: aBlock seen: aSet ]
 ]
 
 { #category : #operators }

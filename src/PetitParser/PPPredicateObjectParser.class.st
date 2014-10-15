@@ -1,7 +1,7 @@
 Class {
 	#name : #PPPredicateObjectParser,
 	#superclass : #PPPredicateParser,
-	#category : #'PetitParser-Parsers'
+	#category : 'PetitParser-Parsers'
 }
 
 { #category : #'factory-objects' }
@@ -54,7 +54,7 @@ PPPredicateObjectParser class >> chars: aCollection message: aString [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> cr [
-	^ self char: Character cr message: 'carriage return expected'
+	^ self char: (Character codePoint: 13) message: 'carriage return expected'
 ]
 
 { #category : #'factory-chars' }
@@ -91,7 +91,7 @@ PPPredicateObjectParser class >> letter [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> lf [
-	^ self char: Character lf
+	^ self char: (Character codePoint: 10)
 ]
 
 { #category : #'factory-chars' }
@@ -101,7 +101,7 @@ PPPredicateObjectParser class >> lowercase [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> newline [
-	^ self chars: (String with: Character cr with: Character lf) message: 'newline expected'
+	^ self chars: (String with: (Character codePoint: 13) with: (Character codePoint: 10)) message: 'newline expected'
 ]
 
 { #category : #'instance creation' }

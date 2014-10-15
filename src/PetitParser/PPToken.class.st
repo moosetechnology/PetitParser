@@ -10,14 +10,16 @@ Class {
 	#classVars : [
 		'NewLineParser'
 	],
-	#category : #'PetitParser-Core'
+	#category : 'PetitParser-Core'
 }
 
 { #category : #initialization }
 PPToken class >> initialize [
 	"Platform independent newline sequence. LF: Unix, CR+LF: Windows, and CR: Apple."
-
-	NewLineParser := (Character lf asParser) / (Character cr asParser , Character lf asParser optional)
+	| cr lf |
+	cr := Character codePoint: 13.
+	lf := Character codePoint: 10.
+	NewLineParser := lf asParser / (cr asParser , lf asParser optional)
 ]
 
 { #category : #'instance creation' }

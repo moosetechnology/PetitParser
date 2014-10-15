@@ -6,7 +6,7 @@ Class {
 		'position',
 		'properties'
 	],
-	#category : #'PetitParser-Core'
+	#category : 'PetitParser-Core'
 }
 
 { #category : #comparing }

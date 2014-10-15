@@ -5,7 +5,7 @@ Class {
 		'literal',
 		'message'
 	],
-	#category : #'PetitParser-Parsers'
+	#category : 'PetitParser-Parsers'
 }
 
 { #category : #'instance creation' }

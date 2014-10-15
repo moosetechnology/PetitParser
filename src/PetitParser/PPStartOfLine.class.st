@@ -1,7 +1,7 @@
 Class {
 	#name : #PPStartOfLine,
 	#superclass : #PPParser,
-	#category : #'PetitParser-Parsers'
+	#category : 'PetitParser-Parsers'
 }
 
 { #category : #parsing }

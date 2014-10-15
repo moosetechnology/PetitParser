@@ -6,7 +6,7 @@ Class {
 		'context',
 		'position'
 	],
-	#category : #'PetitParser-Core'
+	#category : 'PetitParser-Core'
 }
 
 { #category : #'instance creation' }

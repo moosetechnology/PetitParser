@@ -23,7 +23,7 @@ PPStream >> collection [
 PPStream >> insideCRLF [
 	(position < 1) ifTrue: [ ^ false ].
 	
-	^ (self peek = Character lf) and: [ self peekBack = Character cr ]
+	^ (self peek = (Character codePoint: 10)) and: [ self peekBack = (Character codePoint: 13) ]
 ]
 
 { #category : #queries }
@@ -32,7 +32,18 @@ PPStream >> isStartOfLine [
 
 	self insideCRLF ifTrue: [ ^ false ].
 	
-	^ (self peekBack = Character cr) or: [ self peekBack = Character lf].
+	^ (self peekBack = (Character codePoint: 13)) or: [ self peekBack = (Character codePoint: 10)].
+]
+
+{ #category : #accessing }
+PPStream >> next: anInteger [ 
+	"Answer up to anInteger elements of my collection. Overridden for efficiency."
+
+	| answer endPosition |
+	endPosition := position + anInteger min: readLimit.
+	answer := collection copyFrom: position + 1 to: endPosition.
+	position := endPosition.
+	^ answer
 ]
 
 { #category : #accessing }
@@ -57,6 +68,15 @@ PPStream >> printOn: aStream [
 		nextPutAll: (collection copyFrom: 1 to: position);
 		nextPutAll: '·';
 		nextPutAll: (collection copyFrom: position + 1 to: readLimit)
+]
+
+{ #category : #accessing }
+PPStream >> size [
+	"
+		The same implementation as a ReadStream. Implemented here for compatibility with Smalltalk/X
+		that has different implementation in a ReadStream
+	"
+	^readLimit
 ]
 
 { #category : #accessing }
