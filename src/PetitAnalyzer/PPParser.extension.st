@@ -19,35 +19,6 @@ PPParser >> allNamedParsersDo: aBlock [
 			ifTrue: [ aBlock value: each ] ]
 ]
 
-{ #category : #'*petitanalyzer-enumerating' }
-PPParser >> allParsers [
-	"Answer all the parse nodes of the receiver."
-
-	| result |
-	result := OrderedCollection new.
-	self allParsersDo: [ :parser | result addLast: parser ].
-	^ result
-]
-
-{ #category : #'*petitanalyzer-enumerating' }
-PPParser >> allParsersDo: aBlock [
-	"Iterate over all the parse nodes of the receiver."
-
-	self allParsersDo: aBlock seen: IdentitySet new
-]
-
-{ #category : #'*petitanalyzer-enumerating' }
-PPParser >> allParsersDo: aBlock seen: aSet [
-	"Iterate over all the parse nodes of the receiver, do not visit and follow the ones contained in aSet."
-
-	(aSet includes: self)
-		ifTrue: [ ^ self ].
-	aSet add: self.
-	aBlock value: self.
-	self children
-		do: [ :each | each allParsersDo: aBlock seen: aSet ]
-]
-
 { #category : #'*petitanalyzer-matching' }
 PPParser >> copyInContext: aDictionary [
 	^ self copyInContext: aDictionary seen: IdentityDictionary new
