@@ -565,7 +565,7 @@ ConfigurationOfPetitParser >> version151: spec [
 		spec description: 'releasing a version for petit parser before changes regarding integration of the parsing context and island grammar by Jan Kurs for backward compatibility'.
 		spec author: 'usmanbhatti'.
 		spec timestamp: '26/9/2014 18:27'.
-		
+		spec project: 'Glamour' with: '2.7'.
 		spec 
 			package: 'PetitParser' with: 'PetitParser-DiegoLont.233';
 			package: 'PetitTests' with: 'PetitTests-AndreHora.47';
