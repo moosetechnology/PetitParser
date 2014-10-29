@@ -332,7 +332,6 @@ ConfigurationOfPetitParser >> baseline16: spec [
 				className: 'ConfigurationOfGlamour';
 				file: 'ConfigurationOfGlamour';
 				version: #development;
-				loads: #('Core' 'Morphic' 'Roassal2');
 				repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
 		spec 
 			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
@@ -605,7 +604,7 @@ ConfigurationOfPetitParser >> version16: spec [
 		spec description: 'releasing a version of petitparser for moose 4.7 release'.
 		spec author: 'usmanbhatti'.
 		spec timestamp: '3/1/2013 18:01'.
-		spec project: 'Glamour for Petit' with: '2.4'.
+		spec project: 'Glamour' with: '2.4'.
 		spec 
 			package: 'PetitParser' with: 'PetitParser-YuriyTymchuk.232';
 			package: 'PetitTests' with: 'PetitTests-AndreHora.47';
