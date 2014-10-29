@@ -129,6 +129,11 @@ PPContext >> initializeFor: parser [
 ]
 
 { #category : #'stream mimicry' }
+PPContext >> isEndOfLine [
+	^ stream isEndOfLine
+]
+
+{ #category : #'stream mimicry' }
 PPContext >> isStartOfLine [
 	^ stream isStartOfLine
 ]

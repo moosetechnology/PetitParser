@@ -1,7 +1,7 @@
 Class {
 	#name : #PPPredicateObjectParser,
 	#superclass : #PPPredicateParser,
-	#category : 'PetitParser-Parsers'
+	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'factory-objects' }
@@ -60,6 +60,12 @@ PPPredicateObjectParser class >> cr [
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> digit [
 	^ self on: (PPCharSetPredicate on: [ :char | char isDigit ]) message: 'digit expected'
+]
+
+{ #category : #'factory-objects' }
+PPPredicateObjectParser class >> endOfLine [
+	
+	^ PPEndOfLineParser new.
 ]
 
 { #category : #'factory-objects' }
@@ -127,7 +133,7 @@ PPPredicateObjectParser class >> space [
 { #category : #'instance creation' }
 PPPredicateObjectParser class >> startOfLine [
 	
-	^ PPStartOfLine new.
+	^ PPStartOfLineParser new.
 ]
 
 { #category : #'factory-chars' }

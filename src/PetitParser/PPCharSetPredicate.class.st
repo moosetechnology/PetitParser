@@ -5,7 +5,7 @@ Class {
 		'block',
 		'classification'
 	],
-	#category : 'PetitParser-Tools'
+	#category : #'PetitParser-Tools'
 }
 
 { #category : #'instance creation' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'dependencies'
 	],
-	#category : 'PetitParser-Tools'
+	#category : #'PetitParser-Tools'
 }
 
 { #category : #accessing }
