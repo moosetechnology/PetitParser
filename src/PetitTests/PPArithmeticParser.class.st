@@ -11,7 +11,7 @@ Class {
 		'parentheses',
 		'number'
 	],
-	#category : 'PetitTests-Examples'
+	#category : #'PetitTests-Examples'
 }
 
 { #category : #grammar }

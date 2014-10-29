@@ -1,7 +1,7 @@
 Class {
 	#name : #PPExtensionTest,
 	#superclass : #PPAbstractParserTest,
-	#category : 'PetitTests-Tests'
+	#category : #'PetitTests-Tests'
 }
 
 { #category : #'testing-parser' }

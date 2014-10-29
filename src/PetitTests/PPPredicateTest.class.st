@@ -1,7 +1,7 @@
 Class {
 	#name : #PPPredicateTest,
 	#superclass : #PPAbstractParserTest,
-	#category : 'PetitTests-Tests'
+	#category : #'PetitTests-Tests'
 }
 
 { #category : #utilities }
@@ -121,6 +121,32 @@ PPPredicateTest >> testDigit [
 	self assert: parser parse: '9' to: $9.
 	self assert: parser fail: ''.
 	self assert: parser fail: 'a'
+]
+
+{ #category : #'testing-chars' }
+PPPredicateTest >> testEndOfLine [
+	| parser |
+	parser := (#letter asParser / #blank asParser) star, #endOfLine asParser.
+	
+	self assert: parser parse: 'lorem ipsum'.
+	
+	parser := #any asParser, #endOfLine asParser, #any asParser star.
+	self assert: parser parse: 'a', String cr, 'b'.
+	self assert: parser fail: String crlf.
+	self assert: parser fail: 'lorem ipsum'.
+	
+	parser := #endOfLine asParser, #any asParser, #endOfLine asParser negate star, #endOfLine asParser.
+	self assert: parser parse: String cr, 'lorem ipsum'.
+	self assert: parser parse: String lf, 'lorem ipsum'.	
+	self assert: parser parse: String crlf, 'lorem ipsum'.	
+	
+	self assert: parser parse: String crlf.
+	self assert: parser parse: String cr.
+	self assert: parser parse: String lf.
+	
+	parser := #endOfLine asParser negate star, #endOfLine asParser, #any asParser star.
+	self assert: parser parse: String crlf, 'lorem ipsum'.
+	self assert: parser parse: String crlf.
 ]
 
 { #category : #'testing-objects' }

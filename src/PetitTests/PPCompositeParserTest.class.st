@@ -5,7 +5,7 @@ Class {
 		'parser',
 		'result'
 	],
-	#category : 'PetitTests-Core'
+	#category : #'PetitTests-Core'
 }
 
 { #category : #testing }
