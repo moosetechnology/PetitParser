@@ -7,7 +7,7 @@ Class {
 		'application',
 		'variable'
 	],
-	#category : #'PetitTests-Examples'
+	#category : 'PetitTests-Examples'
 }
 
 { #category : #'curch-booleans' }
