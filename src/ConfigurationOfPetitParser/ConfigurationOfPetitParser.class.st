@@ -323,8 +323,8 @@ ConfigurationOfPetitParser >> baseline16: spec [
 				spec requires: #('PetitParser') ];
 			package: 'Factorial-Language' with: [
 				spec requires: #('PetitParser') ].
-		spec group: 'Core' with: #( 'PetitParser' 'PetitAnalyzer' ).
-		spec group: 'Tests' with: #( 'PetitTests' 'PetitAnalyzer' 'PetitIslands' ) ].
+		spec group: 'Core' with: #( 'PetitParser').
+		spec group: 'Tests' with: #( 'PetitTests') ].
 
 	spec for: #( 'squeakCommon' )  do: [
 		spec project: 'Glamour' with: [
