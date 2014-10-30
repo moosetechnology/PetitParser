@@ -2,10 +2,9 @@ Class {
 	#name : #PPSentinel,
 	#superclass : #PPEpsilonParser,
 	#classInstVars : [
-		'current',
 		'instance'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : 'PetitAnalyzer-Core'
 }
 
 { #category : #'instance creation' }
