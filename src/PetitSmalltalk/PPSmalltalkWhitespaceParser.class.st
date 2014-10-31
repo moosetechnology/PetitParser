@@ -15,6 +15,11 @@ PPSmalltalkWhitespaceParser >> isNullable [
 ]
 
 { #category : #parsing }
+PPSmalltalkWhitespaceParser >> name [
+	^ 'smalltalk_ws'
+]
+
+{ #category : #parsing }
 PPSmalltalkWhitespaceParser >> parseOn: aPPContext [
 	[ [aPPContext atEnd not and: [ aPPContext uncheckedPeek isSeparator ] ]
 		whileTrue: [ aPPContext next ].
