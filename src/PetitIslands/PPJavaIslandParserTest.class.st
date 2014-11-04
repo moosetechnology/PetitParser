@@ -1,5 +1,5 @@
 Class {
-	#name : #JavaParserTest,
+	#name : #PPJavaIslandParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
 		'debugResult',
@@ -9,17 +9,17 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-JavaParserTest class >> classJavaLangClass [
+PPJavaIslandParserTest class >> classJavaLangClass [
 	^ self new classJavaLangClass
 ]
 
 { #category : #'as yet unclassified' }
-JavaParserTest class >> classJavaLangObject [
+PPJavaIslandParserTest class >> classJavaLangObject [
 	^ self new classJavaLangObject
 ]
 
 { #category : #src }
-JavaParserTest >> classJavaIoInputStream [
+PPJavaIslandParserTest >> classJavaIoInputStream [
  ^
 '
 /*
@@ -376,7 +376,7 @@ public abstract class InputStream implements Closeable {
 ]
 
 { #category : #src }
-JavaParserTest >> classJavaLangClass [
+PPJavaIslandParserTest >> classJavaLangClass [
  ^
 '/*
  * Copyright (c) 1994, 2006, Oracle and/or its affiliates. All rights reserved.
@@ -3502,7 +3502,7 @@ public final
 ]
 
 { #category : #src }
-JavaParserTest >> classJavaLangObject [
+PPJavaIslandParserTest >> classJavaLangObject [
  ^
 '/*
  * Copyright (c) 1994, 2006, Oracle and/or its affiliates. All rights reserved.
@@ -4060,7 +4060,7 @@ public class Object {
 ]
 
 { #category : #'as yet unclassified' }
-JavaParserTest >> context [
+PPJavaIslandParserTest >> context [
 	context ifNil: [ 
 		context := PPContext new.
 	].
@@ -4070,7 +4070,7 @@ JavaParserTest >> context [
 ]
 
 { #category : #'as yet unclassified' }
-JavaParserTest >> createContext: anInput [
+PPJavaIslandParserTest >> createContext: anInput [
 	| context |
 	context := PPContext on: self parserInstance stream: anInput asPetitStream.
 	self parserInstance updateContext: context.
@@ -4081,7 +4081,7 @@ JavaParserTest >> createContext: anInput [
 ]
 
 { #category : #src }
-JavaParserTest >> file1 [
+PPJavaIslandParserTest >> file1 [
  ^
 'package org.test;
 
@@ -4094,7 +4094,7 @@ public class Foo
 ]
 
 { #category : #src }
-JavaParserTest >> file2 [
+PPJavaIslandParserTest >> file2 [
  ^
 '
 public class Foo
@@ -4106,7 +4106,7 @@ public class Foo
 ]
 
 { #category : #src }
-JavaParserTest >> file3 [
+PPJavaIslandParserTest >> file3 [
  ^
 'package org.test;
 
@@ -4133,7 +4133,7 @@ public class Foo<Bar> extends Zorg
 ]
 
 { #category : #src }
-JavaParserTest >> file4 [
+PPJavaIslandParserTest >> file4 [
  ^
 'package java.lang;
 
@@ -4209,7 +4209,7 @@ public final
 ]
 
 { #category : #src }
-JavaParserTest >> file5 [
+PPJavaIslandParserTest >> file5 [
  ^
 'package java.lang;
 
@@ -4249,7 +4249,7 @@ public final class Foo implements java.io.Serializable {
 ]
 
 { #category : #src }
-JavaParserTest >> file6 [
+PPJavaIslandParserTest >> file6 [
  ^
 '/*
  * Copyright (c) 1994, 2006, Oracle and/or its affiliates. All rights reserved.
@@ -5206,7 +5206,7 @@ public final
 ]
 
 { #category : #src }
-JavaParserTest >> file7 [
+PPJavaIslandParserTest >> file7 [
  ^
 '
 
@@ -5253,25 +5253,25 @@ public final
 ]
 
 { #category : #'as yet unclassified' }
-JavaParserTest >> parserClass [
-	^ JavaParser
+PPJavaIslandParserTest >> parserClass [
+	^ PPJavaIslandParser
 ]
 
 { #category : #'as yet unclassified' }
-JavaParserTest >> setUp [
+PPJavaIslandParserTest >> setUp [
 	super setUp.
 	context := nil.
 ]
 
 { #category : #tests }
-JavaParserTest >> test1 [
+PPJavaIslandParserTest >> test1 [
 	self parse: self file1.
 	self assert: result first = 'Foo'.
 	self assert: result second size = 0.
 ]
 
 { #category : #tests }
-JavaParserTest >> test2 [
+PPJavaIslandParserTest >> test2 [
 	self parse: self file2.
 
 	self assert: result first = 'Foo'.
@@ -5282,7 +5282,7 @@ JavaParserTest >> test2 [
 ]
 
 { #category : #tests }
-JavaParserTest >> test3 [
+PPJavaIslandParserTest >> test3 [
 	self parse: self file3.
 
 	self assert: result first = 'Foo'.
@@ -5293,7 +5293,7 @@ JavaParserTest >> test3 [
 ]
 
 { #category : #tests }
-JavaParserTest >> test4 [
+PPJavaIslandParserTest >> test4 [
 	self parse: self file4.
 
 	self assert: result first = 'Class'.
@@ -5304,7 +5304,7 @@ JavaParserTest >> test4 [
 ]
 
 { #category : #tests }
-JavaParserTest >> test5 [
+PPJavaIslandParserTest >> test5 [
 	self parse: self file5.
 
 	self assert: result first = 'Foo'.
@@ -5315,7 +5315,7 @@ JavaParserTest >> test5 [
 ]
 
 { #category : #tests }
-JavaParserTest >> test6 [
+PPJavaIslandParserTest >> test6 [
 	self parse: self file6.
 
 	self assert: result first = 'Class'.
@@ -5330,7 +5330,7 @@ JavaParserTest >> test6 [
 ]
 
 { #category : #tests }
-JavaParserTest >> test7 [
+PPJavaIslandParserTest >> test7 [
 	self parse: self file7.
 
 	self assert: result first = 'Class'.
@@ -5343,28 +5343,28 @@ JavaParserTest >> test7 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testBlock [
+PPJavaIslandParserTest >> testBlock [
 	self parse: '{}' rule: #block.
 	
 	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
-JavaParserTest >> testBlock2 [
+PPJavaIslandParserTest >> testBlock2 [
 	self parse: '{ }' rule: #block.
 	
 	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
-JavaParserTest >> testBlock3 [
+PPJavaIslandParserTest >> testBlock3 [
 	self parse: '{ {}  }' rule: #block.
 	
 	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
-JavaParserTest >> testClass1 [
+PPJavaIslandParserTest >> testClass1 [
 	self parse: 'private final class Foo 
 		{
 			// I am only empty class
@@ -5375,7 +5375,7 @@ JavaParserTest >> testClass1 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClass2 [
+PPJavaIslandParserTest >> testClass2 [
 	self parse: 'public class Foo<Bar> extends Zorg implements Qwark, Bark
 		{
 			// I am only empty class
@@ -5386,7 +5386,7 @@ JavaParserTest >> testClass2 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClass3 [
+PPJavaIslandParserTest >> testClass3 [
 	self parse: 'private class Bar<T> extends Zorg implements Qwark, Bark
 		{
 			public static void methodA() { /* is empty */ }
@@ -5398,7 +5398,7 @@ JavaParserTest >> testClass3 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody1 [
+PPJavaIslandParserTest >> testClassBody1 [
 	self parse: '{
 		// some comment
 		public void methodA() 
@@ -5411,7 +5411,7 @@ JavaParserTest >> testClassBody1 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody10 [
+PPJavaIslandParserTest >> testClassBody10 [
 	self parse: '{
     private static final int SKIP_BUFFER_SIZE = 2048;
    	 public int read(byte b[]) throws IOException {
@@ -5426,7 +5426,7 @@ JavaParserTest >> testClassBody10 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody2 [
+PPJavaIslandParserTest >> testClassBody2 [
 	self parse: '{
 		// some comment
 		public void methodA() { 
@@ -5444,7 +5444,7 @@ JavaParserTest >> testClassBody2 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody3 [
+PPJavaIslandParserTest >> testClassBody3 [
 	self parse: '{
 		// some comment
 	
@@ -5467,7 +5467,7 @@ JavaParserTest >> testClassBody3 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody4 [
+PPJavaIslandParserTest >> testClassBody4 [
 	self parse: '{
 		public void methodA() {
 			System.out.println();
@@ -5486,7 +5486,7 @@ JavaParserTest >> testClassBody4 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody5 [
+PPJavaIslandParserTest >> testClassBody5 [
 	self parse: '{
 	// I am only empty class
 }' 
@@ -5497,7 +5497,7 @@ JavaParserTest >> testClassBody5 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody6 [
+PPJavaIslandParserTest >> testClassBody6 [
 	self parse: '{
 		static { int i; }
 }' 
@@ -5509,7 +5509,7 @@ JavaParserTest >> testClassBody6 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody7 [
+PPJavaIslandParserTest >> testClassBody7 [
 	self parse: '{
 		static { int i; }
 		
@@ -5523,7 +5523,7 @@ JavaParserTest >> testClassBody7 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody8 [
+PPJavaIslandParserTest >> testClassBody8 [
 	self parse: '{
 		private static final int ANNOTATION= 0x00002000;
 		static { int i; }
@@ -5539,7 +5539,7 @@ JavaParserTest >> testClassBody8 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassBody9 [
+PPJavaIslandParserTest >> testClassBody9 [
 	self parse: '{
 	 private static final int ANNOTATION= 0x00002000;
    
@@ -5563,12 +5563,12 @@ JavaParserTest >> testClassBody9 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testClassDef1 [
+PPJavaIslandParserTest >> testClassDef1 [
 	self parse: 'public class Foo' rule: #classDef
 ]
 
 { #category : #tests }
-JavaParserTest >> testComment [
+PPJavaIslandParserTest >> testComment [
 	| input res |
 	input := '/* hello there */'.
 	res := self parserInstance comment end parse: input.
@@ -5576,7 +5576,7 @@ JavaParserTest >> testComment [
 ]
 
 { #category : #tests }
-JavaParserTest >> testComment02 [
+PPJavaIslandParserTest >> testComment02 [
 	| input res |
 	input := '/**
      * <p> If the {@code name} is "{@code <init>};"or "{@code <clinit>}" a
@@ -5587,7 +5587,7 @@ JavaParserTest >> testComment02 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testJavaIoInputStream [
+PPJavaIslandParserTest >> testJavaIoInputStream [
 	self parse: self classJavaIoInputStream.
 
 	self assert: result first = 'InputStream'.
@@ -5603,7 +5603,7 @@ JavaParserTest >> testJavaIoInputStream [
 ]
 
 { #category : #tests }
-JavaParserTest >> testJavaLangClass [
+PPJavaIslandParserTest >> testJavaLangClass [
 	self parse: self classJavaLangClass.
 
 	self assert: result first = 'Class'.
@@ -5618,7 +5618,7 @@ JavaParserTest >> testJavaLangClass [
 ]
 
 { #category : #tests }
-JavaParserTest >> testJavaLangObject [
+PPJavaIslandParserTest >> testJavaLangObject [
 	self parse: self classJavaLangObject.
 
 	self assert: result first = 'Object'.
@@ -5634,21 +5634,21 @@ JavaParserTest >> testJavaLangObject [
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod1 [
+PPJavaIslandParserTest >> testMethod1 [
 	self parse: 'void foo() { }' rule: #methodDef.
 	
 	self assert: result = 'foo'.
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod2 [
+PPJavaIslandParserTest >> testMethod2 [
 	self parse: 'Foo m() { /** method body */ }' rule: #methodDef.
 	
 	self assert: result = 'm'.
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod3 [
+PPJavaIslandParserTest >> testMethod3 [
 	self parse: 'Bar methodB(Some argument, and another)
 		{
 			return new Bar();
@@ -5659,7 +5659,7 @@ JavaParserTest >> testMethod3 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod4 [
+PPJavaIslandParserTest >> testMethod4 [
 	self parse: 'void finalize() throws Throwable { }'
 	rule: #methodDef.
 	
@@ -5667,7 +5667,7 @@ JavaParserTest >> testMethod4 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod5 [
+PPJavaIslandParserTest >> testMethod5 [
 	self parse: 'public void methodA() 
 		{ 
 		}' 
@@ -5677,7 +5677,7 @@ JavaParserTest >> testMethod5 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod6 [
+PPJavaIslandParserTest >> testMethod6 [
 	self fail: 'private InnerClass {  }
 	
 	   public void methodA() 
@@ -5688,7 +5688,7 @@ JavaParserTest >> testMethod6 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testMethod7 [
+PPJavaIslandParserTest >> testMethod7 [
 	self parse: 'public int read(byte b) throws IOException {
 		return b;
     }' 
@@ -5699,7 +5699,7 @@ JavaParserTest >> testMethod7 [
 ]
 
 { #category : #tests }
-JavaParserTest >> testSingleLineComment [
+PPJavaIslandParserTest >> testSingleLineComment [
 	| input res |
 	input := '// hello there
 '.

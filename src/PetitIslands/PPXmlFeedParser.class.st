@@ -1,5 +1,5 @@
 "
-A XmlFeedParser is Parser of a fake shop feed. Shop feed is a XML file with information about shop products. Shop feed can be malformed (for any reason) the parser will recover from malformed item and will continue on the next valid item.
+A XmlFeedParser is Parser of a fake shop feed. Shop feed is a XML file with information about shop products. Shop feed can be malformed (for any reason) the parser will recover from malformed item (see rule shoplistContent) and will continue on the next valid item.
 
 Instance Variables
 	closeItem:		<Object>
@@ -61,7 +61,7 @@ stringValue
 
 "
 Class {
-	#name : #XmlFeedParser,
+	#name : #PPXmlFeedParser,
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'item',
@@ -79,17 +79,17 @@ Class {
 }
 
 { #category : #tags }
-XmlFeedParser >> closeItem [
+PPXmlFeedParser >> closeItem [
 	^ '</' asParser, 'item' asParser trim, '>' asParser
 ]
 
 { #category : #tags }
-XmlFeedParser >> closeShoplist [
+PPXmlFeedParser >> closeShoplist [
 	^ '</' asParser, 'shoplist' asParser trim, '>' asParser
 ]
 
 { #category : #xmlSupport }
-XmlFeedParser >> elementsToDictionaryBlock [
+PPXmlFeedParser >> elementsToDictionaryBlock [
  	^ [ :elements | | d | 
 		d := Dictionary new.
 		elements do: [ :e | d at: e first asSymbol put: e second ].
@@ -98,37 +98,37 @@ XmlFeedParser >> elementsToDictionaryBlock [
 ]
 
 { #category : #grammar }
-XmlFeedParser >> item [
+PPXmlFeedParser >> item [
 	^ (openItem, itemContent trim, closeItem) trim ==> #second
 ]
 
 { #category : #grammar }
-XmlFeedParser >> itemContent [
+PPXmlFeedParser >> itemContent [
 	^ (simpleElement trim star) ==> self elementsToDictionaryBlock
 ]
 
 { #category : #tags }
-XmlFeedParser >> openItem [
+PPXmlFeedParser >> openItem [
 	^ '<' asParser, 'item' asParser trim, '>' asParser
 ]
 
 { #category : #tags }
-XmlFeedParser >> openShoplist [
+PPXmlFeedParser >> openShoplist [
 	^ '<' asParser, 'shoplist' asParser trim, '>' asParser
 ]
 
 { #category : #grammar }
-XmlFeedParser >> shoplist [
+PPXmlFeedParser >> shoplist [
 	^ (openShoplist, shoplistContent, closeShoplist) trim ==> #second
 ]
 
 { #category : #grammar }
-XmlFeedParser >> shoplistContent [
+PPXmlFeedParser >> shoplistContent [
 	^ (item island ==> #second) star
 ]
 
 { #category : #xmlSupport }
-XmlFeedParser >> simpleElement [
+PPXmlFeedParser >> simpleElement [
 	^ (
 		(('<' asParser, stringValue trim, '>' asParser) ==> #second),
 		stringValue,
@@ -141,11 +141,11 @@ XmlFeedParser >> simpleElement [
 ]
 
 { #category : #grammar }
-XmlFeedParser >> start [
+PPXmlFeedParser >> start [
 	^ shoplist
 ]
 
 { #category : #grammar }
-XmlFeedParser >> stringValue [
+PPXmlFeedParser >> stringValue [
 	^ (#letter asParser / #digit asParser) star flatten trim
 ]

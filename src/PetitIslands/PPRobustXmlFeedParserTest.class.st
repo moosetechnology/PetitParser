@@ -1,5 +1,5 @@
 Class {
-	#name : #RobustXmlFeedParserTest,
+	#name : #PPRobustXmlFeedParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
 		'debugResult'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-RobustXmlFeedParserTest >> feed03 [
+PPRobustXmlFeedParserTest >> feed03 [
 ^'
 <shoplist>
 <name>ABC Shop</name>
@@ -39,12 +39,12 @@ RobustXmlFeedParserTest >> feed03 [
 ]
 
 { #category : #'as yet unclassified' }
-RobustXmlFeedParserTest >> parserClass [
-	^ RobustXmlFeedParser 
+PPRobustXmlFeedParserTest >> parserClass [
+	^ PPRobustXmlFeedParser 
 ]
 
 { #category : #'as yet unclassified' }
-RobustXmlFeedParserTest >> testXmlFeed03 [
+PPRobustXmlFeedParserTest >> testXmlFeed03 [
 	self parse: self feed03.
 	
 	self assert: result size = 3.

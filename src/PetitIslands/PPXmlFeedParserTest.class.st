@@ -1,5 +1,5 @@
 Class {
-	#name : #XmlFeedParserTest,
+	#name : #PPXmlFeedParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
 		'debugResult'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> debug: aString rule: aSymbol [
+PPXmlFeedParserTest >> debug: aString rule: aSymbol [
 	| production |
 	production := self parserInstanceFor: aSymbol.
 	debugResult := production end debug: aString.
@@ -20,7 +20,7 @@ XmlFeedParserTest >> debug: aString rule: aSymbol [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> feed01 [
+PPXmlFeedParserTest >> feed01 [
 ^'
 <shoplist>
 <name>ABC Shop</name>
@@ -35,7 +35,7 @@ XmlFeedParserTest >> feed01 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> feed02 [
+PPXmlFeedParserTest >> feed02 [
 ^'
 <shoplist>
 <name>ABC Shop</name>
@@ -58,7 +58,7 @@ XmlFeedParserTest >> feed02 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> feed03 [
+PPXmlFeedParserTest >> feed03 [
 ^'
 <shoplist>
 <name>ABC Shop</name>
@@ -89,7 +89,7 @@ XmlFeedParserTest >> feed03 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> parse: aString rule: aSymbol to: anObject [
+PPXmlFeedParserTest >> parse: aString rule: aSymbol to: anObject [
 	| production |
 	production := self parserInstanceFor: aSymbol.
 	result := production end parse: aString.
@@ -102,12 +102,12 @@ XmlFeedParserTest >> parse: aString rule: aSymbol to: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> parserClass [
-	^ XmlFeedParser
+PPXmlFeedParserTest >> parserClass [
+	^ PPXmlFeedParser
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testItem [
+PPXmlFeedParserTest >> testItem [
 	self testItem01.
 	self testItem02.
 	self testItem03.
@@ -115,7 +115,7 @@ XmlFeedParserTest >> testItem [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testItem01 [
+PPXmlFeedParserTest >> testItem01 [
 	self debug: '
 	<item>
 		<name>abc</name>
@@ -127,7 +127,7 @@ XmlFeedParserTest >> testItem01 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testItem02 [
+PPXmlFeedParserTest >> testItem02 [
 	self debug: '
 	<item>
 		<name>abc</name>
@@ -141,7 +141,7 @@ XmlFeedParserTest >> testItem02 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testItem03 [
+PPXmlFeedParserTest >> testItem03 [
 	self debug: '
 	<item>
 		<price>123</price>
@@ -155,14 +155,14 @@ XmlFeedParserTest >> testItem03 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testShoplist [
+PPXmlFeedParserTest >> testShoplist [
 	self testShoplist01.
 	self testShoplist02.
 	self testShoplist03.
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testShoplist01 [
+PPXmlFeedParserTest >> testShoplist01 [
 	self debug: '
 <shoplist>
 	<item>
@@ -176,7 +176,7 @@ XmlFeedParserTest >> testShoplist01 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testShoplist02 [
+PPXmlFeedParserTest >> testShoplist02 [
 	self debug: '
 <shoplist>
 	<name>xyz</name>
@@ -192,7 +192,7 @@ XmlFeedParserTest >> testShoplist02 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testShoplist03 [
+PPXmlFeedParserTest >> testShoplist03 [
 	self debug: '
 <shoplist>
 	<name>xyz</name>
@@ -212,7 +212,7 @@ XmlFeedParserTest >> testShoplist03 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testSimpleElement [
+PPXmlFeedParserTest >> testSimpleElement [
 	self parse: '<a>b</a>' rule: #simpleElement to: #('a' 'b').	
 	self parse: '<abc> def </ abc>' rule: #simpleElement to: #('abc' 'def').	
 		
@@ -221,14 +221,14 @@ XmlFeedParserTest >> testSimpleElement [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testStringValue [
+PPXmlFeedParserTest >> testStringValue [
 	self parse: 'abc' rule: #stringValue to: 'abc'.	
 	self parse: ' def ' rule: #stringValue to: 'def'.
 	
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testXmlFeed01 [
+PPXmlFeedParserTest >> testXmlFeed01 [
 	self parse: self feed01.
 	
 	self assert: result size = 1.
@@ -239,7 +239,7 @@ XmlFeedParserTest >> testXmlFeed01 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testXmlFeed02 [
+PPXmlFeedParserTest >> testXmlFeed02 [
 	self parse: self feed02.
 	
 	self assert: result size = 2.
@@ -254,7 +254,7 @@ XmlFeedParserTest >> testXmlFeed02 [
 ]
 
 { #category : #'as yet unclassified' }
-XmlFeedParserTest >> testXmlFeed03 [
+PPXmlFeedParserTest >> testXmlFeed03 [
 	self parse: self feed03.
 	
 	self assert: result size = 2.
