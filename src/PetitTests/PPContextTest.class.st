@@ -75,6 +75,24 @@ PPContextTest >> testMemoization2 [
 ]
 
 { #category : #tests }
+PPContextTest >> testMemoization3 [
+	| stream memento memento2 collection |
+	stream := 'abc' asPetitStream.
+	context := context stream: stream.
+	collection := OrderedCollection new.
+
+	memento := context remember.
+	context propertyAt: #foo put: collection.
+	memento2 := context remember.
+	
+	context restore: memento.
+	self assert: (context hasProperty: #foo) not.
+	
+	context restore: memento2.
+	self assert: (context hasProperty: #foo).
+]
+
+{ #category : #tests }
 PPContextTest >> testPutGlobals [
 	self assert: (context hasGlobal: #foo) not.
 	self assert: (context hasGlobal: #bar) not.	
