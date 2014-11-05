@@ -8,18 +8,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PPXmlFeedParserTest >> debug: aString rule: aSymbol [
-	| production |
-	production := self parserInstanceFor: aSymbol.
-	debugResult := production end debug: aString.
-	result := debugResult children first result.
-	self
-		deny: result isPetitFailure
-		description: 'Unable to parse ' , aString printString.
-	^ result
-]
-
-{ #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> feed01 [
 ^'
 <shoplist>
@@ -107,16 +95,8 @@ PPXmlFeedParserTest >> parserClass [
 ]
 
 { #category : #'as yet unclassified' }
-PPXmlFeedParserTest >> testItem [
-	self testItem01.
-	self testItem02.
-	self testItem03.
-	
-]
-
-{ #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testItem01 [
-	self debug: '
+	self parse: '
 	<item>
 		<name>abc</name>
 	</item>
@@ -128,7 +108,7 @@ PPXmlFeedParserTest >> testItem01 [
 
 { #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testItem02 [
-	self debug: '
+	self parse: '
 	<item>
 		<name>abc</name>
 		<price>123</price>
@@ -142,7 +122,7 @@ PPXmlFeedParserTest >> testItem02 [
 
 { #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testItem03 [
-	self debug: '
+	self parse: '
 	<item>
 		<price>123</price>
 		<name>abc</name>
@@ -163,7 +143,7 @@ PPXmlFeedParserTest >> testShoplist [
 
 { #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testShoplist01 [
-	self debug: '
+	self parse: '
 <shoplist>
 	<item>
 		<name>abc</name>
@@ -177,7 +157,7 @@ PPXmlFeedParserTest >> testShoplist01 [
 
 { #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testShoplist02 [
-	self debug: '
+	self parse: '
 <shoplist>
 	<name>xyz</name>
 	<item>
@@ -193,7 +173,7 @@ PPXmlFeedParserTest >> testShoplist02 [
 
 { #category : #'as yet unclassified' }
 PPXmlFeedParserTest >> testShoplist03 [
-	self debug: '
+	self parse: '
 <shoplist>
 	<name>xyz</name>
 	<item>
