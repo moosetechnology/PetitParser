@@ -224,6 +224,7 @@ FirstFollowNextTests >> testFirstNot [
 	
 	self assert: (p parse: 'b') isPetitFailure not.
 	
+	self assert: (self first: p) size: 1.
 	self assert: (self first: p) noneSatisfy: [:each | each matches: 'a' ].
 	self assert: (self first: p) anySatisfy:  [:each | each matches: 'b' ].
 	self assert: (self first: p) anySatisfy: [:each | each matches: 'c' ].
@@ -251,6 +252,39 @@ FirstFollowNextTests >> testFirstRepeat1 [
 
 	self assert: first anyMatches: 'a'.
 	self assert: first anyMatches: ''.	
+]
+
+{ #category : #'test first' }
+FirstFollowNextTests >> testFirstRepeat2 [
+	| p first |
+	p := 'a' asParser star, 'b' asParser.
+	
+	first := self first: p.
+
+	self assert: first anyMatches: 'a'.
+	self assert: first anyMatches: 'b'.
+	self assert: first noneMatches: ''	
+]
+
+{ #category : #'test first' }
+FirstFollowNextTests >> testFirstRepeat3 [
+	| p first |
+	p := 'a' asParser negate, 'a' asParser.
+	
+	first := self first: p.
+
+	self assert: first noneMatches: 'a'.
+]
+
+{ #category : #'test first' }
+FirstFollowNextTests >> testFirstRepeat4 [
+	| p first |
+	p := 'a' asParser negate star, 'b' asParser.
+	
+	first := self first: p.
+
+	self assert: first size: 2.
+	self assert: first noneMatches: 'a'.
 ]
 
 { #category : #'test first' }
