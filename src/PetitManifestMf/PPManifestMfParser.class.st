@@ -67,5 +67,5 @@ PPManifestMfParser >> start [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> valueSeparator [
-	^ $, asParser token
+	^ $, asParser token trim
 ]

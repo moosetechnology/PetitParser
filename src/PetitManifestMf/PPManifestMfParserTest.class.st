@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PPManifestMfParserTest >> expectedFailures [
-	^ #(testDoublePairsWithCollection testMultilineDoublePairsWithCollection testMultilineSinglePairWithCollection testSinglePairWithCollection)
-]
-
-{ #category : #'as yet unclassified' }
 PPManifestMfParserTest >> parserClass [
 	^ PPManifestMfParser
 ]
@@ -18,7 +13,7 @@ PPManifestMfParserTest >> parserClass [
 PPManifestMfParserTest >> testDoublePairsWithCollection [
 	self 
 		assert: 'Header: value1,value2
-Header2: value3, value4' 
+Header2: value3, value4'
 		is: {'Header'->#('value1' 'value2') . 'Header2'->#('value3' 'value4')}
 ]
 
