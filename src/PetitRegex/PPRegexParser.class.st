@@ -162,21 +162,20 @@ PPRegexParser >> characterAtom [
 
 { #category : #'grammar-atoms' }
 PPRegexParser >> characterGroup [
-	^ [ :stream | stream position ] asParser , $[ asParser , $^ asParser optional , $- asParser optional , characterSet star , $- asParser optional , $] asParser map: [ :pos :open :negate :opend :parsers :closed :close |
+	^  $[ asParser , $^ asParser optional, $] asParser optional,  $- asParser optional , characterSet star , $- asParser optional , $] asParser 
+	map: [ :open :negate :closeSquareBracket :opend :parsers :closed :close |
 		| result |
 		result := parsers
 			inject: PPChoiceParser new
 			into: [ :each :other | each / other ].
 		(opend notNil or: [ closed notNil ])
 			ifTrue: [ result := $- asParser / result ].
-		result children isEmpty
-			ifTrue: [ PPFailure message: 'Empty character set' context: nil at: pos ]
-			ifFalse: [
-				result children size = 1
-					ifTrue: [ result := result children first ]. 
-				negate isNil
-					ifTrue: [ result ]
-					ifFalse: [ result negate ] ] ]
+		closeSquareBracket notNil ifTrue: [ result := $] asParser / result ].
+		result children size = 1
+			ifTrue: [ result := result children first ]. 
+		negate isNil
+			ifTrue: [ result ]
+			ifFalse: [ result negate ] ] 
 ]
 
 { #category : #'grammar-characters' }
@@ -280,7 +279,7 @@ PPRegexParser >> rangePieceSpec [
 
 { #category : #grammar }
 PPRegexParser >> regex [
-	^ ((branch separatedBy: $| asParser) foldLeft: [ :a :op :b | a / b ])
+	^ ((branch separatedBy: $| asParser) foldLeft: [ :a :op :b | a // b ])
 	/ (PPEpsilonParser new ==> [ :r | PPEpsilonParser new ])
 ]
 
@@ -288,7 +287,7 @@ PPRegexParser >> regex [
 PPRegexParser >> resolveStubs: aParser [
 	"In this post-processing step we need to fix the quantifiers."
 	
-	aParser followSets keysAndValuesDo: [ :start :follow |
+	aParser nextSets keysAndValuesDo: [ :start :follow |
 		(start isKindOf: PPLimitedRepeatingParser) ifTrue: [
 			| limit |
 			limit := follow collect: [ :each | 
@@ -297,7 +296,18 @@ PPRegexParser >> resolveStubs: aParser [
 					ifFalse: [ each ] ].
 			start setLimit: (limit size = 1
 				ifTrue: [ limit anyOne ]
-				ifFalse: [ PPChoiceParser withAll: limit ]) ] ].
+				ifFalse: [ PPChoiceParser withAll: limit ]) ].
+			
+		(start isKindOf: PPLimitedChoiceParser) ifTrue: [ 
+			| limit |
+			limit := follow collect: [ :each | 
+				each isNil
+					ifTrue: [ nil asParser end ]
+					ifFalse: [ each ] ].
+			start limit: (limit size = 1
+				ifTrue: [ limit anyOne and ]
+				ifFalse: [ (PPChoiceParser withAll: limit) and ]) ].
+	].
 	^ aParser
 ]
 

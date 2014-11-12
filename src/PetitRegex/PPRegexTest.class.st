@@ -19,10 +19,7 @@ PPRegexTest >> compileRegex: aString [
 
 { #category : #'testing-henry' }
 PPRegexTest >> henryReadme [
-	self error: 'The tests in this category are based on the ones in Henry Spencer''s regexp.c package.
-The parser currently does not pass all these tests. The failing ones are marked with <expectedFailure>
-'
-	
+	self error: 'The tests in this category are based on the ones in Henry Spencer''s regexp.c package.'
 ]
 
 { #category : #accessing }
@@ -499,7 +496,6 @@ PPRegexTest >> testHenry044 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry045 [
-	<expectedFailure>
 	self runRegex: #('a[]]b'
 		'a]b' true (1 'a]b'))
 ]
@@ -520,7 +516,6 @@ PPRegexTest >> testHenry047 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry048 [
-	<expectedFailure>
 	self runRegex: #('a[^]b]c'
 		'a]c' false nil
 		'adc' true (1 'adc'))
@@ -762,7 +757,6 @@ PPRegexTest >> testHenry086 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry087 [
-	<expectedFailure>
 	self runRegex: #('a*?' nil)
 ]
 
@@ -920,7 +914,6 @@ PPRegexTest >> testHenry114 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry115 [
-	<expectedFailure>
 	self runRegex: #('(ab|ab*)bc' 'abc' true (1 'abc' 2 'a'))
 	
 ]
@@ -945,14 +938,12 @@ PPRegexTest >> testHenry118 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry119 [
-	<expectedFailure>
 	self runRegex: #('a([bc]*)(c+d)' 'abcd' true (1 'abcd' 2 'b' 3 'cd'))
 	
 ]
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry120 [
-	<expectedFailure>
 	self runRegex: #('a[bcd]*dcdcde' 'adcdcde' true (1 'adcdcde'))
 	
 ]
