@@ -31,6 +31,16 @@ PPParser >> / aParser [
 	^ PPChoiceParser with: self with: aParser
 ]
 
+{ #category : #operators }
+PPParser >> // aParser [ 
+	"
+		Answer a new parser that parses the receiver, if the receiver fails try with aParser (ordered-choice).
+		If the receiver passes, limit must pass as well.
+	"
+	
+	^ PPLimitedChoiceParser with: self with: aParser
+]
+
 { #category : #'operators-mapping' }
 PPParser >> ==> aBlock [
 	"Answer a new parser that performs aBlock as action handler on success."

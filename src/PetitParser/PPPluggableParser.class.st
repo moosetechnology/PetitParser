@@ -12,6 +12,11 @@ PPPluggableParser class >> on: aBlock [
 	^ self new initializeOn: aBlock
 ]
 
+{ #category : #parsing }
+PPPluggableParser >> acceptsEpsilon [
+	^ false
+]
+
 { #category : #accessing }
 PPPluggableParser >> block [
 	"Answer the pluggable block."

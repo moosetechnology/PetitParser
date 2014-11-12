@@ -19,7 +19,8 @@ PPListParser class >> with: aFirstParser with: aSecondParser [
 
 { #category : #'instance creation' }
 PPListParser class >> withAll: aCollection [
-	^ self basicNew setParsers: aCollection
+	^ self basicNew initialize;
+		setParsers: aCollection
 ]
 
 { #category : #accessing }
