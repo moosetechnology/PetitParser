@@ -8,24 +8,36 @@ PPSequenceParser >> acceptsEpsilonOpenSet: set [
 
 { #category : #'*petitislands' }
 PPSequenceParser >> nextSets: aNextDictionary into: aSet [
-	
-	| nextSet eachNextSet change tally |
-	nextSet := aSet copy.
+	| change tally tmp childSet |
 	
 	change := false.
-	
-	self children reverseDo: [:each |
-		eachNextSet := aNextDictionary at: each.	
-		tally := eachNextSet size.
-		eachNextSet addAll: nextSet.
-		change := change or: [ tally ~= eachNextSet size ].
-		
-		each acceptsEpsilon ifTrue: [
-			nextSet add: each.
-		] ifFalse: [
-			nextSet := IdentitySet with: each.
+
+	self children keysAndValuesDo: [ :index :child |
+		childSet := (aNextDictionary at: child). 
+		tally :=  childSet size.
+
+		index = parsers size ifTrue: [ 
+			childSet addAll: aSet.
+		] ifFalse: [  
+			tmp := self subsequenceFrom: index + 1 to: parsers size.
+			childSet add: tmp.
+			tmp acceptsEpsilon ifTrue: [ 
+				childSet addAll: aSet.
+			]
 		].
-	].
+		change := change or: [ (aNextDictionary at: child) size ~= tally ]
+ 	].
 
 	^ change
+]
+
+{ #category : #'*petitislands' }
+PPSequenceParser >> subsequenceFrom: from to: to [
+	| interval dict |
+	
+	interval := from to: to.
+	dict := self propertyAt: #subsequenceCache ifAbsentPut: [ Dictionary new ].
+	^ dict at: interval ifAbsentPut: [ 
+		self class withAll: (parsers copyFrom: from to: to) 
+	].
 ]

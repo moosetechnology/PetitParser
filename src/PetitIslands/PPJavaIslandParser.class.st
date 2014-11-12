@@ -149,7 +149,7 @@ PPJavaIslandParser >> methodBody [
 
 { #category : #method }
 PPJavaIslandParser >> methodDef [
-	^ methodModifiers, (type island: water), (methodName island:water), (arguments island:water), methodBody ==> [:tokens | tokens third second ]
+	^ methodModifiers, ((type island: water), (methodName island:water), (arguments island:water)) wrapped, methodBody ==> [:tokens | tokens second second second ]
 ]
 
 { #category : #class }

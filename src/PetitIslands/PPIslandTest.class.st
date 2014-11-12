@@ -425,7 +425,7 @@ PPIslandTest >> testIslandSequence [
 	b := 'b' asParser.
 	c := 'c' asParser.
 	
-	parser := (self island: a), (self island: b), c.
+	parser := ((self island: a), (self island: b)) wrapped, c.
 	
 	self assert: parser parse: '..a...b...c'.
 	self assert: parser fail: '..a..c...b..c'.

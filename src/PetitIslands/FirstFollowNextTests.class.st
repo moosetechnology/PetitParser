@@ -1037,15 +1037,13 @@ FirstFollowNextTests >> testNext5 [
 
 	nextSet := (self next: a2 in: p).
 	self assert: nextSet anySatisfy: [:e | e end matches: 'b'].
-	"Might be test to match nb -- not sure, what is better"
-	self assert: nextSet anySatisfy: [:e | e end matches: 'n'].
+	self assert: nextSet anySatisfy: [:e | e end matches: 'nb'].
 
 
 
 	nextSet := (self next: a in: p).
 	self assert: nextSet anySatisfy: [:e | e end matches: 'b'].
-	"Might be test to match nb -- not sure, what is better"
-	self assert: nextSet anySatisfy: [:e | e end matches: 'n'].
+	self assert: nextSet anySatisfy: [:e | e end matches: 'nb'].
 	
 	nextSet := (self next: n in: p).
 	self assert: nextSet anySatisfy: [:e | e end matches: 'b'].
@@ -1100,7 +1098,7 @@ FirstFollowNextTests >> testNext7 [
 	
 	nextSet := (self next: a in: p).
 
-	self assert: nextSet anySatisfy: [:e | e matches: 'b'].
+	self assert: nextSet anySatisfy: [:e | e matches: 'bac'].
 	self assert: nextSet anySatisfy: [:e | e matches: 'c'].
 
 
@@ -1117,8 +1115,8 @@ FirstFollowNextTests >> testNext8 [
 	p := a, n, a, b, c.
 	
 	nextSet := (self next: a in: p).
-	self assert: nextSet anySatisfy: [:e | e matches: 'a'].
-	self assert: nextSet anySatisfy: [:e | e matches: 'b'].
+	self assert: nextSet anySatisfy: [:e | e matches: 'abc'].
+	self assert: nextSet anySatisfy: [:e | e matches: 'bc'].
 
 
 ]
@@ -1208,6 +1206,21 @@ FirstFollowNextTests >> testNextRepeat4 [
 	
 	nextSet := (self next: a in: root).
 	self assert: nextSet anySatisfy: [:e | e end matches: 'a'].
+
+
+
+]
+
+{ #category : #'test next' }
+FirstFollowNextTests >> testNextSequence [
+	| a p nextSet |
+	a := 'a' asParser.
+	p := a, 'b' asParser, 'c' asParser.
+	
+	nextSet := (self next: a in: p).
+	self assert: nextSet noneSatisfy: [:e | e matches: 'b' ].
+	self assert: nextSet noneSatisfy: [:e | e matches: 'c' ].
+	self assert: nextSet anySatisfy: [:e | e matches: 'bc' ].
 
 
 
