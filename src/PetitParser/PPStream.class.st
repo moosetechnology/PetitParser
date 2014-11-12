@@ -20,6 +20,34 @@ PPStream >> collection [
 ]
 
 { #category : #queries }
+PPStream >> column [
+	^ self column: position.
+]
+
+{ #category : #queries }
+PPStream >> column: pos [
+	| column clear tmp |
+	
+	pos > readLimit ifTrue: [ ^ Error signal: 'Oot of bounds' ].	
+
+	tmp := position.
+	column := 0.	
+	clear := true.
+
+	(0 to: pos) do: 
+	[:index |
+		position := index.
+		self isStartOfLine ifTrue: [ clear := true ].
+
+		clear ifTrue: [ column := 0. clear := false ].
+		column := column + 1.
+		(position > readLimit) ifTrue: [ position := tmp. ^ column ].
+	].
+	position := tmp.
+	^ column
+]
+
+{ #category : #queries }
 PPStream >> insideCRLF [
 	(position < 1) ifTrue: [ ^ false ].
 	
@@ -40,6 +68,29 @@ PPStream >> isStartOfLine [
 	self insideCRLF ifTrue: [ ^ false ].
 	
 	^ (self peekBack = (Character codePoint: 13)) or: [ self peekBack = (Character codePoint: 10)].
+]
+
+{ #category : #queries }
+PPStream >> line [
+	^ self line: position
+]
+
+{ #category : #queries }
+PPStream >> line: pos [
+	| tmp line |
+	(pos = -1) ifTrue: [  ^ 0 ].
+	(pos > readLimit) ifTrue: [ ^ self error: 'Out of limit' ].
+	
+	tmp := position.
+	line := 0.
+	
+	(0 to: pos) do: 
+	[:index |
+		position := index.
+		self isStartOfLine ifTrue: [ line := line + 1 ]
+	].
+	position := tmp.
+	^ line
 ]
 
 { #category : #accessing }
