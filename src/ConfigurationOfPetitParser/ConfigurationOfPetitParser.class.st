@@ -321,6 +321,8 @@ ConfigurationOfPetitParser >> baseline16: spec [
 				spec requires: #('PetitParser' 'PetitTests') ];
 			package: 'PetitIslands' with: [
 				spec requires: #('PetitParser') ];
+			package: 'PetitIndent' with: [
+				spec requires: #('PetitParser') ];
 			package: 'Factorial-Language' with: [
 				spec requires: #('PetitParser') ].
 		spec group: 'Core' with: #( 'PetitParser').
