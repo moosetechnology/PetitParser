@@ -135,10 +135,11 @@ PPParserBrowser >> inspectorIn: composite [
 
 { #category : #'private building' }
 PPParserBrowser >> mapIn: composite [
-	self class environment at: #GLMRoassalPresentation ifPresent: [ :cls |
-		composite roassal
+	self class environment at: #GLMRoassal2Presentation ifPresent: [ :cls |
+		composite roassal2
 			title: 'Map';
 			useExplicitNotNil;
+			initializeView: [ RTMondrianViewBuilder new ];
 			painting: [ :view :class :selector |
 				(self production: #start from: class)
 					viewAllNamedParsersWithSelection: (Array with: selector)  
