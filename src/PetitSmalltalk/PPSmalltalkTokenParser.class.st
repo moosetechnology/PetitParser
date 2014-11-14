@@ -1,5 +1,5 @@
 "
-A parser that knows how to skip comments and whitespace in Smalltalk and how to instantiate tokens.
+A parser that knows how to skip comments and whitespace in Smalltalk and how to instantiate tokens
 "
 Class {
 	#name : #PPSmalltalkTokenParser,

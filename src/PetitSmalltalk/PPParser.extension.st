@@ -5,6 +5,6 @@ PPParser >> smalltalkToken [
 	| ws |
 	ws := PPSmalltalkWhitespaceParser new.
 	^ ((ws, ((PPTokenParser on: self) tokenClass: PPSmalltalkToken; yourself), ws) ==> #second)
-		name: 'trimmingToken';
+		propertyAt: #trimmingToken put: true;
 		yourself
 ]
