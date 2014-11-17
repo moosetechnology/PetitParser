@@ -31,7 +31,7 @@ PPPredicateTest >> parsedCharacterSet: aParser [
 	| result |
 	result := String new writeStream.
 	self charactersDo: [ :char |
-		(aParser matches: (String with: char))
+		(aParser matches: (char asString))
 			ifTrue: [ result nextPut: char ] ].
 	^ result contents
 ]
