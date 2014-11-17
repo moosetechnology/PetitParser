@@ -10,7 +10,7 @@ Interval >> asParser [
     ^ PPPredicateObjectParser between: start and: stop
 
     "
-		(Interval from: $a to: $f) asParser parse: 'a'
-		(Interval from: $a to: $f) asParser parse: 'g'
+		($a to: $f) asParser parse: 'a'
+		($a to: $f) asParser parse: 'g'
     "
 ]
