@@ -192,10 +192,7 @@ PPIsland >> parseOn: aPPContext [
 	|  bwr awr result retval memento |
 
 	memento := aPPContext remember.
-	Halt ifShiftPressed.
-	Halt if: [ island name = #primary ].
-	
-	
+ 
 	bwr := self parseBeforeWater: aPPContext.
 	bwr isPetitFailure ifTrue: 
 	[
