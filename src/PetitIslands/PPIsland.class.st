@@ -107,11 +107,11 @@ PPIsland >> createAfterWaterParser: aPPContext [
 
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
-	nextSet add: PPInputEnds new.
+	(nextSet anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ nextSet add: PPInputEnds new ].
 	
 	nextSet := nextSet collect: [ :e | PPNonEmptyParser on: e ].
 	
-	p := (PPChoiceParser withAll: nextSet) not.
+	p := (PPChoiceParser withAll: nextSet) and.
 	^ PPWater on: p waterToken: water
 ]
 
@@ -120,11 +120,10 @@ PPIsland >> createBeforeWaterParser: aPPContext [
 	| nextSet p |
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
-	nextSet add: PPInputEnds new.
 	
 	nextSet := nextSet collect: [:e | PPNonEmptyParser on: e].
 	
-	p := (PPChoiceParser withAll: nextSet) not, (PPNonEmptyParser on: island) not.
+	p := ((PPChoiceParser withAll: nextSet) / (PPNonEmptyParser on: island)) and.
 	^ PPWater on: p waterToken: water.
 ]
 
@@ -193,12 +192,16 @@ PPIsland >> parseOn: aPPContext [
 	|  bwr awr result retval memento |
 
 	memento := aPPContext remember.
-	"Halt ifShiftPressed."
+	Halt ifShiftPressed.
+	Halt if: [ island name = #primary ].
+	
 	
 	bwr := self parseBeforeWater: aPPContext.
 	bwr isPetitFailure ifTrue: 
 	[
-		self error: 'IMO should never happen'.
+		retval := PPFailure message: 'Could not find neither the island nor the next' context: aPPContext.
+		aPPContext restore: memento.
+		^ retval.
 	].
 
 	"JK: HACK ALERT, FIX!"
@@ -219,7 +222,7 @@ PPIsland >> parseOn: aPPContext [
 	awr := self parseAfterWater: aPPContext.	
 	awr isPetitFailure ifTrue: 
 	[
-		retval := PPFailure message: 'IMO should not happen :(' context: aPPContext.
+		retval := PPFailure message: 'Could not find the next' context: aPPContext.
 		aPPContext restore: memento.
 		^ retval.
 	].

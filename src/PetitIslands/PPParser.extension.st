@@ -18,8 +18,9 @@ PPParser >> acceptsEpsilonOpenSet: set [
 PPParser >> island [
 	^ PPIsland new
 		island: self;
-		yourself;
-		memoized
+		yourself
+	"	;
+		memoized"
 ]
 
 { #category : #'*petitislands' }

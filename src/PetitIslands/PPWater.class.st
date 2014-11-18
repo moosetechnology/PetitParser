@@ -47,9 +47,11 @@ PPWater >> parseOn: aPPContext [
 		waterPosition := aPPContext waterPosition.
 		aPPContext waterPosition: aPPContext position.
 
-		"TODO: probably can be rewritten with test in the end!"
 		result := parser parseOn: aPPContext.
-		[result isPetitFailure] whileFalse: [ 
+		[result isPetitFailure] whileTrue: [
+			aPPContext atEnd ifTrue: [ 
+				aPPContext waterPosition: waterPosition.
+				^ PPFailure message: 'anchor did not found' at: aPPContext position ].
 			waterToken parseOn: aPPContext.
 			aPPContext waterPosition: aPPContext position.
 			result := parser parseOn: aPPContext.

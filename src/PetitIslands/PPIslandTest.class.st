@@ -650,6 +650,28 @@ PPIslandTest >> testNestedIsland [
 ]
 
 { #category : #testing }
+PPIslandTest >> testNestedIsland2 [
+	
+	|  nestedIsland before after topIsland |
+	nestedIsland := self island: 'after' asParser.
+	
+	before := 'before' asParser.
+	after := 'after' asParser.
+	topIsland := self island: (before, nestedIsland, after).
+	
+	self assert: nestedIsland parse: '..after..'.
+	self assert: topIsland parse: 'before..after..after'.
+	self assert: topIsland parse: '....before...after....after...'.
+	self assert: topIsland fail: '....before...after...'.
+	
+	topIsland := self island: (before, (nestedIsland / (nil asParser island)), after).
+	self assert: topIsland parse: '....before...after....after...'.
+	self assert: topIsland parse: '..before...after..'.
+
+
+]
+
+{ #category : #testing }
 PPIslandTest >> testNilIsland [
 	
 	| nilIsland  p |
