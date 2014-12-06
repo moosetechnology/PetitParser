@@ -178,6 +178,14 @@ PPContext >> position: anInteger [
 	^ stream position: anInteger
 ]
 
+{ #category : #printing }
+PPContext >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPut: $:.
+	aStream nextPut: $ .
+	stream printOn: aStream
+]
+
 { #category : #'accessing-properties' }
 PPContext >> propertyAt: aKey [
 	"Answer the property value associated with aKey."
