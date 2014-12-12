@@ -1,7 +1,7 @@
 Class {
 	#name : #PPPredicateTest,
 	#superclass : #PPAbstractParserTest,
-	#category : 'PetitTests-Tests'
+	#category : #'PetitTests-Tests'
 }
 
 { #category : #utilities }
@@ -306,6 +306,24 @@ PPPredicateTest >> testStartOfLine [
 	parser := #startOfLine asParser, #any asParser, #any asParser, #startOfLine asParser, #any asParser star.
 	self assert: parser parse: String crlf, 'lorem ipsum'.
 	self assert: parser parse: String crlf.
+]
+
+{ #category : #'testing-chars' }
+PPPredicateTest >> testStartOfWord [
+	| parser |
+	parser := #startOfWord asParser, #word asParser plus.
+	
+	self assert: parser parse: 'lorem'.
+	
+	parser := #any asParser, #startOfWord asParser, #word asParser plus.
+	self assert: parser fail: 'lorem'.
+	self assert: parser fail: '1234'.
+	
+	self assert: parser parse: ' lorem'.	
+	self assert: parser parse: ' 123'.
+	self assert: parser parse: ')lorem'.
+	self assert: parser parse: ':lorem'.
+
 ]
 
 { #category : #'testing-chars' }

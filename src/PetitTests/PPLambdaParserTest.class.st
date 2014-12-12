@@ -1,7 +1,7 @@
 Class {
 	#name : #PPLambdaParserTest,
 	#superclass : #PPCompositeParserTest,
-	#category : 'PetitTests-Tests'
+	#category : #'PetitTests-Tests'
 }
 
 { #category : #accessing }

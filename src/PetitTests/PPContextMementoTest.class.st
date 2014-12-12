@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'memento'
 	],
-	#category : 'PetitTests-Tests'
+	#category : #'PetitTests-Tests'
 }
 
 { #category : #accessing }
