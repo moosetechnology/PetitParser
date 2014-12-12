@@ -459,11 +459,10 @@ ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
 	spec for: #'common' version: '1.6'.
-
 	spec for: #'pharo1.3.x' version: '1.5'.
-
 	spec for: #'pharo2.x' version: '1.8-snapshot'.
-
+	spec for: #'pharo3.x' version: '1.7'.
+	spec for: #'pharo4.x' version: '1.7'.
 ]
 
 { #category : #versions }
@@ -612,6 +611,34 @@ ConfigurationOfPetitParser >> version16: spec [
 			package: 'PetitAnalyzer' with: 'PetitAnalyzer-DiegoLont.46';
 			package: 'PetitGui' with: 'PetitGui-DiegoLont.125'. ].
 
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version17: spec [
+	<version: '1.7' imports: #('1.6-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'development'.
+		spec description: 'releasing a version of petitparser for moose 5 release'.
+		spec author: 'StephanEggermont'.
+		spec timestamp: '12/12/2014 11:28'.
+		spec project: 'Glamour' with: #stable.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-JanKurs.261';
+			package: 'PetitTests' with: 'PetitTests-JanKurs.65';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-JanKurs.48';
+			package: 'PetitGui' with: 'PetitGui-TudorGirba.147';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-JanKurs.78';
+			package: 'PetitCSV' with: 'PetitCSV-tg.7';
+			package: 'PetitJson' with: 'PetitJson-JanKurs.9';
+			package: 'PetitMSE' with: 'PetitMSE-AndreHora.21';
+			package: 'PetitManifestMf' with: 'PetitManifestMf-JanKurs.10';
+			package: 'PetitRegex' with: 'PetitRegex-JanKurs.30';
+			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
+			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
+			package: 'PetitIslands' with: 'PetitIslands-JanKurs.18';
+			package: 'PetitIndent' with: 'PetitIndent-JanKurs.1';
+			package: 'Factorial-Language' with: 'Factorial-Language-lr.6'. ].
 ]
 
 { #category : #'snapshot versions' }
