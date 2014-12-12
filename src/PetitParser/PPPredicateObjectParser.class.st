@@ -136,6 +136,12 @@ PPPredicateObjectParser class >> startOfLine [
 	^ PPStartOfLineParser new.
 ]
 
+{ #category : #'instance creation' }
+PPPredicateObjectParser class >> startOfWord [
+	
+	^ PPStartOfWordParser new.
+]
+
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> tab [
 	^ self char: Character tab message: 'tab expected'
