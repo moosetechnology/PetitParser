@@ -150,11 +150,9 @@ PPParserBrowser >> mapIn: composite [
 
 { #category : #'private utilities' }
 PPParserBrowser >> production: selector from: class [
-	| parser |
-	parser := class new.
 	^ selector isNil 
-		ifTrue: [ parser ]
-		ifFalse: [ parser productionAt: selector ]
+		ifTrue: [ ^ PPSentinel instance ]
+		ifFalse: [ class newStartingAt: selector ]
 ]
 
 { #category : #'private utilities' }
