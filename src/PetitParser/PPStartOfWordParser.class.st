@@ -18,8 +18,16 @@ PPStartOfWordParser >> acceptsEpsilon [
 
 { #category : #'as yet unclassified' }
 PPStartOfWordParser >> parseOn: aPPContext [
+	aPPContext atEnd ifTrue: [  
+		^ PPFailure message: 'Start of word expected' context: aPPContext at: aPPContext position 
+	].
+
 	(aPPContext position == 0) ifTrue: [ 
-		^ #startOfWord
+		(aPPContext peek isAlphaNumeric) ifTrue: [ 
+			^ #startOfWord
+		] ifFalse: [ 
+			^ PPFailure message: 'Start of word expected' context: aPPContext at: aPPContext position 
+	 	]
 	].
 
 	aPPContext back.
