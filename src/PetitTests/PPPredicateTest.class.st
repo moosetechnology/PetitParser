@@ -323,7 +323,11 @@ PPPredicateTest >> testStartOfWord [
 	self assert: parser parse: ' 123'.
 	self assert: parser parse: ')lorem'.
 	self assert: parser parse: ':lorem'.
-
+	
+	parser := #startOfWord asParser.
+	self assert: parser fail: ''.
+	self assert: parser parse: 'a'.
+	self assert: parser fail: '.'.
 ]
 
 { #category : #'testing-chars' }
