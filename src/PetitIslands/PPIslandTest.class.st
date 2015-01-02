@@ -139,210 +139,107 @@ PPIslandTest >> testBlock [
 ]
 
 { #category : #testing }
-PPIslandTest >> testBoundary [
-	|  p end body start |
-	
-	"use non-trivial end-of-class a complex end"
-	end := 'end' asParser trimBlanks, 'of' asParser trimBlanks, 'class' asParser trimBlanks ==> [:args | #eoc].
-	body := self nilIsland.
-	start := 'class' asParser trim, self identifier.
-	p := start, body, end.
-	
-	self assert: p parse: 'class Foo end of class'.
-	self assert: result size = 4.
-	self assert: result second = 'Foo'.
-	
-	self assert: p parse: 'class Foo .... end of class'.
-	self assert: result size = 4.
-	self assert: result second = 'Foo'.
-	
-	self assert: p parse: 'class Foo .... end ... end of class'.
-	self assert: result size = 4.
-	self assert: result second = 'Foo'.
-	
-	self assert: p parse: 'class Foo .... end of ... end of class'.
-	self assert: result size = 4.
-	self assert: result second = 'Foo'.
+PPIslandTest >> testBlock2 [
+	| parser block  |
 
+	block := self nestedBlock.
+	parser := (self island: 'a' asParser), block.
+	
+	self assert: parser parse: '..a..{}'.	
+	self assert: result second second second = nil.
+	
+	self assert: parser parse: '..a..{ {} }'.
+	self assert: result second second size = 1.
+	
+	self assert: parser parse: '..a..{ {} {} }'.
+	self assert: result second second size = 2.
+
+	self assert: parser parse: '..a..{ {}'.
+	self assert: result second second second = nil.	
 ]
 
 { #category : #testing }
-PPIslandTest >> testBoundary2 [
-	
-	|   epilog  id p |
-	"use optional boundary"
-	epilog := 'end' asParser optional.
-	id := self identifier.
-	p := ((self island: id), epilog) plus.
+PPIslandTest >> testBlock3 [
+	| parser block  |
 
-	self assert: p parse: '...foo..end...bar...end'.	
+	block := self nestedBlock.
+	parser := block trim plus.
 	
-	self assert: result first first second = 'foo'.
-	self assert: result first second = 'end'.
-
-	self assert: result second first second = 'bar'.
-	self assert: result second second = 'end'.
-]
-
-{ #category : #'tests - complex' }
-PPIslandTest >> testClass [
-	| text   file class |
-	text := '
-// some comment
-namespace cde {
-
-public class Foo 
-endclass
-
-public class 123 // invalid class
-public struct {}
-
-class bar endclass
-class Zorg endclass
-}	
-	'.
-	
-	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
-		==> [:t | t third] .
-	file := ((self island: class) ==> [:t | t second ]) plus.	
-	
-	result := file parse: text.
-	self assert: result size = 3.
-	self assert: result first = 'Foo'.
-	self assert: result second = 'bar'.
-	self assert: result third = 'Zorg'.
-
-]
-
-{ #category : #'tests - complex' }
-PPIslandTest >> testFile [
-	| text using imports class file |
-	text := '
-	
-using a.b.c;
-using c.d.e;
-// some comment
-namespace cde {
-
-public class Foo 
-endclass
-
-public class 123 // invalid class
-public struct {}
-
-class bar endclass
-}	
-	'.
-	
-	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
-	
-	imports := (self island: using) star.
-	
-	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
-		==> [:t | t third] .
-	file := imports, ((self island: class) ==> [:t | t second ]) plus.	
-	
-	result := file parse: text.
-	
-	self assert: result isPetitFailure not.
-
-]
-
-{ #category : #'tests - complex' }
-PPIslandTest >> testFile2 [
-	| text using imports class file |
-	text := '
-	
-using a.b.c;
-using c.d.e;
-// some comment
-namespace cde {
-
-class Foo 
-endclass
-
-public class 123 // invalid class
-public struct {}
-
-class bar endclass
-}	
-	'.
-	
-	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
-	
-	imports := (self island: using) star.
-	
-	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
-		==> [:t | t third] .
-	file := imports, ((self island: class) ==> [:t | t second ]) plus.	
-	
-	result := file parse: text.
-	
-	self assert: result isPetitFailure not.
-
-]
-
-{ #category : #'tests - complex' }
-PPIslandTest >> testImports [
-	| text using imports   |
-	text := '
-
-/** whatever */	
-using a.b.c;
-// another comment
-using c.d.e;
-// some comment
-namespace cde {
-}	
-	'.
-	
-	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
-	imports := ((self island: using) ==> [:t | t second ]) star.
-	
-	result := imports parse: text.
-	
+	self assert: parser parse: ' {} {} '.	
 	self assert: result size = 2.
-	self assert: result first = 'a.b.c'.
-	self assert: result second = 'c.d.e'.
+	
+	self assert: parser parse: '{ {} } {}'.
+	self assert: result size = 2.
+		
+	self assert: parser parse: '{{{}}{}} {{}} {{}} '.
+	self assert: result size = 3.
 
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandAfterIslandPlus [
+PPIslandTest >> testInputEnds [
+	| parser |
+	parser := PPInputEnds new.
+	self assert: parser parse: ''.
 	
-	| island2 islandParser2 island1 islandParser1 parser |
-	island1 := 'aa' asParser, 'bb' asParser.
-	islandParser1 := self islandInstance.
-	islandParser1 island: island1.
+	parser := 'a' asParser, PPInputEnds new.
+	self assert: parser parse: 'a'.
+	self assert: parser fail: ''.
+	self assert: parser fail: 'aa'.
+]
+
+{ #category : #testing }
+PPIslandTest >> testIsland [
 	
-	island2 := 'cc' asParser.
-	islandParser2 := self islandInstance.
-	islandParser2 island: island2.
+	| island    |
 	
-	parser := (islandParser1, islandParser2) plus.
-	 
-	result := islandParser1 parse: '__ aabb __ cc __'.
-	self assert: result isPetitFailure not.
+	island := self island: 'a' asParser.
+	
+	self assert: island parse: '...a...'.
+	self assert: result size = 3.
+	self assert: result first = #water.
+	self assert: result third = #water.
+]
+
+{ #category : #testing }
+PPIslandTest >> testIsland2 [
+	
+	| a b parser |
+	
+	a := self island: 'a' asParser.
+	b := 'b' asParser trimBlanks, 'c' asParser trimBlanks.
+	parser := a, b wrapped.
+	
+	self assert: parser parse: '...a..b..b c '.
+	self assert: result size = 2.
+	self assert: result first size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second first = 'b'.
+	self assert: result second second = 'c'.
 
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandAfterIslandPlus2 [
+PPIslandTest >> testIsland3 [
 	
-	| island2 islandParser2 island1 islandParser1 parser |
+	| a b parser |
 	
-	island1 := 'aa' asParser, 'bb' asParser.
-	islandParser1 := self islandInstance.
-	islandParser1 island: island1.
+	a := self island: 'a' asParser.
+	b := 'b' asParser trimBlanks optional.
+	parser := a, b wrapped.
 	
-	island2 := 'cc' asParser.
-	islandParser2 := self islandInstance.
-	islandParser2 island: island2.
-	
-	parser := (islandParser1, islandParser2) plus.
-	 
-	result := islandParser1 parse: '__ aaxx __ cc __'.
-	self assert: result isPetitFailure.
+	self assert: parser parse: '...a..b'.
+	self assert: result size = 2.
+	self assert: result first size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second = 'b'.
+
+
+	self assert: parser parse: '...a...'.
+	self assert: result size = 2.
+	self assert: result first size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second = nil.
 
 ]
 
@@ -378,16 +275,16 @@ PPIslandTest >> testIslandDetection [
 PPIslandTest >> testIslandPlus [
 	
 	| island  parser |
-	island := self island: 'X' asParser.
+	island := self island: 'a' asParser.
 	parser := island plus.
 	
-	self assert: parser parse: '....X....'.
+	self assert: parser parse: '..a..'.
 	self assert: result size = 1.
 
-	self assert: parser parse: '...X...X...XX'.
+	self assert: parser parse: '..a..a..aa'.
 	self assert: result size = 4.
 
-	self assert: parser fail: '.....'.
+	self assert: parser fail: '..'.
 ]
 
 { #category : #testing }
@@ -501,22 +398,200 @@ PPIslandTest >> testIslandSequence2 [
 { #category : #testing }
 PPIslandTest >> testIslandSequence3 [
 	
-	| parser   body class extends |
-	class := self island: 'class' asParser trim, self identifier trim.	
-	extends := self island: 'extends' asParser trim, self identifier trim.
-	body := self island: self nestedBlock.
+	| parser   a b c |
+	a := self island: 'a' asParser.
+	b := self island: 'b' asParser.
+	c := self island: 'c' asParser.
 
-	parser := (class, extends optional, body) plus.
+	parser := (a, b optional, c) plus.
 	self assert: parser parse: '
-	/* lorem ipsum */ 
-	class Foo { whatever } 
-	
-	// something more 
-	class Bar extends Zorg { blah blah bla } 
-	// this is the end'.
+	..a..c..
+	..a..b..c..'.
 	
 	self assert: result isPetitFailure not.
 	self assert: result size = 2. 
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence4 [
+	
+	| parser  a b |
+	a := self island: 'a' asParser.
+	b := self island: 'b' asParser.
+	
+
+	parser := a optional, b.
+	self assert: parser parse: '...a...b'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 2. 
+	self assert: result first second = 'a'.
+	self assert: result second second = 'b'.
+	
+	self assert: parser parse: '...b'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 2. 
+	self assert: result first = nil.
+	self assert: result second second = 'b'.
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence5 [
+	
+	| parser  a b c|
+	a := self island: 'a' asParser.
+	b := self island: 'b' asParser.
+	c := 'c' asParser.
+	
+
+	parser := a optional, b, c.
+	self assert: parser parse: '...a...b..c'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 3. 
+	self assert: result first second = 'a'.
+	self assert: result second second = 'b'.
+	
+	self assert: parser parse: '...b..c'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 3. 
+	self assert: result first = nil.
+	self assert: result second second = 'b'.
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence6 [
+	
+	| parser  aba a |
+	aba := self island: 'aba' asParser.
+	a := 'a' asParser, #endOfLine asParser.
+	
+
+	parser := aba, aba optional, a.
+
+	self assert: parser parse: '...aba...aba..a'.
+	self assert: result isPetitFailure not.
+	self assert: result size = 3. 
+	self assert: result first second = 'aba'.
+	self assert: result second second = 'aba'.
+	self assert: result third = #('a' #endOfLine).
+
+
+	self assert: parser parse: '...aba...a'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 3. 
+	self assert: result first second = 'aba'.
+	self assert: result second = nil.
+	self assert: result third = #('a' #endOfLine).
+	
+
+	self assert: parser parse: '...aba...aba'.
+		
+	self assert: result isPetitFailure not.
+	self assert: result size = 3. 
+	self assert: result first second = 'aba'.
+	self assert: result second = nil.
+	self assert: result third =  #('a' #endOfLine)..
+
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence7 [
+	
+	| parser a b c|
+	b := PPDelegateParser new.
+	
+	a := (self island: 'a' asParser, b).
+	b setParser: (self island: 'b' asParser).
+	c := 'c' asParser, #endOfLine asParser.
+	
+
+	parser := a, c.
+
+	self assert: parser parse: 'abc'.
+	self assert: result isPetitFailure not.
+	self assert: result size = 2. 
+	self assert: result first second first = 'a'.
+	self assert: result first second second second = 'b'.
+	self assert: result second = #('c' #endOfLine).
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence8 [
+	
+	| parser a b c |
+	a := self island: 'a' asParser.
+	b := self island: 'b' asParser.
+	c := self island: 'c' asParser.
+	
+	parser := a, b, c.
+
+	self assert: parser parse: '..a..b..c'.
+	self assert: result size = 3. 
+	self assert: result first second = 'a'.
+	self assert: result second second = 'b'.
+	self assert: result third second = 'c'.	
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequence9 [
+	
+	| parser a b  |
+	a := self island: 'a' asParser.
+	b := '{' asParser, (self island: 'b' asParser), '}' asParser.
+	
+	parser := a, b.
+
+	self assert: parser parse: '..a..{..b..}'.
+	self assert: result size = 2. 
+	self assert: result first second = 'a'.
+	self assert: result second second second = 'b'.
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequencePlus [
+	
+	| parser ab c |
+	ab := self island: ('a' asParser, 'b' asParser).
+	c := self island: 'c' asParser.
+	
+	parser := (ab, c) plus.
+	 
+	result := parser parse: '..ab..c..'.
+	self assert: result isPetitFailure not.
+
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequencePlus2 [
+	
+	| parser ab c |
+	ab := self island: ('a' asParser, 'b' asParser).
+	c := self island: 'c' asParser.
+	
+	parser := (ab, c) plus.
+	 
+	result := parser parse: '..a..c..'.
+	self assert: result isPetitFailure.
+
+]
+
+{ #category : #testing }
+PPIslandTest >> testIslandSequencePlus3 [
+	
+	| parser ab c |
+	ab := self island: ('a' asParser, 'b' asParser).
+	c := self island: 'c' asParser.
+	
+	parser := (ab, c) plus.
+	 
+	self assert: parser parse: '..ab..c..ab..c'.
+	self assert: result isPetitFailure not.
+	self assert: result size = 2.
+
 ]
 
 { #category : #testing }
@@ -724,6 +799,49 @@ PPIslandTest >> testOptionalIsland [
 	self assert: result second = 'c'.
 
 	self assert: parser parse: '...c'.
+]
+
+{ #category : #testing }
+PPIslandTest >> testOptionalIsland2 [
+	|  p  |
+	
+	p := (self island: 'a' asParser) optional, 'a' asParser.
+	
+	self assert: p parse: 'a'.
+	self assert: result size = 2.
+	self assert: result first = nil.
+	self assert: result second = 'a'.
+	
+	self assert: p parse: '..a..a'.
+	self assert: result size = 2.
+	self assert: result first second = 'a'.
+	self assert: result second = 'a'.
+
+]
+
+{ #category : #testing }
+PPIslandTest >> testOptionalIsland3 [
+	|  p  |
+	
+	p := (self island: 'a' asParser), (self island: 'a' asParser) optional, 'a' asParser.
+	
+	self assert: p parse: 'aa'.
+	self assert: result size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second = nil.
+	self assert: result third = 'a'.
+	
+	self assert: p parse: '..a..a'.
+	self assert: result size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second = nil.
+	self assert: result third = 'a'.
+	
+	self assert: p parse: '..a..a..a'.
+	self assert: result size = 3.
+	self assert: result first second = 'a'.
+	self assert: result second second = 'a'.
+	self assert: result third = 'a'.
 ]
 
 { #category : #'tests - water objects' }
