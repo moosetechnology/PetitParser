@@ -324,7 +324,7 @@ PPPredicateTest >> testStartOfWord [
 	self assert: parser parse: ')lorem'.
 	self assert: parser parse: ':lorem'.
 	
-	parser := #startOfWord asParser.
+	parser := #startOfWord asParser, #any asParser optional.
 	self assert: parser fail: ''.
 	self assert: parser parse: 'a'.
 	self assert: parser fail: '.'.
