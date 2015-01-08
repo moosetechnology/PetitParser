@@ -19,3 +19,8 @@ PPContext >> indexes [
 PPContext >> indexes: anIndexes [
 	^ self propertyAt: #indexes put: anIndexes 
 ]
+
+{ #category : #'*PetitIndent' }
+PPContext >> lastIndent [
+	^ self indentTraces lastIndentOf: PPIndentationLevel instance
+]

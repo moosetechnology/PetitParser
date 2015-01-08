@@ -8,16 +8,23 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+PPPopParser >> acceptsEpsilon [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
 PPPopParser >> initialize [ 
 	ref := PPIndentationLevel instance
 ]
 
 { #category : #'as yet unclassified' }
 PPPopParser >> parseOn: aPPContext [
-	(aPPContext indentTraces pop: ref) ifNil: [ 
+	| value |
+	(value := aPPContext indentTraces pop: ref) ifNil: [ 
 		^ PPFailure message: 'cannot pop anymore' context: aPPContext
 	].
-	^ #pop
+	
+	^ 'poped column: ', (aPPContext stream column: value) asString
 ]
 
 { #category : #'as yet unclassified' }

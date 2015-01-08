@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+PPPushParser >> acceptsEpsilon [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
 PPPushParser >> initialize [ 
 	ref := PPIndentationLevel instance
 ]

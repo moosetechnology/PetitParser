@@ -11,7 +11,13 @@ PPParser >> alignedTo: aPPParser [
 ]
 
 { #category : #'*PetitIndent' }
+PPParser >> cancelOffsideLine [
+	^ (PPIndentationLevel instance pop, self) ==> #second
+]
+
+{ #category : #'*PetitIndent' }
 PPParser >> cut [
+	"This should be Indentation Sensitive Trimming Operator"
 	^ PPSmartTrimmingParser on: self
 ]
 
@@ -38,6 +44,11 @@ PPParser >> deepStrictlyOnsideTo: aPPParser [
 			]
 		]) parseOn: cntx
 	]
+]
+
+{ #category : #'*PetitIndent' }
+PPParser >> defineOffsideLine [
+	^ self setIndentationLevel
 ]
 
 { #category : #'*PetitIndent' }

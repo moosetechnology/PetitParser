@@ -6,7 +6,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 PPAlignedParser >> compare [
-
 	^ self lastIndent == context stream column.
 ]
 

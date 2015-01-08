@@ -3,7 +3,8 @@ Class {
 	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'input',
-		'result'
+		'result',
+		'parser'
 	],
 	#category : #'PetitIndent-Tests'
 }
@@ -11,6 +12,59 @@ Class {
 { #category : #'as yet unclassified' }
 PPOnsideParserTest >> assert: aParser parse: aCollection to: aTargetObject end: anInteger [
 	^ result := super assert: aParser parse: aCollection to: aTargetObject end: anInteger
+]
+
+{ #category : #'as yet unclassified' }
+PPOnsideParserTest >> testBlock [
+	|  begin content end block |
+	
+	begin := 'begin' asParser defineOffsideLine.
+	content := #word asParser star.
+	end := 'end' asParser cancelOffsideLine.
+	block := PPDelegateParser new.
+	
+	block setParser: 	begin trim,
+								(block / content) trim strictlyOnside star,
+							end trim aligned.
+			
+	self assert: block parse: '
+		begin
+			foo
+			bar
+		end
+'.
+
+	self assert: result size = 3.
+	self assert: result second size = 2.
+]
+
+{ #category : #'as yet unclassified' }
+PPOnsideParserTest >> testBlock2 [
+	|  begin content end block |
+	
+	begin := 'begin' asParser defineOffsideLine.
+	content := #word asParser star.
+	end := 'end' asParser cancelOffsideLine.
+	block := PPDelegateParser new.
+	
+	block setParser: 	begin trim,
+								(block / content) trim strictlyOnside star,
+							end trim aligned.
+			
+	self assert: block parse: '
+		begin
+			foo
+			begin
+				bag
+				baz
+			end
+			bar
+		end
+'.
+
+	self assert: result size = 3.
+	self assert: result second size = 3.
+	self assert: result second second second size = 2.
 ]
 
 { #category : #'as yet unclassified' }
