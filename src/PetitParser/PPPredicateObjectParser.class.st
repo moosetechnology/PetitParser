@@ -137,6 +137,12 @@ PPPredicateObjectParser class >> startOfLine [
 ]
 
 { #category : #'instance creation' }
+PPPredicateObjectParser class >> startOfLogicalLine [
+	
+	^ PPStartOfLogicalLineParser new.
+]
+
+{ #category : #'instance creation' }
 PPPredicateObjectParser class >> startOfWord [
 	
 	^ PPStartOfWordParser new.
