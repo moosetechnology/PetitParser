@@ -37,7 +37,9 @@ PPSequenceParser >> subsequenceFrom: from to: to [
 	
 	interval := from to: to.
 	dict := self propertyAt: #subsequenceCache ifAbsentPut: [ Dictionary new ].
-	^ dict at: interval ifAbsentPut: [ 
-		self class withAll: (parsers copyFrom: from to: to) 
+	^ dict at: interval ifAbsentPut: [
+		(from = to) 
+			ifTrue: [ parsers at: from ] 
+			ifFalse: [ self class withAll: (parsers copyFrom: from to: to) ]
 	].
 ]

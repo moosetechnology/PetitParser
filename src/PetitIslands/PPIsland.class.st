@@ -109,8 +109,9 @@ PPIsland >> createAfterWaterParser: aPPContext [
 	nextSet addAll: (self nextSet: aPPContext).
 	(nextSet anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ nextSet add: PPInputEnds new ].
 	
-	nextSet := nextSet collect: [ :e | PPNonEmptyParser on: e ].
-	
+	nextSet := nextSet collect: [ :e | e nonEmpty ].
+	nextSet := nextSet select: [ :e | e class ~= PPFailingParser ].
+		
 	p := (PPChoiceParser withAll: nextSet) and.
 	^ PPWater on: p waterToken: water
 ]
@@ -120,10 +121,12 @@ PPIsland >> createBeforeWaterParser: aPPContext [
 	| nextSet p |
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
+	(nextSet anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ nextSet add: PPInputEnds new ].
 	
-	nextSet := nextSet collect: [:e | PPNonEmptyParser on: e].
+	nextSet := nextSet collect: [:e | e nonEmpty].
+	nextSet := nextSet select: [ :e | e class ~= PPFailingParser ].
 	
-	p := ((PPChoiceParser withAll: nextSet) / (PPNonEmptyParser on: island)) and.
+	p := ((PPChoiceParser withAll: nextSet) / (island nonEmpty)) and.
 	^ PPWater on: p waterToken: water.
 ]
 
@@ -192,7 +195,7 @@ PPIsland >> parseOn: aPPContext [
 	|  bwr awr result retval memento |
 
 	memento := aPPContext remember.
- 
+ 	
 	bwr := self parseBeforeWater: aPPContext.
 	bwr isPetitFailure ifTrue: 
 	[
@@ -203,7 +206,7 @@ PPIsland >> parseOn: aPPContext [
 
 	"JK: HACK ALERT, FIX!"
 	(aPPContext waterPosition == aPPContext position) ifTrue:[
-		result := (PPNonEmptyParser on: island) parseOn: aPPContext.
+		result := island nonEmpty parseOn: aPPContext.
 	] ifFalse: [
 		result := island parseOn: aPPContext.
 	].

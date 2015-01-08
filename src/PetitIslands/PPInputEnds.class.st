@@ -20,6 +20,12 @@ PPInputEnds >> isNullable [
 ]
 
 { #category : #'as yet unclassified' }
+PPInputEnds >> nonEmpty [
+	"I know I am empty, but it does not count in my case, I represent virtual non-existent character"
+	^ self
+]
+
+{ #category : #'as yet unclassified' }
 PPInputEnds >> parseOn: aPPContext [
 	(aPPContext atEnd) ifFalse:
 	[

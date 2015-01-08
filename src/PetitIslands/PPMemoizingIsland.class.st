@@ -18,8 +18,7 @@ Class {
 	#name : #PPMemoizingIsland,
 	#superclass : #PPIsland,
 	#instVars : [
-		'rootParser',
-		'memoizationDictionaries'
+		'dictionary'
 	],
 	#category : #'PetitIslands-Parsers'
 }
@@ -30,11 +29,14 @@ PPMemoizingIsland class >> initialize [
 
 ]
 
+{ #category : #parsing }
+PPMemoizingIsland >> check: aPPContext [
+	context == aPPContext ifFalse: [ self reset: aPPContext ].
+]
+
 { #category : #initialization }
 PPMemoizingIsland >> initialize [ 
 	super initialize.
-
-	memoizationDictionaries := IdentityDictionary new.
 
 ]
 
@@ -49,19 +51,14 @@ PPMemoizingIsland >> island: anObject [
 ]
 
 { #category : #memoization }
-PPMemoizingIsland >> memoizationDictionaryForContext: aPPContext [
-	^ memoizationDictionaries at: aPPContext ifAbsentPut: [IdentityDictionary new].
-]
-
-{ #category : #memoization }
-PPMemoizingIsland >> memoizeResult: result onContext: aPPContext position: pos [
+PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
 	| memento |
 	
 	memento := PPMemento new.
 	memento contextMemento: aPPContext remember.
 	memento result: result.
 	
-	(self memoizationDictionaryForContext: aPPContext) at: pos put: memento.
+	dictionary at: ctxMemento put: memento.
 
 ]
 
@@ -73,7 +70,7 @@ PPMemoizingIsland >> memoized [
 
 { #category : #memoization }
 PPMemoizingIsland >> memoizedResult: aPPContext [
-	^ (self memoizationDictionaryForContext: aPPContext) at: (aPPContext position) ifAbsent: [ nil ].
+	^ dictionary at: (aPPContext remember) ifAbsent: [ nil ].
 	
 ]
 
@@ -86,21 +83,29 @@ PPMemoizingIsland >> nonMemoized [
 
 { #category : #parsing }
 PPMemoizingIsland >> parseOn: aPPContext [ 
-	|  memoizedResult parsingPosition retval |
+	|  memoizedResult retval memento |
+	self check: aPPContext.
+	
 	memoizedResult := self memoizedResult: aPPContext.
 	memoizedResult ifNotNil: [ 
 		aPPContext restore: memoizedResult contextMemento.
 		^ memoizedResult result 
 	].
-	parsingPosition := aPPContext position.
+	memento := aPPContext remember.
 	
 	retval := super parseOn: aPPContext.
 
 	(aPPContext waterPosition == aPPContext position) ifFalse: [ 
-		self memoizeResult: retval onContext: aPPContext position: parsingPosition.
+		self memoizeResult: retval onContext: aPPContext memento: memento.
 	].
 
 	^ retval.
 
 
+]
+
+{ #category : #parsing }
+PPMemoizingIsland >> reset: aPPContext [
+	super reset: aPPContext.
+	dictionary := Dictionary new.
 ]

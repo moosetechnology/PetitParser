@@ -16,20 +16,36 @@ PPParser >> acceptsEpsilonOpenSet: set [
 
 { #category : #'*petitislands' }
 PPParser >> island [
-	^ PPIsland new
+	| island |
+	island := PPIsland new
 		island: self;
-		yourself
-	"	;
-		memoized"
+		yourself.
+		
+	"
+		TODO JK: Hack alert!
+		Not nice, but usefull for debugging
+	"	
+	Sensor shiftPressed ifFalse: [ 	
+		island := island memoized
+	].
+	^ island
 ]
 
 { #category : #'*petitislands' }
 PPParser >> island: water [
-	^ PPIsland new
+	| island |
+	island := PPIsland new
 		island: self;
 		water: water;
-		yourself;
-		memoized
+		yourself.
+	"
+		TODO JK: Hack alert!
+		Not nice, but usefull for debugging
+	"	
+	Sensor shiftPressed ifFalse: [ 	
+		island := island memoized
+	].
+	^ island
 
 ]
 
@@ -71,4 +87,9 @@ PPParser >> nextSets: aNextDictionary into: aSet [
 
 	^ change
 	
+]
+
+{ #category : #'*petitislands' }
+PPParser >> nonEmpty [
+	^ PPNonEmptyParser on: self
 ]

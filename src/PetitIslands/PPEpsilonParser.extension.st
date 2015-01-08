@@ -4,3 +4,8 @@ Extension { #name : #PPEpsilonParser }
 PPEpsilonParser >> acceptsEpsilon [
 	^ true
 ]
+
+{ #category : #'*petitislands' }
+PPEpsilonParser >> nonEmpty [
+	^ PPFailingParser message: 'epsilon is always empty'
+]
