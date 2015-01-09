@@ -36,7 +36,13 @@ PPIndentStreamTest >> test1 [
 		position: 3
 		line: 1
 		column: 4.
-		
+
+	self
+		assert: aStream
+		position: 8
+		line: 1
+		column: 9.
+				
 	self
 		assert: aStream
 		position: 9
@@ -48,6 +54,12 @@ PPIndentStreamTest >> test1 [
 		position: 13
 		line: 2
 		column: 5.
+		
+	self
+		assert: aStream
+		position: 22
+		line: 2
+		column: 14.
 ]
 
 { #category : #'as yet unclassified' }
