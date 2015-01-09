@@ -4,6 +4,9 @@ A positional stream implementation used for parsing. It overrides some methods f
 Class {
 	#name : #PPStream,
 	#superclass : #ReadStream,
+	#instVars : [
+		'newlines'
+	],
 	#category : #'PetitParser-Core'
 }
 
@@ -19,32 +22,40 @@ PPStream >> collection [
 	^ collection
 ]
 
-{ #category : #queries }
+{ #category : #positioning }
 PPStream >> column [
 	^ self column: position.
 ]
 
-{ #category : #queries }
+{ #category : #positioning }
 PPStream >> column: pos [
-	| column clear tmp |
+	| nl |
+	(pos = -1) ifTrue: [  ^ 0 ].
+	(pos > readLimit) ifTrue: [ ^ self error: 'Out of limit' ].
 	
-	pos > readLimit ifTrue: [ ^ Error signal: 'Oot of bounds' ].	
+	nl := self newlines.
+	nl keysAndValuesDo: [ :index :value |
+		(value > pos) ifTrue: [ ^ pos - (nl at: (index - 1)) + 1]
+	].	
 
+	^ pos - (nl at: (nl size )) + 1
+]
+
+{ #category : #positioning }
+PPStream >> fillNewlines [
+	| tmp line |
+	newlines := OrderedCollection new.	
+	
 	tmp := position.
-	column := 0.	
-	clear := true.
-
-	(0 to: pos) do: 
-	[:index |
+	line := 0.
+	
+	(0 to: readLimit) do: [:index |
 		position := index.
-		self isStartOfLine ifTrue: [ clear := true ].
-
-		clear ifTrue: [ column := 0. clear := false ].
-		column := column + 1.
-		(position > readLimit) ifTrue: [ position := tmp. ^ column ].
+		self isStartOfLine ifTrue: [ newlines add: position ]
 	].
 	position := tmp.
-	^ column
+	newlines := newlines asArray.
+	^ newlines
 ]
 
 { #category : #queries }
@@ -70,27 +81,30 @@ PPStream >> isStartOfLine [
 	^ (self peekBack = (Character codePoint: 13)) or: [ self peekBack = (Character codePoint: 10)].
 ]
 
-{ #category : #queries }
+{ #category : #positioning }
 PPStream >> line [
 	^ self line: position
 ]
 
-{ #category : #queries }
+{ #category : #positioning }
 PPStream >> line: pos [
-	| tmp line |
+	| nl |
 	(pos = -1) ifTrue: [  ^ 0 ].
 	(pos > readLimit) ifTrue: [ ^ self error: 'Out of limit' ].
 	
-	tmp := position.
-	line := 0.
-	
-	(0 to: pos) do: 
-	[:index |
-		position := index.
-		self isStartOfLine ifTrue: [ line := line + 1 ]
-	].
-	position := tmp.
-	^ line
+	nl := self newlines.
+	nl keysAndValuesDo: [ :index :value |
+		(value > pos) ifTrue: [ ^ (index - 1)]
+	].	
+
+	^ nl size
+]
+
+{ #category : #positioning }
+PPStream >> newlines [
+	^ newlines ifNil: [ 
+		newlines := self fillNewlines.
+	]
 ]
 
 { #category : #accessing }
