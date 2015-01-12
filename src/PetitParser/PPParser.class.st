@@ -441,7 +441,8 @@ PPParser >> parseWithContext: context [
 	result := self parseOn: context.
 	
 	"Return the furthest failure, it gives better results than the last failure"
-	result isPetitFailure ifTrue: [ ^ context furthestFailure ].
+	(result isPetitFailure and: [ context furthestFailure isNotNil]) 
+		ifTrue: [ ^ context furthestFailure ].
 	^ result
 	
 ]
