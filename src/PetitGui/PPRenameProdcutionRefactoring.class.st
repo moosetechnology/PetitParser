@@ -46,7 +46,8 @@ PPRenameProdcutionRefactoring >> transform [
 		model: model
 		rename: oldProduction asString
 		to: newProduction asString
-		in: baseClass).
+		in: baseClass
+		renameAccessors: false).
 	oldEnvironment := model environment.
 	model environment: (model environment
 		forClasses: baseClass realClass withAllSubclasses).
