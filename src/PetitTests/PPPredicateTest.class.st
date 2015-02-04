@@ -124,6 +124,19 @@ PPPredicateTest >> testDigit [
 ]
 
 { #category : #'testing-chars' }
+PPPredicateTest >> testEndOfFile [
+	| parser |
+	parser := (#letter asParser / #blank asParser) star, #eof asParser.
+	
+	self assert: parser parse: 'lorem ipsum'.
+	
+	parser := #any asParser, #eof asParser, #any asParser star.
+	self assert: parser fail: 'a', String cr, 'b'.
+	self assert: parser fail: String crlf.
+	self assert: parser parse: 'a'.
+]
+
+{ #category : #'testing-chars' }
 PPPredicateTest >> testEndOfLine [
 	| parser |
 	parser := (#letter asParser / #blank asParser) star, #endOfLine asParser.
