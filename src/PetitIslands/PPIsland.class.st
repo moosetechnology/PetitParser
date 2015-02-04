@@ -107,7 +107,7 @@ PPIsland >> createAfterWaterParser: aPPContext [
 
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
-	(nextSet anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ nextSet add: PPInputEnds new ].
+	(nextSet anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ nextSet add: PPEndOfFileParser new ].
 	
 	nextSet := nextSet collect: [ :e | e nonEmpty ].
 	nextSet := nextSet select: [ :e | e class ~= PPFailingParser ].
@@ -121,7 +121,7 @@ PPIsland >> createBeforeWaterParser: aPPContext [
 	| nextSet p |
 	nextSet := Set new.
 	nextSet addAll: (self nextSet: aPPContext).
-	(nextSet anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ nextSet add: PPInputEnds new ].
+	(nextSet anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ nextSet add: PPEndOfFileParser new ].
 	
 	nextSet := nextSet collect: [:e | e nonEmpty].
 	nextSet := nextSet select: [ :e | e class ~= PPFailingParser ].

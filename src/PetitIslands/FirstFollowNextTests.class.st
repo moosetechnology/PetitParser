@@ -591,7 +591,7 @@ FirstFollowNextTests >> testFollowSet8 [
 	| result p root followSets followSet follow |
 
 	p := 'a' asParser.
-	follow := PPInputEnds new.
+	follow := PPEndOfFileParser new.
 	
 	root := p, follow.
 
