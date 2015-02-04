@@ -68,6 +68,12 @@ PPPredicateObjectParser class >> endOfLine [
 	^ PPEndOfLineParser new.
 ]
 
+{ #category : #'instance creation' }
+PPPredicateObjectParser class >> eof [
+	
+	^ PPEndOfFileParser new
+]
+
 { #category : #'factory-objects' }
 PPPredicateObjectParser class >> expect: anObject [
 	^ self expect: anObject message: anObject printString , ' expected'
