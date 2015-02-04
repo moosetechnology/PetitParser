@@ -182,6 +182,11 @@ PPParser >> hasProperty: aKey [
 	^ properties notNil and: [ properties includesKey: aKey ]
 ]
 
+{ #category : #operators }
+PPParser >> if: aBlock [
+	^ PPConditionalParser on: self block: aBlock
+]
+
 { #category : #initialization }
 PPParser >> initialize [
 ]
