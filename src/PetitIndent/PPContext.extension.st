@@ -22,5 +22,5 @@ PPContext >> indexes: anIndexes [
 
 { #category : #'*PetitIndent' }
 PPContext >> lastIndent [
-	^ self indentTraces lastIndentOf: PPIndentationLevel instance
+	^ self indentTraces lastIndent
 ]

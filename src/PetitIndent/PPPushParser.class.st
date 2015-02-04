@@ -19,7 +19,7 @@ PPPushParser >> initialize [
 
 { #category : #'as yet unclassified' }
 PPPushParser >> parseOn: aPPContext [
-	aPPContext indentTraces push: ref value: aPPContext stream position.
+	aPPContext indentTraces push: ref column: aPPContext stream column.
 	^ 'pushed at column: ', aPPContext stream column asString
 ]
 

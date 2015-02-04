@@ -22,7 +22,7 @@ IndentTraces >> = anObject [
 	^ true.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 IndentTraces >> copy [ 
 	| newTraces |
 	newTraces := IdentityDictionary new.
@@ -41,70 +41,82 @@ IndentTraces >> hash [
 	^ traces hash bitXor: stream hash
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 IndentTraces >> initialize [
 	super initialize.
 	traces := IdentityDictionary new.
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> lastIndentOf: aPPParser [
-	^ stream column: (self tracesFor: aPPParser) top.
+{ #category : #defaults }
+IndentTraces >> lastIndent [
+	^ self top
+]
+
+{ #category : #accessing }
+IndentTraces >> lastIndentOf: reference [
+	^ ((self tracesFor: reference) isEmpty) ifFalse: [ 
+		(self tracesFor: reference) top
+	] ifTrue: [ -1 ]
 	
 	
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> lastLineOf: aPPParser [
-	^ stream line: (self tracesFor: aPPParser) top.
+{ #category : #accessing }
+IndentTraces >> lastLineOf: reference [
+	self error: 'not supported for now'.
+	^ stream line: (self tracesFor: reference) top.
 	
 	
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> pop: aPPParser [
-	| t |
-	t := self tracesFor: aPPParser.
-	t size = 1 ifTrue: [ ^ nil ].
-	^ t pop.
-	
-	
+{ #category : #defaults }
+IndentTraces >> pop [
+	^ self pop: (PPIndentationLevel instance)
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> push: anObject value: position [
-	self tracesFor: anObject add: position.
+{ #category : #accessing }
+IndentTraces >> pop: reference [
+	^ (self tracesFor: reference) pop.	
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> register: aPPParser [
-	traces at: aPPParser ifAbsentPut: [ Stack with: 0 ].
+{ #category : #defaults }
+IndentTraces >> push: column [
+	self push: (PPIndentationLevel instance) column: column
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+IndentTraces >> push: reference column: column [
+	self assert: column isInteger.
+	(self tracesFor: reference) push: column.
+]
+
+{ #category : #accessing }
 IndentTraces >> size [
 	^ traces size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IndentTraces >> stream: aPPIndentStream [
 	stream := aPPIndentStream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
+IndentTraces >> top [
+	^ self top: PPIndentationLevel instance
+]
+
+{ #category : #accessing }
+IndentTraces >> top: reference [
+	^ (self tracesFor: reference) top.
+	
+]
+
+{ #category : #accessing }
 IndentTraces >> traces: aDictionary [
 	traces := aDictionary
 ]
 
-{ #category : #'as yet unclassified' }
-IndentTraces >> tracesFor: aPPParser [ 	
-	^ traces at: aPPParser ifAbsentPut: [ Stack with: 0 ].
-]
-
-{ #category : #'as yet unclassified' }
-IndentTraces >> tracesFor: aPPParser add: position [
-	| t |
-	t := self tracesFor: aPPParser.
-	t ifNotNil: [ t push: position ].
-	
+{ #category : #accessing }
+IndentTraces >> tracesFor: reference [ 	
+	^ traces at: reference ifAbsentPut: [ Stack with: 1 ].
 ]
