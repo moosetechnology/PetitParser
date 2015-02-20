@@ -16,7 +16,7 @@ PPMemoizingIslandTest >> islandClass [
 
 { #category : #testing }
 PPMemoizingIslandTest >> testMemo [
-	| parser  result1 result2 context input |
+	| parser  result1 result2 input |
 	
 	parser := self island: ('class' asParser, self identifier, 'endclass' asParser).
 	input := 'class Foo endclass' asPetitStream.

@@ -4071,7 +4071,6 @@ PPJavaIslandParserTest >> context [
 
 { #category : #'as yet unclassified' }
 PPJavaIslandParserTest >> createContext: anInput [
-	| context |
 	context := PPContext on: self parserInstance stream: anInput asPetitStream.
 	self parserInstance updateContext: context.
 	
