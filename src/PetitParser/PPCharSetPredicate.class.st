@@ -19,7 +19,7 @@ PPCharSetPredicate >> initializeOn: aBlock [
 	classification := Array new: 255.
 	1 to: classification size do: [ :index |
 		classification at: index put: (block
-			value: (Character value: index)) ]
+			value: (Character codePoint: index)) ]
 ]
 
 { #category : #evaluating }
