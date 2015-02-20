@@ -146,14 +146,14 @@ PPSmalltalkParser >> buildMethod: aMethodNode [
 		do: [ :each | aMethodNode addComments: each comments ].
 	aMethodNode arguments
 		do: [ :each | aMethodNode addComments: each token comments ].
-	aMethodNode pragmas do: [ :pragma |
-		aMethodNode addComments: pragma comments.
-		pragma selectorParts 
+	aMethodNode pragmas do: [ :aPragma |
+		aMethodNode addComments: aPragma comments.
+		aPragma selectorParts 
 			do: [ :each | aMethodNode addComments: each comments ].
-		pragma arguments do: [ :each | 
+		aPragma arguments do: [ :each | 
 			each isLiteralArray
 				ifFalse: [ aMethodNode addComments: each token comments ] ].
-		pragma comments: nil ].
+		aPragma comments: nil ].
 	^ aMethodNode
 ]
 
