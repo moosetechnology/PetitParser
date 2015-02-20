@@ -27,7 +27,8 @@ Class {
 		'stream',
 		'root',
 		'properties',
-		'globals'
+		'globals',
+		'furthestFailure'
 	],
 	#category : #'PetitParser-Core'
 }
@@ -65,7 +66,9 @@ PPContext >> contents [
 PPContext >> furthestFailure [
 	" the furthest failure encountered while parsing the input stream "
 	
-	^ self globalAt: #furthestFailure ifAbsent: [ nil ]
+	"^ self globalAt: #furthestFailure ifAbsent: [ nil ]"
+	"performance optimization:"
+	^ furthestFailure
 ]
 
 { #category : #'accessing-globals' }
@@ -152,10 +155,8 @@ PPContext >> next: anInteger [
 PPContext >> noteFailure: aPPFailure [
 	"record the furthest failure encountered while parsing the input stream "
 
-	| furthestFailure |
-	furthestFailure := self furthestFailure.
 	( furthestFailure isNil or: [ aPPFailure position > furthestFailure position ]) 
-		ifTrue: [ self globalAt: #furthestFailure put: aPPFailure ].
+		ifTrue: [ furthestFailure := aPPFailure ].
 ]
 
 { #category : #'stream mimicry' }
