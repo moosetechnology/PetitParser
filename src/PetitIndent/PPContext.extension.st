@@ -11,16 +11,6 @@ PPContext >> indentTraces: anIndentTraces [
 ]
 
 { #category : #'*PetitIndent' }
-PPContext >> indexes [
-	^ self propertyAt: #indexes ifAbsentPut: [ Indexes new ]
-]
-
-{ #category : #'*PetitIndent' }
-PPContext >> indexes: anIndexes [
-	^ self propertyAt: #indexes put: anIndexes 
-]
-
-{ #category : #'*PetitIndent' }
 PPContext >> lastIndent [
 	^ self indentTraces lastIndent
 ]

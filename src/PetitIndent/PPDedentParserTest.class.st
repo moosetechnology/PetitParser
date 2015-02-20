@@ -5,7 +5,8 @@ Class {
 		'indentationLevel',
 		'indent',
 		'dedent',
-		'input'
+		'input',
+		'parser'
 	],
 	#category : #'PetitIndent-Tests'
 }
