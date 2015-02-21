@@ -457,7 +457,7 @@ PPParserTest >> testMatchingSkipRangesIn [
 
 { #category : #testing }
 PPParserTest >> testMax [
-	| parser |
+	| parser printString suffix |
 	parser := $a asParser max: 2.
 	self assert: parser min equals: 0.
 	self assert: parser max equals: 2.
@@ -474,7 +474,10 @@ PPParserTest >> testMax [
 		parse: 'aaaa'
 		to: #($a $a)
 		end: 2.
-	self assert: (parser printString endsWith: '[0, 2]')
+	printString := parser printString.
+	suffix := printString copyFrom: printString size - 5 to: printString size.
+	self assert: suffix = '[0, 2]'
+
 ]
 
 { #category : #testing }
@@ -544,7 +547,7 @@ PPParserTest >> testMemoized [
 
 { #category : #testing }
 PPParserTest >> testMin [
-	| parser |
+	| parser printString suffix |
 	parser := $a asParser min: 2.
 	self assert: parser min equals: 2.
 	self assert: parser max > parser min.
@@ -553,7 +556,10 @@ PPParserTest >> testMin [
 	self assert: parser parse: 'aa' to: #($a $a).
 	self assert: parser parse: 'aaa' to: #($a $a $a).
 	self assert: parser parse: 'aaaa' to: #($a $a $a $a).
-	self assert: (parser printString endsWith: '[2, *]')
+	printString := parser printString.
+	suffix := printString copyFrom: printString size - 5 to: printString size.
+	self assert: suffix = '[2, *]'
+
 ]
 
 { #category : #testing }
@@ -632,7 +638,7 @@ PPParserTest >> testMinLazy [
 
 { #category : #testing }
 PPParserTest >> testMinMax [
-	| parser |
+	| parser printString suffix |
 	parser := $a asParser min: 2 max: 4.
 	self assert: parser min equals: 2.
 	self assert: parser max equals: 4.
@@ -651,7 +657,9 @@ PPParserTest >> testMinMax [
 		parse: 'aaaaaa'
 		to: #($a $a $a $a)
 		end: 4.
-	self assert: (parser printString endsWith: '[2, 4]')
+	printString := parser printString.
+	suffix := printString copyFrom: printString size - 5 to: printString size.
+	self assert: suffix = '[2, 4]'
 ]
 
 { #category : #testing }
@@ -783,13 +791,13 @@ PPParserTest >> testParse [
 	parser := $a asParser.
 	self assert: (parser parse: 'a') equals: $a.
 	self assert: (result := parser parse: 'b') isPetitFailure.
-	self assert: (result message includesSubstring: $a printString).
-	self assert: (result message includesSubstring: 'expected').
+	self assert: result message includesSubstring: $a printString.
+	self assert: result message includesSubstring: 'expected'.
 	self assert: result position equals: 0.
 	self assert: (parser parse: 'a' readStream) equals: $a.
 	self assert: (result := parser parse: 'b' readStream) isPetitFailure.
-	self assert: (result message includesSubstring: $a printString).
-	self assert: (result message includesSubstring: 'expected').
+	self assert: result message includesSubstring: $a printString.
+	self assert: result message includesSubstring: 'expected'.
 	self assert: result position equals: 0
 ]
 
@@ -814,8 +822,8 @@ PPParserTest >> testParseOnError1 [
 		parse: 'b'
 		onError: [ :failure | 
 			self assert: failure position equals: 0.
-			self assert: (failure message includesSubstring: $a printString).
-			self assert: (failure message includesSubstring: 'expected').
+			self assert: failure message includesSubstring: $a printString.
+			self assert: failure message includesSubstring: 'expected'.
 			seen := true ].
 	self assert: result.
 	self assert: seen
@@ -830,8 +838,8 @@ PPParserTest >> testParseOnError2 [
 	result := parser
 		parse: 'b'
 		onError: [ :msg :pos | 
-			self assert: (msg includesSubstring: $a printString).
-			self assert: (msg includesSubstring: 'expected').
+			self assert: msg includesSubstring: $a printString.
+			self assert: msg includesSubstring: 'expected'.
 			self assert: pos equals: 0.
 			seen := true ].
 	self assert: result.
@@ -1040,19 +1048,19 @@ PPParserTest >> testPostCopy [
 PPParserTest >> testPrint [
 	| parser |
 	parser := PPParser new.
-	self assert: (parser printString includesSubstring: 'PPParser').
+	self assert: parser printString includesSubstring: 'PPParser'.
 	
 	parser := PPParser named: 'choice'.
-	self assert: (parser printString includesSubstring: 'PPParser(choice').
+	self assert: parser printString includesSubstring: 'PPParser(choice'.
 	
 	parser := PPLiteralObjectParser on: $a.
-	self assert: (parser printString includesSubstring: $a printString).
+	self assert: parser printString includesSubstring: $a printString.
 	
 	parser := PPFailingParser message: 'error'.
-	self assert: (parser printString includesSubstring: 'error').
+	self assert: parser printString includesSubstring: 'error'.
 	
 	parser := PPPredicateObjectParser on: [ :c | true ] message: 'error'.
-	self assert: (parser printString includesSubstring: 'error')
+	self assert: parser printString includesSubstring: 'error'
 ]
 
 { #category : #'testing-properties' }

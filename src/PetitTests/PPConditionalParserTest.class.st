@@ -1,5 +1,5 @@
 Class {
-	#name : #PPConditionalParserTests,
+	#name : #PPConditionalParserTest,
 	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'context'
@@ -8,18 +8,18 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PPConditionalParserTests >> context [
+PPConditionalParserTest >> context [
 	^ context
 ]
 
 { #category : #'as yet unclassified' }
-PPConditionalParserTests >> setUp [
+PPConditionalParserTest >> setUp [
 	super setUp.
 	context := PPContext new
 ]
 
 { #category : #'as yet unclassified' }
-PPConditionalParserTests >> testConditionCtxAccess [
+PPConditionalParserTest >> testConditionCtxAccess [
 	| parser |
 
 	parser := ('a' asParser if: [ :ctx | (ctx propertyAt: #foo) = #bar ]).
@@ -34,7 +34,7 @@ PPConditionalParserTests >> testConditionCtxAccess [
 ]
 
 { #category : #'as yet unclassified' }
-PPConditionalParserTests >> testConditionFalse [
+PPConditionalParserTest >> testConditionFalse [
 	| parser |
 	parser := ('a' asParser if: [ :ctx | false ]).
 	
@@ -43,7 +43,7 @@ PPConditionalParserTests >> testConditionFalse [
 ]
 
 { #category : #'as yet unclassified' }
-PPConditionalParserTests >> testConditionTrue [
+PPConditionalParserTest >> testConditionTrue [
 	| parser |
 	parser := ('a' asParser if: [ :ctx | true ]).
 	

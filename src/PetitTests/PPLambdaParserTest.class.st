@@ -63,15 +63,15 @@ PPLambdaParserTest >> testParseOnError [
 			beenHere := true.
 			fail ].
 	self assert: beenHere.
-	self assert: (result message includesSubstring: 'separator').
-	self assert: (result message includesSubstring: 'expected').
+	self assert: result message includesSubstring: 'separator'.
+	self assert: result message includesSubstring: 'expected'.
 	self assert: result position equals: 3.
 	beenHere := false.
 	result := self parserClass
 		parse: '\x.'
 		onError: [ :msg :pos | 
-			self assert: (msg includesSubstring: 'separator').
-			self assert: (msg includesSubstring: 'expected').
+			self assert: msg includesSubstring: 'separator'.
+			self assert: msg includesSubstring: 'expected'.
 			self assert: pos equals: 3.
 			beenHere := true ].
 	self assert: result.

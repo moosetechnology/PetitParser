@@ -152,7 +152,7 @@ PPComposedTest >> testListOfIntegers [
 	number := #digit asParser plus flatten trim
 		==> [ :node | node asInteger ].
 	list := (number separatedBy: $, asParser token trim)
-		==> [ :node | node select: [ :each | each isInteger ] ].
+		==> [ :node | node select: [ :each | each isKindOf: Integer ] ].
 	parser := list end.
 
 	self assert: parser parse: '1' to: (1 to: 1) asArray.

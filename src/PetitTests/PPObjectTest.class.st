@@ -7,14 +7,14 @@ Class {
 { #category : #parsers }
 PPObjectTest >> integer [
 	^ PPPredicateObjectParser
-		on: [ :each | each isInteger ]
+		on: [ :each | each isKindOf: Integer ]
 		message: 'integer expected'
 ]
 
 { #category : #parsers }
 PPObjectTest >> string [
 	^ PPPredicateObjectParser
-		on: [ :each | each isString ]
+		on: [ :each | each isKindOf: String ]
 		message: 'string expected'
 ]
 

@@ -14,6 +14,7 @@ PPContextMementoTest >> memento [
 
 { #category : #running }
 PPContextMementoTest >> setUp [
+	super setUp.
 	memento := self memento.
 ]
 

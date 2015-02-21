@@ -14,6 +14,7 @@ PPContextTest >> context [
 
 { #category : #'as yet unclassified' }
 PPContextTest >> setUp [
+	super setUp.
 	context := self context.
 ]
 

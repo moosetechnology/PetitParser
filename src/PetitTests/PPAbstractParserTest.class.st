@@ -40,6 +40,13 @@ PPAbstractParserTest >> assert: aParser fail: aCollection end: anInteger [
 ]
 
 { #category : #utilities }
+PPAbstractParserTest >> assert: string1 includesSubstring: string2 [
+	"Support portability by using ANSI search method"
+
+	self assert: (string1 notEmpty and: [string2 notEmpty and: [0 < (string1 indexOfSubCollection: string2 startingAt: 1)]])
+]
+
+{ #category : #utilities }
 PPAbstractParserTest >> assert: aParser parse: aCollection [
 	^ self assert: aParser parse: aCollection to: nil end: aCollection size 
 ]

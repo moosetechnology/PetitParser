@@ -29,7 +29,7 @@ PPPredicateTest >> charactersDo: aBlock [
 { #category : #utilities }
 PPPredicateTest >> parsedCharacterSet: aParser [
 	| result |
-	result := String new writeStream.
+	result := WriteStream on: String new.
 	self charactersDo: [ :char |
 		(aParser matches: (char asString))
 			ifTrue: [ result nextPut: char ] ].
@@ -131,35 +131,40 @@ PPPredicateTest >> testEndOfFile [
 	self assert: parser parse: 'lorem ipsum'.
 	
 	parser := #any asParser, #eof asParser, #any asParser star.
-	self assert: parser fail: 'a', String cr, 'b'.
-	self assert: parser fail: String crlf.
+	self assert: parser fail: 'a', Character cr asString, 'b'.
+	self assert: parser fail: Character cr asString , Character lf asString.
 	self assert: parser parse: 'a'.
+
 ]
 
 { #category : #'testing-chars' }
 PPPredicateTest >> testEndOfLine [
-	| parser |
+	| cr crlf lf parser |
+	cr := Character cr asString.
+	crlf := Character cr asString , Character lf asString.
+	lf := Character lf asString.
 	parser := (#letter asParser / #blank asParser) star, #endOfLine asParser.
 	
 	self assert: parser parse: 'lorem ipsum'.
 	
 	parser := #any asParser, #endOfLine asParser, #any asParser star.
-	self assert: parser parse: 'a', String cr, 'b'.
-	self assert: parser fail: String crlf.
+	self assert: parser parse: 'a', cr, 'b'.
+	self assert: parser fail: crlf.
 	self assert: parser fail: 'lorem ipsum'.
 	
 	parser := #endOfLine asParser, #any asParser, #endOfLine asParser negate star, #endOfLine asParser.
-	self assert: parser parse: String cr, 'lorem ipsum'.
-	self assert: parser parse: String lf, 'lorem ipsum'.	
-	self assert: parser parse: String crlf, 'lorem ipsum'.	
+	self assert: parser parse: cr, 'lorem ipsum'.
+	self assert: parser parse: lf, 'lorem ipsum'.	
+	self assert: parser parse: crlf, 'lorem ipsum'.	
 	
-	self assert: parser parse: String crlf.
-	self assert: parser parse: String cr.
-	self assert: parser parse: String lf.
+	self assert: parser parse: crlf.
+	self assert: parser parse: cr.
+	self assert: parser parse: lf.
 	
 	parser := #endOfLine asParser negate star, #endOfLine asParser, #any asParser star.
-	self assert: parser parse: String crlf, 'lorem ipsum'.
-	self assert: parser parse: String crlf.
+	self assert: parser parse: crlf, 'lorem ipsum'.
+	self assert: parser parse: crlf.
+
 ]
 
 { #category : #'testing-objects' }
@@ -299,7 +304,10 @@ PPPredicateTest >> testSpace [
 
 { #category : #'testing-chars' }
 PPPredicateTest >> testStartOfLine [
-	| parser |
+	| cr crlf lf parser |
+	cr := Character cr asString.
+	crlf := Character cr asString , Character lf asString.
+	lf := Character lf asString.
 	parser := #startOfLine asParser, #any asParser star.
 	
 	self assert: parser parse: 'lorem ipsum'.
@@ -308,17 +316,19 @@ PPPredicateTest >> testStartOfLine [
 	self assert: parser fail: 'lorem ipsum'.
 	
 	parser := #startOfLine asParser, #any asParser, #startOfLine asParser, #any asParser star.
-	self assert: parser parse: String cr, 'lorem ipsum'.
-	self assert: parser parse: String lf, 'lorem ipsum'.	
-	self assert: parser fail: String crlf, 'lorem ipsum'.	
+	self assert: parser parse: cr, 'lorem ipsum'.
+	self assert: parser parse: lf, 'lorem ipsum'.	
+	self assert: parser fail: crlf, 'lorem ipsum'.	
 	
-	self assert: parser fail: String crlf.
-	self assert: parser parse: String cr.
-	self assert: parser parse: String lf.
+	self assert: parser fail: crlf.
+	self assert: parser parse: cr.
+	self assert: parser parse: lf.
 	
 	parser := #startOfLine asParser, #any asParser, #any asParser, #startOfLine asParser, #any asParser star.
-	self assert: parser parse: String crlf, 'lorem ipsum'.
-	self assert: parser parse: String crlf.
+	self assert: parser parse: crlf, 'lorem ipsum'.
+	self assert: parser parse: crlf.
+
+
 ]
 
 { #category : #'testing-chars' }

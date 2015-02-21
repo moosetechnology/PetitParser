@@ -40,7 +40,7 @@ PPArithmeticParser >> number [
 { #category : #grammar }
 PPArithmeticParser >> parentheses [
 	^ $( asParser trim , terms , $) asParser trim
-		==> [ :nodes | nodes second ]
+		==> [ :nodes | nodes at: 2 ]
 ]
 
 { #category : #grammar }
