@@ -225,8 +225,9 @@ PPSmalltalkParser >> method [
 PPSmalltalkParser >> methodDeclaration [
 	^ super methodDeclaration ==> [ :nodes |
 		RBMethodNode 
-			selectorParts: nodes first
-			arguments: nodes second ]
+			selector: nodes first first value
+			arguments: nodes second
+			body: nil ]
 ]
 
 { #category : #grammar }
@@ -244,7 +245,15 @@ PPSmalltalkParser >> nilLiteral [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> numberLiteral [
-	^ super numberLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBNumberLiteralToken value: (Number readFrom: token inputValue) start: token start stop: token stop source: token inputValue) comments: token comments; yourself) ]
+	^ super numberLiteral 
+	
+	==> [ :token | 
+		(RBLiteralValueNode 
+			value: (Number readFrom: token inputValue) 
+			start: token start 
+			stop: token stop 
+			source: token inputValue) 
+				comments: token comments; yourself ]
 ]
 
 { #category : #grammar }
@@ -310,7 +319,14 @@ PPSmalltalkParser >> symbolLiteralArray [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> trueLiteral [
-	^ super trueLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: true start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super trueLiteral 
+	
+	==> [ :token | 
+		(RBLiteralValueNode 
+			value: true 
+			start: token start
+			stop: token stop) 
+				comments: token comments; yourself ]
 ]
 
 { #category : #'grammar-messages' }

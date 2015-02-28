@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 PPSmalltalkToken >> comments [
-	^ comments
+	^ comments ifNil: [ #() ]
 ]
 
 { #category : #accessing }
