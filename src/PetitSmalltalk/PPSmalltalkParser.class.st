@@ -117,7 +117,7 @@ PPSmalltalkParser >> build: aNode messages: anArray [
 						ifFalse: [
 							RBMessageNode 
 								receiver: rec
-								selectorParts: msg first
+								selector: msg first first value
 								arguments: msg second ] ] ]
 ]
 
@@ -325,5 +325,5 @@ PPSmalltalkParser >> unaryToken [
 
 { #category : #grammar }
 PPSmalltalkParser >> variable [
-	^ super variable ==> [ :token | RBVariableNode identifierToken: token ]
+	^ super variable ==> [ :token | RBVariableNode identifierNamed: token value  at: token start ]
 ]
