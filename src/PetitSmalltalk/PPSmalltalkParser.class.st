@@ -185,7 +185,11 @@ PPSmalltalkParser >> cascadeExpression [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> charLiteral [
-	^ super charLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: token inputValue second start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super charLiteral ==> [ :token | 
+		(RBLiteralValueNode 
+			value: token inputValue second 
+			start: token start 
+			stop: token stop) comments: token comments; yourself ]
 ]
 
 { #category : #grammar }
@@ -195,7 +199,11 @@ PPSmalltalkParser >> expression [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> falseLiteral [
-	^ super falseLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: false start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super falseLiteral ==> [ :token | 
+		(RBLiteralValueNode 
+			value: false 
+			start: token start 
+			stop: token stop) comments: token comments; yourself ]
 ]
 
 { #category : #token }
@@ -240,7 +248,11 @@ PPSmalltalkParser >> methodSequence [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> nilLiteral [
-	^ super nilLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: nil start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super nilLiteral ==> [ :token | 
+		(RBLiteralValueNode 
+			value: nil 
+			start: token start 
+			stop: token stop) comments: token comments; yourself ]
 ]
 
 { #category : #'grammar-literals' }
@@ -304,17 +316,22 @@ PPSmalltalkParser >> startMethod [
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> stringLiteral [
-	^ super stringLiteral ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: (self buildString: token inputValue) start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super stringLiteral ==> [ :token | (RBLiteralValueNode value: (self buildString: token inputValue) start: token start stop: token stop) comments: token comments; yourself ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> symbolLiteral [
-	^ super symbolLiteral ==> [ :tokens | RBLiteralValueNode literalToken: ((RBLiteralToken value: (self buildString: tokens last inputValue) asSymbol start: tokens first start stop: tokens last stop) comments: tokens last comments; yourself) ]
+	^ super symbolLiteral ==> [ :tokens | 
+		(RBLiteralValueNode value: (self buildString: tokens last inputValue) asSymbol start: tokens first start stop: tokens last stop) comments: tokens last comments; yourself ]
 ]
 
 { #category : #'grammar-literals' }
 PPSmalltalkParser >> symbolLiteralArray [
-	^ super symbolLiteralArray ==> [ :token | RBLiteralValueNode literalToken: ((RBLiteralToken value: (self buildString: token inputValue) asSymbol start: token start stop: token stop) comments: token comments; yourself) ]
+	^ super symbolLiteralArray ==> [ :token | 
+		(RBLiteralValueNode 
+			value: (self buildString: token inputValue) asSymbol 
+			start: token start 
+			stop: token stop) comments: token comments; yourself ]
 ]
 
 { #category : #'grammar-literals' }
