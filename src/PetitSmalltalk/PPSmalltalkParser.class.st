@@ -142,18 +142,19 @@ PPSmalltalkParser >> buildArray: aStatementCollection [
 
 { #category : #private }
 PPSmalltalkParser >> buildMethod: aMethodNode [
-	aMethodNode selectorParts 
+	self flag: 'check this one thoroughly as it is unclear if the changes preserve 
+	the original behavior from before the AST refactoring '.
+"	aMethodNode selectorParts 
 		do: [ :each | aMethodNode addComments: each comments ].
-	aMethodNode arguments
-		do: [ :each | aMethodNode addComments: each token comments ].
+"	aMethodNode arguments
+		do: [ :each | aMethodNode addComments: each comments ].
 	aMethodNode pragmas do: [ :aPragma |
 		aMethodNode addComments: aPragma comments.
-		aPragma selectorParts 
-			do: [ :each | aMethodNode addComments: each comments ].
+		aMethodNode addComments: aPragma comments.
 		aPragma arguments do: [ :each | 
 			each isLiteralArray
-				ifFalse: [ aMethodNode addComments: each token comments ] ].
-		aPragma comments: nil ].
+				ifFalse: [ aMethodNode addComments: each comments ] ].
+		aPragma comments: #() ].
 	^ aMethodNode
 ]
 
@@ -235,7 +236,7 @@ PPSmalltalkParser >> methodDeclaration [
 		RBMethodNode 
 			selector: nodes first first value
 			arguments: nodes second
-			body: nil ]
+			body: (RBSequenceNode statements: #()) ]
 ]
 
 { #category : #grammar }
@@ -276,7 +277,7 @@ PPSmalltalkParser >> parens [
 { #category : #grammar }
 PPSmalltalkParser >> pragma [
 	^ super pragma ==> [ :nodes | 
-		(RBPragmaNode selectorParts: nodes second first arguments: nodes second second)
+		(RBPragmaNode selector: nodes second first first value arguments: nodes second second)
 			addComments: nodes first comments;
 			addComments: nodes last comments;
 			left: nodes first start;
