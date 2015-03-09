@@ -68,7 +68,7 @@ PPPredicateObjectParser class >> endOfLine [
 	^ PPEndOfLineParser new.
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'factory-objects' }
 PPPredicateObjectParser class >> eof [
 	
 	^ PPEndOfFileParser new
@@ -136,19 +136,19 @@ PPPredicateObjectParser class >> space [
 	^ self on: (PPCharSetPredicate on: [ :char | char isSeparator ]) message: 'separator expected'
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'factory-objects' }
 PPPredicateObjectParser class >> startOfLine [
 	
 	^ PPStartOfLineParser new.
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'factory-objects' }
 PPPredicateObjectParser class >> startOfLogicalLine [
 	
 	^ PPStartOfLogicalLineParser new.
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'factory-objects' }
 PPPredicateObjectParser class >> startOfWord [
 	
 	^ PPStartOfWordParser new.
