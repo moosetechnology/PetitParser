@@ -105,19 +105,20 @@ PPSmalltalkParser >> build: aNode cascade: anArray [
 ]
 
 { #category : #private }
-PPSmalltalkParser >> build: aNode messages: anArray [ 
-	^ (anArray isNil or: [ anArray isEmpty ]) 
+PPSmalltalkParser >> build: aNode messages: anArray [
+	^ (anArray isNil or: [ anArray isEmpty ])
 		ifTrue: [ aNode ]
-		ifFalse: [
-			anArray 
+		ifFalse: [ 
+			anArray
 				inject: aNode
 				into: [ :rec :msg | 
-					msg isNil 
+					msg isNil
 						ifTrue: [ rec ]
-						ifFalse: [
-							RBMessageNode 
+						ifFalse: [ 
+							RBMessageNode
 								receiver: rec
-								selector: msg first first value
+								selector: (self buildSelector: msg first)
+								keywordsPositions: (msg first collect: [ :each | each start ])
 								arguments: msg second ] ] ]
 ]
 
@@ -156,6 +157,11 @@ PPSmalltalkParser >> buildMethod: aMethodNode [
 				ifFalse: [ aMethodNode addComments: each comments ] ].
 		aPragma comments: #() ].
 	^ aMethodNode
+]
+
+{ #category : #private }
+PPSmalltalkParser >> buildSelector: anArray [
+	^ (String streamContents: [ :stream | anArray do: [ :each | stream nextPutAll: each value ] ]) asSymbol
 ]
 
 { #category : #private }
@@ -232,11 +238,14 @@ PPSmalltalkParser >> method [
 
 { #category : #grammar }
 PPSmalltalkParser >> methodDeclaration [
-	^ super methodDeclaration ==> [ :nodes |
-		RBMethodNode 
-			selector: nodes first first value
-			arguments: nodes second
-			body: (RBSequenceNode statements: #()) ]
+	^ super methodDeclaration
+		==> [ :nodes | 
+			(RBMethodNode
+				selector: (self buildSelector: nodes first)
+				keywordsPositions: (nodes first collect: [ :each | each start ])
+				arguments: nodes second)
+				body: (RBSequenceNode statements: #());
+				yourself ]
 ]
 
 { #category : #grammar }
@@ -276,13 +285,17 @@ PPSmalltalkParser >> parens [
 
 { #category : #grammar }
 PPSmalltalkParser >> pragma [
-	^ super pragma ==> [ :nodes | 
-		(RBPragmaNode selector: nodes second first first value arguments: nodes second second)
-			addComments: nodes first comments;
-			addComments: nodes last comments;
-			left: nodes first start;
-			right: nodes last start;
-			yourself ]
+	^ super pragma
+		==> [ :nodes | 
+			(RBPragmaNode
+				selector: (self buildSelector: nodes second first)
+				keywordsPositions: (nodes second first collect: [ :each | each start ])
+				arguments: nodes second second)
+				addComments: nodes first comments;
+				addComments: nodes last comments;
+				left: nodes first start;
+				right: nodes last start;
+				yourself ]
 ]
 
 { #category : #grammar }

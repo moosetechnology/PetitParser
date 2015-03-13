@@ -285,6 +285,7 @@ PPSmalltalkParserTests >> testBinaryExpression3 [
 	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #//.
+	self assert: result keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
@@ -297,6 +298,7 @@ PPSmalltalkParserTests >> testBinaryExpression4 [
 	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #--.
+	self assert: result keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
@@ -309,6 +311,7 @@ PPSmalltalkParserTests >> testBinaryExpression5 [
 	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #==>.
+	self assert: result keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
@@ -319,6 +322,7 @@ PPSmalltalkParserTests >> testBinaryMethod1 [
 	super testBinaryMethod1.
 	self assert: result isMethod.
 	self assert: result selector equals: #+.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -331,6 +335,7 @@ PPSmalltalkParserTests >> testBinaryMethod2 [
 	super testBinaryMethod2.
 	self assert: result isMethod.
 	self assert: result selector equals: #+.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -343,6 +348,7 @@ PPSmalltalkParserTests >> testBinaryMethod3 [
 	super testBinaryMethod3.
 	self assert: result isMethod.
 	self assert: result selector equals: #+.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.	
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -355,6 +361,7 @@ PPSmalltalkParserTests >> testBinaryMethod4 [
 	super testBinaryMethod4.
 	self assert: result isMethod.
 	self assert: result selector equals: #+.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.	
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -367,6 +374,7 @@ PPSmalltalkParserTests >> testBinaryMethod5 [
 	super testBinaryMethod5.
 	self assert: result isMethod.
 	self assert: result selector equals: #--.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.	
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -438,8 +446,10 @@ PPSmalltalkParserTests >> testCascadeExpression1 [
 	self assert: result messages size equals: 2.
 	self assert: result messages first receiver equals: result receiver.
 	self assert: result messages first selector equals: #abs.
+	self assert: result messages first keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result messages second receiver equals: result receiver.
-	self assert: result messages second selector equals: #negated
+	self assert: result messages second selector equals: #negated.
+	self assert: result messages second keywordsPositions equals: #(8) asIntegerArray
 ]
 
 { #category : #'testing-messages' }
@@ -450,13 +460,17 @@ PPSmalltalkParserTests >> testCascadeExpression2 [
 	self assert: result receiver receiver isLiteralNode.
 	self assert: result receiver receiver value equals: 1.
 	self assert: result receiver selector equals: #abs.
+	self assert: result receiver keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result messages size equals: 3.
 	self assert: result messages first receiver equals: result receiver.
 	self assert: result messages first selector equals: #negated.
+	self assert: result messages first keywordsPositions equals: #(7) asIntegerArray.
 	self assert: result messages second receiver equals: result receiver.
 	self assert: result messages second selector equals: #raisedTo:.
+	self assert: result messages second keywordsPositions equals: #(16) asIntegerArray.
 	self assert: result messages third receiver equals: result receiver.
-	self assert: result messages third selector equals: #negated
+	self assert: result messages third selector equals: #negated.
+	self assert: result messages third keywordsPositions equals: #(30) asIntegerArray
 ]
 
 { #category : #'testing-messages' }
@@ -468,9 +482,11 @@ PPSmalltalkParserTests >> testCascadeExpression3 [
 	self assert: result messages size equals: 2.
 	self assert: result messages first receiver equals: result receiver.
 	self assert: result messages first selector equals: #+.
+	self assert: result messages first keywordsPositions equals: #(3) asIntegerArray.				
 	self assert: result messages first arguments size equals: 1.
 	self assert: result messages second receiver equals: result receiver.
 	self assert: result messages second selector equals: #-.
+	self assert: result messages second keywordsPositions equals: #(8) asIntegerArray.				
 	self assert: result messages second arguments size equals: 1
 ]
 
@@ -565,6 +581,7 @@ PPSmalltalkParserTests >> testKeywordExpression1 [
 	self assert: result receiver isLiteralNode.
 	self assert: result receiver value equals: 1.
 	self assert: result selector equals: #to:.
+	self assert: result keywordsPositions equals: #(3) asIntegerArray.
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2
@@ -576,6 +593,7 @@ PPSmalltalkParserTests >> testKeywordExpression2 [
 	self assert: result isMessage.
 	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #to:by:.
+	self assert: result keywordsPositions equals: #(3 9) asIntegerArray.
 	self assert: result arguments size equals: 2.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2.
@@ -589,6 +607,7 @@ PPSmalltalkParserTests >> testKeywordExpression3 [
 	self assert: result isMessage.
 	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #to:by:do:.
+	self assert: result keywordsPositions equals: #(3 9 15) asIntegerArray.
 	self assert: result arguments size equals: 3.
 	self assert: result arguments first isLiteralNode.
 	self assert: result arguments first value equals: 2.
@@ -603,6 +622,7 @@ PPSmalltalkParserTests >> testKeywordMethod1 [
 	super testKeywordMethod1.
 	self assert: result isMethod.
 	self assert: result selector equals: #to:.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.		
 	self assert: result arguments size equals: 1.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -615,6 +635,7 @@ PPSmalltalkParserTests >> testKeywordMethod2 [
 	super testKeywordMethod2.
 	self assert: result isMethod.
 	self assert: result selector equals: #to:do:.
+	self assert: result keywordsPositions equals: #(1 7) asIntegerArray.		
 	self assert: result arguments size equals: 2.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -629,6 +650,7 @@ PPSmalltalkParserTests >> testKeywordMethod3 [
 	super testKeywordMethod3.
 	self assert: result isMethod.
 	self assert: result selector equals: #to:do:by:.
+	self assert: result keywordsPositions equals: #(1 7 13) asIntegerArray.			
 	self assert: result arguments size equals: 3.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -645,6 +667,7 @@ PPSmalltalkParserTests >> testKeywordMethod4 [
 	super testKeywordMethod4.
 	self assert: result isMethod.
 	self assert: result selector equals: #to:do:by:.
+	self assert: result keywordsPositions equals: #(1 7 13) asIntegerArray.			
 	self assert: result arguments size equals: 3.
 	self assert: result arguments first isVariable.
 	self assert: result arguments first name equals: 'a'.
@@ -826,6 +849,7 @@ PPSmalltalkParserTests >> testPragma1 [
 	self 
 		assert: result pragmas
 		format: #('<foo>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -836,6 +860,7 @@ PPSmalltalkParserTests >> testPragma10 [
 	self 
 		assert: result pragmas
 		format: #('<foo: #bar>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -846,6 +871,7 @@ PPSmalltalkParserTests >> testPragma11 [
 	self 
 		assert: result pragmas
 		format: #('<foo: true>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -856,6 +882,7 @@ PPSmalltalkParserTests >> testPragma12 [
 	self 
 		assert: result pragmas
 		format: #('<foo: false>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -866,6 +893,7 @@ PPSmalltalkParserTests >> testPragma13 [
 	self 
 		assert: result pragmas
 		format: #('<foo: nil>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -876,6 +904,7 @@ PPSmalltalkParserTests >> testPragma14 [
 	self 
 		assert: result pragmas
 		format: #('<foo: #()>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -886,6 +915,7 @@ PPSmalltalkParserTests >> testPragma15 [
 	self 
 		assert: result pragmas
 		format: #('<foo: #()>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -896,6 +926,29 @@ PPSmalltalkParserTests >> testPragma16 [
 	self 
 		assert: result pragmas
 		format: #('< + 1>' ).
+	self assert: result pragmas first keywordsPositions equals: #(10) asIntegerArray.		
+	self assert: result body temporaries isEmpty.
+	self assert: result body statements isEmpty
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkParserTests >> testPragma17 [
+	super testPragma17.
+	self 
+		assert: result pragmas
+		format: #('<foo: 1 bar: 2>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9 16) asIntegerArray.		
+	self assert: result body temporaries isEmpty.
+	self assert: result body statements isEmpty
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkParserTests >> testPragma18 [
+	super testPragma18.
+	self 
+		assert: result pragmas
+		format: #('<foo: 1 bar: 2 baz: #b>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9 16 24) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -906,6 +959,8 @@ PPSmalltalkParserTests >> testPragma2 [
 	self 
 		assert: result pragmas
 		format: #('<foo>' '<bar>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
+	self assert: result pragmas second keywordsPositions equals: #(15) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -914,6 +969,7 @@ PPSmalltalkParserTests >> testPragma2 [
 PPSmalltalkParserTests >> testPragma3 [
 	super testPragma3.
 	self assert: result pragmas format: #('<foo>').
+	self assert: result pragmas first keywordsPositions equals: #(15) asIntegerArray.
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
 ]
@@ -922,6 +978,7 @@ PPSmalltalkParserTests >> testPragma3 [
 PPSmalltalkParserTests >> testPragma4 [
 	super testPragma4.
 	self assert: result pragmas format: #('<foo>').
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.	
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
 ]
@@ -930,6 +987,8 @@ PPSmalltalkParserTests >> testPragma4 [
 PPSmalltalkParserTests >> testPragma5 [
 	super testPragma5.
 	self assert: result pragmas format: #('<foo>' '<bar>').
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
+	self assert: result pragmas second keywordsPositions equals: #(21) asIntegerArray.	
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
 ]
@@ -940,6 +999,7 @@ PPSmalltalkParserTests >> testPragma6 [
 	self 
 		assert: result pragmas
 		format: #('<foo: 1>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -950,6 +1010,7 @@ PPSmalltalkParserTests >> testPragma7 [
 	self 
 		assert: result pragmas
 		format: #('<foo: 1.2>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -960,6 +1021,7 @@ PPSmalltalkParserTests >> testPragma8 [
 	self 
 		assert: result pragmas
 		format: #('<foo: ''bar''>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -970,6 +1032,7 @@ PPSmalltalkParserTests >> testPragma9 [
 	self 
 		assert: result pragmas
 		format: #('<foo: #bar>' ).
+	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
 ]
@@ -1315,6 +1378,7 @@ PPSmalltalkParserTests >> testUnaryExpression1 [
 	self assert: result isMessage.
 	self assert: result receiver isLiteralNode.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(3) asIntegerArray.		
 	self assert: result arguments isEmpty
 ]
 
@@ -1326,8 +1390,10 @@ PPSmalltalkParserTests >> testUnaryExpression2 [
 	self assert: result receiver receiver isLiteralNode.
 	self assert: result receiver receiver value equals: 1.
 	self assert: result receiver selector equals: #abs.
+	self assert: result receiver keywordsPositions equals: #(3) asIntegerArray.		
 	self assert: result receiver arguments isEmpty.
 	self assert: result selector equals: #negated.
+	self assert: result keywordsPositions equals: #(7) asIntegerArray.		
 	self assert: result arguments isEmpty
 ]
 
@@ -1336,6 +1402,7 @@ PPSmalltalkParserTests >> testUnaryMethod1 [
 	super testUnaryMethod1.
 	self assert: result isMethod.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.		
 	self assert: result arguments isEmpty.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -1346,6 +1413,7 @@ PPSmalltalkParserTests >> testUnaryMethod2 [
 	super testUnaryMethod2.
 	self assert: result isMethod.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.			
 	self assert: result arguments isEmpty.
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
@@ -1356,6 +1424,7 @@ PPSmalltalkParserTests >> testUnaryMethod3 [
 	super testUnaryMethod3.
 	self assert: result isMethod.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.			
 	self assert: result arguments isEmpty.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements size equals: 1
@@ -1366,6 +1435,7 @@ PPSmalltalkParserTests >> testUnaryMethod4 [
 	super testUnaryMethod4.
 	self assert: result isMethod.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.			
 	self assert: result arguments isEmpty.
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements size equals: 1
@@ -1376,6 +1446,7 @@ PPSmalltalkParserTests >> testUnaryMethod5 [
 	super testUnaryMethod5.
 	self assert: result isMethod.
 	self assert: result selector equals: #abs.
+	self assert: result keywordsPositions equals: #(1) asIntegerArray.		
 	self assert: result arguments isEmpty.
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty

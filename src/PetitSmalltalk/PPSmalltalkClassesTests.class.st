@@ -194,10 +194,9 @@ PPSmalltalkClassesTests >> verifyClass: aClass selector: aSelector [
 				assert: node1 periods asArray = node2 periods asArray
 				description: 'Source position periods in ' , signature ].
 		(node1 isMethod or: [ node1 isMessage or: [ node1 isPragma ] ]) ifTrue: [
-			node1 selectorParts with: node2 selectorParts do: [ :a :b |
-				self
-					assert: a start = b start
-					description: 'Source position selector parts in ' , signature ] ].
+			self
+				assert: node1 keywordsPositions = node2 keywordsPositions 
+				description: 'Source position keywords positions in ' , signature ].
 		node1 children with: node2 children do: checker ].
 	checker value: original value: other
 ]

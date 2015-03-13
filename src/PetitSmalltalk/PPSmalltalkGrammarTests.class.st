@@ -630,6 +630,20 @@ PPSmalltalkGrammarTests >> testPragma16 [
 ]
 
 { #category : #'testing-pragmas' }
+PPSmalltalkGrammarTests >> testPragma17 [
+	self 
+		parse: 'method <foo: 1 bar: 2>'
+		rule: #method
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkGrammarTests >> testPragma18 [
+	self 
+		parse: 'method <foo: 1 bar: 2  baz: b>'
+		rule: #method
+]
+
+{ #category : #'testing-pragmas' }
 PPSmalltalkGrammarTests >> testPragma2 [
 	self 
 		parse: 'method <foo> <bar>'
