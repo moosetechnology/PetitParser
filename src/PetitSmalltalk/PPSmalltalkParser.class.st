@@ -240,12 +240,10 @@ PPSmalltalkParser >> method [
 PPSmalltalkParser >> methodDeclaration [
 	^ super methodDeclaration
 		==> [ :nodes | 
-			(RBMethodNode
+			RBMethodNode
 				selector: (self buildSelector: nodes first)
 				keywordsPositions: (nodes first collect: [ :each | each start ])
-				arguments: nodes second)
-				body: (RBSequenceNode statements: #());
-				yourself ]
+				arguments: nodes second ]
 ]
 
 { #category : #grammar }
