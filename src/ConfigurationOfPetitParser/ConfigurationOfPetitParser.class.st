@@ -193,7 +193,7 @@ ConfigurationOfPetitParser >> baseline13: spec [
 
 { #category : #baselines }
 ConfigurationOfPetitParser >> baseline151: spec [ 
-	<version: '1.51-baseline'>
+	<version: '1.5.1-baseline'>
 	
 	spec for: #common do: [
 		spec blessing: #baseline.
@@ -600,7 +600,7 @@ ConfigurationOfPetitParser >> version14: spec [
 
 { #category : #versions }
 ConfigurationOfPetitParser >> version151: spec [
-	<version: '1.51' imports: #('1.51-baseline' )>
+	<version: '1.5.1' imports: #('1.5.1-baseline' )>
 
 	spec for: #'common' do: [
 		spec blessing: #'development'.
