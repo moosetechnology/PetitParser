@@ -4,14 +4,19 @@ A parser that accepts if a given predicate on one element of the input sequence 
 Class {
 	#name : #PPPredicateObjectParser,
 	#superclass : #PPPredicateParser,
+	#classInstVars : [
+		'cache'
+	],
 	#category : #'PetitParser-Parsers'
 }
 
 { #category : #'factory-objects' }
 PPPredicateObjectParser class >> any [
-	^ self
-		on: [ :each | true ] message: 'input expected'
-		negated: [ :each | false ] message: 'no input expected'
+	^self
+		cacheAt: #'any'
+		ifAbsentPut: [ self
+			on: [ :each | true ] message: 'input expected'
+			negated: [ :each | false ] message: 'no input expected' ]
 ]
 
 { #category : #'factory-objects' }
@@ -37,7 +42,19 @@ PPPredicateObjectParser class >> between: min and: max [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> blank [
-	^ self chars: (String with: Character space with: Character tab) message: 'blank expected'
+	^self
+		cacheAt: #'blank'
+		ifAbsentPut: [ self
+			chars: (String with: Character space with: Character tab) message: 'blank expected' ]
+]
+
+{ #category : #cache }
+PPPredicateObjectParser class >> cacheAt: aSymbol ifAbsentPut: aBlock [
+
+	cache ifNil: [ ^aBlock value ].
+	^(cache
+		at: aSymbol
+		ifAbsentPut: aBlock) copy
 ]
 
 { #category : #'factory-chars' }
@@ -57,12 +74,16 @@ PPPredicateObjectParser class >> chars: aCollection message: aString [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> cr [
-	^ self char: (Character codePoint: 13) message: 'carriage return expected'
+	^self
+		cacheAt: #'cr'
+		ifAbsentPut: [ self char: (Character codePoint: 13) message: 'carriage return expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> digit [
-	^ self on: (PPCharSetPredicate on: [ :char | char isDigit ]) message: 'digit expected'
+	^self
+		cacheAt: #'digit'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isDigit ]) message: 'digit expected' ]
 ]
 
 { #category : #'factory-objects' }
@@ -91,32 +112,42 @@ PPPredicateObjectParser class >> expect: anObject message: aString [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> hex [
-	^ self 
+	^self
+		cacheAt: #'hex'
+		ifAbsentPut: [ self
 		on: (PPCharSetPredicate on: [ :char | 
 			(char between: $0 and: $9) 
 				or: [ (char between: $a and: $f) 
 				or: [ (char between: $A and: $F) ] ] ])
-		message: 'hex digit expected'
+		message: 'hex digit expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> letter [
-	^ self on: (PPCharSetPredicate on: [ :char | char isLetter ]) message: 'letter expected'
+	^self
+		cacheAt: #'letter'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isLetter ]) message: 'letter expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> lf [
-	^ self char: (Character codePoint: 10)
+	^self
+		cacheAt: #'lf'
+		ifAbsentPut: [ self char: (Character codePoint: 10) ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> lowercase [
-	^ self on: (PPCharSetPredicate on: [ :char | char isLowercase ]) message: 'lowercase letter expected'
+	^self
+		cacheAt: #'lowercase'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isLowercase ]) message: 'lowercase letter expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> newline [
-	^ self chars: (String with: (Character codePoint: 13) with: (Character codePoint: 10)) message: 'newline expected'
+	^self
+		cacheAt: #'newline'
+		ifAbsentPut: [ self chars: (String with: (Character codePoint: 13) with: (Character codePoint: 10)) message: 'newline expected' ]
 ]
 
 { #category : #'instance creation' }
@@ -131,12 +162,16 @@ PPPredicateObjectParser class >> on: aBlock message: aString negated: aNegatedBl
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> punctuation [
-	^ self chars: '.,"''?!;:#$%&()*+-/<>=@[]\^_{}|~' message: 'punctuation expected'
+	^self
+		cacheAt: #'punctuation'
+		ifAbsentPut: [ self chars: '.,"''?!;:#$%&()*+-/<>=@[]\^_{}|~' message: 'punctuation expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> space [
-	^ self on: (PPCharSetPredicate on: [ :char | char isSeparator ]) message: 'separator expected'
+	^self
+		cacheAt: #'space'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isSeparator ]) message: 'separator expected' ]
 ]
 
 { #category : #'factory-objects' }
@@ -159,17 +194,34 @@ PPPredicateObjectParser class >> startOfWord [
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> tab [
-	^ self char: Character tab message: 'tab expected'
+	^self
+		cacheAt: #'tab'
+		ifAbsentPut: [ self char: Character tab message: 'tab expected' ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> uppercase [
-	^ self on: (PPCharSetPredicate on: [ :char | char isUppercase ]) message: 'uppercase letter expected'
+	^self
+		cacheAt: #'uppercase'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isUppercase ]) message: 'uppercase letter expected' ]
+]
+
+{ #category : #cache }
+PPPredicateObjectParser class >> useCache: aBoolean [
+"
+	PPPredicateObjectParser useCache: true.
+	PPPredicateObjectParser useCache: false.
+"
+	cache := aBoolean 
+		ifTrue: [ Dictionary new ]
+		ifFalse: [ nil ]
 ]
 
 { #category : #'factory-chars' }
 PPPredicateObjectParser class >> word [
-	^ self on: (PPCharSetPredicate on: [ :char | char isAlphaNumeric ]) message: 'letter or digit expected'
+	^self
+		cacheAt: #'word'
+		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isAlphaNumeric ]) message: 'letter or digit expected' ]
 ]
 
 { #category : #initialization }
