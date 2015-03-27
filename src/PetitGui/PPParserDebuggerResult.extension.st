@@ -3,8 +3,13 @@ Extension { #name : #PPParserDebuggerResult }
 { #category : #'*petitgui' }
 PPParserDebuggerResult >> findStream [
 	
-	stream ifNil: [ ^ parent findStream ].
+	stream ifNil: [ ^ parent ifNotNil: [ parent findStream ] ].
 	^ stream
+]
+
+{ #category : #'*petitgui' }
+PPParserDebuggerResult >> findStreamContents [
+	^ (self findStream ifNotNilDo: [ :s | s contents ]) ifNil: [ '' ]
 ]
 
 { #category : #'*petitgui' }
@@ -40,11 +45,43 @@ PPParserDebuggerResult >> gtDebugView: composite [
 ]
 
 { #category : #'*petitgui' }
+PPParserDebuggerResult class >> gtExampleAlmostArithmetic [
+	<gtExample: 'Incomplete arithmetic expression'>
+	^ PPParserDebuggerResult 
+		parse: '1 + ' 
+		with: PPArithmeticParser new
+]
+
+{ #category : #'*petitgui' }
+PPParserDebuggerResult class >> gtExampleArithmetic [
+	<gtExample: 'Arithmetic expression'>
+	^ PPParserDebuggerResult 
+		parse: '1 + 2' 
+		with: PPArithmeticParser new
+]
+
+{ #category : #'*petitgui' }
+PPParserDebuggerResult class >> gtExampleNoNumber [
+	<gtExample: 'Result with #Number expected, but #String given'>
+	^ PPParserDebuggerResult 
+		parse: 'hello world' 
+		with: (PPArithmeticParser new productionAt: #number)
+]
+
+{ #category : #'*petitgui' }
+PPParserDebuggerResult class >> gtExampleNumber [
+	<gtExample: 'Result with #Number'>
+	^ PPParserDebuggerResult 
+		parse: '123' 
+		with: (PPArithmeticParser new productionAt: #number)
+]
+
+{ #category : #'*petitgui' }
 PPParserDebuggerResult >> sampleIn: composite [
 
 	(composite text)
 		title: 'Sample';
-		display: [:res | res findStream contents ifNil: [''] ];
+		display: [:res | res findStreamContents ];
 		allowNil.
 ]
 

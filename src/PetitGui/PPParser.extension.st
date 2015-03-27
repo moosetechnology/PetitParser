@@ -94,6 +94,18 @@ PPParser >> gtAllParsersIn: composite [
 ]
 
 { #category : #'*petitgui' }
+PPParser class >> gtExampleCharactersParser [
+	<gtExample: 'Characters parser'>
+	^ ($a to: $z) asParser
+]
+
+{ #category : #'*petitgui' }
+PPParser class >> gtExampleEmptyParser [
+	<gtExample: 'Empty parser'>
+	^ self new
+]
+
+{ #category : #'*petitgui' }
 PPParser >> gtInspectorParserInspectorIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	composite custom: (

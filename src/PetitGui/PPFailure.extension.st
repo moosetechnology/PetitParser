@@ -46,6 +46,18 @@ PPFailure >> gtDebugView: composite [
 ]
 
 { #category : #'*petitgui' }
+PPFailure class >> gtExampleEmptyMessage [
+	<gtExample: 'Failure: empty'>
+	^ self message: ''
+]
+
+{ #category : #'*petitgui' }
+PPFailure class >> gtExampleNumberExpected [
+	<gtExample: 'Failure: Number expected'>
+	^ #digit asParser plus parse: 'a'
+]
+
+{ #category : #'*petitgui' }
 PPFailure >> sampleIn: composite [
 
 	(composite text)
