@@ -627,10 +627,38 @@ PPParser >> trimBlanks [
 ]
 
 { #category : #'operators-mapping' }
+PPParser >> trimLeft [
+	"Answer a new parser that consumes spaces before the receiving parser."
+	
+	^ self trimSpacesLeft
+]
+
+{ #category : #'operators-mapping' }
+PPParser >> trimRight [
+	"Answer a new parser that consumes spaces after the receiving parser."
+	
+	^ self trimSpacesRight
+]
+
+{ #category : #'operators-mapping' }
 PPParser >> trimSpaces [
 	"Answer a new parser that consumes spaces before and after the receiving parser."
 	
 	^ self trim: #space asParser
+]
+
+{ #category : #'operators-mapping' }
+PPParser >> trimSpacesLeft [
+	"Answer a new parser that consumes spaces before the receiving parser."
+	
+	^ (#space asParser star, self) ==> #second
+]
+
+{ #category : #'operators-mapping' }
+PPParser >> trimSpacesRight [
+	"Answer a new parser that consumes spaces after the receiving parser."
+	
+	^ (self, #space asParser star) ==> #first
 ]
 
 { #category : #context }
