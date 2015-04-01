@@ -26,7 +26,7 @@ PPNoIndentTrimmingParser >> createTrimmingParser: aPPContext [
 	/
 		nil asParser.
 	
-	trimmer disableDebuggerOutput.	
+	"trimmer disableDebuggerOutput.	"
 	^ trimmer, parser, trimmer ==> #second
 	
 	
