@@ -424,7 +424,7 @@ ConfigurationOfPetitParser >> baseline17: spec [
 ConfigurationOfPetitParser >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '1.11'.
+	spec for: #'common' version: '1.7-baseline'.
 
 	spec for: #'pharo1.4.x' version: '1.6-baseline'.
 
