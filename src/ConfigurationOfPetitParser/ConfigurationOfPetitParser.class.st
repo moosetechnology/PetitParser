@@ -587,7 +587,7 @@ ConfigurationOfPetitParser >> version111: spec [
 	<version: '1.11' imports: #('1.6-baseline' )>
 
 	spec for: #'common' do: [
-		spec blessing: #'development'.
+		spec blessing: #'stable'.
 		spec description: 'version 1.11'.
 		spec author: 'JanKurs'.
 		spec timestamp: '4/1/2015 11:27'.
