@@ -417,7 +417,7 @@ ConfigurationOfPetitParser >> baseline17: spec [
 		spec 
 			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
 		
-		spec group: 'PetitIDE' with: #( 'PetitGui' ) ] 
+		spec group: 'ParserIDE' with: #( 'PetitGui' ) ] 
 ]
 
 { #category : #'symbolic versions' }
