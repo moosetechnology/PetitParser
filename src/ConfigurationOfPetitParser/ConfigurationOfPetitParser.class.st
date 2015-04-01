@@ -604,7 +604,7 @@ ConfigurationOfPetitParser >> version111: spec [
 			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
 			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
 			package: 'PetitIslands' with: 'PetitIslands-JanKurs.22';
-			package: 'PetitIndent' with: 'PetitIndent-JanKurs.6';
+			package: 'PetitIndent' with: 'PetitIndent-JanKurs.7';
 			package: 'Factorial-Language' with: 'Factorial-Language-lr.6'. ].
 
 	spec for: #'squeakCommon' do: [
