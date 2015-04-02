@@ -210,10 +210,14 @@ PPIslandTest >> testBoundary [
 	self assert: p parse: 'class Foo end of class'.
 	self assert: result size = 4.
 	self assert: result second = 'Foo'.
+	self assert: result third first = ''.
+	self assert: result third last = ''.
 	
 	self assert: p parse: 'class Foo .... end of class'.
 	self assert: result size = 4.
 	self assert: result second = 'Foo'.
+	self assert: result third first = ' ....'.
+	self assert: result third last = ''.
 	
 	self assert: p parse: 'class Foo .... end ... end of class'.
 	self assert: result size = 4.
@@ -222,6 +226,9 @@ PPIslandTest >> testBoundary [
 	self assert: p parse: 'class Foo .... end of ... end of class'.
 	self assert: result size = 4.
 	self assert: result second = 'Foo'.
+	self assert: result third first = ' .... end of ...'.
+	self assert: result third last = ''.
+
 
 ]
 
@@ -236,10 +243,15 @@ PPIslandTest >> testBoundary2 [
 
 	self assert: p parse: '...foo..end...bar...end'.	
 	
+	self assert: result first first first = '...'.
 	self assert: result first first second = 'foo'.
+	self assert: result first first third = '..'.
+	
 	self assert: result first second = 'end'.
 
+	self assert: result second first first = '...'.
 	self assert: result second first second = 'bar'.
+	self assert: result second first third = '...'.
 	self assert: result second second = 'end'.
 ]
 
@@ -647,9 +659,18 @@ PPIslandTest >> testIslandPlus [
 	
 	self assert: parser parse: '....X....'.
 	self assert: result size = 1.
+	self assert: result first first = '....'.
+	self assert: result first third = '....'.
 
 	self assert: parser parse: '...X...X...XX'.
 	self assert: result size = 4.
+
+	self assert: result second first = ''.
+	self assert: result second third = '...'.
+	self assert: result third first = ''.
+	self assert: result third third = ''.
+	self assert: result fourth first = ''.
+	self assert: result fourth third = ''.
 
 	self assert: parser fail: '.....'.
 ]

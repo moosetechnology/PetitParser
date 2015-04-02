@@ -41,8 +41,9 @@ PPWater >> initialize [
 
 { #category : #'as yet unclassified' }
 PPWater >> parseOn: aPPContext [
-	| waterPosition result |
+	| waterPosition result position |
 	
+	position := aPPContext position.
 	(aPPContext waterPosition == aPPContext position) ifFalse: [ 
 		waterPosition := aPPContext waterPosition.
 		aPPContext waterPosition: aPPContext position.
@@ -59,8 +60,8 @@ PPWater >> parseOn: aPPContext [
 		
 		aPPContext waterPosition: waterPosition.
 	].
-
-	^ #water
+	
+	^ aPPContext stream collection copyFrom: position + 1 to: aPPContext position
 ]
 
 { #category : #'as yet unclassified' }
