@@ -1,22 +1,63 @@
 Class {
 	#name : #PPCompareParser,
-	#superclass : #PPIndentationParser,
+	#superclass : #PPParser,
+	#instVars : [
+		'compareBlock',
+		'message',
+		'column'
+	],
 	#category : #'PetitIndent-Core'
 }
 
 { #category : #'as yet unclassified' }
-PPCompareParser >> parseOn: aPPContext [
-	| start |
-	context := aPPContext.
-	start := context stream position.
-	self compare ifTrue: [ 
-		^ parser parseOn: aPPContext
-	].
+PPCompareParser class >> on: compareBlock [
+	^ self on: compareBlock message: compareBlock asString
+]
 
-	^ PPFailure message: 
-		'The ', parser asString, ' was expected to be at ', self expectedString, 
-		' (reference: ', self ref asString, ')',
-		' current line: ', context stream line asString,
-		' current column: ', context stream column asString
-	 context: aPPContext.
+{ #category : #'as yet unclassified' }
+PPCompareParser class >> on: compareBlock message: message [
+	^ (self basicNew
+		initialize)
+		compareBlock: compareBlock ;
+		message: message;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser class >> on: compareBlock message: message column: column [
+	^ (self basicNew
+		initialize)
+		compareBlock: compareBlock ;
+		message: message;
+		column: column;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser >> column [
+	^ column
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser >> column: anInteger [
+	column := anInteger
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser >> compareBlock: aBlock [
+	compareBlock := aBlock
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser >> message: aString [
+	message := aString
+]
+
+{ #category : #'as yet unclassified' }
+PPCompareParser >> parseOn: context [
+	^ (compareBlock value: context) ifTrue: [  
+		compareBlock asString
+	] ifFalse: [  
+		PPFailure message: message context: context
+	]
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #MiniFSharpGrammarTest,
+	#name : #PPMiniFSharpGrammarTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
 		'aPPContext',
@@ -9,12 +9,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> parserClass [
-	^ MiniFSharpGrammar
+PPMiniFSharpGrammarTest >> parserClass [
+	^ PPMiniFSharpGrammar
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testConst [
+PPMiniFSharpGrammarTest >> testConst [
 	self parse: '1' rule: #const.
 	self assert: result = 1.
 	self parse: '123' rule: #const.	
@@ -25,7 +25,7 @@ MiniFSharpGrammarTest >> testConst [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExpr1 [
+PPMiniFSharpGrammarTest >> testExpr1 [
 	self parse: '1;2' rule: #expr.
 	self assert: result size = 2.
 	self assert: result first = 1.
@@ -33,12 +33,12 @@ MiniFSharpGrammarTest >> testExpr1 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExpr2 [
+PPMiniFSharpGrammarTest >> testExpr2 [
 	self parse: 'a+b' rule: #expr.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExpr3 [
+PPMiniFSharpGrammarTest >> testExpr3 [
 	self parse: 'printf "hi"' rule: #expr.
 	self assert: result size = 1.
 	self assert: result first first = #printf.
@@ -51,7 +51,7 @@ MiniFSharpGrammarTest >> testExpr3 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprArithmetics [
+PPMiniFSharpGrammarTest >> testExprArithmetics [
 	self parse: '1+2' rule: #expr.
 	self assert: result size = 2.
 	self assert: result first = 1.
@@ -59,7 +59,7 @@ MiniFSharpGrammarTest >> testExprArithmetics [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprArithmetics2 [
+PPMiniFSharpGrammarTest >> testExprArithmetics2 [
 	self parse: '1+2+3' rule: #expr.
 	self assert: result size = 3.
 	self assert: result first = 1.
@@ -68,10 +68,9 @@ MiniFSharpGrammarTest >> testExprArithmetics2 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprArithmetics3 [
-	self parse: 
-' 
-   1+2+3' rule: #seqBlock.
+PPMiniFSharpGrammarTest >> testExprArithmetics3 [
+	self parse: '
+	1+2+3' rule: #seqBlock.
 
 	self assert: result size = 3.
 	self assert: result first = 1.
@@ -80,7 +79,7 @@ MiniFSharpGrammarTest >> testExprArithmetics3 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprArithmetics4 [
+PPMiniFSharpGrammarTest >> testExprArithmetics4 [
 	self parse: 
 ' 
    1
@@ -94,7 +93,7 @@ MiniFSharpGrammarTest >> testExprArithmetics4 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprArithmetics5 [
+PPMiniFSharpGrammarTest >> testExprArithmetics5 [
 	self parse: 
 ' 
    1
@@ -108,7 +107,7 @@ MiniFSharpGrammarTest >> testExprArithmetics5 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeq1 [
+PPMiniFSharpGrammarTest >> testExprSeq1 [
 	self parse: '
 	printf 1;
 	printf 2;
@@ -122,12 +121,10 @@ self assert: result third second = 3.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeq2 [	
+PPMiniFSharpGrammarTest >> testExprSeq2 [	
 	
 self parse: '
-	printf 1;
-	printf 2;
-	
+	printf 1;printf 2;
 	printf 3' rule: #seqBlock.
 
 self assert: result size = 3.
@@ -138,7 +135,7 @@ self assert: result third second = 3.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeq3 [	
+PPMiniFSharpGrammarTest >> testExprSeq3 [	
 	
 self fail: '
    printf 1;
@@ -147,7 +144,7 @@ self fail: '
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeq4 [
+PPMiniFSharpGrammarTest >> testExprSeq4 [
 	
 self parse: '
 	printf 1;
@@ -162,7 +159,21 @@ self assert: result third second = 3.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeqLightweight1 [	
+PPMiniFSharpGrammarTest >> testExprSeq5 [
+	
+self parse: '
+	printf 1
+	;printf 2;' rule: #seqBlock.
+
+self assert: result size = 3.
+self assert: result first first = #printf.
+self assert: result first second = 1.
+self assert: result second first = #printf.
+self assert: result second second = 2.
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testExprSeqLightweight1 [	
 
 self parse: '
    printf 1
@@ -178,12 +189,11 @@ self assert: result third second = 3.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeqLightweight2 [
+PPMiniFSharpGrammarTest >> testExprSeqLightweight2 [
 
 self parse: '
    printf 1
    printf 2
-
    printf 3'
 rule: #seqBlock.
 
@@ -195,7 +205,7 @@ self assert: result third second = 3.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeqLightweight3 [
+PPMiniFSharpGrammarTest >> testExprSeqLightweight3 [
 
 parser := self parserInstanceFor: #seqBlock.
 	
@@ -207,7 +217,7 @@ rule: #seqBlock.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeqLightweight4 [
+PPMiniFSharpGrammarTest >> testExprSeqLightweight4 [
 
 parser := self parserInstanceFor: #seqBlock.
 	
@@ -219,7 +229,7 @@ rule: #seqBlock.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testExprSeqLightweight5 [
+PPMiniFSharpGrammarTest >> testExprSeqLightweight5 [
 
 parser := self parserInstanceFor: #seqBlock.
 	
@@ -231,15 +241,16 @@ rule: #seqBlock.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testFor [
+PPMiniFSharpGrammarTest >> testFor [
 	self parse: 'for a = 1 to 10 do printf a done' rule: #for.
+
 	self assert: result size = 8.
 	self assert: result eighth size = 1.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testFor2 [
+PPMiniFSharpGrammarTest >> testFor2 [
 	self parse: 
 'for a = 1 to 10 do 
 	printf a;
@@ -258,7 +269,7 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testFor3 [
+PPMiniFSharpGrammarTest >> testFor3 [
 	self fail: 
 'for a = 1 to 10 do 
    printf a;
@@ -268,7 +279,7 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testFor4 [
+PPMiniFSharpGrammarTest >> testFor4 [
 	self parse: 
 'for a = 1 to 10 do 
    printf a
@@ -284,7 +295,7 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight1 [
+PPMiniFSharpGrammarTest >> testForLightweight1 [
 	self parse: 
 'for a = 1 to 10 do 
 	printf a
@@ -303,12 +314,11 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight10 [
+PPMiniFSharpGrammarTest >> testForLightweight10 [
 	self parse: 
 'for a = 1 to 10 do 
 	printf a
 	printf b
-	
 	printf c' rule: #for.
 
 	self assert: result size = 8.
@@ -322,7 +332,7 @@ MiniFSharpGrammarTest >> testForLightweight10 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight11 [
+PPMiniFSharpGrammarTest >> testForLightweight11 [
 	self fail: 
 'for a = 1 to 11 do 
     printf a
@@ -331,12 +341,10 @@ MiniFSharpGrammarTest >> testForLightweight11 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight2 [
+PPMiniFSharpGrammarTest >> testForLightweight2 [
 	self parse: 
 'for a = 1 to 10 do 
-	printf a
-	printf b
-	
+	printf a;printf b	
 	printf c
 done' rule: #for.
 	
@@ -351,7 +359,7 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight3 [
+PPMiniFSharpGrammarTest >> testForLightweight3 [
 	self fail: 
 'for a = 1 to 10 do 
    printf a
@@ -361,14 +369,12 @@ done' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight4 [
+PPMiniFSharpGrammarTest >> testForLightweight4 [
 	self parse: 
 'for a = 1 to 10 do 
 	printf a
-	printf b
-	
-	printf c
-' rule: #for.
+	printf b	
+	printf c' rule: #for.
 	
 	self assert: result size = 8.
 	self assert: result eighth size = 3.
@@ -381,7 +387,7 @@ MiniFSharpGrammarTest >> testForLightweight4 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight5 [
+PPMiniFSharpGrammarTest >> testForLightweight5 [
 	self parse: 
 '
   for a = 1 to 10 do 
@@ -401,7 +407,7 @@ MiniFSharpGrammarTest >> testForLightweight5 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight6 [
+PPMiniFSharpGrammarTest >> testForLightweight6 [
 	self parse: 
 '
   for a = 1 to 10 do 
@@ -421,7 +427,7 @@ MiniFSharpGrammarTest >> testForLightweight6 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight7 [
+PPMiniFSharpGrammarTest >> testForLightweight7 [
 	self parse: 
 '
   for a = 1 to 10 do 
@@ -441,7 +447,7 @@ MiniFSharpGrammarTest >> testForLightweight7 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight8 [
+PPMiniFSharpGrammarTest >> testForLightweight8 [
 	self parse: 
 '
   for a = 1 to 10 do 
@@ -461,14 +467,11 @@ MiniFSharpGrammarTest >> testForLightweight8 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForLightweight9 [
+PPMiniFSharpGrammarTest >> testForLightweight9 [
 	self parse: 
 'for a = 1 to 10 do 
-	printf a
-	printf b
-	
-	printf c
-    ' rule: #for.
+	printf a; 	printf b
+	printf c' rule: #for.
 	
 	self assert: result size = 8.
 	self assert: result eighth size = 3.
@@ -481,14 +484,12 @@ MiniFSharpGrammarTest >> testForLightweight9 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForMixed1 [
+PPMiniFSharpGrammarTest >> testForMixed1 [
 	self parse: 
 'for a = 1 to 10 do 
 	printf a
 	printf b;
-	
-	printf c
-    ' rule: #for.
+	printf c' rule: #for.
 	
 	self assert: result size = 8.
 	self assert: result eighth size = 3.
@@ -501,14 +502,13 @@ MiniFSharpGrammarTest >> testForMixed1 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForMixed2 [
+PPMiniFSharpGrammarTest >> testForMixed2 [
 
 	self parse: 
 'for a = 1 to 10 do 
 	printf a
 	printf b;
-	 printf c
-' rule: #for.
+	 printf c' rule: #for.
 	
 	self assert: result size = 8.
 	self assert: result eighth size = 3.
@@ -521,136 +521,220 @@ MiniFSharpGrammarTest >> testForMixed2 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testForMixed3 [
+PPMiniFSharpGrammarTest >> testForMixed3 [
 
 	self fail: 
 'for a = 1 to 10 do 
 	printf a
 	 printf b;
-	 printf c
-' rule: #for.
+	 printf c' rule: #for.
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLet [
-	self parse: 'let a = 1 in a' rule: #let.
+PPMiniFSharpGrammarTest >> testForMixed4 [
+
+	self parse: 
+'for a = 1 to 10 do 
+	printf a
+	printf b;
+	 printf c' rule: #for.
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testLet [
+	self parse: 'let a = 1 in a' rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLet2 [
+PPMiniFSharpGrammarTest >> testLet2 [
 	self parse: 
 'let a = 1 in 
  let b = 2 in 
-    a + b' rule: #let.
+    a + b' rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLet3 [
-	self parse: 
+PPMiniFSharpGrammarTest >> testLet3 [
+	self fail: 
 '  let a = 1 in 
-a' rule: #let.
+a' rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight1 [
+PPMiniFSharpGrammarTest >> testLetBlock1 [
+	| setIl restoreIl expr trim p input |
+	setIl := self parserInstanceFor: #setIl.
+	restoreIl := self parserInstanceFor: #restoreIl.
+	expr := self parserInstanceFor: #expr.
+	trim := self parserInstanceFor: #trim.
+	
+	p := setIl, #any asParser, trim, expr, restoreIl ==> #fourth.
+
+	input := 
+'
+  printf a;
+  printf b;'.
+	
+	result := self assert: p parse: input.
+	self assert: result size = 3.
+    
+	
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testLetBlock2 [
+	| setIl restoreIl expr trim p input |
+	setIl := self parserInstanceFor: #setIl.
+	restoreIl := self parserInstanceFor: #restoreIl.
+	expr := self parserInstanceFor: #expr.
+	trim := self parserInstanceFor: #trim.
+	
+	p := setIl, #any asParser, trim, expr, restoreIl ==> #fourth.
+
+	input := 
+'
+  printf a;
+ printf b;'.
+	
+	result := self assert: p parse: input.
+	self assert: result size = 3.
+    
+	
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testLetBlock3 [
+	| setIl restoreIl expr trim p input |
+	setIl := self parserInstanceFor: #setIl.
+	restoreIl := self parserInstanceFor: #restoreIl.
+	expr := self parserInstanceFor: #expr.
+	trim := self parserInstanceFor: #trim.
+	
+	p := setIl, #any asParser, trim, expr, restoreIl ==> #fourth.
+
+	input := 
+'
+  printf a
+  printf b'.
+	
+	result := self assert: p end fail: input.
+    
+	
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testLetLightweight1 [
 	self parse: 
 'let a = 1
 a' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight2 [
+PPMiniFSharpGrammarTest >> testLetLightweight2 [
 	self fail: 
 'let a = 1
    a' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight3 [
-	self parse: 
-'let a = 3  
+PPMiniFSharpGrammarTest >> testLetLightweight3 [
+	self parse: '
+let a = 3  
 let b = 1 in
  a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight4 [
+PPMiniFSharpGrammarTest >> testLetLightweight4 [
 
 	self parse: 
 'let a = 3  
 let b = 1
 a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight5 [
+PPMiniFSharpGrammarTest >> testLetLightweight5 [
 	self fail: 
 'let a = 3  
 let b = 1
  a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight6 [
+PPMiniFSharpGrammarTest >> testLetLightweight6 [
 	self fail: 
 'let a = 1 in
  let b = 2
   a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight7 [
+PPMiniFSharpGrammarTest >> testLetLightweight7 [
 	
-	self parse: 
+	self fail: 
 '
   let a = 3  
   let b = 1 in
  a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight8 [
+PPMiniFSharpGrammarTest >> testLetLightweight7b [
+	
+	self parse: 
+'
+let foo = 4 in
+  let a = 3  
+  let b = 1 in
+ a + b' 
+   rule: #seqBlock.
+	
+]
+
+{ #category : #'as yet unclassified' }
+PPMiniFSharpGrammarTest >> testLetLightweight8 [
 	
 	self parse: 
 '
   let a = 3  
   let b = 1
   a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testLetLightweight9 [
+PPMiniFSharpGrammarTest >> testLetLightweight9 [
 	
 	self fail: 
 '
   let a = 3  
   let b = 1
    a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testMixed [
+PPMiniFSharpGrammarTest >> testMixed [
 	
 	self parse: 
 '
@@ -658,19 +742,20 @@ MiniFSharpGrammarTest >> testMixed [
           +1  
    let b = 1
    a + b' 
-   rule: #let.
+   rule: #seqBlock.
 
-	self assert: result size = 2.
-	self assert: result first first = 'a'.
-	self assert: result first second first = 3.
-	self assert: result first second second = 1.
-	
-	self assert: result second first first first = 'b'.
-	
+	self assert: result size = 1.
+	self assert: result first first first = 'a'.
+	self assert: result first first second first = 3.
+	self assert: result first first second second = 1.
+
+	self assert: result first second first first first = 'b'.
+	self assert: result first second first first second first = 1.
+	self assert: result first second first second first = 'a'.			
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testMixed2 [
+PPMiniFSharpGrammarTest >> testMixed2 [
 	
 	self parse: 
 '
@@ -678,8 +763,13 @@ MiniFSharpGrammarTest >> testMixed2 [
          + 1 in  
     let b = 1
     a + b' 
-   rule: #let.
+   rule: #seqBlock.
 
+	"seq block with one let"
+	self assert: result size = 1.
+
+	"first let"
+	result := result first.
 	self assert: result size = 2.
 	self assert: result first first = 'a'.
 	self assert: result first second first = 3.
@@ -690,7 +780,7 @@ MiniFSharpGrammarTest >> testMixed2 [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testMixed3 [
+PPMiniFSharpGrammarTest >> testMixed3 [
 	
 	self fail: 
 '
@@ -698,28 +788,12 @@ MiniFSharpGrammarTest >> testMixed3 [
          + 1 in  
     let b = 1
      a + b' 
-   rule: #let.
+   rule: #seqBlock.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testMixed4 [
-	
-	self parse: 
-'
-    let foo =
-       let tick = printf "tick"
-       let tack = printf "tock"
-       let choose =
-         x
-       for i = 1 to 10 do
-         choose
-    printf "done"    
-'.
-]
-
-{ #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testNumber [
+PPMiniFSharpGrammarTest >> testNumber [
 	self parse: '1' rule: #number.
 	self assert: result = 1.
 	
@@ -728,7 +802,7 @@ MiniFSharpGrammarTest >> testNumber [
 ]
 
 { #category : #'as yet unclassified' }
-MiniFSharpGrammarTest >> testValueDefinition [
+PPMiniFSharpGrammarTest >> testValueDefinition [
 	self parse: 'a = 123' rule: #valueDefinition.
 	self parse: 'abc = 1' rule: #valueDefinition.	
 ]

@@ -4,10 +4,16 @@ Class {
 	#instVars : [
 		'debugResult',
 		'aPPContext',
-		'string'
+		'string',
+		'context'
 	],
 	#category : #'PetitIndent-Examples'
 }
+
+{ #category : #'as yet unclassified' }
+PPListsParserTest >> context [
+	^ context
+]
 
 { #category : #'as yet unclassified' }
 PPListsParserTest >> parserClass [
@@ -15,41 +21,57 @@ PPListsParserTest >> parserClass [
 ]
 
 { #category : #'as yet unclassified' }
+PPListsParserTest >> setUp [
+	context := PPContext new.
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParserTest >> testContent [
+
+	context := PPContext new.
+	context indentStack push: (PPCompareParser on: [:ctx | ctx column = 1 ]).
+
+	self parse: '
+hi
+there
+' rule: #content.
+	self assert: result size = 2.
+	self assert: result first = 'hi'.
+	self assert: result second = 'there'
+]
+
+{ #category : #'as yet unclassified' }
 PPListsParserTest >> testItem [
 	self parse: '1) abc' rule: #item.
 	
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
+
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParserTest >> testItem2 [
 	self parse: '2) abc' rule: #item.
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
 	
 	self parse: '2.1) abc' rule: #item.
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
 	
 	self parse: '2.2) def' rule: #item.	
 	self assert: result first = 'def'.
-	self assert: result second isNil
+
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParserTest >> testItem3 [
 	self parse: '2) abc' rule: #item.
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
 	
 	self parse: '2.1) abc' rule: #item.
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
 	
 	self parse: '2.2) def' rule: #item.	
 	self assert: result first = 'def'.
-	self assert: result second isNil
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -62,8 +84,8 @@ PPListsParserTest >> testItem4 [
    def'.
 
 	self parse: source rule: #item.
-	self assert: result first = 'abc def'.
-	self assert: result second isNil.
+	self assert: result first = 'abc'.
+	self assert: result second = 'def'.
 	
 	source := 
 '2) abc
@@ -71,8 +93,9 @@ PPListsParserTest >> testItem4 [
    ghi'.
 
 	self parse: source rule: #item.
-	self assert: result first = 'abc def ghi'.
-	self assert: result second isNil.
+	self assert: result first = 'abc'.
+	self assert: result second =  'def'.
+	self assert: result third =  'ghi'.
 	
 	source := 
 '2) abc
@@ -86,15 +109,14 @@ PPListsParserTest >> testItemSublist [
 
       string := 
 '1) abc
-    1.1) def
+   1.1) def
 '.
 	
 	self parse: string rule: #item.
 	self assert: result first = 'abc'.
+	self assert: result second isCollection.
 	self assert: result second size = 1.
 	self assert: result second first first = 'def'.
-	self assert: result second first second isNil.
-
 ]
 
 { #category : #'as yet unclassified' }
@@ -102,7 +124,6 @@ PPListsParserTest >> testItemWithoutParen [
 	self parse: '1 abc' rule: #item.
 	
 	self assert: result first = 'abc'.
-	self assert: result second isNil.
 ]
 
 { #category : #'as yet unclassified' }
@@ -142,9 +163,9 @@ PPListsParserTest >> testList2 [
 	string :=
 '
 1) a
-  1.1) j
-  1.2) k
-  1.3) l
+   1.1) j
+   1.2) k
+   1.3) l
 2) b
 3) c
 '.
@@ -168,19 +189,21 @@ PPListsParserTest >> testList3 [
 	string :=
 '
 1) a
-  1.1) j
-  1.2) k
-  1.3) l
+   1.1) j
+   1.2) k
+   1.3) l
+   aa
 2) b
 3) c
-     3.1) m
-     3.2) n
-     3.3) o
+   3.1) m
+   3.2) n
+   3.3) o
 '.
 	self parse: string.
 	
 	self assert: result size = 3.
 	self assert: result first first = 'a'.
+	self assert: result first third = 'aa'.
 	self assert: result second first = 'b'.
 	self assert: result third first = 'c'.
 	
@@ -193,8 +216,6 @@ PPListsParserTest >> testList3 [
 	self assert: sublist first first = 'm'.
 	self assert: sublist second first = 'n'.	
 	self assert: sublist third first = 'o'.	
-	
-	self assert: sublist third second = nil.
 ]
 
 { #category : #'as yet unclassified' }
@@ -204,18 +225,18 @@ PPListsParserTest >> testList4 [
 	string :=
 '
 1) a
-  1.1) j
-  1.2) k
-  1.3) l
-     1.3.1) q
-     1.3.2) w
-     1.3.3) e
-  1.4) m
+   1.1) j
+   1.2) k
+   1.3) l
+        1.3.1) q
+        1.3.2) w
+        1.3.3) e
+   1.4) m
 2) b
 3) c
-     3.1) m
-     3.2) n
-     3.3) o
+   3.1) m
+   3.2) n
+   3.3) o
 '.
 	self parse: string.
 	
@@ -311,16 +332,18 @@ PPListsParserTest >> testList7 [
         1.3.2) w
         1.3.3) e
    1.4) m
+   aa
 2) b
 3) c
-     3.1) m
-     3.2) n
-     3.3) o
+   3.1) m
+   3.2) n
+   3.3) o
 '.
 	self parse: string.
 	
 	self assert: result size = 3.
 	self assert: result first first = 'a'.
+	self assert: result first third = 'aa'.
 	self assert: result second first = 'b'.
 	self assert: result third first = 'c'.
 	
@@ -358,9 +381,13 @@ PPListsParserTest >> testListMultiline [
 	self parse: string.
 	
 	self assert: result size = 3.
-	self assert: result first first = 'a a'.
-	self assert: result second first = 'b b'.
-	self assert: result third first = 'c c c'.
+	self assert: result first first = 'a'.
+	self assert: result first second = 'a'.
+	self assert: result second first = 'b'.
+	self assert: result second second = 'b'.
+	self assert: result third first = 'c'.
+	self assert: result third second = 'c'.
+	self assert: result third third = 'c'.
 
 ]
 
@@ -372,12 +399,12 @@ PPListsParserTest >> testListMultiline2 [
 '
 1) a
    a
-  1.1) j
-       j
-  1.2) k
-       k
-       k
-  1.3) l
+   1.1) j
+        j
+   1.2) k
+        k
+        k
+   1.3) l
 2) b
    b
 3) c
@@ -385,13 +412,13 @@ PPListsParserTest >> testListMultiline2 [
 	self parse: string.
 	
 	self assert: result size = 3.
-	self assert: result first first = 'a a'.
-	self assert: result second first = 'b b'.
+	self assert: result first second = 'a'.
+	self assert: result second second = 'b'.
 	self assert: result third first = 'c'.
 	
-	sublist := result first second.
-	self assert: sublist first first = 'j j'.
-	self assert: sublist second first = 'k k k'.	
+	sublist := result first third.
+	self assert: sublist first second = 'j'.
+	self assert: sublist second third = 'k'.	
 	self assert: sublist third first = 'l'.
 ]
 
@@ -407,36 +434,4 @@ PPListsParserTest >> testListMultiline3 [
 '.
 	self fail: string rule: #start.
 	self assert: result isPetitFailure.
-]
-
-{ #category : #'as yet unclassified' }
-PPListsParserTest >> testSublist [
-
-	string :=
-'
-  1.1) sublist
-'.
-	self parse: string rule: #sublist.
-	
-	self assert: result size = 1.
-	self assert: result first first = 'sublist'.
-	self assert: result first second isNil.
-]
-
-{ #category : #'as yet unclassified' }
-PPListsParserTest >> testSublist2 [
-
-	string :=
-'
-  1.1) subitem1
-  1.2) subitem2
-  1.3) subitem3
-'.
-	self parse: string rule: #sublist.
-	
-	self assert: result size = 3.
-	self assert: result first first = 'subitem1'.
-	self assert: result second first = 'subitem2'.
-	self assert: result third first = 'subitem3'.
-
 ]

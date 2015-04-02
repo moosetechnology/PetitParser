@@ -1,13 +1,18 @@
 Extension { #name : #PPContext }
 
 { #category : #'*PetitIndent' }
-PPContext >> indentTraces [
-	^ self propertyAt: #indentTraces ifAbsentPut: [ IndentTraces new stream: self stream; yourself ]
+PPContext >> MPPStack [
+	^ self globalAt: #mppstack ifAbsentPut: [ Stack with: 1 ]
 ]
 
 { #category : #'*PetitIndent' }
-PPContext >> indentTraces: anIndentTraces [
-	^ self propertyAt: #indentTraces put: anIndentTraces
+PPContext >> column [
+	^ stream column
+]
+
+{ #category : #'*PetitIndent' }
+PPContext >> indentStack [
+	^ self propertyAt: #indentStack ifAbsentPut: [ IndentStack new ]
 ]
 
 { #category : #'*PetitIndent' }

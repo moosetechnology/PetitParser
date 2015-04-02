@@ -4,40 +4,97 @@ Class {
 	#instVars : [
 		'list',
 		'item',
-		'indent',
-		'dedent',
 		'numbering',
-		'spaces',
-		'text',
-		'sublist',
-		'line'
+		'line',
+		'content',
+		'itemStarts',
+		'itemEnds',
+		'contentElement',
+		'aligns',
+		'blank',
+		'emptyLine',
+		'lineEnd',
+		'paragraph'
 	],
 	#category : #'PetitIndent-Examples'
 }
 
 { #category : #'as yet unclassified' }
-PPListsParser >> dedent [
-	^ #dedent asParser
+PPListsParser >> aligns [
+	^ #aligns asParser
 ]
 
 { #category : #'as yet unclassified' }
-PPListsParser >> indent [
-	^ #indent asParser
+PPListsParser >> blank [
+
+	^ #blank asParser
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> content [
+	^ contentElement, 
+	 (contentElement trimAlign nonEmpty) star
+	
+	map: [ :_first :_rest |
+		(OrderedCollection with: _first)
+			addAll: _rest;
+			reject: [ :e | e isNil ]
+	]
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> contentElement [
+	^ (list / paragraph / emptyLine)
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> emptyLine [
+	^ #startOfLine asParser, blank star, lineEnd ==> [ :e | nil ]
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParser >> item [
-	^ (numbering, spaces, text, sublist optional) ==> [ :args | OrderedCollection with: args third with: args fourth ]
+	^ itemStarts, content, itemEnds 
+
+	map:[:_start :_content :_end |
+		_content
+	]
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> itemEnds [
+	^ #restoreIl asParser
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> itemStarts [
+	^ numbering, blank plus, #setIl asParser
+
+	map: [ :_numbering :_ws :_setIl |
+		_numbering
+	]
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParser >> line [
-	^ ((#letter asParser, #word asParser star) flatten) trimBlanks plus flatten
+	^ #newline asParser negate plus flatten
+]
+
+{ #category : #'as yet unclassified' }
+PPListsParser >> lineEnd [
+	^ #eof asParser / #newline asParser
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParser >> list [
-	^ item plus aligned
+	^ item,
+	(item trimAlign) star
+	
+	map: [ :_first :_rest |
+		(OrderedCollection with: _first)
+			addAll: _rest;
+			yourself
+	]
 ]
 
 { #category : #'as yet unclassified' }
@@ -48,26 +105,11 @@ PPListsParser >> numbering [
 ]
 
 { #category : #'as yet unclassified' }
-PPListsParser >> spaces [
-	^ #blank asParser star
+PPListsParser >> paragraph [
+	^ line, lineEnd ==> #first
 ]
 
 { #category : #'as yet unclassified' }
 PPListsParser >> start [
-	^ list trim end
-]
-
-{ #category : #'as yet unclassified' }
-PPListsParser >> sublist [
-	^ indent, list, dedent ==> #second
-]
-
-{ #category : #'as yet unclassified' }
-PPListsParser >> text [
-	^ line plus aligned ==> [:result | ' ' join: result ]
-"	
-	firstLine trimBlanks, 
-	  ((#newline asParser, line trimBlanks) ==> #second) star 
-	  ==> [ :result | result second inject: result first into: [:r :e | r, ' ', e ] ]
-"
+	^ #setIl asParser, (list trim end), #restoreIl asParser ==> #second
 ]

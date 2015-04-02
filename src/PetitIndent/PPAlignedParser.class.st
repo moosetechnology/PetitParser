@@ -1,6 +1,6 @@
 Class {
 	#name : #PPAlignedParser,
-	#superclass : #PPCompareParser,
+	#superclass : #Object,
 	#category : #'PetitIndent-Core'
 }
 
