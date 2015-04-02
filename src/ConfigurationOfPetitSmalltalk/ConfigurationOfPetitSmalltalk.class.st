@@ -123,7 +123,7 @@ ConfigurationOfPetitSmalltalk >> baseline01: spec [
 					spec
 						className: #ConfigurationOfPetitParser;
 						versionString: #development;
-						loads: #('Core');
+						loads: #('Core' 'Tests');
 						repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/' ].
 			spec package: 'PetitSmalltalk' with: [ spec requires: #('PetitParser') ] ]
 ]
