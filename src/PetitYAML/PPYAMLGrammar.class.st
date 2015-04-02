@@ -120,10 +120,19 @@ Class {
 		's_l_block_collection',
 		'l_block_sequence',
 		'l_block_mapping',
-		'l_bare_document'
+		'l_bare_document',
+		'aligns'
 	],
 	#category : #PetitYAML
 }
+
+{ #category : #indentation }
+PPYAMLGrammar >> aligns [
+	^ [ :context | 
+		context indentStack isEmpty ifFalse: [ 
+			context indentStack top parseOn: context ] 
+	] asParser
+]
 
 { #category : #spec }
 PPYAMLGrammar >> autoDetect: context [
@@ -377,12 +386,11 @@ PPYAMLGrammar >> c_l_folded [
 PPYAMLGrammar >> c_l_literal [ 
 	^ ($| asParser, c_b_block_header, (l_literal_content >=> [ :context :cc |
 		| retval |
-		
 		context YAMLN: (context YAMLN + context YAMLM).
 			
 		retval := cc value.
 		context YAMLRestoreN.
-		context YAMLRestoreM.
+		context YAMLM: 1.
 		retval
 	])) ==> #third
 ]
@@ -473,9 +481,9 @@ PPYAMLGrammar >> l_block_mapping [
 	
 	>=> [ :context :cc |
 		| retval size |
-		size := (context indentTraces tracesFor: #YAMLN) size.
+		size := context indentStack size.
 		context YAMLN: (context YAMLN + (self autoDetect: context)).
-		self assert: (size + 1) = ((context indentTraces tracesFor: #YAMLN) size).
+		self assert: (size + 1) = (context indentStack size).
 		retval := cc value.
 		
 		context YAMLRestoreN.
@@ -1018,16 +1026,22 @@ PPYAMLGrammar >> s_flow_line_prefix [
 
 { #category : #spec }
 PPYAMLGrammar >> s_indent [
-	^ ((nil asParser offsideTo: #YAMLN), s_space ==> #second) star, (nil asParser alignedTo: #YAMLN) 
-	
+	^ (aligns not, s_space) star, aligns
 	==> [ :e | '' ]
+
+"	^ ((nil asParser offsideTo: #YAMLN), s_space ==> #second) star, (nil asParser alignedTo: #YAMLN) 
+	
+	==> [ :e | '' ]"
 ]
 
 { #category : #spec }
 PPYAMLGrammar >> s_indent_smaller [
-	^ (s_space, nil asParser offsideTo: #YAMLN) star
-	
+	^ (aligns not, s_space) star
 	==> [ :e | '' ]
+
+"	^ (s_space, nil asParser offsideTo: #YAMLN) star
+	
+	==> [ :e | '' ]"
 ]
 
 { #category : #spec }

@@ -1024,6 +1024,10 @@ PPYAMLGrammarTest >> test_s_indent [
 
 	self assert: p fail: 
 '   a'.
+
+	context YAMLN: 1.
+	self assert: p parse: 
+'a'.
 ]
 
 { #category : #spec }

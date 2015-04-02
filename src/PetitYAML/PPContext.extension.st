@@ -22,23 +22,29 @@ PPContext >> YAMLContext: whatever [
 
 { #category : #'*PetitYAML' }
 PPContext >> YAMLM [
-	^ self indentTraces top: #YAMLM
+	^ self propertyAt: #YAMLM ifAbsent: [ ^ 1 ]
 ]
 
 { #category : #'*PetitYAML' }
 PPContext >> YAMLM: whatever [
-	Halt ifShiftPressed.
-	self indentTraces push: #YAMLM column: whatever
+	self propertyAt: #YAMLM put: whatever
 ]
 
 { #category : #'*PetitYAML' }
 PPContext >> YAMLN [
-	^ self indentTraces top: #YAMLN
+	self indentStack isEmpty ifTrue: [ ^ 1 ].
+	^ self indentStack top column
 ]
 
 { #category : #'*PetitYAML' }
 PPContext >> YAMLN: whatever [
-	self indentTraces push: #YAMLN column: whatever
+	| compare |
+	compare := PPCompareParser 
+					on: [ :ctx | ctx column = whatever  ] 
+					message: 'expected level: ', whatever asString
+					column: whatever.
+
+	self indentStack push: compare.
 ]
 
 { #category : #'*PetitYAML' }
@@ -48,5 +54,5 @@ PPContext >> YAMLRestoreM [
 
 { #category : #'*PetitYAML' }
 PPContext >> YAMLRestoreN [
-	^ self indentTraces pop: #YAMLN
+	^ self indentStack pop
 ]
