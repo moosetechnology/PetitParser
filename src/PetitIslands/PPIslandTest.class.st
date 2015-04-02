@@ -8,9 +8,32 @@ Class {
 	#category : #'PetitIslands-Tests'
 }
 
+{ #category : #indentation }
+PPIslandTest >> align [
+	| aligns |
+	
+	aligns := self aligns.
+	
+	^ (aligns not, #space asParser) star, aligns
+]
+
+{ #category : #indentation }
+PPIslandTest >> aligns [
+	^ [ :ctx | 
+		ctx indentStack isEmpty ifFalse: [ 
+			ctx indentStack top parseOn: ctx ] 
+		ifTrue: [ PPFailure message: 'stack is empty' context: ctx ]
+	] asParser
+]
+
 { #category : #parsing }
 PPIslandTest >> assert: parser parse: input [
 	result := super assert: parser parse: input
+]
+
+{ #category : #indentation }
+PPIslandTest >> blank [
+	^ #blank asParser
 ]
 
 { #category : #'as yet unclassified' }
@@ -79,6 +102,27 @@ PPIslandTest >> nilIsland [
 	^ nilIsland
 ]
 
+{ #category : #indentation }
+PPIslandTest >> restoreIl [
+	^ [ :ctx | ctx indentStack pop ] asParser
+]
+
+{ #category : #indentation }
+PPIslandTest >> setIl [
+	^ [ :ctx | 
+		| level comp p blank |
+		level := ctx column.
+		blank := self blank.
+	
+		comp := PPCompareParser 
+						on: [ :_ctx | _ctx column = level  ] 
+						message: 'expected level: ', level asString.
+		p := comp.
+	
+		ctx indentStack push: p.
+	] asParser
+]
+
 { #category : #'as yet unclassified' }
 PPIslandTest >> setUp [
 	super setUp.
@@ -90,6 +134,21 @@ PPIslandTest >> singleCommentParser [
 	| nl |
 	nl := #newline asParser.
 	^ '//' asParser, (#any asParser starLazy: nl), nl.
+]
+
+{ #category : #'tests - indentation' }
+PPIslandTest >> testAlign [
+	|  align p setIl restoreIl blank |
+	
+	setIl := #setIl asParser.
+	restoreIl := #restoreIl asParser.
+	align := #align asParser.
+	blank := #blank asParser.
+	
+	p := blank, setIl, 'a' asParser, align, 'b' asParser, restoreIl.
+	
+	self assert: p  parse: ' a     
+ b'.
 ]
 
 { #category : #testing }
@@ -307,43 +366,109 @@ namespace cde {
 
 ]
 
-{ #category : #testing }
-PPIslandTest >> testIndentationBlock [
-	|  begin content end block |
+{ #category : #'tests - indentation' }
+PPIslandTest >> testIndentation [
+	|  aligns push island p |
 	
-	begin := 'begin' asParser defineOffsideLine.
-	content := 'foo' asParser star.
-	end := 'end' asParser cancelOffsideLine.
+	aligns := #aligns asParser.
+	push := (nil asParser ==> [ :e | 'a' asParser]) push.
+	
+	island := push, aligns.	
+		
+	self assert: island parse: 'a'.
+	self assert: island fail: '.a'.
+	
+	p := self island: island.
+	self assert: p  parse: 'a'.
+	self assert: p  parse: '..a'.
+]
+
+{ #category : #'tests - indentation' }
+PPIslandTest >> testIndentation2 [
+	|  aligns push  p |
+	
+	aligns := #aligns asParser.
+	push := (nil asParser ==> [ :e | 'a' asParser]) push.
+	
+	p := push, (self island: aligns) plus.
+	self assert: p  parse: 'a'.
+	self assert: p  parse: '..a'.
+	self assert: p  parse: '..a.aa'.	
+	self assert: p  parse: '..a..a...a'.
+	
+	self assert: result second size = 3.
+]
+
+{ #category : #'tests - indentation' }
+PPIslandTest >> testIndentation3 [
+	|  aligns push pop  p |
+	
+	aligns := #aligns asParser.
+	push := (nil asParser ==> [ :e | 'a' asParser]) push.
+	pop := #pop asParser.
+	
+	p := push, (self island: aligns) plus, pop.
+	
+	self assert: p  parse: 'a'.
+	self assert: p  parse: '..a'.
+	self assert: p  parse: '..a.aa'.	
+	self assert: p  parse: '..a..a...a'.
+]
+
+{ #category : #'tests - indentation' }
+PPIslandTest >> testIndentationBlock [
+	|  begin content end block setIl restoreIl     |
+	
+	setIl:= #setIl asParser.
+	restoreIl := #restoreIl asParser.
+	
+	begin := setIl, 'begin' asParser ==> [:e | #begin ].
+	content := 'foo' asParser.
+	end := 'end' asParser, restoreIl ==> [:e | #end ].
 	block := PPDelegateParser new.
 	
-	block setParser: 	begin trim,
-								(block / content) island strictlyOnside star,
-							end trim aligned.
+	block setParser: 	begin trimLeft,
+								(self island: (block / content) trimOnside)  star,
+							end trimAlign.
 			
 	self assert: block parse: '
 		begin
 			foo
 			bar
 			foo
-		end
-'.
+		end'.
 
 	self assert: result size = 3.
 	self assert: result second size = 2.
+	self assert: result second first second = 'foo'.
+	
+	self assert: block parse: '
+		begin
+			foo
+			foo
+		end'.
+
+	self assert: result size = 3.
+	self assert: result second size = 2.
+	self assert: result second first second = 'foo'.
+	self assert: result second second second = 'foo'.
 ]
 
-{ #category : #testing }
+{ #category : #'tests - indentation' }
 PPIslandTest >> testIndentationBlock2 [
-	|  begin content end block |
+	|  begin content end block setIl restoreIl     |
 	
-	begin := 'begin' asParser defineOffsideLine.
-	content := 'foo' asParser star.
-	end := 'end' asParser cancelOffsideLine.
+	setIl:= #setIl asParser.
+	restoreIl := #restoreIl asParser.
+		
+	begin := setIl, 'begin' asParser ==> [:e | #begin ].
+	content := 'foo' asParser plus.
+	end := 'end' asParser, restoreIl ==> [:e | #end ].
 	block := PPDelegateParser new.
 	
-	block setParser: 	begin trim,
-								((block / content) island ==> #second) strictlyOnside star,
-							end trim aligned.
+	block setParser: 	begin trimLeft,
+								(self island: (block / content) trimOnside)  star,
+							end trimAlign.
 			
 	self assert: block parse: '
 		begin
@@ -357,26 +482,28 @@ PPIslandTest >> testIndentationBlock2 [
 			end
 			bar
 			foo
-		end
-'.
+		end'.
 
 	self assert: result size = 3.
 	self assert: result second size = 3.
-	self assert: result second second second size = 2.
+	self assert: result second second second second size = 2.
 ]
 
-{ #category : #testing }
+{ #category : #'tests - indentation' }
 PPIslandTest >> testIndentationBlock3 [
-	|  begin content end block |
+	|  begin content end block setIl restoreIl     |
 	
-	begin := 'begin' asParser defineOffsideLine.
-	content := 'foo' asParser star.
-	end := 'end' asParser cancelOffsideLine.
+	setIl:= #setIl asParser.
+	restoreIl := #restoreIl asParser.
+	
+	begin := setIl, 'begin' asParser ==> [:e | #begin ].
+	content := 'foo' asParser plus.
+	end := 'end' asParser, restoreIl ==> [:e | #end ].
 	block := PPDelegateParser new.
 	
-	block setParser: 	begin trim,
-								((self island: (block / content))==> #second) strictlyOnside star,
-							end trim aligned.
+	block setParser: 	begin trimLeft,
+								(self island: ((block / content) trimOnside)) star,
+							end trimAlign.
 			
 	self assert: block parse: '
 		begin
@@ -389,25 +516,27 @@ PPIslandTest >> testIndentationBlock3 [
 				bar
 			bar
 			foo
-		end
-'.
+		end'.
 
 	self assert: result size = 3.
 	self assert: result second size = 3.
 ]
 
-{ #category : #testing }
+{ #category : #'tests - indentation' }
 PPIslandTest >> testIndentationBlock4 [
-	|  begin content end block |
+	|  begin content end block setIl restoreIl     |
 	
-	begin := 'begin' asParser defineOffsideLine.
-	content := 'foo' asParser star.
-	end := 'end' asParser cancelOffsideLine.
+	setIl:= #setIl asParser.
+	restoreIl := #restoreIl asParser.
+	
+	begin := setIl, 'begin' asParser ==> [:e | #begin ].
+	content := 'foo' asParser plus.
+	end := 'end' asParser, restoreIl ==> [:e | #end ].
 	block := PPDelegateParser new.
 	
-	block setParser: 	begin trim,
-								(block / content) island strictlyOnside star,
-							end trim aligned.
+	block setParser: 	begin trimLeft,
+								(self island: (block / content) trimOnside) star,
+							end trimAlign.
 			
 	self assert: (block island ==> #second) star parse: '
 		begin
@@ -422,12 +551,24 @@ PPIslandTest >> testIndentationBlock4 [
 		begin
 			foo
 			bar
-		end
-'.
+		end'.
 
 	self assert: result size = 2.
 	self assert: result first second size = 2.
 	self assert: result second second size = 1.	
+]
+
+{ #category : #'tests - indentation' }
+PPIslandTest >> testIndentationCompare [
+	|  aligns p setIl restoreIl |
+	
+	aligns := self aligns.
+	setIl := self setIl.
+	restoreIl := self restoreIl.
+	
+	p := (setIl, aligns, restoreIl, (aligns not)).
+	
+	self assert: p  parse: ''.
 ]
 
 { #category : #testing }

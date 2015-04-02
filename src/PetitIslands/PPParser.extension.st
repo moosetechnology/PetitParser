@@ -50,6 +50,16 @@ PPParser >> island: water [
 ]
 
 { #category : #'*petitislands' }
+PPParser >> next: context [
+	^ PPChoiceParser withAll: (self nextSet: context)
+]
+
+{ #category : #'*petitislands' }
+PPParser >> nextSet: aPPContext [
+	^ aPPContext root nextSets at: self.
+]
+
+{ #category : #'*petitislands' }
 PPParser >> nextSets [
 	| nextSets |
 	
