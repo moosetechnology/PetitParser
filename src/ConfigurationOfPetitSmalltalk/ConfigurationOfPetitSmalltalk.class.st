@@ -156,3 +156,26 @@ ConfigurationOfPetitSmalltalk >> project [
 		project loadType: #linear. "change to #atomic if desired"
 		project ]
 ]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPetitSmalltalk >> stable: spec [
+	<symbolicVersion: #'stable'>
+
+	spec for: #'common' version: '0.1-baseline'.
+
+	spec for: #'pharo3.x' version: '1.1'.
+]
+
+{ #category : #versions }
+ConfigurationOfPetitSmalltalk >> version11: spec [
+	<version: '1.1' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'Stable version for Pharo 3'.
+		spec author: 'JanKurs'.
+		spec timestamp: '4/4/2015 11:32'.
+		spec project: 'PetitParser' with: #'development'.
+		spec package: 'PetitSmalltalk' with: 'PetitSmalltalk-JanKurs.79'. ].
+
+]
