@@ -164,7 +164,7 @@ PPYAMLGrammar >> autoDetect: context blockHeader: blockHeader [
 		return something strange :)
 	"
 	(retval = 0) ifTrue: [ retval := -1 ].
-	Transcript crShow: 'autodetected: ', retval asString.
+	"Transcript crShow: 'autodetected: ', retval asString."
 	^ retval
 ]
 
