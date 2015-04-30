@@ -208,16 +208,6 @@ PPJavaIslandParser >> type [
 	^ (#letter asParser, (#letter asParser / #digit asParser) star) flatten 
 ]
 
-{ #category : #context }
-PPJavaIslandParser >> updateContext: aPPContext [
-	super updateContext: aPPContext.
-"	aPPContext globalAt: #waterObjects put: (OrderedCollection 
-			with: self comment 
-			with: self singleLineComment
-			with: self string
-			with: self block)."
-]
-
 { #category : #method }
 PPJavaIslandParser >> water [
 	"
