@@ -661,6 +661,11 @@ PPParser >> trimSpacesRight [
 	^ (self, #space asParser star) ==> #first
 ]
 
+{ #category : #context }
+PPParser >> updateContext: aPPContext [
+	"nothing to do"
+]
+
 { #category : #'operators-convenience' }
 PPParser >> withoutSeparators [
 	"Filters out the separators from a parse result produced by one of the productions #delimitedBy: or #separatedBy:."

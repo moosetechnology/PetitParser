@@ -50,7 +50,7 @@ PPToken class >> on: aSequenceableCollection start: aStartInteger stop: aStopInt
 
 { #category : #comparing }
 PPToken >> = anObject [
-	^ self class = anObject class and: [ self parsedValue = anObject parsedValue ]
+	^ self class = anObject class and: [ self inputValue = anObject inputValue ]
 ]
 
 { #category : #accessing }
@@ -82,7 +82,7 @@ PPToken >> copyFrom: aStartInteger to: aStopInteger [
 
 { #category : #comparing }
 PPToken >> hash [
-	^ self parsedValue hash
+	^ self inputValue hash
 ]
 
 { #category : #initialization }
@@ -126,7 +126,7 @@ PPToken >> parsedValue [
 PPToken >> printOn: aStream [
 	super printOn: aStream.
 	aStream nextPut: $[; print: self start; nextPut: $,; print: self stop; nextPut: $].
-	aStream nextPut: $(; print: self parsedValue; nextPut: $)
+	aStream nextPut: $(; print: self inputValue; nextPut: $)
 ]
 
 { #category : #accessing }
@@ -152,6 +152,6 @@ PPToken >> stop [
 
 { #category : #'accessing-values' }
 PPToken >> value [
-	self notify: 'Token>>#value is no longer supported. Instead use Token>>#inputValue or the more pragmatic #parsedValue.'.
+	self notify: 'Token>>#value is no longer supported. Instead use Token>>#inputValue'.
 	^ self inputValue
 ]
