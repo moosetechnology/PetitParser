@@ -126,9 +126,6 @@ PPContext >> initializeFor: parser [
 	parser == root ifTrue: [ ^ self ].
 	
 	root := parser.
-	root allParsersDo: [ :p | 
-		p updateContext: self
-	]
 ]
 
 { #category : #'stream mimicry' }
