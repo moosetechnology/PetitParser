@@ -465,7 +465,7 @@ ConfigurationOfPetitParser >> stable: spec [
 
 	spec for: #'pharo3.x' version: '1.10'.
 
-	spec for: #'pharo4.x' version: '1.11'.
+	spec for: #'pharo4.x' version: '1.12'.
 
 ]
 
@@ -545,6 +545,37 @@ ConfigurationOfPetitParser >> version111: spec [
 
 	spec for: #'squeakCommon' do: [
 		spec project: 'Glamour' with: #'development'.
+		spec package: 'PetitGui' with: 'PetitGui-StefanReichhart.150'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version112: spec [
+	<version: '1.12' imports: #('1.6-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 1.12'.
+		spec author: 'AndreiChis'.
+		spec timestamp: '5/5/2015 19:03'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-JanKurs.278';
+			package: 'PetitTests' with: 'PetitTests-JanKurs.73';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-JanKurs.48';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-BernardoContreras.86';
+			package: 'PetitCSV' with: 'PetitCSV-tg.7';
+			package: 'PetitJson' with: 'PetitJson-JanKurs.9';
+			package: 'PetitMSE' with: 'PetitMSE-AndreHora.21';
+			package: 'PetitManifestMf' with: 'PetitManifestMf-JanKurs.10';
+			package: 'PetitRegex' with: 'PetitRegex-JanKurs.31';
+			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
+			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
+			package: 'PetitIslands' with: 'PetitIslands-JanKurs.28';
+			package: 'PetitIndent' with: 'PetitIndent-JanKurs.11';
+			package: 'Factorial-Language' with: 'Factorial-Language-lr.6'. ].
+
+	spec for: #'squeakCommon' do: [
+		spec project: 'Glamour' with: #'stable'.
 		spec package: 'PetitGui' with: 'PetitGui-StefanReichhart.150'. ].
 
 ]
