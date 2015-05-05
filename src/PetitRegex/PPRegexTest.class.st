@@ -83,6 +83,7 @@ PPRegexTest >> runRegex: anArray [
 { #category : #'testing-protocol' }
 PPRegexTest >> testCaseInsensitive [
 	| matcher |
+	
 	matcher := self matcherClass forString: 'the quick brown fox' ignoreCase: true.
 	self assert: (matcher search: 'the quick brown fox').
 	self assert: (matcher search: 'The quick brown FOX').
