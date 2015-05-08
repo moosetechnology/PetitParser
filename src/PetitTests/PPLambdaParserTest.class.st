@@ -51,31 +51,32 @@ PPLambdaParserTest >> testOr [
 { #category : #'testing-utilities' }
 PPLambdaParserTest >> testParseOnError [
 	| beenHere |
-	result := self parserClass parse: '\x.y' onError: [ self fail ].
+	result := self parserClass parse: '\x. y' onError: [ self fail ].
 	self assert: result equals: #('x' 'y').
 	beenHere := false.
 	result := self parserClass parse: '\x.' onError: [ beenHere := true ].
 	self assert: beenHere.
 	beenHere := false.
 	result := self parserClass
-		parse: '\x.'
+		parse: '\x. '
 		onError: [ :fail | 
 			beenHere := true.
 			fail ].
 	self assert: beenHere.
-	self assert: result message includesSubstring: 'separator'.
+	self assert: result message includesSubstring: 'letter'.
 	self assert: result message includesSubstring: 'expected'.
-	self assert: result position equals: 3.
+	self assert: result position equals: 4.
 	beenHere := false.
 	result := self parserClass
-		parse: '\x.'
+		parse: '\x. '
 		onError: [ :msg :pos | 
-			self assert: msg includesSubstring: 'separator'.
+			self assert: msg includesSubstring: 'letter'.
 			self assert: msg includesSubstring: 'expected'.
-			self assert: pos equals: 3.
+			self assert: pos equals: 4.
 			beenHere := true ].
 	self assert: result.
 	self assert: beenHere
+
 ]
 
 { #category : #'testing-utilities' }
@@ -88,23 +89,24 @@ PPLambdaParserTest >> testParseStartingAtOnError [
 	self assert: beenHere.
 	beenHere := false.
 	result := self parserClass
-		parse: '\'
+		parse: '\ '
 		startingAt: #variable
 		onError: [ :fail | 
 			beenHere := true.
 			fail ].
 	self assert: beenHere.
-	self assert: result message equals: 'separator expected'.
+	self assert: result message equals: 'letter expected'.
 	self assert: result position equals: 0.
 	beenHere := false.
 	result := self parserClass
-		parse: '\'
+		parse: '\ '
 		startingAt: #variable
 		onError: [ :msg :pos | 
-			self assert: msg equals: 'separator expected'.
+			self assert: msg equals: 'letter expected'.
 			self assert: pos equals: 0.
 			beenHere := true ].
 	self assert: beenHere
+
 ]
 
 { #category : #'testing-utilities' }
