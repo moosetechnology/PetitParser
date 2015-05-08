@@ -20,15 +20,16 @@ PPTrimmingParser class >> on: aParser trimmer: aTrimParser [
 
 { #category : #parsing }
 PPTrimmingParser >> parseOn: aPPContext [
-	| memento element |
+	| memento element trimContext |
 	memento := aPPContext remember.
-	[ (trimmer parseOn: aPPContext) isPetitFailure ]
+	trimContext := aPPContext copy.
+	[ (trimmer parseOn: trimContext) isPetitFailure ]
 		whileFalse.
 	element := parser parseOn: aPPContext.
 	element isPetitFailure ifTrue: [
 		aPPContext restore: memento.
 		^ element ].
-	[ (trimmer parseOn: aPPContext) isPetitFailure ]
+	[ (trimmer parseOn: trimContext) isPetitFailure ]
 		whileFalse.
 	^ element
 ]

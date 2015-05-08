@@ -51,7 +51,7 @@ PPPredicateObjectParser class >> blank [
 { #category : #cache }
 PPPredicateObjectParser class >> cacheAt: aSymbol ifAbsentPut: aBlock [
 
-	cache ifNil: [ ^aBlock value ].
+	cache ifNil: [ cache := Dictionary new ].
 	^(cache
 		at: aSymbol
 		ifAbsentPut: aBlock) copy
@@ -204,17 +204,6 @@ PPPredicateObjectParser class >> uppercase [
 	^self
 		cacheAt: #'uppercase'
 		ifAbsentPut: [ self on: (PPCharSetPredicate on: [ :char | char isUppercase ]) message: 'uppercase letter expected' ]
-]
-
-{ #category : #cache }
-PPPredicateObjectParser class >> useCache: aBoolean [
-"
-	PPPredicateObjectParser useCache: true.
-	PPPredicateObjectParser useCache: false.
-"
-	cache := aBoolean 
-		ifTrue: [ Dictionary new ]
-		ifFalse: [ nil ]
 ]
 
 { #category : #'factory-chars' }

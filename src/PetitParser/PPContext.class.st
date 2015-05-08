@@ -176,6 +176,13 @@ PPContext >> position: anInteger [
 	^ stream position: anInteger
 ]
 
+{ #category : #initialization }
+PPContext >> postCopy [
+	super postCopy.
+	globals := globals copy.
+	
+]
+
 { #category : #printing }
 PPContext >> printOn: aStream [
 	super printOn: aStream.
