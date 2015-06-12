@@ -641,6 +641,13 @@ PPParser >> trimRight [
 ]
 
 { #category : #'operators-mapping' }
+PPParser >> trimRight: trimmer [
+	"Answer a new parser that consumes spaces after the receiving parser."
+	
+	^ (self, trimmer star) ==> #first
+]
+
+{ #category : #'operators-mapping' }
 PPParser >> trimSpaces [
 	"Answer a new parser that consumes spaces before and after the receiving parser."
 	
