@@ -466,6 +466,8 @@ ConfigurationOfPetitParser >> stable: spec [
 	spec for: #'pharo3.x' version: '1.10'.
 
 	spec for: #'pharo4.x' version: '1.13'.
+	
+	spec for: #'pharo5.x' version: '1.13'.
 
 ]
 
