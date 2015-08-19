@@ -63,8 +63,8 @@ PPBrowserStream >> asPositionDrawing [
 { #category : #converting }
 PPBrowserStream >> asPositionMorph [
 	| width height canvas morph |
-	width := self size + 1 min: 2048.
-	height := self positions size min: 2048.
+	width := self size + 1 min: 65535.
+	height := self positions size min: 65535.
 	canvas := FormCanvas extent: width @ height.
 	self contents keysAndValuesDo: [ :index :char |
 		char isSeparator 
