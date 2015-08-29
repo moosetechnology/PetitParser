@@ -202,23 +202,23 @@ PPMiniPythonGrammar >> ifStmt [
        ( (align, 'elif' asParser,  whatever, suiteTrimmed) ==> #last ) star, 
        elseOpt 
 	map: [ :_if :_whatever :_then :__elifs :_else |
-		| _elifs retval |
+		| _elifs _retval |
 		_elifs := __elifs.
 
-		retval := OrderedCollection new.
-		retval add: 'if:'.
-		retval add:_then.
+		_retval := OrderedCollection new.
+		_retval add: 'if:'.
+		_retval add:_then.
 
 		_elifs do: [ :e | 
-			retval add: 'if:'.
-			retval add: e 
+			_retval add: 'if:'.
+			_retval add: e 
 		].
-		retval add: _else.
+		_retval add: _else.
 		_elifs do: [ :e | 
-			retval add: ':if'
+			_retval add: ':if'
 		].
-		retval add: ':if'.
-		retval
+		_retval add: ':if'.
+		_retval
 	]
 ]
 
