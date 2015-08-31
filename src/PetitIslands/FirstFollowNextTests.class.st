@@ -1122,18 +1122,6 @@ FirstFollowNextTests >> testNext8 [
 ]
 
 { #category : #'test next' }
-FirstFollowNextTests >> testNext9 [
-	| a nextSet |
-	a := 'a' asParser.
-	
-	nextSet := (self next: a in: a).
-	self assert: nextSet anySatisfy: [:e | e end matches: ''].
-
-
-
-]
-
-{ #category : #'test next' }
 FirstFollowNextTests >> testNextDelegate1 [
 
 	| a nextSet b c p |
@@ -1205,20 +1193,41 @@ FirstFollowNextTests >> testNextRepeat4 [
 	root := p plus.
 	
 	nextSet := (self next: a in: root).
-	self assert: nextSet anySatisfy: [:e | e end matches: 'a'].
-
+	self assert: nextSet anySatisfy: [ :e | e end matches: 'a'].
+	self assert: nextSet anySatisfy: [ :e | e acceptsEpsilon ].
 
 
 ]
 
 { #category : #'test next' }
 FirstFollowNextTests >> testNextSequence [
-	| a p nextSet |
+	| a p nextSet b c |
 	a := 'a' asParser.
-	p := a, 'b' asParser, 'c' asParser.
+	b := 'b' asParser.
+	c := 'c' asParser.
+	
+	p := a, b, c.
 	
 	nextSet := (self next: a in: p).
 	self assert: nextSet noneSatisfy: [:e | e matches: 'b' ].
+	self assert: nextSet noneSatisfy: [:e | e matches: 'c' ].
+	self assert: nextSet anySatisfy: [:e | e matches: 'bc' ].
+
+
+
+]
+
+{ #category : #'test next' }
+FirstFollowNextTests >> testNextSequence2 [
+	| a p nextSet b c |
+	a := 'a' asParser.
+	b := 'b' asParser.
+	c := 'c' asParser.
+	
+	p := (a, b) wrapped, c.
+	
+	nextSet := (self next: a in: p).
+	self assert: nextSet anySatisfy: [:e | e matches: 'b' ].
 	self assert: nextSet noneSatisfy: [:e | e matches: 'c' ].
 	self assert: nextSet anySatisfy: [:e | e matches: 'bc' ].
 

@@ -50,19 +50,16 @@ Class {
 		'afterWaterParser',
 		'beforeWaterParser',
 		'context',
-		'afterWaterDelegate',
-		'beforeWaterDelegate',
-		'water'
+		'water',
+		'defaultBeforeWaterParser',
+		'defaultAfterWaterParser'
 	],
 	#category : #'PetitIslands-Parsers'
 }
 
 { #category : #queries }
 PPIsland >> acceptsEpsilon [
-	"JK: Hack alert?"
-	"Let us suppose island is always nullable, it helps to sequences of islands"
-	^ true
-	"^ island isNullableOpenSet: (IdentitySet with: self)"
+	^ island acceptsEpsilon
 ]
 
 { #category : #queries }
@@ -103,10 +100,13 @@ PPIsland >> children [
 
 { #category : #parsing }
 PPIsland >> createAfterWaterParser: aPPContext [
-	|  nextSet  p |
+	^ self createAfterWaterParserFromNextSet: (self nextSet: aPPContext).
+]
 
-	nextSet := Set new.
-	nextSet addAll: (self nextSet: aPPContext).
+{ #category : #parsing }
+PPIsland >> createAfterWaterParserFromNextSet: aNextSet [
+	| nextSet p |
+	nextSet := aNextSet copy.
 	(nextSet anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ nextSet add: PPEndOfFileParser new ].
 	
 	nextSet := nextSet collect: [ :e | e nonEmpty ].
@@ -118,15 +118,20 @@ PPIsland >> createAfterWaterParser: aPPContext [
 
 { #category : #parsing }
 PPIsland >> createBeforeWaterParser: aPPContext [
-	| nextSet p |
-	nextSet := Set new.
-	nextSet addAll: (self nextSet: aPPContext).
-	(nextSet anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ nextSet add: PPEndOfFileParser new ].
+	^ self createBeforeWaterParserFromNextSet: (self nextSet: aPPContext).
 	
-	nextSet := nextSet collect: [:e | e nonEmpty].
-	nextSet := nextSet select: [ :e | e class ~= PPFailingParser ].
+]
+
+{ #category : #parsing }
+PPIsland >> createBeforeWaterParserFromNextSet: nextSet [
+	| set p |
+	set := nextSet copy.
+	(set anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ set add: PPEndOfFileParser new ].
 	
-	p := ((PPChoiceParser withAll: nextSet) / (island nonEmpty)) and.
+	set := set collect: [:e | e nonEmpty].
+	set := set select: [ :e | e class ~= PPFailingParser ].
+	
+	p := ((PPChoiceParser withAll: set) / (island nonEmpty)) and.
 	^ PPWater on: p waterToken: water.
 ]
 
@@ -148,6 +153,11 @@ PPIsland >> initialize [
 	super initialize.
 	water := #any asParser name: 'water'; yourself.
 
+]
+
+{ #category : #queries }
+PPIsland >> isIslandBorder [
+	^ false
 ]
 
 { #category : #accessing }
@@ -245,8 +255,18 @@ PPIsland >> replace: parser with: anotherParser [
 { #category : #memoization }
 PPIsland >> reset: aPPContext [
 	context := aPPContext.
-	beforeWaterParser := nil.
-	afterWaterParser := nil.
+	beforeWaterParser := defaultBeforeWaterParser.
+	afterWaterParser := defaultAfterWaterParser.
+]
+
+{ #category : #'accessing - private' }
+PPIsland >> setAfterWaterParser: parser [
+	defaultAfterWaterParser := parser
+]
+
+{ #category : #'accessing - private' }
+PPIsland >> setBeforeWaterParser: parser [
+	defaultBeforeWaterParser  := parser
 ]
 
 { #category : #accessing }

@@ -15,6 +15,11 @@ PPParser >> acceptsEpsilonOpenSet: set [
 ]
 
 { #category : #'*petitislands' }
+PPParser >> isIslandBorder [
+	^ self acceptsEpsilon not
+]
+
+{ #category : #'*petitislands' }
 PPParser >> island [
 	| island |
 	island := PPIsland new

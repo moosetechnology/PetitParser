@@ -29,7 +29,7 @@ PPWater >> checkContext: aPPContext [
 
 { #category : #'as yet unclassified' }
 PPWater >> children [
-	^ Array with: waterToken
+	^ Array with: waterToken with: parser
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,7 +67,11 @@ PPWater >> parseOn: aPPContext [
 { #category : #'as yet unclassified' }
 PPWater >> replace: child with: anotherChild [
 	child == waterToken  ifTrue: [ 
-		waterToken := anotherChild.
+		waterToken := anotherChild
+	].
+
+	child == parser ifTrue: [ 
+		parser := anotherChild
 	]
 ]
 

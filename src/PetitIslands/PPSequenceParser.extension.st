@@ -21,7 +21,7 @@ PPSequenceParser >> nextSets: aNextDictionary into: aSet [
 		] ifFalse: [  
 			tmp := self subsequenceFrom: index + 1 to: parsers size.
 			childSet add: tmp.
-			tmp acceptsEpsilon ifTrue: [ 
+			tmp isIslandBorder ifFalse: [ 
 				childSet addAll: aSet.
 			]
 		].
