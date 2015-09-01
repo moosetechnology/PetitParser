@@ -1036,20 +1036,17 @@ PPIslandTest >> testOptionalIsland [
 { #category : #'tests - water objects' }
 PPIslandTest >> testWaterObjects [
 	| parser |
-	context := PPContext new.
 	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)) star.
 
 	self assert: parser parse: ' /* hello there */ class Foo endclass'.
 	self assert: result size = 1.
 	self assert: result first second = 'Foo'.
 	
-	context := PPContext new.
 	self assert: parser parse: ' /* class Bar endclass */ class Foo endclass'.
 	self assert: result size = 2.
 	self assert: result first second = 'Bar'.
 	self assert: result second second = 'Foo'.
 	
-	context := PPContext new.
 	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second) water: self multilineCommentParser / #any asParser) star.
 
 	self assert: parser parse: ' /* class Bar endclass */ class Foo endclass'.

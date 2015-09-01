@@ -330,22 +330,16 @@ PPJavaIslandParserTest >> test7 [
 { #category : #tests }
 PPJavaIslandParserTest >> testBlock [
 	self parse: '{}' rule: #block.
-	
-	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
 PPJavaIslandParserTest >> testBlock2 [
 	self parse: '{ }' rule: #block.
-	
-	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
 PPJavaIslandParserTest >> testBlock3 [
 	self parse: '{ {}  }' rule: #block.
-	
-	self assert: result isPetitFailure not.
 ]
 
 { #category : #tests }
@@ -554,21 +548,20 @@ PPJavaIslandParserTest >> testClassDef1 [
 
 { #category : #tests }
 PPJavaIslandParserTest >> testComment [
-	| input res |
+	| input  |
 	input := '/* hello there */'.
-	res := self parserInstance comment end parse: input.
-	self assert: res isPetitFailure not.
+	self parse: input rule: #comment
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testComment02 [
-	| input res |
+PPJavaIslandParserTest >> testComment2 [
+	| input  |
 	input := '/**
      * <p> If the {@code name} is "{@code <init>};"or "{@code <clinit>}" a
      * @since JDK1.1
      */'.
-	res := self parserInstance comment end parse: input.
-	self assert: res isPetitFailure not.
+
+	self parse: input rule: #comment
 ]
 
 { #category : #tests }
@@ -638,9 +631,8 @@ PPJavaIslandParserTest >> testMethod7 [
 
 { #category : #tests }
 PPJavaIslandParserTest >> testSingleLineComment [
-	| input res |
+	| input  |
 	input := '// hello there
 '.
-	res := self parserInstance singleLineComment end parse: input.
-	self assert: res isPetitFailure not.
+	self parse: input rule: #singleLineComment.
 ]
