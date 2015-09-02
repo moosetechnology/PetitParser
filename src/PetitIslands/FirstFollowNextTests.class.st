@@ -1193,7 +1193,9 @@ FirstFollowNextTests >> testNextRepeat4 [
 	root := p plus.
 	
 	nextSet := (self next: a in: root).
-	self assert: nextSet anySatisfy: [ :e | e end matches: 'a'].
+	self assert: nextSet size = 3.
+	self assert: nextSet anySatisfy: [ :e | e matches: 'a'].
+	self assert: nextSet anySatisfy: [ :e | e matches: 'ab'].
 	self assert: nextSet anySatisfy: [ :e | e acceptsEpsilon ].
 
 
@@ -1231,6 +1233,43 @@ FirstFollowNextTests >> testNextSequence2 [
 	self assert: nextSet noneSatisfy: [:e | e matches: 'c' ].
 	self assert: nextSet anySatisfy: [:e | e matches: 'bc' ].
 
+
+
+]
+
+{ #category : #'test next' }
+FirstFollowNextTests >> testNextSequence3 [
+	| a p nextSet b c |
+	a := 'a' asParser.
+	b := 'b' asParser.
+	c := 'c' asParser.
+	
+	p := (a, b island) wrapped, c.
+	
+	nextSet := (self next: a in: p).
+	self assert: nextSet size = 2.
+	
+	self assert: nextSet anySatisfy: [:e | e matches: 'b' ].
+	self assert: nextSet anySatisfy: [:e | e matches: 'c' ].
+
+
+]
+
+{ #category : #'test next' }
+FirstFollowNextTests >> testNextSequence4 [
+	| a p nextSet b c d |
+	a := 'a' asParser.
+	b := 'b' asParser.
+	c := 'c' asParser.
+	d := 'd' asParser.
+	
+	p := (a, b island, c island) wrapped, d.
+	
+	nextSet := (self next: a in: p).
+	self assert: nextSet size = 2.
+	
+	self assert: nextSet anySatisfy: [:e | e matches: 'bc' ].
+	self assert: nextSet anySatisfy: [:e | e matches: 'd' ].
 
 
 ]

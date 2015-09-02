@@ -39,6 +39,11 @@ PPWater >> initialize [
 	context := nil.
 ]
 
+{ #category : #testing }
+PPWater >> isWater [
+	^ true
+]
+
 { #category : #'as yet unclassified' }
 PPWater >> parseOn: aPPContext [
 	| waterPosition result position |

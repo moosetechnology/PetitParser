@@ -1,6 +1,21 @@
 Extension { #name : #PPRepeatingParser }
 
 { #category : #'*petitislands' }
+PPRepeatingParser >> acceptsEpsilon [
+	^ min == 0
+]
+
+{ #category : #'*petitislands' }
+PPRepeatingParser >> isIslandBorder [
+	^ min > 0
+]
+
+{ #category : #'*petitislands' }
+PPRepeatingParser >> isIslandBorderOpenSet: set [
+	^ min > 0
+]
+
+{ #category : #'*petitislands' }
 PPRepeatingParser >> nextSets: aNextDictionary into: aSet [
 	| tally childSet change |
 

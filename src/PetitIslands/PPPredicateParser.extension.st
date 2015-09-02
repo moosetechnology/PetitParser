@@ -4,3 +4,8 @@ Extension { #name : #PPPredicateParser }
 PPPredicateParser >> acceptsEpsilon [
 	^ false
 ]
+
+{ #category : #'*petitislands' }
+PPPredicateParser >> isIslandBorder [
+	^ true
+]

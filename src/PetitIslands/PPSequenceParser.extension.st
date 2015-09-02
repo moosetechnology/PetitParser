@@ -7,6 +7,12 @@ PPSequenceParser >> acceptsEpsilonOpenSet: set [
 ]
 
 { #category : #'*petitislands' }
+PPSequenceParser >> isIslandBorderOpenSet: set [
+	set add: self.
+	^ self children anySatisfy: [:e | e isIslandBorderOpenSet: set ]
+]
+
+{ #category : #'*petitislands' }
 PPSequenceParser >> nextSets: aNextDictionary into: aSet [
 	| change tally tmp childSet |
 	

@@ -4,3 +4,8 @@ Extension { #name : #PPStartOfLineParser }
 PPStartOfLineParser >> acceptsEpsilon [
 	^ true
 ]
+
+{ #category : #'*petitislands' }
+PPStartOfLineParser >> isIslandBorder [
+	^ true
+]

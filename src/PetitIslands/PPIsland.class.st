@@ -64,9 +64,7 @@ PPIsland >> acceptsEpsilon [
 
 { #category : #queries }
 PPIsland >> acceptsEpsilonOpenSet: set [
-	"JK: Hack alert?"
-	^ true
-"	^ island isNullableOpenSet: set"
+	^ island acceptsEpsilonOpenSet: set
 ]
 
 { #category : #parsing }
@@ -160,6 +158,11 @@ PPIsland >> isIslandBorder [
 	^ false
 ]
 
+{ #category : #queries }
+PPIsland >> isIslandBorderOpenSet: set [
+	^ false
+]
+
 { #category : #accessing }
 PPIsland >> island [
 
@@ -227,7 +230,6 @@ PPIsland >> parseOn: aPPContext [
 		aPPContext restore: memento.
 		^ retval
 	].
-
 
 	awr := self parseAfterWater: aPPContext.	
 	awr isPetitFailure ifTrue: 

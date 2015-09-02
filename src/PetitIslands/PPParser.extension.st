@@ -16,7 +16,20 @@ PPParser >> acceptsEpsilonOpenSet: set [
 
 { #category : #'*petitislands' }
 PPParser >> isIslandBorder [
-	^ self acceptsEpsilon not
+	^ self subclassResponsibility
+]
+
+{ #category : #'*petitislands' }
+PPParser >> isIslandBorderOpenSet: set [
+	"private helper for acceptsEmpsilon that makes sure to avoid cycles (using open set)"
+	self children isEmpty ifTrue: [ ^ self isIslandBorder ].
+	
+	self shouldBeImplemented .
+]
+
+{ #category : #'*petitislands' }
+PPParser >> isWater [
+	^ false
 ]
 
 { #category : #'*petitislands' }

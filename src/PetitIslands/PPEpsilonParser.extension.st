@@ -6,6 +6,11 @@ PPEpsilonParser >> acceptsEpsilon [
 ]
 
 { #category : #'*petitislands' }
+PPEpsilonParser >> isIslandBorder [
+	^ false
+]
+
+{ #category : #'*petitislands' }
 PPEpsilonParser >> nonEmpty [
 	^ PPFailingParser message: 'epsilon is always empty'
 ]

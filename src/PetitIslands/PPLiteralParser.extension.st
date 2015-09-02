@@ -4,3 +4,8 @@ Extension { #name : #PPLiteralParser }
 PPLiteralParser >> acceptsEpsilon [
 	^ false
 ]
+
+{ #category : #'*petitislands' }
+PPLiteralParser >> isIslandBorder [
+	^ true
+]
