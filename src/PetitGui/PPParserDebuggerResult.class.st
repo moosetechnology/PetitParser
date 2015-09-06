@@ -28,7 +28,9 @@ Class {
 
 { #category : #'*petitgui' }
 PPParserDebuggerResult class >> gtExampleAlmostArithmetic [
-	<gtExample: 'Incomplete arithmetic expression'>
+	<gtExample>
+	<label: 'Incomplete arithmetic expression'>
+	
 	^ PPParserDebuggerResult 
 		parse: '1 + ' 
 		with: PPArithmeticParser new
@@ -36,7 +38,9 @@ PPParserDebuggerResult class >> gtExampleAlmostArithmetic [
 
 { #category : #'*petitgui' }
 PPParserDebuggerResult class >> gtExampleArithmetic [
-	<gtExample: 'Arithmetic expression'>
+	<gtExample>
+	<label: 'Arithmetic expression'>
+	
 	^ PPParserDebuggerResult 
 		parse: '1 + 2' 
 		with: PPArithmeticParser new
@@ -44,7 +48,9 @@ PPParserDebuggerResult class >> gtExampleArithmetic [
 
 { #category : #'*petitgui' }
 PPParserDebuggerResult class >> gtExampleNoNumber [
-	<gtExample: 'Result with #Number expected, but #String given'>
+	<gtExample>
+	<label: 'Result with #Number expected, but #String given'>
+	
 	^ PPParserDebuggerResult 
 		parse: 'hello world' 
 		with: (PPArithmeticParser new productionAt: #number)
@@ -52,7 +58,9 @@ PPParserDebuggerResult class >> gtExampleNoNumber [
 
 { #category : #'*petitgui' }
 PPParserDebuggerResult class >> gtExampleNumber [
-	<gtExample: 'Result with #Number'>
+	<gtExample>
+	<label: 'Result with #Number'>
+	
 	^ PPParserDebuggerResult 
 		parse: '123' 
 		with: (PPArithmeticParser new productionAt: #number)

@@ -95,13 +95,17 @@ PPParser >> gtAllParsersIn: composite [
 
 { #category : #'*petitgui' }
 PPParser class >> gtExampleCharactersParser [
-	<gtExample: 'Characters parser'>
+	<gtExample>
+	<label: 'Characters parser'>
+	
 	^ ($a to: $z) asParser
 ]
 
 { #category : #'*petitgui' }
 PPParser class >> gtExampleEmptyParser [
-	<gtExample: 'Empty parser'>
+	<gtExample>
+	<label: 'Empty parser'>
+	
 	^ self new
 ]
 
