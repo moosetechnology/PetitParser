@@ -29,25 +29,10 @@ PPMemoizingIsland class >> initialize [
 
 ]
 
-{ #category : #parsing }
-PPMemoizingIsland >> check: aPPContext [
-	context == aPPContext ifFalse: [ self reset: aPPContext ].
-]
-
 { #category : #initialization }
 PPMemoizingIsland >> initialize [ 
 	super initialize.
 
-]
-
-{ #category : #accessing }
-PPMemoizingIsland >> island: anObject [
-
-	island ifNil: [
-		super island: anObject.
-	] ifNotNil: [
-		self error: 'JK: I do not want to do this' .
-	] 
 ]
 
 { #category : #memoization }

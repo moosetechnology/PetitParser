@@ -86,7 +86,9 @@ Class {
 		'comment',
 		'singleLineComment',
 		'string',
-		'water'
+		'water',
+		'letters',
+		'spaces'
 	],
 	#category : #'PetitIslands-Examples'
 }
@@ -99,7 +101,7 @@ PPJavaIslandParser >> arguments [
 { #category : #class }
 PPJavaIslandParser >> block [
 	^ (${ asParser,
-		((block island: water) plus / nil asParser island),
+		((block island: water) plus / nil asParser island: water),
 	$} asParser) ==> [:tokens | nil ]
 		
 ]
@@ -109,15 +111,20 @@ PPJavaIslandParser >> classBody [
 	 ^ 
 	(${ asParser,
 		(
-		((methodDef island: water) ==> [:tokens | tokens second]) plus /
+		(
+			(((methodDef ==> [:name | { name } ]) 
+			  / 
+			  (javaClass ==> [:t | self collectMethodNames: t ])
+			) island: water) ==> #second
+		) plus /
 		((nil asParser island: water) ==> [ :tokens | OrderedCollection new ])
 		),
-	$} asParser) ==> [:tokens | tokens second select: [:e | e isNil not ]]
+	$} asParser) ==> [:tokens | tokens second flatten select: [:e | e isNil not ]]
 ]
 
 { #category : #class }
 PPJavaIslandParser >> classDef [
-	^ modifiers trim, 'class' asParser, classId trim ==> [:tokens | tokens third ]
+	^ modifiers trim, 'class' asParser, classId trim ==> #third
 ]
 
 { #category : #class }
@@ -125,21 +132,35 @@ PPJavaIslandParser >> classId [
 	^ (#uppercase asParser, (#letter asParser / #digit asParser) star) flatten 
 ]
 
+{ #category : #support }
+PPJavaIslandParser >> collectMethodNames: javaClassResult [
+	| name methods |
+	name := javaClassResult first.
+	methods := javaClassResult second.
+	
+	^ methods collect: [ :m | name, '::', m ]
+]
+
 { #category : #'comments and strings' }
 PPJavaIslandParser >> comment [
 	| end |
 	end := '*/' asParser.
-	^ ('/*' asParser, (#any asParser starLazy: end), end)
+	^ ('/*' asParser, (end negate star), end)
 ]
 
 { #category : #class }
 PPJavaIslandParser >> javaClass [
-	^ classDef, ((classBody island:water) ==> [:tokens | tokens second ])
+	^ classDef, ((classBody island:water) ==> #second)
 ]
 
 { #category : #class }
 PPJavaIslandParser >> javaClassIsland [
 	^ (javaClass island: water) ==> [:tokens | tokens second]
+]
+
+{ #category : #method }
+PPJavaIslandParser >> letters [
+	^ (#letter asParser plus)
 ]
 
 { #category : #method }
@@ -149,7 +170,7 @@ PPJavaIslandParser >> methodBody [
 
 { #category : #method }
 PPJavaIslandParser >> methodDef [
-	^ methodModifiers, ((type island: water), (methodName island:water), (arguments island:water)) wrapped, methodBody ==> [:tokens | tokens second second second ]
+	^ methodModifiers, ((type island: water), ((methodName, arguments) island:water)) wrapped, methodBody ==> [:tokens | tokens second second second first ]
 ]
 
 { #category : #class }
@@ -169,7 +190,7 @@ PPJavaIslandParser >> methodName [
 
 { #category : #class }
 PPJavaIslandParser >> modifiers [
-	^ ('public' asParser / 'private' asParser), 'final' asParser trim optional, 'abstract' asParser trim optional
+	^ ('public' asParser / 'private' asParser) optional, 'final' asParser trim optional, 'abstract' asParser trim optional
 ]
 
 { #category : #method }
@@ -181,7 +202,12 @@ PPJavaIslandParser >> semicolon [
 PPJavaIslandParser >> singleLineComment [
 	| end |
 	end := #newline asParser.
-	^ ('//' asParser, (#any asParser starLazy: end), end)
+	^ ('//' asParser, (end negate star), end)
+]
+
+{ #category : #method }
+PPJavaIslandParser >> spaces [
+	^ #space asParser plus
 ]
 
 { #category : #'as yet unclassified' }
@@ -218,5 +244,5 @@ PPJavaIslandParser >> water [
 		when parsing water. This way, comments and strings cannot confuse the result.
 	"
 
-	^ comment / string / singleLineComment / block / #any asParser
+	^ comment / string / singleLineComment / block / letters / spaces / #any asParser
 ]

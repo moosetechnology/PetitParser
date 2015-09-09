@@ -297,9 +297,9 @@ PPJavaIslandParserTest >> test4 [
 	self parse: self file4.
 
 	self assert: result first = 'Class'.
-	self assert: result second size > 2.
+	self assert: result second size = 2.
 	
-	self assert: (result second anySatisfy: [ :e | e = 'Class' ]).
+	self assert: (result second anySatisfy: [ :e | e = 'registerNatives' ]).
 	self assert: (result second anySatisfy: [ :e | e = 'toString' ]).
 ]
 
@@ -308,10 +308,10 @@ PPJavaIslandParserTest >> test5 [
 	self parse: self file5.
 
 	self assert: result first = 'Foo'.
-	self assert: result second size = 2.
+	self assert: result second size = 1.
 	
-	self assert: result second first = 'Foo'.
-	self assert: result second second = 'toString'.	
+	"self assert: result second first = 'Foo'."
+	self assert: result second first = 'toString'.	
 ]
 
 { #category : #tests }
@@ -319,11 +319,12 @@ PPJavaIslandParserTest >> test7 [
 	self parse: self file7.
 
 	self assert: result first = 'Class'.
-	self assert: result second size > 2.
+	self assert: result second size = 3.
 	
-	self assert: (result second anySatisfy: [ :e | e = 'Class' ]).
+"	self assert: (result second anySatisfy: [ :e | e = 'Class' ])."
 	self assert: (result second anySatisfy: [ :e | e = 'toString' ]).
-	self assert: (result second anySatisfy: [ :e | e = 'getAnnotationType' ])
+	self assert: (result second anySatisfy: [ :e | e = 'getAnnotationType' ]).
+	self assert: (result second anySatisfy: [ :e | e = 'registerNatives' ]).
 
 ]
 
@@ -402,6 +403,55 @@ PPJavaIslandParserTest >> testClassBody10 [
 	self assert: result isPetitFailure not.
 	self assert: result size = 1.
 	self assert: result first = 'read'.
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testClassBody11 [
+	self parse: '{
+    void foo() { {}}
+    void bar() { }
+}' 
+	rule: #classBody.
+	
+	self assert: result isPetitFailure not.
+	self assert: result size = 2.
+	self assert: result first = 'foo'.
+	self assert: result second = 'bar'.	
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testClassBody12 [
+	self parse: '{
+    public boolean addAll(int index, Collection<? extends E> c) {
+    }	
+   
+	 public Iterator<E> iterator() {
+        return listIterator();
+    }	 
+}' 
+	rule: #classBody.
+	
+	self assert: result isPetitFailure not.
+	self assert: result first = 'addAll'.
+	self assert: result second = 'iterator'.
+
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testClassBody13 [
+	self parse: '{
+			class A { 
+        		void bar() {}
+			}
+			
+			void baz() {}
+		}' 
+	rule: #classBody.
+	
+	self assert: result isPetitFailure not.
+	self assert: result first = 'A::bar'.
+	self assert: result second = 'baz'.
+
 ]
 
 { #category : #tests }
@@ -627,6 +677,57 @@ PPJavaIslandParserTest >> testMethod7 [
 	
 	self assert: result isPetitFailure not.
 	self assert: result = 'read'.
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testMethod8 [
+	"type is missing"
+	self fail: 'private Class() {}' rule: #methodDef.
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testMethod9 [
+	self parse: 'public void foo() { if (true) {} return false;}' rule: #methodDef.
+
+	self assert: result = 'foo'.
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testNestedClass1 [
+	self parse: 'private final class Foo 
+		{
+			public void foo() {  }
+			
+			class Bar { 
+				public void bar() { }
+			}
+		}'
+	rule: #javaClass.
+
+	self assert: result first = 'Foo'.
+	self assert: result second size = 2.
+	self assert: result second first = 'foo'.
+	self assert: result second second = 'Bar::bar'.
+]
+
+{ #category : #tests }
+PPJavaIslandParserTest >> testNestedClass2 [
+	self parse: 'class Foo 
+		{
+			private class Entry {
+        		private void bar() {
+       		}
+			}
+			
+			public void baz() {  }
+		}'
+	rule: #javaClass.
+
+	self assert: result first = 'Foo'.
+	self assert: result second size = 2.
+
+	self assert: result second first = 'Entry::bar'.
+	self assert: result second second = 'baz'.
 ]
 
 { #category : #tests }

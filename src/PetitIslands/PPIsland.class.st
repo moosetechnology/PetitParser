@@ -49,10 +49,10 @@ Class {
 		'island',
 		'afterWaterParser',
 		'beforeWaterParser',
-		'context',
 		'water',
 		'defaultBeforeWaterParser',
-		'defaultAfterWaterParser'
+		'defaultAfterWaterParser',
+		'contextIdentifier'
 	],
 	#category : #'PetitIslands-Parsers'
 }
@@ -69,7 +69,7 @@ PPIsland >> acceptsEpsilonOpenSet: set [
 
 { #category : #parsing }
 PPIsland >> afterWaterParser: aPPContext [
-	context == aPPContext ifFalse: [ self reset: aPPContext ].
+	self check: aPPContext.
 
 	afterWaterParser ifNil: [
 		afterWaterParser := self createAfterWaterParser: aPPContext.
@@ -80,13 +80,18 @@ PPIsland >> afterWaterParser: aPPContext [
 
 { #category : #parsing }
 PPIsland >> beforeWaterParser: aPPContext [
-	context == aPPContext ifFalse: [ self reset: aPPContext ].
+	self check: aPPContext.
 
 	beforeWaterParser ifNil: [
 		beforeWaterParser := self createBeforeWaterParser: aPPContext.
 	].
 	^ beforeWaterParser
 
+]
+
+{ #category : #parsing }
+PPIsland >> check: aPPContext [
+	(contextIdentifier == aPPContext identifier) ifFalse: [ self reset: aPPContext ].
 ]
 
 { #category : #accessing }
@@ -204,11 +209,39 @@ PPIsland >> parseBeforeWater: aPPContext [
 ]
 
 { #category : #parsing }
+PPIsland >> parseIslandOn: aPPContext [ 
+	|  result |
+
+	"Do not allow empty parses, when searching for the island..."
+	(aPPContext waterPosition == aPPContext position) ifTrue:[
+		result := island nonEmpty parseOn: aPPContext.
+	"But allow when boundary found"
+	] ifFalse: [
+		| tmp |
+		"
+			Oh, the thing is, if island starts with island parser B, 
+			which is nested in another parser A, where B is bounded
+			by something else than A. Then the B is not allowed to 
+			skip over the boundary of A, but B has different boundary!
+			
+			Thus I disallow before water of any island parser that starts island
+			by setting the water position!
+		"
+		tmp := aPPContext waterPosition.
+		aPPContext waterPosition: aPPContext position.
+		result := island parseOn: aPPContext.
+		aPPContext waterPosition: tmp.
+	].
+
+	^ result
+
+]
+
+{ #category : #parsing }
 PPIsland >> parseOn: aPPContext [ 
 	|  bwr awr result retval memento |
 
 	memento := aPPContext remember.
- 	
 	bwr := self parseBeforeWater: aPPContext.
 	bwr isPetitFailure ifTrue: 
 	[
@@ -217,13 +250,7 @@ PPIsland >> parseOn: aPPContext [
 		^ retval.
 	].
 
-	"JK: HACK ALERT, FIX!"
-	(aPPContext waterPosition == aPPContext position) ifTrue:[
-		result := island nonEmpty parseOn: aPPContext.
-	] ifFalse: [
-		result := island parseOn: aPPContext.
-	].
-	
+	result := self parseIslandOn: aPPContext.
 
 	result isPetitFailure ifTrue: [ 
 		retval := PPFailure message: 'Island not found between ', memento position asString, ' and ', aPPContext position asString context: aPPContext.
@@ -256,7 +283,7 @@ PPIsland >> replace: parser with: anotherParser [
 
 { #category : #memoization }
 PPIsland >> reset: aPPContext [
-	context := aPPContext.
+	contextIdentifier := aPPContext identifier.
 	beforeWaterParser := defaultBeforeWaterParser.
 	afterWaterParser := defaultAfterWaterParser.
 ]
