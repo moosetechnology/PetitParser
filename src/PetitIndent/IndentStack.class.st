@@ -7,6 +7,24 @@ Class {
 	#category : #'PetitIndent-Core'
 }
 
+{ #category : #comparison }
+IndentStack >> = anotherStack [
+	self == anotherStack ifTrue: [ ^ true ].
+	self contents = anotherStack contents ifTrue: [ ^ true ].
+	
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
+IndentStack >> contents [
+	^ contents
+]
+
+{ #category : #comparison }
+IndentStack >> hash [
+	^ contents hash
+]
+
 { #category : #'as yet unclassified' }
 IndentStack >> initialize [
 	super initialize.
@@ -20,7 +38,6 @@ IndentStack >> isEmpty [
 
 { #category : #'as yet unclassified' }
 IndentStack >> pop [
-	Halt ifShiftPressed.
 	contents isEmpty ifTrue: [ ^ PPFailure message: 'cannot pop an empty stack' ].
 	^ contents removeLast
 ]
@@ -33,7 +50,7 @@ IndentStack >> postCopy [
 
 { #category : #'as yet unclassified' }
 IndentStack >> push: anExpression [
-	self assert: anExpression isPetitParser.
+"	self assert: anExpression isPetitParser."
 	^ contents addLast: anExpression
 ]
 
@@ -63,4 +80,10 @@ IndentStack >> size [
 { #category : #'as yet unclassified' }
 IndentStack >> top [
 	^ contents last
+]
+
+{ #category : #'as yet unclassified' }
+IndentStack >> topIfEmpty: block [
+	self isEmpty ifTrue: [ ^ block value ].
+	^ self top
 ]

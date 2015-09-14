@@ -10,6 +10,42 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+IndentStackTest >> testCompare [
+	| anotherStack parser |
+	context := PPContext new.
+	stack := context indentStack.
+
+	context := PPContext new.
+	anotherStack := context indentStack.
+	
+	self assert: stack ~~ anotherStack.
+	self assert: stack = anotherStack.
+	
+	parser := 'a' asParser.
+	stack push: parser.
+	self assert: stack ~= anotherStack.
+	
+	anotherStack push: parser.
+	self assert: stack = anotherStack.
+
+]
+
+{ #category : #'as yet unclassified' }
+IndentStackTest >> testCompare2 [
+	| anotherStack  |
+	context := PPContext new.
+	context stream: 'aaa' asPetitStream.
+	stack := context indentStack.
+	
+	stack push: 'a' asParser.
+
+	anotherStack := context remember indentStack.
+	
+	self assert: stack ~~ anotherStack.
+	self assert: stack = anotherStack.
+]
+
+{ #category : #'as yet unclassified' }
 IndentStackTest >> testMemo [
 	| memento |
 	context := PPContext new.

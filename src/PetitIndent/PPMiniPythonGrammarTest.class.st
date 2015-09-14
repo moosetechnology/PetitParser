@@ -1082,7 +1082,6 @@ PPMiniPythonGrammarTest >> testIndent [
 	self assert: align parse: '   ' end: 0.
 	self assert: indent parse: '   ' to: '   ' end: 0.
 	self assert: context indentStack size = 1.
-	
 	self assert: align parse: '   ' to: '   ' end: 3.
 	
 	context := PPContext new.
