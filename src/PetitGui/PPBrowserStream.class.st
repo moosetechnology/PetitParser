@@ -63,8 +63,8 @@ PPBrowserStream >> asPositionDrawing [
 { #category : #converting }
 PPBrowserStream >> asPositionMorph [
 	| width height canvas morph |
-	width := self size + 1 min: 65535.
-	height := self positions size min: 65535.
+	width := self size + 1 min: 4096.
+	height := self positions size min: 32768.
 	canvas := FormCanvas extent: width @ height.
 	self contents keysAndValuesDo: [ :index :char |
 		char isSeparator 
@@ -141,6 +141,19 @@ PPBrowserStream >> positions [
 	^ positions
 ]
 
+{ #category : #'*petitgui-debug' }
+PPBrowserStream >> progressIn: composite [
+	<gtInspectorPresentationOrder: 30>
+	composite morph 
+		title: 'Progress';
+		display: [:result :sample :stream :parser  | 
+			| morph |
+			morph := ScrollPane new.
+			morph color: Color white.
+			morph scroller addMorph: self asPositionMorph.
+			morph ]
+]
+
 { #category : #positioning }
 PPBrowserStream >> reset [
 	super reset.
@@ -158,6 +171,20 @@ PPBrowserStream >> stamps [
 PPBrowserStream >> step [
 	positions addLast: position.
 	stamps addLast: Time millisecondClockValue.
-	(thisContext findContextSuchThat: [ :ctxt | ctxt receiver isKindOf: PPParser ])
+	(thisContext findContextSuchThat: [ :ctxt | ctxt receiver isKindOf: PPIsland ])
 		ifNotNil: [ :aContext | parsers addLast: aContext receiver ].
+]
+
+{ #category : #'*petitgui-debug' }
+PPBrowserStream >> tallyIn: composite [
+	<gtInspectorPresentationOrder: 30>
+
+	composite table 
+		title: 'Tally';
+		column: 'Parser' evaluated: [ :each | each first displayName ];
+		column: 'Count' evaluated: [ :each | each second printString ];
+		column: 'Percentage (%)' evaluated: [ :each | each third printString ];
+		display: [ self asFrequencyTable ];
+		noSelection;
+		showOnly: 50
 ]

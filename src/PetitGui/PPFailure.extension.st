@@ -75,7 +75,5 @@ PPFailure >> treeViewIn: composite [
 	composite tree
 		title: 'Execution Traces';
 		format: [:resultNode | resultNode formattedText ];
-		children: [:resultNode | resultNode showChildren 
-											ifTrue: [ resultNode children ] 
-											ifFalse: [ #() ] ]. 
+		children: [:resultNode | resultNode children ]. 
 ]

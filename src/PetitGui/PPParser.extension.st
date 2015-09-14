@@ -12,21 +12,6 @@ PPParser >> debug: anObject [
 	^ self enableDebug parse: anObject asPetitStream
 ]
 
-{ #category : #'*petitgui-debug' }
-PPParser >> debuggerOutput [
-	^ self propertyAt: #debuggerOutput ifAbsentPut: true.
-]
-
-{ #category : #'*petitgui-debug' }
-PPParser >> debuggerOutput: aBoolean [
-	self propertyAt: #debuggerOutput put: aBoolean
-]
-
-{ #category : #'*petitgui-debug' }
-PPParser >> disableDebuggerOutput [ 
-	self debuggerOutput: false.	
-]
-
 { #category : #'*petitgui-accessing' }
 PPParser >> displayColor [
 	^ self isTerminal
@@ -46,6 +31,11 @@ PPParser >> enableDebug [
    | root newParser  |
 	root := PPParserDebuggerResult new.
 	
+	"In order to debug island waters, we need to compute the island water..."
+	self allParsers select: [ :p | p isKindOf: PPIsland  ] thenDo: [ :island |
+		island createWaterForRoot: self	
+	].
+	
 	newParser := self transform: [:each |
 		each >=> [:stream :continuation | 
 			| result child |
@@ -54,7 +44,6 @@ PPParser >> enableDebug [
 					parent: root.
 			root := root children add: child.
  			child start: stream position + 1.
-			child showChildren: each debuggerOutput.
 			result := continuation value.
 			child end: stream position.
 			root result: result.
@@ -65,11 +54,6 @@ PPParser >> enableDebug [
 	
 	^ PPDebugParser on: newParser root: root.
 
-]
-
-{ #category : #'*petitgui-debug' }
-PPParser >> enableDebuggerOutput [ 
-	self debuggerOutput: true.
 ]
 
 { #category : #'*petitgui-accessing' }
