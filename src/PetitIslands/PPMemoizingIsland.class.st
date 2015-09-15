@@ -73,6 +73,7 @@ PPMemoizingIsland >> parseOn: aPPContext [
 	
 	memoizedResult := self memoizedResult: aPPContext.
 	memoizedResult ifNotNil: [ 
+		aPPContext islandMemoHit.
 		aPPContext restore: memoizedResult contextMemento.
 		^ memoizedResult result 
 	].
@@ -81,6 +82,7 @@ PPMemoizingIsland >> parseOn: aPPContext [
 	retval := super parseOn: aPPContext.
 
 	(aPPContext waterPosition == aPPContext position) ifFalse: [ 
+		aPPContext islandMemoized.
 		self memoizeResult: retval onContext: aPPContext memento: memento.
 	].
 

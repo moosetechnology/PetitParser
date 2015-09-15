@@ -45,6 +45,12 @@ PPWater >> isWater [
 ]
 
 { #category : #'as yet unclassified' }
+PPWater >> nextSets: aNextSetDictionary into: aSet [
+	self assert: aSet isEmpty.
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
 PPWater >> parseOn: aPPContext [
 	| waterPosition result position |
 	
@@ -58,6 +64,7 @@ PPWater >> parseOn: aPPContext [
 			aPPContext atEnd ifTrue: [ 
 				aPPContext waterPosition: waterPosition.
 				^ PPFailure message: 'anchor did not found' at: aPPContext position ].
+			aPPContext waterToken.
 			waterToken parseOn: aPPContext.
 			aPPContext waterPosition: aPPContext position.
 			result := parser parseOn: aPPContext.

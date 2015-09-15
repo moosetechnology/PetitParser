@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #parsing }
+PPNonEmptyParser >> nonEmpty [
+	^ super nonEmpty.
+]
+
+{ #category : #parsing }
 PPNonEmptyParser >> parseOn: aPPContext [
 	| memento result |
 	memento := aPPContext remember.

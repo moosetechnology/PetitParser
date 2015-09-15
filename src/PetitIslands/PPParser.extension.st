@@ -39,31 +39,15 @@ PPParser >> island [
 		island: self;
 		yourself.
 		
-	"
-		TODO JK: Hack alert!
-		Not nice, but usefull for debugging
-	"	
-	Sensor shiftPressed ifFalse: [ 	
-		island := island memoized
-	].
-	^ island
+	^ island memoized
+
 ]
 
 { #category : #'*petitislands' }
 PPParser >> island: water [
-	| island |
-	island := PPIsland new
-		island: self;
+	^ self island
 		water: water;
-		yourself.
-	"
-		TODO JK: Hack alert!
-		Not nice, but usefull for debugging
-	"	
-	Sensor shiftPressed ifFalse: [ 	
-		island := island memoized
-	].
-	^ island
+		yourself
 
 ]
 
@@ -120,4 +104,9 @@ PPParser >> nextSets: aNextDictionary into: aSet [
 { #category : #'*petitislands' }
 PPParser >> nonEmpty [
 	^ PPNonEmptyParser on: self
+]
+
+{ #category : #'*petitislands' }
+PPParser >> previous [
+	^ PPPreviousParser on: self
 ]
