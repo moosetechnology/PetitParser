@@ -17,7 +17,7 @@ PPContextMemento >> = anObject [
 	
 	(anObject stream == stream) ifFalse: [ ^ false ].
 	(anObject position = position) ifFalse: [ ^ false ].
-
+	
 	(self propertiesSize = anObject propertiesSize) ifFalse: [ ^ false ].
 
 	self keysAndValuesDo: [ :key :value |

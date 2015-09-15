@@ -123,8 +123,6 @@ PPContext >> initialize [
 
 { #category : #initialization }
 PPContext >> initializeFor: parser [
-	parser == root ifTrue: [ ^ self ].
-	
 	root := parser.
 ]
 
@@ -277,6 +275,12 @@ PPContext >> removeProperty: aKey ifAbsent: aBlock [
 	answer := properties removeKey: aKey ifAbsent: aBlock.
 	properties isEmpty ifTrue: [ properties := nil ].
 	^ answer
+]
+
+{ #category : #initialization }
+PPContext >> reset [
+	properties := nil.
+	globals := nil.
 ]
 
 { #category : #memoization }

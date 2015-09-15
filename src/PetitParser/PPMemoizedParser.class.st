@@ -11,11 +11,16 @@ Class {
 	#superclass : #PPDelegateParser,
 	#instVars : [
 		'buffer',
-		'context',
-		'hash'
+		'identifier'
 	],
 	#category : #'PetitParser-Parsers'
 }
+
+{ #category : #parsing }
+PPMemoizedParser >> check: aPPContext [
+	(identifier == aPPContext identifier)
+		ifFalse: [ self reset: aPPContext ].
+]
 
 { #category : #operators }
 PPMemoizedParser >> memoized [
@@ -28,10 +33,8 @@ PPMemoizedParser >> memoized [
 PPMemoizedParser >> parseOn: aPPContext [
 	| memento contextMemento  aStream |
 	"TODO: JK memoizing needs review!"
-	
+	self check: aPPContext.
 	contextMemento := aPPContext remember.
-	(hash == aPPContext hash)
-		ifFalse: [ self reset: aPPContext ].
 	memento := (buffer at: contextMemento ifAbsentPut: [ PPMemento new ]).
 	
 	memento contextMemento isNil
@@ -41,13 +44,12 @@ PPMemoizedParser >> parseOn: aPPContext [
 				ifTrue: [ PPFailure message: 'overflow' context: aPPContext ]
 				ifFalse: [ memento increment. parser parseOn: aPPContext ]).
 			memento contextMemento: aPPContext remember ]
-		ifFalse: [ context restore: memento contextMemento ].
+		ifFalse: [ aPPContext restore: memento contextMemento ].
 	^ memento result.
 ]
 
 { #category : #parsing }
 PPMemoizedParser >> reset: aPPContext [
-	hash := aPPContext hash.
-	context := aPPContext.
 	buffer := Dictionary new.
+	identifier := aPPContext identifier.
 ]

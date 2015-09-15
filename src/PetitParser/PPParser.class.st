@@ -113,6 +113,12 @@ PPParser >> asParser [
 ]
 
 { #category : #accessing }
+PPParser >> child [
+	self assert: (self children size == 1).
+	^ self children first
+]
+
+{ #category : #accessing }
 PPParser >> children [
 	"Answer a set of child parsers that could follow the receiver."
 
