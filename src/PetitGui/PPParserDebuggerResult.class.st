@@ -89,6 +89,20 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 	^ root children first
 ]
 
+{ #category : #analysis }
+PPParserDebuggerResult >> allChildren [
+	| collection |
+	collection := IdentitySet new.
+	self allChildrenTo: collection.
+	^ collection
+]
+
+{ #category : #analysis }
+PPParserDebuggerResult >> allChildrenTo: set [
+	set add: self.
+	self children do: [ :child | child allChildrenTo: set ].
+]
+
 { #category : #accessing }
 PPParserDebuggerResult >> children [
 	^ children
