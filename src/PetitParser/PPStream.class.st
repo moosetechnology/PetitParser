@@ -34,10 +34,13 @@ PPStream >> column: pos [
 	(pos > readLimit) ifTrue: [ ^ self error: 'Out of limit' ].
 	
 	nl := self newlines.
-	nl keysAndValuesDo: [ :index :value |
+	1 to: nl size do: [ :index | 
+		((nl at: index) > pos) ifTrue: [ ^ pos - (nl at: (index - 1)) + 1 ]
+	].
+"	nl keysAndValuesDo: [ :index :value |
 		(value > pos) ifTrue: [ ^ pos - (nl at: (index - 1)) + 1]
 	].	
-
+"
 	^ pos - (nl at: (nl size )) + 1
 ]
 

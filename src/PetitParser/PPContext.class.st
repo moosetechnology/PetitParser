@@ -322,6 +322,11 @@ PPContext >> root [
 	^ root 
 ]
 
+{ #category : #memoization }
+PPContext >> size [
+	^ stream size
+]
+
 { #category : #'stream mimicry' }
 PPContext >> skip: anInteger [ 
 	^ stream skip: anInteger 
