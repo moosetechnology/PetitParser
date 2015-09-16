@@ -2,8 +2,7 @@ Class {
 	#name : #PPWater,
 	#superclass : #PPDelegateParser,
 	#instVars : [
-		'waterToken',
-		'context'
+		'waterToken'
 	],
 	#category : #'PetitIslands-Parsers'
 }
@@ -21,13 +20,6 @@ PPWater class >> on: parser waterToken: waterToken [
 ]
 
 { #category : #'as yet unclassified' }
-PPWater >> checkContext: aPPContext [
-	context == aPPContext ifFalse: [ 
-		self reset: aPPContext
-	]
-]
-
-{ #category : #'as yet unclassified' }
 PPWater >> children [
 	^ Array with: waterToken with: parser
 ]
@@ -36,7 +28,7 @@ PPWater >> children [
 PPWater >> initialize [
 	super initialize.
 	waterToken := nil asParser.
-	context := nil.
+
 ]
 
 { #category : #testing }
@@ -85,18 +77,6 @@ PPWater >> replace: child with: anotherChild [
 	child == parser ifTrue: [ 
 		parser := anotherChild
 	]
-]
-
-{ #category : #'as yet unclassified' }
-PPWater >> reset: aPPContext [
-	| waterObjects |
-	
-	context := aPPContext.
-
-	waterObjects := aPPContext globalAt: #waterObjects ifAbsent: [ OrderedCollection new ].
-	waterObjects add: #any asParser.
-	waterToken := PPChoiceParser withAll: waterObjects.
-
 ]
 
 { #category : #'as yet unclassified' }

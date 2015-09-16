@@ -59,6 +59,9 @@ PPRubyIslandGrammar >> aligns [
 			PPFailure message: 'no alignment' at: context position
 		]
 	] asParser
+		"JK: this is a hack, it improves the speed of compiled parser"
+		propertyAt: #changesContext put: false;
+		yourself
 ]
 
 { #category : #grammar }
@@ -91,7 +94,7 @@ PPRubyIslandGrammar >> classDef [
 
 { #category : #whitespaces }
 PPRubyIslandGrammar >> comment [
-	^ $# asParser trimBlanks, (#any asParser starLazy: nl), nl
+	^ $# asParser trimBlanks, (nl negate star), nl
 ]
 
 { #category : #grammar }
@@ -240,6 +243,9 @@ PPRubyIslandGrammar >> onside [
 			PPFailure message: 'offside position, not onside :(' at: context position
 		]
 	] asParser
+		"JK: this is a hack, it improves the speed of compiled parser"
+		propertyAt: #changesContext put: false;
+		yourself
 ]
 
 { #category : #whitespaces }
@@ -281,6 +287,9 @@ PPRubyIslandGrammar >> program [
 { #category : #indentation }
 PPRubyIslandGrammar >> restoreIl [
 	^ [ :context | context indentStack pop ] asParser
+		"JK: this is a hack, it improves the speed of compiled parser"
+		propertyAt: #indentPop put: true;
+		yourself
 ]
 
 { #category : #indentation }
@@ -290,6 +299,9 @@ PPRubyIslandGrammar >> setIl [
 		level := context column.
 		context indentStack push: level.
 	] asParser
+		"JK: this is a hack, it improves the speed of compiled parser"
+		propertyAt: #indentPush put: true;
+		yourself
 ]
 
 { #category : #whitespaces }
@@ -330,9 +342,9 @@ PPRubyIslandGrammar >> superclass [
 
 ]
 
-{ #category : #grammar }
+{ #category : #whitespaces }
 PPRubyIslandGrammar >> water [
-	^ comment "/ string / line" / onsideLine / identifier / (#space asParser plus) / #any asParser
+	^ (#space asParser plus) /  onsideLine  / comment "/ string / line" /  identifier / #any asParser
 ]
 
 { #category : #grammar }

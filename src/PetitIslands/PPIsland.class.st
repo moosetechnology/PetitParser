@@ -172,14 +172,14 @@ PPIsland >> filterOutNextSet: nextSet [
 	newNextSet := nextSet.
 	
 	"This should remove the most patological cases of exponential complexity of islands"
-"	newNextSet := newNextSet collect: [ :e | 
+	newNextSet := newNextSet collect: [ :e | 
 		((e isKindOf: PPIsland) and: [e island == island ]) 
 			ifTrue: [ island ] 
 			ifFalse: [ e ]].
 	newNextSet := newNextSet collect: [ :e | 
 		((e isKindOf: PPActionParser) and: [ (e child isKindOf: PPIsland)  and: [ e child island == island ]]) 			ifTrue: [ island ] 
 			ifFalse: [ e ]].
-"
+
 	^ newNextSet
 ]
 
@@ -268,10 +268,22 @@ PPIsland >> parseBeforeWater: aPPContext [
 
 { #category : #parsing }
 PPIsland >> parseIslandOn: aPPContext [ 
+	| tmp result |
+	tmp := aPPContext waterPosition.
+	aPPContext waterPosition: aPPContext position.
+	result := island parseOn: aPPContext.
+	aPPContext waterPosition: tmp.
+
+	^ result
+
+]
+
+{ #category : #parsing }
+PPIsland >> parseIslandOn_old: aPPContext [ 
 	|  result |
 	"Do not allow empty parses, when searching for the island..."
 	(aPPContext waterPosition == aPPContext position) ifTrue:[
-		result := island nonEmpty parseOn: aPPContext.
+		result := island "nonEmpty" parseOn: aPPContext.
 	"But allow when boundary found"
 	] ifFalse: [
 		| tmp |
@@ -312,7 +324,7 @@ PPIsland >> parseOn: aPPContext [
 	result := self parseIslandOn: aPPContext.
 
 	result isPetitFailure ifTrue: [ 
-		retval := PPFailure message: 'Island not found between ', memento position asString, ' and ', aPPContext position asString context: aPPContext.
+		retval := PPFailure message: 'Island not found  between ', memento position asString, ' and ', aPPContext position asString context: aPPContext.
 		aPPContext restore: memento.
 		^ retval
 	].

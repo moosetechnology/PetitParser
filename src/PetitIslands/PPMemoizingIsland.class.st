@@ -38,13 +38,13 @@ PPMemoizingIsland >> initialize [
 { #category : #memoization }
 PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
 	| memento |
-	
 	memento := PPMemento new.
 	memento contextMemento: aPPContext remember.
 	memento result: result.
 	
 	dictionary at: ctxMemento put: memento.
-
+	
+"	memoizedPositions at: (ctxMemento position + 1) put: true."
 ]
 
 { #category : #parsing }
@@ -55,7 +55,8 @@ PPMemoizingIsland >> memoized [
 
 { #category : #memoization }
 PPMemoizingIsland >> memoizedResult: aPPContext [
-	^ dictionary at: (aPPContext remember) ifAbsent: [ nil ].
+"	(memoizedPositions at: aPPContext position + 1) isNil ifTrue: [ ^ nil ]."
+	^ dictionary at: (aPPContext remember) ifAbsent: nil .
 	
 ]
 
@@ -95,4 +96,5 @@ PPMemoizingIsland >> parseOn: aPPContext [
 PPMemoizingIsland >> reset: aPPContext [
 	super reset: aPPContext.
 	dictionary := Dictionary new.
+	"memoizedPositions := Array new: aPPContext size + 1."
 ]
