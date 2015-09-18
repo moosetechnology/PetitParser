@@ -29,12 +29,6 @@ PPMemoizingIsland class >> initialize [
 
 ]
 
-{ #category : #initialization }
-PPMemoizingIsland >> initialize [ 
-	super initialize.
-
-]
-
 { #category : #memoization }
 PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
 	| memento |
@@ -47,7 +41,7 @@ PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMem
 "	memoizedPositions at: (ctxMemento position + 1) put: true."
 ]
 
-{ #category : #parsing }
+{ #category : #converting }
 PPMemoizingIsland >> memoized [
 	"We have our own implementation of memoization"
 	^ self
@@ -60,7 +54,7 @@ PPMemoizingIsland >> memoizedResult: aPPContext [
 	
 ]
 
-{ #category : #parsing }
+{ #category : #converting }
 PPMemoizingIsland >> nonMemoized [ 
 	^ PPIsland new
 		island: self island;
@@ -92,7 +86,7 @@ PPMemoizingIsland >> parseOn: aPPContext [
 
 ]
 
-{ #category : #parsing }
+{ #category : #initialization }
 PPMemoizingIsland >> reset: aPPContext [
 	super reset: aPPContext.
 	dictionary := Dictionary new.

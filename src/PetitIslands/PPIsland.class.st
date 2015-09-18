@@ -176,6 +176,7 @@ PPIsland >> filterOutNextSet: nextSet [
 		((e isKindOf: PPIsland) and: [e island == island ]) 
 			ifTrue: [ island ] 
 			ifFalse: [ e ]].
+
 	newNextSet := newNextSet collect: [ :e | 
 		((e isKindOf: PPActionParser) and: [ (e child isKindOf: PPIsland)  and: [ e child island == island ]]) 			ifTrue: [ island ] 
 			ifFalse: [ e ]].
