@@ -20,7 +20,8 @@ Class {
 		'parent',
 		'start',
 		'end',
-		'stream'
+		'stream',
+		'allChildren'
 	],
 	#category : #'PetitGui-Core'
 }
@@ -91,10 +92,13 @@ PPParserDebuggerResult class >> parse: aStream with: parser [
 
 { #category : #analysis }
 PPParserDebuggerResult >> allChildren [
-	| collection |
-	collection := IdentitySet new.
-	self allChildrenTo: collection.
-	^ collection
+	^ allChildren ifNil: [  
+		| collection |
+		collection := IdentitySet new.
+		self allChildrenTo: collection.
+		allChildren := collection	
+	]
+
 ]
 
 { #category : #analysis }
