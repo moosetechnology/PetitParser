@@ -120,7 +120,10 @@ ConfigurationOfPetitMSE >> baseline01: spec [
 					className: #ConfigurationOfPetitParser;
 					versionString: #'development';
 					repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/' ].
-		spec package: 'PetitMSE'. ].
+		spec package: 'PetitMSE'.
+		spec 
+			group: 'Core' with: #('PetitMSE' );
+			group: 'Tests' with: #('PetitMSE' ). ].
 
 ]
 
