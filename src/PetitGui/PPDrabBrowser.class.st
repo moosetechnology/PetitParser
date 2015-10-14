@@ -257,7 +257,7 @@ PPDrabBrowser >> browseSelectorsOn: aBrowser [
 
 { #category : #'browse-static' }
 PPDrabBrowser >> browseSourceOn: aBrowser [
-	aBrowser smalltalkCode
+	aBrowser pharoMethod
 		title: 'Source';
 		useExplicitNotNil;
 		display: [ self sourceCode ];

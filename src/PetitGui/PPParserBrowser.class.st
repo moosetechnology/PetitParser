@@ -211,7 +211,7 @@ PPParserBrowser >> sourceCodeFrom: class selector: production [
 
 { #category : #'private building' }
 PPParserBrowser >> sourceIn: composite [
-	composite smalltalkCode
+	composite pharoMethod
 		title: 'Source';
 		useExplicitNotNil;
 		display: [ :class :production | self sourceCodeFrom: class selector: production ];
