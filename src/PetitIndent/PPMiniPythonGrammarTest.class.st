@@ -36,7 +36,7 @@ PPMiniPythonGrammarTest >> setUp [
 	context := PPContext new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'test-indentation' }
 PPMiniPythonGrammarTest >> testAlign [
 	align := self parserInstanceFor: #align.
 	
@@ -99,22 +99,21 @@ self parse:
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'test-indentation' }
 PPMiniPythonGrammarTest >> testDedent [
 	dedent := self parserInstanceFor: #dedent.
-	align := self parserInstanceFor: #align.
-	
+
 	context := PPContext new.
 	context indentStack push: '  ' asParser.
 	self assert: context indentStack size = 1.
 
-	self assert: align parse: '  ' end: 2.
-	self assert: dedent parse: ''.
+	self parse: '   ' rule: #align to: '  ' end: 2.
+	self parse: '' rule: #dedent.
 	self assert: context indentStack size = 0.
-	self assert: dedent fail: ''.	
+	self fail: '' rule: #dedent.	
 		
 	context indentStack push: '  ' asParser.
-	self assert: dedent fail: '   '.
+	self fail: '  ' rule: #dedent.
 		
 
 	context := PPContext new.
@@ -1074,20 +1073,20 @@ else:  # py3
 	self assert: result third size = 3.	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'test-indentation' }
 PPMiniPythonGrammarTest >> testIndent [
-	indent := self parserInstanceFor: #indent.
+"	parser := self parserInstanceFor: #indent.
 	align := self parserInstanceFor: #align.
-
-	self assert: align parse: '   ' end: 0.
-	self assert: indent parse: '   ' to: '   ' end: 0.
+"
+	self parse: '   ' rule: #align to: '' end: 0.
+	self parse: '   ' rule: #indent to: '   ' end: 0.
 	self assert: context indentStack size = 1.
-	self assert: align parse: '   ' to: '   ' end: 3.
+	self parse: '   ' rule: #align to: '   ' end: 3.
 	
 	context := PPContext new.
 	context indentStack push: '  ' asParser.
-	self assert: indent parse: '  
-    foo' end: 0.
+	self parse: '  
+    foo' rule: #indent to: '  ' end: 0.
 ]
 
 { #category : #'test-grammar' }
