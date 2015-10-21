@@ -537,9 +537,9 @@ ConfigurationOfPetitParser >> stable: spec [
 
 	spec for: #'pharo3.x' version: '1.10'.
 
-	spec for: #'pharo4.x' version: '1.13'.
+	spec for: #'pharo4.x' version: '1.14'.
 	
-	spec for: #'pharo5.x' version: '1.13'.
+	spec for: #'pharo5.x' version: '1.14'.
 
 ]
 
@@ -676,6 +676,38 @@ ConfigurationOfPetitParser >> version113: spec [
 			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
 			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
 			package: 'PetitIslands' with: 'PetitIslands-JanKurs.28';
+			package: 'PetitIndent' with: 'PetitIndent-JanKurs.11';
+			package: 'Factorial-Language' with: 'Factorial-Language-lr.6';
+			package: 'PetitYAML' with: 'PetitYAML-JanKurs.6'.].
+
+	spec for: #'squeakCommon' do: [
+		spec project: 'Glamour' with: #'stable'.
+		spec package: 'PetitGui' with: 'PetitGui-StefanReichhart.150'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version114: spec [
+	<version: '1.14' imports: #('1.7-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 1.13'.
+		spec author: 'JanKurs'.
+		spec timestamp: '20/10/2015 10:41'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-JanKurs.278';
+			package: 'PetitTests' with: 'PetitTests-JanKurs.73';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-JanKurs.48';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-BernardoContreras.86';
+			package: 'PetitCSV' with: 'PetitCSV-tg.7';
+			package: 'PetitJson' with: 'PetitJson-JanKurs.9';
+			package: 'PetitMSE' with: 'PetitMSE-AndreHora.21';
+			package: 'PetitManifestMf' with: 'PetitManifestMf-JanKurs.10';
+			package: 'PetitRegex' with: 'PetitRegex-JanKurs.31';
+			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
+			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
+			package: 'PetitIslands' with: 'PetitIslands-JanKurs.32';
 			package: 'PetitIndent' with: 'PetitIndent-JanKurs.11';
 			package: 'Factorial-Language' with: 'Factorial-Language-lr.6';
 			package: 'PetitYAML' with: 'PetitYAML-JanKurs.6'.].
