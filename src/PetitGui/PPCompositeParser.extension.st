@@ -19,3 +19,15 @@ PPCompositeParser class >> debug: anObject startingAt: aSymbol [
 PPCompositeParser class >> debug: anObject startingAt: aSymbol onError: aBlock [
 	^ (self newStartingAt: aSymbol) debug: anObject onError: aBlock
 ]
+
+{ #category : #'*PetitGui' }
+PPCompositeParser >> spotterForProductionsFor: aStep [
+	<spotterOrder: 10>
+	
+	aStep listProcessor
+		title: 'Productions';
+		allCandidates: [ (self productionNames collect: #value) asOrderedCollection ];
+		candidatesLimit: 5;
+		filter: GTFilterSubstring;
+		wantsToDisplayOnEmptyQuery: true
+]
