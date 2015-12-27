@@ -262,6 +262,7 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames on: view [
 
 { #category : #'*petitgui-mondrian' }
 PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBlock on: view [
+	| l |
 	view shape label
 		color: [ :each | 
 					(aCollectionOfNames includes: each name)
@@ -271,9 +272,10 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBl
 	view interaction popupText: aBlock.
 	view interaction item: 'Explore' action: #explore.
 	view nodes: (self allParsers reject: [ :each | each name isEmptyOrNil ]).
-	view edges: (self allParsers reject: [ :each | each name isEmptyOrNil ]) from: #yourself toAll: #namedParsers.
-	view horizontalDominanceTreeLayout
-		verticalGap: 10;
+	view edges
+		source: (self allParsers reject: [ :each | each name isEmptyOrNil ]) connectFrom: #yourself toAll: #namedParsers.
+	l := view layout horizontalDominanceTree.
+	l verticalGap: 10;
 		layered
 ]
 

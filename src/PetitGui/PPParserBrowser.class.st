@@ -7,8 +7,9 @@ Class {
 	#category : #'PetitGui-Core'
 }
 
-{ #category : #'as yet unclassified' }
-PPParserBrowser class >> openOn: aParserClass [ 
+{ #category : #openning }
+PPParserBrowser class >> openOn: aParserClass [  
+	<script: 'self openOn: PPArithmeticParser'>
 	^ self new openOn: aParserClass
 ]
 
@@ -139,7 +140,7 @@ PPParserBrowser >> mapIn: composite [
 		composite roassal2
 			title: 'Map';
 			useExplicitNotNil;
-			initializeView: [ RTMondrianViewBuilder new ];
+			initializeView: [ RTMondrian new ];
 			painting: [ :view :class :selector |
 				(self production: #start from: class)
 					viewAllNamedParsersWithSelection: (Array with: selector)  
