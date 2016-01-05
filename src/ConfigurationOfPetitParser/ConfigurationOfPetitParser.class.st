@@ -10,6 +10,22 @@ Class {
 	#category : #ConfigurationOfPetitParser
 }
 
+{ #category : #catalog }
+ConfigurationOfPetitParser class >> catalogContactInfo [
+	^ 'info@moosetechnology.org'
+]
+
+{ #category : #catalog }
+ConfigurationOfPetitParser class >> catalogDescription [
+	^ 'PetitParser is a parsing engine. It models grammars and parsers dynamically as objects based on a mechanism inspired from scannnerless parsing, parser combinators, parsing expression grammars and packrat parsers.'
+]
+
+{ #category : #catalog }
+ConfigurationOfPetitParser class >> catalogKeywords [
+	^ #(parser)
+	
+]
+
 { #category : #private }
 ConfigurationOfPetitParser class >> ensureMetacello [
 	Smalltalk at: #MetacelloProject ifAbsent: [
