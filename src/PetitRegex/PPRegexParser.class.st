@@ -47,9 +47,39 @@ PPRegexParser class >> atWordBoundary: aStream [
 	^ (self isWordChar: (self lastCharIn: aStream)) xor: (self isWordChar: aStream peek)
 ]
 
+{ #category : #accessing }
+PPRegexParser class >> beginOfLineParser [
+	BeginOfLineParser isNil ifTrue: [ 
+		BeginOfLineParser  := self createBeginOfLineParser.
+	].
+	^ BeginOfLineParser 
+]
+
 { #category : #private }
 PPRegexParser class >> condition: aBlock message: aString [
 	^ [ :stream | (aBlock value: stream) ifFalse: [ PPFailure message: aString context: stream  ] ] asParser
+]
+
+{ #category : #creation }
+PPRegexParser class >> createBeginOfLineParser [
+	^ [ :context | 
+		(context position = 0 or: [ (context skip: -1; next) = Character cr ])
+			ifFalse: [ PPFailure message: '^ not expected' context: context ] ] asParser.
+]
+
+{ #category : #creation }
+PPRegexParser class >> createEndOfLineParser [ 
+	^ [ :context | 
+		(context atEnd or: [ context peek = Character cr ])
+			ifFalse: [ PPFailure message: '$ not expected' context: context  ] ] asParser
+]
+
+{ #category : #accessing }
+PPRegexParser class >> endOfLineParser [
+	EndOfLineParser isNil ifTrue: [ 
+		EndOfLineParser  := self createEndOfLineParser.
+	].
+	^ EndOfLineParser 
 ]
 
 { #category : #initialization }
@@ -116,12 +146,8 @@ PPRegexParser class >> initializeEscapeMap [
 
 { #category : #initialization }
 PPRegexParser class >> initializeOther [
-	BeginOfLineParser := [ :context | 
-		(context position = 0 or: [ (context skip: -1; next) = Character cr ])
-			ifFalse: [ PPFailure message: '^ not expected' context: context ] ] asParser.
-	EndOfLineParser := [ :context | 
-		(context atEnd or: [ context peek = Character cr ])
-			ifFalse: [ PPFailure message: '$ not expected' context: context  ] ] asParser
+	BeginOfLineParser := self createBeginOfLineParser.
+	EndOfLineParser := self createEndOfLineParser 
 ]
 
 { #category : #private }
