@@ -720,7 +720,7 @@ ConfigurationOfPetitParser >> version114: spec [
 			package: 'PetitJson' with: 'PetitJson-JanKurs.9';
 			package: 'PetitMSE' with: 'PetitMSE-AndreHora.21';
 			package: 'PetitManifestMf' with: 'PetitManifestMf-JanKurs.10';
-			package: 'PetitRegex' with: 'PetitRegex-JanKurs.31';
+			package: 'PetitRegex' with: 'PetitRegex-JanKurs.32';
 			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
 			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
 			package: 'PetitIslands' with: 'PetitIslands-JanKurs.32';
