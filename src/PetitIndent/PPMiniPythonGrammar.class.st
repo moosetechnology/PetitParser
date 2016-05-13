@@ -228,7 +228,7 @@ PPMiniPythonGrammar >> indent [
 	
 	map: [ :emptylines :_align :_indent |
 		_indent
-	]) and push
+	]) and pushAsParser
 ]
 
 { #category : #others }

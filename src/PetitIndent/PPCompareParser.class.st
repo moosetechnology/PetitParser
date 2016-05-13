@@ -33,27 +33,27 @@ PPCompareParser class >> on: compareBlock message: message column: column [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCompareParser >> column [
 	^ column
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCompareParser >> column: anInteger [
 	column := anInteger
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCompareParser >> compareBlock: aBlock [
 	compareBlock := aBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCompareParser >> message: aString [
 	message := aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPCompareParser >> parseOn: context [
 	^ (compareBlock value: context) ifTrue: [  
 		compareBlock asString

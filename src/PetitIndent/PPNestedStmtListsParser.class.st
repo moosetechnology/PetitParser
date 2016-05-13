@@ -36,7 +36,7 @@ PPNestedStmtListsParser >> _indent [
 	 Use 'and' in order to return back to the beginning of a line and than
 	 push the indent
 	"
-	(prefix, #blank asParser plus flatten ==> #second) and push
+	(prefix, #blank asParser plus flatten ==> #second) and pushAsParser
 ]
 
 { #category : #'as yet unclassified' }

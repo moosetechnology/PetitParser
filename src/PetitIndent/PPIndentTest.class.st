@@ -1,6 +1,6 @@
 Class {
 	#name : #PPIndentTest,
-	#superclass : #PPParserTest,
+	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'aligns',
 		'setIl',
@@ -113,7 +113,7 @@ PPIndentTest >> testPop2 [
 
 { #category : #'as yet unclassified' }
 PPIndentTest >> testPrefix [
-	p := (a push), (b push), nl, prefix.
+	p := (a pushAsParser), (b pushAsParser), nl, prefix.
 
 	self assert: p parse: 'ab
 ab'.
@@ -141,7 +141,7 @@ PPIndentTest >> testPush2 [
 
 { #category : #'as yet unclassified' }
 PPIndentTest >> testTop [
-	p := (a push), (b push), top.
+	p := (a pushAsParser), (b pushAsParser), top.
 
 	self assert: p parse: 'abb'.
 	self assert: p fail: 'aba'.
@@ -149,7 +149,7 @@ PPIndentTest >> testTop [
 
 { #category : #'as yet unclassified' }
 PPIndentTest >> testTop2 [
-	p := (a push), (b push) optional, top.
+	p := (a pushAsParser), (b pushAsParser) optional, top.
 
 	self assert: p parse: 'aa'.
 	self assert: p parse: 'abb'.

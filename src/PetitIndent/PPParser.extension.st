@@ -17,14 +17,13 @@ PPParser >> pop [
 { #category : #'*PetitIndent' }
 PPParser >> push [
 	"evaluate myself and if I dont' fail, push the result on the indent stack"
-	^ self >=> [ :context :cc | 
-		| result |
-		result := cc value.
-		result isPetitFailure ifFalse: [ 
-			context indentStack push: result asParser.
-		].
-		result
-	]
+	^ PPPushParser on: self
+]
+
+{ #category : #'*PetitIndent' }
+PPParser >> pushAsParser [
+	"evaluate myself and if I dont' fail, push the parser made from result on the indent stack"
+	^ PPPushAsParserParser on: self
 ]
 
 { #category : #'*PetitIndent' }

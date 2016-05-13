@@ -165,7 +165,7 @@ PPMiniCommonMark >> listBullet [
 		 "get content"
 		 (linePrefix, listMarker, space, linePrefix optional) flatten and,
 		 "push content as spaces"
-		 ((linePrefix, listMarker, space, linePrefix optional) flatten and ==> [:e | self spaces: (e size)]) push,
+		 ((linePrefix, listMarker, space, linePrefix optional) flatten and ==> [:e | self spaces: (e size)]) pushAsParser,
 	    "get type of bullet -> numbered or unnumbered"
 	    ((linePrefix, listMarker, space) ==> #second)
 	  
@@ -282,7 +282,7 @@ PPMiniCommonMark >> quoteDedent [
 
 { #category : #quotes }
 PPMiniCommonMark >> quoteIndent [
-	^ (quote ==> [ :e | quote ]) push
+	^ (quote ==> [ :e | quote ]) pushAsParser
 ]
 
 { #category : #'as yet unclassified' }

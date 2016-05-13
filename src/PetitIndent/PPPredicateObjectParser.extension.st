@@ -22,6 +22,30 @@ PPPredicateObjectParser class >> aligns [
 	^ #top asParser
 ]
 
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> alignsOL [
+	^  PPAlignOLParser new
+]
+
+{ #category : #'*PetitIndent' }
+PPPredicateObjectParser class >> column [
+	^ PPColumnParser new
+]
+
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> dedentOL [
+	| ws |
+	ws := #startOfLine asParser, (#alignsOL asParser not, #space asParser) star.
+	^ ws, #removeOL asParser, (#alignsOL asParser / #offsideOL asParser)  ==> [ :tokens | #dedent ]
+]
+
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> indentOL [
+	| ws |
+	ws := #startOfLine asParser, (#alignsOL asParser not, #space asParser) star.
+	^ ws, #space asParser plus, #setOL asParser ==> [ :tokens | #indent ]
+]
+
 { #category : #'*PetitIndent' }
 PPPredicateObjectParser class >> offside [
 	| aligns blank sol nl |
@@ -38,6 +62,11 @@ PPPredicateObjectParser class >> offside [
 	^ ((sol not, blank star, nl), (aligns not, blank) star, aligns not) flatten
 ]
 
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> offsideOL [
+	^ PPOffsideOLParser new
+]
+
 { #category : #'*PetitIndent' }
 PPPredicateObjectParser class >> onside [
 	| align blank |
@@ -50,6 +79,11 @@ PPPredicateObjectParser class >> onside [
 	blank := #blank asParser.
 	
 	^ (align, blank plus) flatten
+]
+
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> onsideOL [
+	^ PPOnsideOLParser new
 ]
 
 { #category : #'*PetitIndent' }
@@ -65,6 +99,11 @@ PPPredicateObjectParser class >> prefix [
 
 	sol := #startOfLine asParser.
 	^ sol, [ :context | context indentStack replay: context ] asParser
+]
+
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> removeOL [
+	^ #pop asParser
 ]
 
 { #category : #'*PetitIndent' }
@@ -92,6 +131,11 @@ PPPredicateObjectParser class >> setIl [
 	
 		context indentStack push: compare.
 	] asParser
+]
+
+{ #category : #'*PetitIndent-OffsideRule' }
+PPPredicateObjectParser class >> setOL [
+	^ #column asParser push
 ]
 
 { #category : #'*PetitIndent' }

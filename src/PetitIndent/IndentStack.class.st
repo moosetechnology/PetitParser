@@ -15,7 +15,7 @@ IndentStack >> = anotherStack [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IndentStack >> contents [
 	^ contents
 ]
@@ -25,18 +25,18 @@ IndentStack >> hash [
 	^ contents hash
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 IndentStack >> initialize [
 	super initialize.
 	contents := OrderedCollection new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 IndentStack >> isEmpty [
 	^ self size = 0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 IndentStack >> pop [
 	contents isEmpty ifTrue: [ ^ PPFailure message: 'cannot pop an empty stack' ].
 	^ contents removeLast
@@ -48,7 +48,7 @@ IndentStack >> postCopy [
 	contents := contents copy.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 IndentStack >> push: anExpression [
 "	self assert: anExpression isPetitParser."
 	^ contents addLast: anExpression
@@ -72,12 +72,12 @@ IndentStack >> replay: context [
 	^ retval
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IndentStack >> size [
 	^ contents size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IndentStack >> top [
 	^ contents last
 ]
