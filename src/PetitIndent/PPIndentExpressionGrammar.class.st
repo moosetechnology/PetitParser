@@ -21,7 +21,7 @@ Class {
 
 { #category : #accessing }
 PPIndentExpressionGrammar >> add [
-   ^ prod , $+ asParser token trimBlanks , term
+   ^ prod , ($+ asParser olToken trimBlanks), term
 ]
 
 { #category : #'indent-dedent' }
@@ -36,7 +36,7 @@ PPIndentExpressionGrammar >> indent [
 
 { #category : #accessing }
 PPIndentExpressionGrammar >> mul [
-   ^ prim , $* asParser token trimBlanks , prod
+   ^ prim , ($* asParser olToken trimBlanks) , prod
 ]
 
 { #category : #'indent-dedent' }
@@ -48,7 +48,7 @@ PPIndentExpressionGrammar >> nl [
 PPIndentExpressionGrammar >> number [
 	| digit |
 	digit := #digit asParser.
-   ^ digit plus token trimBlanks ==> [ :token | token inputValue asNumber ]
+   ^ digit plus olToken ==> [ :token | token inputValue asNumber ]
 ]
 
 { #category : #accessing }

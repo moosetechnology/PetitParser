@@ -1,6 +1,11 @@
 Extension { #name : #PPParser }
 
 { #category : #'*PetitIndent' }
+PPParser >> olToken [
+	^ PPTokenOLParser on: self
+]
+
+{ #category : #'*PetitIndent' }
 PPParser >> pop [
 	"pop myself from the indent stack, fail if I am not on top of the stack"
 	^ [:context | 

@@ -35,7 +35,8 @@ PPPredicateObjectParser class >> column [
 { #category : #'*PetitIndent-OffsideRule' }
 PPPredicateObjectParser class >> dedentOL [
 	| ws |
-	ws := #startOfLine asParser, (#alignsOL asParser not, #space asParser) star.
+"	ws := #startOfLine asParser, (#alignsOL asParser not, #blank asParser) star."
+	ws := #space asParser star.
 	^ ws, #removeOL asParser, (#alignsOL asParser / #offsideOL asParser)  ==> [ :tokens | #dedent ]
 ]
 
