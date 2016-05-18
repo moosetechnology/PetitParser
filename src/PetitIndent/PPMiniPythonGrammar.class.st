@@ -42,9 +42,10 @@ Class {
 		'multilineComment',
 		'comment',
 		'lineContinues',
-		'tripleQuotString',
 		'string',
-		'emptyStatement'
+		'emptyStatement',
+		'ifKw',
+		'onelineString'
 	],
 	#category : #'PetitIndent-Examples'
 }
@@ -67,9 +68,9 @@ PPMiniPythonGrammar >> blank [
 { #category : #others }
 PPMiniPythonGrammar >> brackets [
 	^ 
-	($( asParser, (brackets / $) asParser negate) star, $) asParser) / 
-	($[ asParser, (brackets / $] asParser negate) star, $] asParser) / 
-	(${ asParser, (brackets / $} asParser negate) star, $} asParser)
+	($( asParser, (multilineComment / onelineString / brackets / $) asParser negate) star, $) asParser) / 
+	($[ asParser, (multilineComment / onelineString / brackets / $] asParser negate) star, $] asParser) / 
+	(${ asParser, (onelineString / brackets / $} asParser negate) star, $} asParser)
 ]
 
 { #category : #grammar }
@@ -134,7 +135,9 @@ PPMiniPythonGrammar >> emptyLine [
 
 { #category : #grammar }
 PPMiniPythonGrammar >> emptyStatement [
-	^ newline ==> [ :e | #() ]
+	^ ( newline / 
+		(comment trimBlanks, newline)
+	) ==> [ :e | #() ]
 ]
 
 { #category : #grammar }
@@ -190,15 +193,19 @@ PPMiniPythonGrammar >> identifier [
 	letter := #letter asParser.
 	digit := #digit asParser.
 	
-	id := (letter, ( letter / digit / '_' asParser )  star).
+	id := ((letter / '_' asParser), ( letter / digit / '_' asParser )  star).
 	
-	^ 
-	(('__' asParser / '_' asParser) optional, id ) flatten
+	^ id flatten
+]
+
+{ #category : #keywords }
+PPMiniPythonGrammar >> ifKw [
+	^ 'if' asParser, (blank / '(' asParser) and
 ]
 
 { #category : #grammar }
 PPMiniPythonGrammar >> ifStmt [
-	^ 'if' asParser, whatever,  suiteTrimmed,
+	^ ifKw, whatever,  suiteTrimmed,
        ( (align, 'elif' asParser,  whatever, suiteTrimmed) ==> #last ) star, 
        elseOpt 
 	map: [ :_if :_whatever :_then :__elifs :_else |
@@ -243,11 +250,15 @@ PPMiniPythonGrammar >> lineEnd [
 
 { #category : #others }
 PPMiniPythonGrammar >> multilineComment [
-	| quot |
-	quot := 	'"""' asParser.
+	| doubleQuot singleQuot |
+	doubleQuot := 	'"""' asParser.
+	singleQuot := 	'''''''' asParser.
 		
 		
- 	^ quot, quot negate star, quot ==> [ :e | #() ]
+ 	^ (
+		(doubleQuot, doubleQuot negate star, doubleQuot) /
+		(singleQuot, singleQuot negate star, singleQuot)
+	) ==> [ :e | #() ]
 ]
 
 { #category : #whitespaces }
@@ -258,6 +269,20 @@ PPMiniPythonGrammar >> newline [
 { #category : #grammar }
 PPMiniPythonGrammar >> number [
 	^ #digit asParser plus
+]
+
+{ #category : #others }
+PPMiniPythonGrammar >> onelineString [
+	| singleQuote doubleQuote sqString dqString |
+	"this is far from complete,..."
+	
+	singleQuote := $' asParser.
+	doubleQuote := $" asParser.
+	
+	sqString := singleQuote, (newline not, ('\''' asParser / singleQuote negate)) star, singleQuote.
+	dqString := doubleQuote, (newline not, ('\"' asParser / doubleQuote negate)) star, doubleQuote.
+	
+	^ sqString / dqString 
 ]
 
 { #category : #grammar }
@@ -302,8 +327,8 @@ PPMiniPythonGrammar >> string [
 	singleQuote := $' asParser.
 	doubleQuote := $" asParser.
 	
-	sqString := singleQuote, singleQuote negate star, singleQuote.
-	dqString := doubleQuote, doubleQuote negate star, doubleQuote.
+	sqString := singleQuote, ('\''' asParser / '\\' asParser / singleQuote negate) star, singleQuote.
+	dqString := doubleQuote, ('\"' asParser / '\\' asParser / doubleQuote negate) star, doubleQuote.
 	
 	^ sqString / dqString 
 ]
@@ -346,7 +371,7 @@ PPMiniPythonGrammar >> tripleQuotString [
 
 { #category : #grammar }
 PPMiniPythonGrammar >> try1Stmt [
-	^ 'try' asParser, colon trimBlanks, suiteTrimmed,
+	^ 'try' asParser, whatever, suiteTrimmed,
 		((align, 'except' asParser, whatever, suiteTrimmed) ==> #last ) plus,
 		elseOpt,
 		((align, 'finally' asParser, colon trimBlanks, suiteTrimmed) ==> #last) optional 
@@ -383,8 +408,9 @@ PPMiniPythonGrammar >> tryStmt [
 PPMiniPythonGrammar >> unknownStmt [
 	^ blank not, 
 		(	brackets /
+			comment /
 			multilineComment /
-			tripleQuotString /
+			string /
 			lineContinues /
 			newline asParser negate) 
 		star nonEmpty flatten ==> [ :e | #() ]

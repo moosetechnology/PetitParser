@@ -68,6 +68,16 @@ PPMiniPythonGrammarTest >> testBrackets [
 ]
 
 { #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testBrackets2 [
+	self parse: '(")")' rule: #brackets.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testBrackets3 [
+	self parse: '["id rexl", "punct", r"""foobar.]/"]jkl;ky"""]' rule: #brackets.
+]
+
+{ #category : #'test-grammar' }
 PPMiniPythonGrammarTest >> testClass01 [
 
 self parse: 
@@ -164,6 +174,18 @@ PPMiniPythonGrammarTest >> testEmptyLine [
 	
 	self assert: parser parse: ''.
 	self assert: parser parse: '   '.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testEmptyStatement [
+	self parse: '
+' rule: #emptyStatement.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testEmptyStatement2 [
+	self parse: '   # foo comment
+' rule: #emptyStatement.
 ]
 
 { #category : #'test-grammar' }
@@ -324,7 +346,7 @@ for file_name in sorted(python_files):
     print bar
 '.
 	self parse: code.
-	
+
 	self assert: result size = 9.
 	self assert: result first = #for:.
 	self assert: result second = #print.
@@ -370,6 +392,9 @@ print queens
 print "\n".join(". "*q + "Q " + ". "*(BOARD_SIZE-q-1) for q in queens)
 '.
 	self parse: code.
+	"
+	self debug: code
+	"
 	
 	self assert: (result joinUsing: String cr) = 
 'class:
@@ -614,6 +639,24 @@ self parse:
 ]
 
 { #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testFuncDef10 [
+
+self parse: 
+'def _(self,other):
+	print 1
+' rule: #funcDef.
+
+	self assert: result size = 4.
+	self assert: result first = 'fundef:'.
+	
+	self assert: result second = '_'.
+
+	self assert: result third size = 1.
+	self assert: result third first allSatisfy: [ :e | e = #print ].
+
+]
+
+{ #category : #'test-grammar' }
 PPMiniPythonGrammarTest >> testFuncDef2 [
 
 self parse: 
@@ -804,6 +847,13 @@ self parse:
 	self assert: result third first size = 4.
 	self assert: result third first second = 'wrapper'.
 
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testIdentifier [
+	self parse: 'foo' rule: #identifier.
+	self parse: '__eq__' rule: #identifier.
+	self parse: '_' rule: #identifier.
 ]
 
 { #category : #'test-grammar' }
@@ -1073,6 +1123,62 @@ else:  # py3
 	self assert: result third size = 3.	
 ]
 
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testIfStmt13 [
+
+self fail: 
+'if_modified = ()
+if if_modified:
+  if_modified = 1
+' rule: #ifStmt.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testIfStmt14 [
+
+	self parse: 
+	'if x < y : #do something smart
+		print x
+		print z' rule: #ifStmt.
+
+	self assert: result size = 4.
+	self assert: result first = 'if:'.
+
+	self assert: result second  size = 2.
+	self assert: result second allSatisfy: [ :e | e = #print ].
+
+
+	self assert: result third  isEmpty.
+
+
+
+
+
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testIfStmt15 [
+
+	self parse: 
+	'if(x):
+		print x
+		print z' rule: #ifStmt.
+
+	self assert: result size = 4.
+	self assert: result first = 'if:'.
+
+	self assert: result second  size = 2.
+	self assert: result second allSatisfy: [ :e | e = #print ].
+
+
+	self assert: result third  isEmpty.
+
+
+
+
+
+]
+
 { #category : #'test-indentation' }
 PPMiniPythonGrammarTest >> testIndent [
 "	parser := self parserInstanceFor: #indent.
@@ -1094,6 +1200,13 @@ PPMiniPythonGrammarTest >> testMultilineComment [
 	self parse: '"""
 		whatever
 	"""' rule: #multilineComment.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testMultilineCommentSingleQuot [
+	self parse: '''''''
+		whatever
+	''''''' rule: #multilineComment.
 ]
 
 { #category : #'test-grammar' }
@@ -1121,6 +1234,16 @@ PPMiniPythonGrammarTest >> testStatement [
 PPMiniPythonGrammarTest >> testString [
 	self parse: '"foo:"' rule: #string.
 	self parse: '''foo: ''' rule: #string.	
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testString2 [
+	self parse: '''foo\''s: ''' rule: #string.	
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testString3 [
+	self parse: '"\\"' rule: #string.	
 ]
 
 { #category : #'test-grammar' }
@@ -1159,13 +1282,6 @@ self parse:
 	self assert: result third size = 1.
 
 
-]
-
-{ #category : #'test-grammar' }
-PPMiniPythonGrammarTest >> testTripleQuotString [
-	self parse: '''''''
-		whatever
-	''''''' rule: #tripleQuotString.
 ]
 
 { #category : #'test-grammar' }
@@ -1394,6 +1510,33 @@ finally:
 ]
 
 { #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testTry1Stmt7 [
+
+self parse: 
+'try : #something smart
+	print x
+except :
+	print y
+' rule: #try1Stmt.
+
+	self assert: result size = 5.
+	self assert: result first = 'try:'.
+	
+	self assert: result second size = 1.
+	self assert: result second allSatisfy: [ :e | e = #print ].
+
+	self assert: result third size = 1.
+	self assert: result third first size = 1.
+	self assert: result third first allSatisfy: [ :e | e = #print ].
+	
+	self assert: result fourth isEmpty.
+	self assert: result fifth = ':try'.
+
+
+
+]
+
+{ #category : #'test-grammar' }
 PPMiniPythonGrammarTest >> testTry2Stmt1 [
 
 self parse: 
@@ -1435,6 +1578,11 @@ PPMiniPythonGrammarTest >> testUnknownStmt2 [
 	
 	self assert: parser parse: 'return isinstance(other, Message) and self.level == other.level and \
             self.message == other.message'.
+]
+
+{ #category : #'test-grammar' }
+PPMiniPythonGrammarTest >> testUnknownStmt3 [
+	self parse: 'return toUnicode(r"""fkjdf;jkdla;fjdf""")' rule: #unknownStmt.
 ]
 
 { #category : #'test-grammar' }
