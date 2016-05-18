@@ -28,6 +28,21 @@ PPCompositeParserTest >> assert: aCollection is: anObject [
 ]
 
 { #category : #parsing }
+PPCompositeParserTest >> debug: aString [ 
+	^ self debug: aString rule: #start
+]
+
+{ #category : #parsing }
+PPCompositeParserTest >> debug: aString rule: aSymbol [
+	| production context |
+	production := self parserInstanceFor: aSymbol.
+	context := self context.
+	
+	^ production end enableDebug parse: aString withContext: context.
+
+]
+
+{ #category : #parsing }
 PPCompositeParserTest >> fail: aString rule: aSymbol [ 
 	| production context |
 	production := self parserInstanceFor: aSymbol.
