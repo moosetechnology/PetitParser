@@ -65,7 +65,7 @@ type
 
 "
 Class {
-	#name : #PPJavaIslandParser,
+	#name : #PPJavaSeaParser,
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'javaClass',
@@ -94,20 +94,20 @@ Class {
 }
 
 { #category : #method }
-PPJavaIslandParser >> arguments [
-	^ $( asParser, nil asParser island,  $) asParser trim
+PPJavaSeaParser >> arguments [
+	^ $( asParser, nil asParser sea,  $) asParser trim
 ]
 
 { #category : #class }
-PPJavaIslandParser >> block [
+PPJavaSeaParser >> block [
 	^ (${ asParser,
-		((block island: water) plus / nil asParser island: water),
+		((block sea: water) plus / nil asParser sea: water),
 	$} asParser) ==> [:tokens | nil ]
 		
 ]
 
 { #category : #class }
-PPJavaIslandParser >> classBody [
+PPJavaSeaParser >> classBody [
 	 ^ 
 	(${ asParser,
 		(
@@ -115,25 +115,25 @@ PPJavaIslandParser >> classBody [
 			(((methodDef ==> [:name | { name } ]) 
 			  / 
 			  (javaClass ==> [:t | self collectMethodNames: t ])
-			) island: water) ==> #second
+			) sea: water) ==> #second
 		) plus /
-		((nil asParser island: water) ==> [ :tokens | OrderedCollection new ])
+		((nil asParser sea: water) ==> [ :tokens | OrderedCollection new ])
 		),
 	$} asParser) ==> [:tokens | tokens second flatten select: [:e | e isNil not ]]
 ]
 
 { #category : #class }
-PPJavaIslandParser >> classDef [
+PPJavaSeaParser >> classDef [
 	^ modifiers trim, 'class' asParser, classId trim ==> #third
 ]
 
 { #category : #class }
-PPJavaIslandParser >> classId [
+PPJavaSeaParser >> classId [
 	^ (#uppercase asParser, (#letter asParser / #digit asParser) star) flatten 
 ]
 
 { #category : #support }
-PPJavaIslandParser >> collectMethodNames: javaClassResult [
+PPJavaSeaParser >> collectMethodNames: javaClassResult [
 	| name methods |
 	name := javaClassResult first.
 	methods := javaClassResult second.
@@ -142,39 +142,39 @@ PPJavaIslandParser >> collectMethodNames: javaClassResult [
 ]
 
 { #category : #'comments and strings' }
-PPJavaIslandParser >> comment [
+PPJavaSeaParser >> comment [
 	| end |
 	end := '*/' asParser.
 	^ ('/*' asParser, (end negate star), end)
 ]
 
 { #category : #class }
-PPJavaIslandParser >> javaClass [
-	^ classDef, ((classBody island:water) ==> #second)
+PPJavaSeaParser >> javaClass [
+	^ classDef, ((classBody sea:water) ==> #second)
 ]
 
 { #category : #class }
-PPJavaIslandParser >> javaClassIsland [
-	^ (javaClass island: water) ==> [:tokens | tokens second]
+PPJavaSeaParser >> javaClassIsland [
+	^ (javaClass sea: water) ==> [:tokens | tokens second]
 ]
 
 { #category : #method }
-PPJavaIslandParser >> letters [
+PPJavaSeaParser >> letters [
 	^ (#letter asParser plus)
 ]
 
 { #category : #method }
-PPJavaIslandParser >> methodBody [ 
+PPJavaSeaParser >> methodBody [ 
 	^ semicolon / block
 ]
 
 { #category : #method }
-PPJavaIslandParser >> methodDef [
-	^ methodModifiers, ((type island: water), ((methodName, arguments) island:water)) wrapped, methodBody ==> [:tokens | tokens second second second first ]
+PPJavaSeaParser >> methodDef [
+	^ methodModifiers, ((type sea: water), ((methodName, arguments) sea:water)) wrapped, methodBody ==> [:tokens | tokens second second second first ]
 ]
 
 { #category : #class }
-PPJavaIslandParser >> methodModifiers [
+PPJavaSeaParser >> methodModifiers [
 	^( ('public' asParser / 'private' asParser / 'protected' asParser) optional, 
 	  'static' asParser trim optional, 
 	  'final' asParser trim optional,
@@ -184,39 +184,39 @@ PPJavaIslandParser >> methodModifiers [
 ]
 
 { #category : #method }
-PPJavaIslandParser >> methodName [
+PPJavaSeaParser >> methodName [
 	^ (#letter asParser, (#letter asParser / #digit asParser) star) flatten 
 ]
 
 { #category : #class }
-PPJavaIslandParser >> modifiers [
+PPJavaSeaParser >> modifiers [
 	^ ('public' asParser / 'private' asParser) optional, 'final' asParser trim optional, 'abstract' asParser trim optional
 ]
 
 { #category : #method }
-PPJavaIslandParser >> semicolon [
+PPJavaSeaParser >> semicolon [
 	^ ';' asParser
 ]
 
 { #category : #'comments and strings' }
-PPJavaIslandParser >> singleLineComment [
+PPJavaSeaParser >> singleLineComment [
 	| end |
 	end := #newline asParser.
 	^ ('//' asParser, (end negate star), end)
 ]
 
 { #category : #method }
-PPJavaIslandParser >> spaces [
+PPJavaSeaParser >> spaces [
 	^ #space asParser plus
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParser >> start [
+PPJavaSeaParser >> start [
 	^ javaClassIsland
 ]
 
 { #category : #'comments and strings' }
-PPJavaIslandParser >> string [
+PPJavaSeaParser >> string [
 	| end |
 	end := $" asParser.
 	^ ($" asParser, (#any asParser starLazy: end), end)
@@ -225,17 +225,17 @@ PPJavaIslandParser >> string [
 ]
 
 { #category : #method }
-PPJavaIslandParser >> throws [
+PPJavaSeaParser >> throws [
 	^ 'throws' asParser trim, type trim, ($, asParser, type trim) star
 ]
 
 { #category : #method }
-PPJavaIslandParser >> type [
+PPJavaSeaParser >> type [
 	^ (#letter asParser, (#letter asParser / #digit asParser) star) flatten 
 ]
 
 { #category : #method }
-PPJavaIslandParser >> water [
+PPJavaSeaParser >> water [
 	"
 		This will allow to skip over
 			- Strings, 

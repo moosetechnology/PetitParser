@@ -1,16 +1,16 @@
 Class {
-	#name : #PPRubyIslandGrammarTest,
+	#name : #PPRubySeaGrammarTest,
 	#superclass : #PPCompositeParserTest,
 	#category : #'PetitIslands-Examples'
 }
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> parserClass [
-	^ PPRubyIslandGrammar
+PPRubySeaGrammarTest >> parserClass [
+	^ PPRubySeaGrammar
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass [
+PPRubySeaGrammarTest >> testClass [
 	self parse: 
 'class Foo 
 end' rule: #classDef.
@@ -19,7 +19,7 @@ end' rule: #classDef.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass2 [
+PPRubySeaGrammarTest >> testClass2 [
 	self parse: '
 	class Foo 
 		def bar
@@ -30,7 +30,7 @@ PPRubyIslandGrammarTest >> testClass2 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass3 [
+PPRubySeaGrammarTest >> testClass3 [
 	self parse: '
 	class Foo 
 		def bar
@@ -45,7 +45,7 @@ PPRubyIslandGrammarTest >> testClass3 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass4 [
+PPRubySeaGrammarTest >> testClass4 [
 	self parse: '
 	class Foo 
 		def bar
@@ -62,7 +62,7 @@ PPRubyIslandGrammarTest >> testClass4 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass5 [
+PPRubySeaGrammarTest >> testClass5 [
 	self parse: '
 	class Foo 
 		def bar()
@@ -84,7 +84,7 @@ PPRubyIslandGrammarTest >> testClass5 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testClass6 [
+PPRubySeaGrammarTest >> testClass6 [
 	"
 	The known case when the Island Indent Parser fails
 	"
@@ -106,7 +106,7 @@ end'.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testDanglingEnd1 [
+PPRubySeaGrammarTest >> testDanglingEnd1 [
 	self parse: '
 	class Foo 
 		def bar
@@ -124,7 +124,7 @@ PPRubyIslandGrammarTest >> testDanglingEnd1 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testDanglingEnd2 [
+PPRubySeaGrammarTest >> testDanglingEnd2 [
 	self parse: '
 	class Foo 
 		def bar
@@ -142,7 +142,7 @@ PPRubyIslandGrammarTest >> testDanglingEnd2 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testEigenClass1 [
+PPRubySeaGrammarTest >> testEigenClass1 [
 	self parse: '
 	class Foo 
 		def bar()
@@ -164,13 +164,13 @@ PPRubyIslandGrammarTest >> testEigenClass1 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testLine [
+PPRubySeaGrammarTest >> testLine [
 	self parse: 'aaa' rule: #line.
 	self parse: '  aaa' rule: #line.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod1 [
+PPRubySeaGrammarTest >> testMethod1 [
 	self parse: 'def bar end' 
 	rule: #methodDef.
 
@@ -180,7 +180,7 @@ PPRubyIslandGrammarTest >> testMethod1 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod2 [
+PPRubySeaGrammarTest >> testMethod2 [
 	self parse: 'def self.bar 
 		1+1
 	end' rule: #methodDef.
@@ -191,7 +191,7 @@ PPRubyIslandGrammarTest >> testMethod2 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod3 [
+PPRubySeaGrammarTest >> testMethod3 [
 	self parse: 'def suspend_record
     					UserHistory.for(a).order(''id DESC'').first
   					 end' rule: #methodDef.
@@ -202,7 +202,7 @@ PPRubyIslandGrammarTest >> testMethod3 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod4 [
+PPRubySeaGrammarTest >> testMethod4 [
 	self parse: 'def bar 
 end' rule: #methodDef.
 	
@@ -212,7 +212,7 @@ end' rule: #methodDef.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod5 [
+PPRubySeaGrammarTest >> testMethod5 [
 	self parse: 'def bar=(val)
 end' rule: #methodDef.
 	
@@ -222,7 +222,7 @@ end' rule: #methodDef.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod6 [
+PPRubySeaGrammarTest >> testMethod6 [
 	self parse: 'def self.bar end' rule: #methodDef.
 	
 	self assert: result size = 1.
@@ -231,7 +231,7 @@ PPRubyIslandGrammarTest >> testMethod6 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethod7 [
+PPRubySeaGrammarTest >> testMethod7 [
 	self parse: 'def self.[] end' rule: #methodDef.
 	
 	self assert: result size = 1.
@@ -240,7 +240,7 @@ PPRubyIslandGrammarTest >> testMethod7 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testMethodWithMethod1 [
+PPRubySeaGrammarTest >> testMethodWithMethod1 [
 	self parse: 'def bar
 		def baz
 		end
@@ -253,7 +253,7 @@ end' rule: #methodDef.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testModule [
+PPRubySeaGrammarTest >> testModule [
 	self parse: '
 	module Foo 
 		def bar
@@ -264,7 +264,7 @@ PPRubyIslandGrammarTest >> testModule [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testNestedClass1 [
+PPRubySeaGrammarTest >> testNestedClass1 [
 	self parse: '
 	class Foo 
 		def bar
@@ -286,19 +286,19 @@ PPRubyIslandGrammarTest >> testNestedClass1 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testOnsideLine [
+PPRubySeaGrammarTest >> testOnsideLine [
 	self parse: 'aaa' rule: #onsideLine.
 	self fail: '  aaa' rule: #onsideLine.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram [
+PPRubySeaGrammarTest >> testProgram [
 	self parse: 'class Foo end'.
 	self assert: result size = 0.
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram2 [
+PPRubySeaGrammarTest >> testProgram2 [
 	self parse: '
 	class Foo 
 		def bar
@@ -313,7 +313,7 @@ PPRubyIslandGrammarTest >> testProgram2 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram3 [
+PPRubySeaGrammarTest >> testProgram3 [
 	self parse: '
 	class Foo 
 		title = 123
@@ -327,7 +327,7 @@ PPRubyIslandGrammarTest >> testProgram3 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram4 [
+PPRubySeaGrammarTest >> testProgram4 [
 	self parse: '
 	require_dependency ''post_creator''	
 	
@@ -343,7 +343,7 @@ PPRubyIslandGrammarTest >> testProgram4 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram5 [
+PPRubySeaGrammarTest >> testProgram5 [
 	self parse: '
 	class Foo 
 		def bar
@@ -359,7 +359,7 @@ PPRubyIslandGrammarTest >> testProgram5 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubyIslandGrammarTest >> testProgram6 [
+PPRubySeaGrammarTest >> testProgram6 [
 	self parse: '
 class Bar
    def foo	

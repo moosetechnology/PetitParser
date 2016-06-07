@@ -10,5 +10,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 PPRobustXmlFeedParser >> itemContent [
-	^ ((simpleElement island ==> #second) star) ==> self elementsToDictionaryBlock
+	^ ((simpleElement sea ==> #second) star) ==> self elementsToDictionaryBlock
 ]

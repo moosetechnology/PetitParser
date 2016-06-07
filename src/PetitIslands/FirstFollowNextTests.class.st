@@ -396,9 +396,9 @@ FirstFollowNextTests >> testFollowSet1 [
 FirstFollowNextTests >> testFollowSet10 [
 	|  island1 followSet p root island2 block |
 
-	island1 := ('class' asParser, self identifier) island.
-	island2 := ('extends' asParser, self identifier) island.
-	block := '{}' asParser island.	
+	island1 := ('class' asParser, self identifier) sea.
+	island2 := ('extends' asParser, self identifier) sea.
+	block := '{}' asParser sea.	
 
 	root := (island1, island2 optional, block) star.
 	
@@ -413,9 +413,9 @@ FirstFollowNextTests >> testFollowSet10 [
 FirstFollowNextTests >> testFollowSet11 [
 	|  island1 followSet p root island2 block |
 
-	island1 := ('class' asParser, self identifier) island.
-	island2 := ('extends' asParser, self identifier) island.
-	block := '{}' asParser island.	
+	island1 := ('class' asParser, self identifier) sea.
+	island2 := ('extends' asParser, self identifier) sea.
+	block := '{}' asParser sea.	
 
 	root := (island1, island2 optional, block) plus.
 	
@@ -605,11 +605,11 @@ FirstFollowNextTests >> testFollowSet8 [
 FirstFollowNextTests >> testFollowSet9 [
 	|  island1 followSet p root island2 block |
 
-	island1 := ('class' asParser, self identifier) island.
-	island2 := (':' asParser, self identifier) island.
-	block := '{' asParser, '}' asParser island.	
+	island1 := ('class' asParser, self identifier) sea.
+	island2 := (':' asParser, self identifier) sea.
+	block := '{' asParser, '}' asParser sea.	
 
-	root := (island1, island2 optional, block) island.
+	root := (island1, island2 optional, block) sea.
 	
 	followSet := self follow: island1 in: root.
 
@@ -1244,7 +1244,7 @@ FirstFollowNextTests >> testNextSequence3 [
 	b := 'b' asParser.
 	c := 'c' asParser.
 	
-	p := (a, b island) wrapped, c.
+	p := (a, b sea) wrapped, c.
 	
 	nextSet := (self next: a in: p).
 	self assert: nextSet size = 2.
@@ -1263,7 +1263,7 @@ FirstFollowNextTests >> testNextSequence4 [
 	c := 'c' asParser.
 	d := 'd' asParser.
 	
-	p := (a, b island, c island) wrapped, d.
+	p := (a, b sea, c sea) wrapped, d.
 	
 	nextSet := (self next: a in: p).
 	self assert: nextSet size = 2.

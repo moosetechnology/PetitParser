@@ -124,7 +124,7 @@ PPXmlFeedParser >> shoplist [
 
 { #category : #grammar }
 PPXmlFeedParser >> shoplistContent [
-	^ (item island ==> #second) star
+	^ (item sea ==> #second) star
 ]
 
 { #category : #xmlSupport }

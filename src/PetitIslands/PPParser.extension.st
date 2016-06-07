@@ -34,21 +34,14 @@ PPParser >> isWater [
 
 { #category : #'*petitislands' }
 PPParser >> island [
-	| island |
-	island := PPIsland new
-		island: self;
-		yourself.
-		
-	^ island memoized
-
+	self halt: 'deprecated'.
+	^ self sea
 ]
 
 { #category : #'*petitislands' }
 PPParser >> island: water [
-	^ self island
-		water: water;
-		yourself
-
+	self halt: 'deprecated'.
+	^ self sea: water
 ]
 
 { #category : #'*petitislands' }
@@ -109,4 +102,23 @@ PPParser >> nonEmpty [
 { #category : #'*petitislands' }
 PPParser >> previous [
 	^ PPPreviousParser on: self
+]
+
+{ #category : #'*petitislands' }
+PPParser >> sea [
+	| island |
+	island := PPSea new
+		island: self;
+		yourself.
+		
+	^ island memoized
+
+]
+
+{ #category : #'*petitislands' }
+PPParser >> sea: water [
+	^ self sea
+		water: water;
+		yourself
+
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #PPIslandTest,
+	#name : #PPSeaTest,
 	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'result',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #indentation }
-PPIslandTest >> align [
+PPSeaTest >> align [
 	| aligns |
 	
 	aligns := self aligns.
@@ -18,7 +18,7 @@ PPIslandTest >> align [
 ]
 
 { #category : #indentation }
-PPIslandTest >> aligns [
+PPSeaTest >> aligns [
 	^ [ :ctx | 
 		ctx indentStack isEmpty ifFalse: [ 
 			ctx indentStack top parseOn: ctx ] 
@@ -27,33 +27,35 @@ PPIslandTest >> aligns [
 ]
 
 { #category : #parsing }
-PPIslandTest >> assert: parser parse: input [
+PPSeaTest >> assert: parser parse: input [
 	result := super assert: parser parse: input
 ]
 
 { #category : #indentation }
-PPIslandTest >> blank [
+PPSeaTest >> blank [
 	^ #blank asParser
 ]
 
-{ #category : #'as yet unclassified' }
-PPIslandTest >> context [
+{ #category : #accessing }
+PPSeaTest >> context [
 	context ifNil: [ ^ super context ].
 	^ context
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> identifier [ 
+PPSeaTest >> identifier [ 
  	^ ((#letter asParser / $# asParser), (#letter asParser / #digit asParser) star) flatten 
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> island: parser [
+PPSeaTest >> island: parser [
+	self halt: 'deprecated'.
 	^ self islandInstance island: parser.
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> island: parser water: water [
+PPSeaTest >> island: parser water: water [
+	self halt: 'deprecated'.
 	^ self islandInstance 
 		island: parser;
 		water: water;
@@ -62,24 +64,26 @@ PPIslandTest >> island: parser water: water [
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> islandClass [ 
-	^ PPIsland  
+PPSeaTest >> islandClass [ 
+	self halt: 'deprecated'.
+	^ PPSea  
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> islandInstance [
+PPSeaTest >> islandInstance [
+	self halt: 'deprecated'.
 	^ self islandClass new 
 ]
 
 { #category : #'tests - water objects' }
-PPIslandTest >> multilineCommentParser [
+PPSeaTest >> multilineCommentParser [
 	^ '/*' asParser, (#any asParser starLazy: '*/' asParser), '*/' asParser.
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> nestedBlock [
+PPSeaTest >> nestedBlock [
 	| blockIsland block nilIsland |
-	blockIsland := self islandInstance.
+	blockIsland := self seaInstance.
 	nilIsland := self nilIsland.
 	
 	block := PPDelegateParser new.
@@ -92,9 +96,9 @@ PPIslandTest >> nestedBlock [
 ]
 
 { #category : #'parse support' }
-PPIslandTest >> nilIsland [
+PPSeaTest >> nilIsland [
 	|  nilIsland |
-	nilIsland := self islandInstance.
+	nilIsland := self seaInstance.
 	
 	nilIsland island: nil asParser.
 	nilIsland name: 'nil island'.
@@ -103,12 +107,36 @@ PPIslandTest >> nilIsland [
 ]
 
 { #category : #indentation }
-PPIslandTest >> restoreIl [
+PPSeaTest >> restoreIl [
 	^ [ :ctx | ctx indentStack pop ] asParser
 ]
 
+{ #category : #'parse support' }
+PPSeaTest >> sea: parser [
+	^ self seaInstance island: parser.
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> sea: parser water: water [
+	^ self seaInstance 
+		island: parser;
+		water: water;
+		yourself
+	
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> seaClass [ 
+	^ PPSea  
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> seaInstance [
+	^ self seaClass new 
+]
+
 { #category : #indentation }
-PPIslandTest >> setIl [
+PPSeaTest >> setIl [
 	^ [ :ctx | 
 		| level comp p blank |
 		level := ctx column.
@@ -123,21 +151,21 @@ PPIslandTest >> setIl [
 	] asParser
 ]
 
-{ #category : #'as yet unclassified' }
-PPIslandTest >> setUp [
+{ #category : #running }
+PPSeaTest >> setUp [
 	super setUp.
 	context := nil
 ]
 
 { #category : #'tests - water objects' }
-PPIslandTest >> singleCommentParser [
+PPSeaTest >> singleCommentParser [
 	| nl |
 	nl := #newline asParser.
 	^ '//' asParser, (#any asParser starLazy: nl), nl.
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testAlign [
+PPSeaTest >> testAlign [
 	|  align p setIl restoreIl blank |
 	
 	setIl := #setIl asParser.
@@ -152,7 +180,7 @@ PPIslandTest >> testAlign [
 ]
 
 { #category : #testing }
-PPIslandTest >> testBlock [
+PPSeaTest >> testBlock [
 	| block  |
 
 	block := self nestedBlock.
@@ -198,7 +226,7 @@ PPIslandTest >> testBlock [
 ]
 
 { #category : #testing }
-PPIslandTest >> testBoundary [
+PPSeaTest >> testBoundary [
 	|  p end body start |
 	
 	"use non-trivial end-of-class a complex end"
@@ -233,13 +261,13 @@ PPIslandTest >> testBoundary [
 ]
 
 { #category : #testing }
-PPIslandTest >> testBoundary2 [
+PPSeaTest >> testBoundary2 [
 	
 	|   epilog  id p |
 	"use optional boundary"
 	epilog := 'end' asParser optional.
 	id := self identifier.
-	p := ((self island: id), epilog) plus.
+	p := ((self sea: id), epilog) plus.
 
 	self assert: p parse: '...foo..end...bar...end'.	
 	
@@ -256,7 +284,7 @@ PPIslandTest >> testBoundary2 [
 ]
 
 { #category : #'tests - complex' }
-PPIslandTest >> testClass [
+PPSeaTest >> testClass [
 	| text   file class |
 	text := '
 // some comment
@@ -275,7 +303,7 @@ class Zorg endclass
 	
 	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
 		==> [:t | t third] .
-	file := ((self island: class) ==> [:t | t second ]) plus.	
+	file := ((self sea: class) ==> [:t | t second ]) plus.	
 	
 	result := file parse: text.
 	self assert: result size = 3.
@@ -286,7 +314,7 @@ class Zorg endclass
 ]
 
 { #category : #'tests - complex' }
-PPIslandTest >> testFile [
+PPSeaTest >> testFile [
 	| text using imports class file |
 	text := '
 	
@@ -307,11 +335,11 @@ class bar endclass
 	
 	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
 	
-	imports := (self island: using) star.
+	imports := (self sea: using) star.
 	
 	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
 		==> [:t | t third] .
-	file := imports, ((self island: class) ==> [:t | t second ]) plus.	
+	file := imports, ((self sea: class) ==> [:t | t second ]) plus.	
 	
 	result := file parse: text.
 	
@@ -320,7 +348,7 @@ class bar endclass
 ]
 
 { #category : #'tests - complex' }
-PPIslandTest >> testFile2 [
+PPSeaTest >> testFile2 [
 	| text using imports class file |
 	text := '
 	
@@ -341,11 +369,11 @@ class bar endclass
 	
 	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
 	
-	imports := (self island: using) star.
+	imports := (self sea: using) star.
 	
 	class := ('public' asParser trim optional, 'class' asParser trim, self identifier,  'endclass' asParser trim) 
 		==> [:t | t third] .
-	file := imports, ((self island: class) ==> [:t | t second ]) plus.	
+	file := imports, ((self sea: class) ==> [:t | t second ]) plus.	
 	
 	result := file parse: text.
 	
@@ -354,7 +382,7 @@ class bar endclass
 ]
 
 { #category : #'tests - complex' }
-PPIslandTest >> testImports [
+PPSeaTest >> testImports [
 	| text using imports   |
 	text := '
 
@@ -368,7 +396,7 @@ namespace cde {
 	'.
 	
 	using := 'using' asParser trim, (self identifier, ('.' asParser, self identifier) star) flatten ==> [:t | t second].
-	imports := ((self island: using) ==> [:t | t second ]) star.
+	imports := ((self sea: using) ==> [:t | t second ]) star.
 	
 	result := imports parse: text.
 	
@@ -379,7 +407,7 @@ namespace cde {
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentation [
+PPSeaTest >> testIndentation [
 	|  aligns push island p |
 	
 	aligns := #aligns asParser.
@@ -390,19 +418,19 @@ PPIslandTest >> testIndentation [
 	self assert: island parse: 'a'.
 	self assert: island fail: '.a'.
 	
-	p := self island: island.
+	p := self sea: island.
 	self assert: p  parse: 'a'.
 	self assert: p  parse: '..a'.
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentation2 [
+PPSeaTest >> testIndentation2 [
 	|  aligns push  p |
 	
 	aligns := #aligns asParser.
 	push := (nil asParser ==> [ :e | 'a' asParser]) push.
 	
-	p := push, (self island: aligns) plus.
+	p := push, (self sea: aligns) plus.
 	self assert: p  parse: 'a'.
 	self assert: p  parse: '..a'.
 	self assert: p  parse: '..a.aa'.	
@@ -412,14 +440,14 @@ PPIslandTest >> testIndentation2 [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentation3 [
+PPSeaTest >> testIndentation3 [
 	|  aligns push pop  p |
 	
 	aligns := #aligns asParser.
 	push := (nil asParser ==> [ :e | 'a' asParser]) push.
 	pop := #pop asParser.
 	
-	p := push, (self island: aligns) plus, pop.
+	p := push, (self sea: aligns) plus, pop.
 	
 	self assert: p  parse: 'a'.
 	self assert: p  parse: '..a'.
@@ -428,7 +456,7 @@ PPIslandTest >> testIndentation3 [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentationBlock [
+PPSeaTest >> testIndentationBlock [
 	|  begin content end block setIl restoreIl     |
 	
 	setIl:= #setIl asParser.
@@ -440,7 +468,7 @@ PPIslandTest >> testIndentationBlock [
 	block := PPDelegateParser new.
 	
 	block setParser: 	begin trimLeft,
-								(self island: (block / content) trimOnside)  star,
+								(self sea: (block / content) trimOnside)  star,
 							end trimAlign.
 			
 	self assert: block parse: '
@@ -467,7 +495,7 @@ PPIslandTest >> testIndentationBlock [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentationBlock2 [
+PPSeaTest >> testIndentationBlock2 [
 	|  begin content end block setIl restoreIl     |
 	
 	setIl:= #setIl asParser.
@@ -479,7 +507,7 @@ PPIslandTest >> testIndentationBlock2 [
 	block := PPDelegateParser new.
 	
 	block setParser: 	begin trimLeft,
-								(self island: (block / content) trimOnside)  star,
+								(self sea: (block / content) trimOnside)  star,
 							end trimAlign.
 			
 	self assert: block parse: '
@@ -502,7 +530,7 @@ PPIslandTest >> testIndentationBlock2 [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentationBlock3 [
+PPSeaTest >> testIndentationBlock3 [
 	|  begin content end block setIl restoreIl     |
 	
 	setIl:= #setIl asParser.
@@ -514,7 +542,7 @@ PPIslandTest >> testIndentationBlock3 [
 	block := PPDelegateParser new.
 	
 	block setParser: 	begin trimLeft,
-								(self island: ((block / content) trimOnside)) star,
+								(self sea: ((block / content) trimOnside)) star,
 							end trimAlign.
 			
 	self assert: block parse: '
@@ -535,7 +563,7 @@ PPIslandTest >> testIndentationBlock3 [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentationBlock4 [
+PPSeaTest >> testIndentationBlock4 [
 	|  begin content end block setIl restoreIl     |
 	
 	setIl:= #setIl asParser.
@@ -547,10 +575,10 @@ PPIslandTest >> testIndentationBlock4 [
 	block := PPDelegateParser new.
 	
 	block setParser: 	begin trimLeft,
-								(self island: (block / content) trimOnside) star,
+								(self sea: (block / content) trimOnside) star,
 							end trimAlign.
 			
-	self assert: (block island ==> #second) star parse: '
+	self assert: (block sea ==> #second) star parse: '
 		begin
 			foo
 			bar
@@ -571,7 +599,7 @@ PPIslandTest >> testIndentationBlock4 [
 ]
 
 { #category : #'tests - indentation' }
-PPIslandTest >> testIndentationCompare [
+PPSeaTest >> testIndentationCompare [
 	|  aligns p setIl restoreIl |
 	
 	aligns := self aligns.
@@ -584,15 +612,15 @@ PPIslandTest >> testIndentationCompare [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandAfterIslandPlus [
+PPSeaTest >> testIslandAfterIslandPlus [
 	
 	| island2 islandParser2 island1 islandParser1 parser |
 	island1 := 'aa' asParser, 'bb' asParser.
-	islandParser1 := self islandInstance.
+	islandParser1 := self seaInstance.
 	islandParser1 island: island1.
 	
 	island2 := 'cc' asParser.
-	islandParser2 := self islandInstance.
+	islandParser2 := self seaInstance.
 	islandParser2 island: island2.
 	
 	parser := (islandParser1, islandParser2) plus.
@@ -603,17 +631,17 @@ PPIslandTest >> testIslandAfterIslandPlus [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandAfterIslandPlus2 [
+PPSeaTest >> testIslandAfterIslandPlus2 [
 	
 	| island2 islandParser2 island1 islandParser1 parser |
 	
 	island1 := 'aa' asParser, 'bb' asParser.
-	islandParser1 := self islandInstance.
+	islandParser1 := self seaInstance.
 	islandParser1 island: island1.
 	
 	island2 := 'cc' asParser.
-	islandParser2 := self islandInstance.
-	islandParser2 island: island2.
+	islandParser2 := self seaInstance.
+	islandParser2 sea: island2.
 	
 	parser := (islandParser1, islandParser2) plus.
 	 
@@ -623,10 +651,10 @@ PPIslandTest >> testIslandAfterIslandPlus2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandDetection [
+PPSeaTest >> testIslandDetection [
 	| island parser |
 	island := 'class' asParser, self identifier trim, 'endclass' asParser.
-	parser := self island: island.
+	parser := self sea: island.
 	
 	self assert: parser parse: 'class Foo endclass'.
 	self assert: result size = 3.
@@ -651,10 +679,10 @@ PPIslandTest >> testIslandDetection [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandPlus [
+PPSeaTest >> testIslandPlus [
 	
 	| island  parser |
-	island := self island: 'X' asParser.
+	island := self sea: 'X' asParser.
 	parser := island plus.
 	
 	self assert: parser parse: '....X....'.
@@ -676,10 +704,10 @@ PPIslandTest >> testIslandPlus [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandPlus2 [
+PPSeaTest >> testIslandPlus2 [
 	
 	| island  parser |
-	island := self island: ('class' asParser, self identifier trim).
+	island := self sea: ('class' asParser, self identifier trim).
 	parser := island plus.
 	
 	self assert: parser parse: '....class Foo....'.
@@ -702,7 +730,7 @@ PPIslandTest >> testIslandPlus2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandSequence [
+PPSeaTest >> testIslandSequence [
 	
 	|  parser   a b c |
 	"Island sequence will never cross the boundery of 'c'"
@@ -710,7 +738,7 @@ PPIslandTest >> testIslandSequence [
 	b := 'b' asParser.
 	c := 'c' asParser.
 	
-	parser := ((self island: a), (self island: b)) wrapped, c.
+	parser := ((self sea: a), (self sea: b)) wrapped, c.
 	
 	self assert: parser parse: '..a...b...c'.
 	self assert: parser fail: '..a..c...b..c'.
@@ -718,13 +746,13 @@ PPIslandTest >> testIslandSequence [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandSequence2 [
+PPSeaTest >> testIslandSequence2 [
 	| p a b |
 	
-	a := self island: ('a' asParser plus).
+	a := self sea: ('a' asParser plus).
 	a name: 'a island'.
 	
-	b := self island: 'b' asParser.
+	b := self sea: 'b' asParser.
 	b name: 'b island'.
 	
 	p := a optional, (b / self nilIsland).
@@ -784,12 +812,12 @@ PPIslandTest >> testIslandSequence2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandSequence3 [
+PPSeaTest >> testIslandSequence3 [
 	
 	| parser   body class extends |
-	class := self island: 'class' asParser trim, self identifier trim.	
-	extends := self island: 'extends' asParser trim, self identifier trim.
-	body := self island: self nestedBlock.
+	class := self sea: 'class' asParser trim, self identifier trim.	
+	extends := self sea: 'extends' asParser trim, self identifier trim.
+	body := self sea: self nestedBlock.
 
 	parser := (class, extends optional, body) plus.
 	self assert: parser parse: '
@@ -805,7 +833,7 @@ PPIslandTest >> testIslandSequence3 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandSequence4 [
+PPSeaTest >> testIslandSequence4 [
 	
 	|  parser  a b c  eps |
 	"Island sequence will never cross the boundery of 'c'"
@@ -814,7 +842,7 @@ PPIslandTest >> testIslandSequence4 [
 	c := 'c' asParser.
 	eps := nil asParser.
 	
-	parser := (self island: a), b optional, (self island: eps), c.
+	parser := (self sea: a), b optional, (self sea: eps), c.
 	
 	self assert: parser parse: '..a...b...c'.
 	"This fails, but it should not. Right now, the problem is, that eps island 
@@ -829,11 +857,11 @@ PPIslandTest >> testIslandSequence4 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandStar [
+PPSeaTest >> testIslandStar [
 	|  p  |
 	
 	
-	p := (self island: 'a' asParser) star, 'b' asParser. 
+	p := (self sea: 'a' asParser) star, 'b' asParser. 
 	self assert: p parse: 'b'.
 	self assert: result size = 2.
 	self assert: result first size = 0.
@@ -868,11 +896,11 @@ PPIslandTest >> testIslandStar [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandStar2 [
+PPSeaTest >> testIslandStar2 [
 	|  p  |
 	
 	
-	p := (self island: 'a' asParser) star, 'b' asParser optional. 
+	p := (self sea: 'a' asParser) star, 'b' asParser optional. 
 	self assert: p parse: 'aa'.
 	self assert: result size = 2.
 	self assert: result first size = 2.
@@ -892,11 +920,11 @@ PPIslandTest >> testIslandStar2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testIslandStar3 [
+PPSeaTest >> testIslandStar3 [
 	|  p  |
 	
 	
-	p := (self island: 'a' asParser) star, (self island: nil asParser). 
+	p := (self sea: 'a' asParser) star, (self sea: nil asParser). 
 	
 	self assert: p parse: '....'.
 	self assert: result size = 2.
@@ -921,7 +949,7 @@ PPIslandTest >> testIslandStar3 [
 ]
 
 { #category : #'tests - water objects' }
-PPIslandTest >> testMultilineComment [
+PPSeaTest >> testMultilineComment [
 	|  parser |
 	parser := self multilineCommentParser.
 	
@@ -931,14 +959,14 @@ PPIslandTest >> testMultilineComment [
 ]
 
 { #category : #testing }
-PPIslandTest >> testNestedIsland [
+PPSeaTest >> testNestedIsland [
 	
 	|  nestedIsland before after topIsland |
-	nestedIsland := self island: 'X' asParser.
+	nestedIsland := self sea: 'X' asParser.
 	
 	before := 'before' asParser.
 	after := 'after' asParser.
-	topIsland := self island: (before, nestedIsland, after).
+	topIsland := self sea: (before, nestedIsland, after).
 	
 	self assert: nestedIsland parse: 'before...X...ater'.
 	self assert: topIsland parse: 'beforeXafter'.
@@ -959,21 +987,21 @@ PPIslandTest >> testNestedIsland [
 ]
 
 { #category : #testing }
-PPIslandTest >> testNestedIsland2 [
+PPSeaTest >> testNestedIsland2 [
 	
 	|  nestedIsland before after topIsland |
-	nestedIsland := self island: 'after' asParser.
+	nestedIsland := self sea: 'after' asParser.
 	
 	before := 'before' asParser.
 	after := 'after' asParser.
-	topIsland := self island: (before, nestedIsland, after).
+	topIsland := self sea: (before, nestedIsland, after).
 	
 	self assert: nestedIsland parse: '..after..'.
 	self assert: topIsland parse: 'before..after..after'.
 	self assert: topIsland parse: '....before...after....after...'.
 	self assert: topIsland fail: '....before...after...'.
 	
-	topIsland := self island: (before, (nestedIsland / (nil asParser island)), after).
+	topIsland := self sea: (before, (nestedIsland / (nil asParser sea)), after).
 	self assert: topIsland parse: '....before...after....after...'.
 	self assert: topIsland parse: '..before...after..'.
 
@@ -981,7 +1009,7 @@ PPIslandTest >> testNestedIsland2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testNilIsland [
+PPSeaTest >> testNilIsland [
 	
 	| nilIsland  p |
 
@@ -1012,8 +1040,8 @@ PPIslandTest >> testNilIsland [
 	self assert: result third = $}.
 ]
 
-{ #category : #'as yet unclassified' }
-PPIslandTest >> testNonEmptyParser [
+{ #category : #'tests - nonempty' }
+PPSeaTest >> testNonEmptyParser [
 	| p |
 	p := 'a' asParser optional nonEmpty.
 	
@@ -1021,8 +1049,8 @@ PPIslandTest >> testNonEmptyParser [
 	self assert: p fail: ''.
 ]
 
-{ #category : #'as yet unclassified' }
-PPIslandTest >> testNonEmptyParser2 [
+{ #category : #'tests - nonempty' }
+PPSeaTest >> testNonEmptyParser2 [
 	| p |
 	context := PPContext new.
 	
@@ -1035,11 +1063,11 @@ PPIslandTest >> testNonEmptyParser2 [
 ]
 
 { #category : #testing }
-PPIslandTest >> testOptionalIsland [
+PPSeaTest >> testOptionalIsland [
 	
 	| island parser   |
 	
-	island := self island: ('a' asParser / 'b' asParser optional).
+	island := self sea: ('a' asParser / 'b' asParser optional).
 	parser := island, 'c' asParser.
 	
 	self assert: parser parse: '....a....b...c'.
@@ -1058,9 +1086,9 @@ PPIslandTest >> testOptionalIsland [
 ]
 
 { #category : #'tests - water objects' }
-PPIslandTest >> testWaterObjects [
+PPSeaTest >> testWaterObjects [
 	| parser |
-	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)) star.
+	parser := (self sea: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)) star.
 
 	self assert: parser parse: ' /* hello there */ class Foo endclass'.
 	self assert: result size = 1.
@@ -1071,7 +1099,7 @@ PPIslandTest >> testWaterObjects [
 	self assert: result first second = 'Bar'.
 	self assert: result second second = 'Foo'.
 	
-	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second) water: self multilineCommentParser / #any asParser) star.
+	parser := (self sea: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second) water: self multilineCommentParser / #any asParser) star.
 
 	self assert: parser parse: ' /* class Bar endclass */ class Foo endclass'.
 	self assert: result size = 1.
@@ -1079,11 +1107,11 @@ PPIslandTest >> testWaterObjects [
 ]
 
 { #category : #'tests - water objects' }
-PPIslandTest >> testWaterObjects2 [
+PPSeaTest >> testWaterObjects2 [
 	| parser source |
 	context := PPContext new.
 
-	parser := (self island: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)
+	parser := (self sea: ('class' asParser, self identifier trim, 'endclass' asParser ==> #second)
 						 water: self multilineCommentParser / self singleCommentParser / #any asParser) 				star.
 	
 	source := ' /* class Bar endclass */ 

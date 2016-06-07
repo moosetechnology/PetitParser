@@ -43,7 +43,7 @@ island
 
 "
 Class {
-	#name : #PPIsland,
+	#name : #PPSea,
 	#superclass : #PPParser,
 	#instVars : [
 		'island',
@@ -58,17 +58,17 @@ Class {
 }
 
 { #category : #queries }
-PPIsland >> acceptsEpsilon [
+PPSea >> acceptsEpsilon [
 	^ island acceptsEpsilon
 ]
 
 { #category : #queries }
-PPIsland >> acceptsEpsilonOpenSet: set [
+PPSea >> acceptsEpsilonOpenSet: set [
 	^ island acceptsEpsilonOpenSet: set
 ]
 
 { #category : #parsing }
-PPIsland >> afterWaterParser: aPPContext [
+PPSea >> afterWaterParser: aPPContext [
 	self check: aPPContext.
 
 	afterWaterParser ifNil: [
@@ -79,7 +79,7 @@ PPIsland >> afterWaterParser: aPPContext [
 ]
 
 { #category : #parsing }
-PPIsland >> beforeWaterParser: aPPContext [
+PPSea >> beforeWaterParser: aPPContext [
 	self check: aPPContext.
 
 	beforeWaterParser ifNil: [
@@ -90,12 +90,12 @@ PPIsland >> beforeWaterParser: aPPContext [
 ]
 
 { #category : #parsing }
-PPIsland >> check: aPPContext [
+PPSea >> check: aPPContext [
 	(contextIdentifier == aPPContext identifier) ifFalse: [ self reset: aPPContext ].
 ]
 
 { #category : #accessing }
-PPIsland >> children [
+PPSea >> children [
 	self flag: 'HACK ???'.
 	(beforeWaterParser isNotNil and: [afterWaterParser isNotNil]) ifTrue: [ 
 		^ Array with: beforeWaterParser with: island with: afterWaterParser
@@ -105,12 +105,12 @@ PPIsland >> children [
 ]
 
 { #category : #parsing }
-PPIsland >> createAfterWaterParser: aPPContext [
+PPSea >> createAfterWaterParser: aPPContext [
 	^ self createAfterWaterParserFromNextSet: (self nextSet: aPPContext).
 ]
 
 { #category : #parsing }
-PPIsland >> createAfterWaterParserFromNextSet: nextSet [
+PPSea >> createAfterWaterParserFromNextSet: nextSet [
 	| set p |
 	set := nextSet copy.
 	set := self filterOutNextSet: set.
@@ -124,13 +124,13 @@ PPIsland >> createAfterWaterParserFromNextSet: nextSet [
 ]
 
 { #category : #parsing }
-PPIsland >> createBeforeWaterParser: aPPContext [
+PPSea >> createBeforeWaterParser: aPPContext [
 	^ self createBeforeWaterParserFromNextSet: (self nextSet: aPPContext).
 	
 ]
 
 { #category : #parsing }
-PPIsland >> createBeforeWaterParserFromNextSet: nextSet [
+PPSea >> createBeforeWaterParserFromNextSet: nextSet [
 	| set p |
 	set := nextSet copy.
 	set := self filterOutNextSet: nextSet.
@@ -146,7 +146,7 @@ PPIsland >> createBeforeWaterParserFromNextSet: nextSet [
 ]
 
 { #category : #analysis }
-PPIsland >> createWaterForRoot: root [
+PPSea >> createWaterForRoot: root [
 	| nextSet |
 	"
 		Be careful, why you call this method.
@@ -160,85 +160,99 @@ PPIsland >> createWaterForRoot: root [
 ]
 
 { #category : #parsing }
-PPIsland >> exampleOn: aStream [
+PPSea >> exampleOn: aStream [
 	aStream nextPutAll: '~~~~ '.
 	island exampleOn: aStream .
 	aStream nextPutAll:  ' ~~~~'.
 ]
 
 { #category : #analysis }
-PPIsland >> filterOutNextSet: nextSet [
+PPSea >> filterOutNextSet: nextSet [
 	| newNextSet |
 	newNextSet := nextSet.
-	
 	"This should remove the most patological cases of exponential complexity of islands"
+	"TODO JK: this is an adhoc approach that needs better solution"
 	newNextSet := newNextSet collect: [ :e | 
-		((e isKindOf: PPIsland) and: [e island == island ]) 
-			ifTrue: [ island ] 
-			ifFalse: [ e ]].
+		((e isKindOf: PPSea) 
+			and: [e island == island ]) 
+				ifTrue: [ island ] 
+				ifFalse: [ e ]].
 
 	newNextSet := newNextSet collect: [ :e | 
-		((e isKindOf: PPActionParser) and: [ (e child isKindOf: PPIsland)  and: [ e child island == island ]]) 			ifTrue: [ island ] 
-			ifFalse: [ e ]].
+		((e isKindOf: PPActionParser) 
+			and: [ (e block == #second) 
+			and: [ (e child isKindOf: PPSea)  
+			and: [ e child island == island ]]]) 
+				ifTrue: [ island ] 
+				ifFalse: [ e ]].
+
+	newNextSet := newNextSet collect: [ :e | 
+		((e isKindOf: PPDelegateParser) 
+			and: [ (e child isKindOf: PPActionParser) 
+			and: [ (e child block == #second) 
+			and: [ (e child child isKindOf: PPSea)  
+			and: [ e child child island == island ]]]])
+				ifTrue: [ island ] 
+				ifFalse: [ e ]].
 
 	^ newNextSet
 ]
 
 { #category : #analysis }
-PPIsland >> followSet: aPPContext [
+PPSea >> followSet: aPPContext [
 
 	^ aPPContext root followSets at: self.	
 ]
 
 { #category : #accessing }
-PPIsland >> initialize [ 
+PPSea >> initialize [ 
 	super initialize.
 	water := #any asParser name: 'water'; yourself.
 
 ]
 
 { #category : #queries }
-PPIsland >> isIslandBorder [
+PPSea >> isIslandBorder [
 	^ false
 ]
 
 { #category : #queries }
-PPIsland >> isIslandBorderOpenSet: set [
+PPSea >> isIslandBorderOpenSet: set [
 	^ false
 ]
 
 { #category : #accessing }
-PPIsland >> island [
+PPSea >> island [
 
 	^ island
 ]
 
 { #category : #accessing }
-PPIsland >> island: anObject [
+PPSea >> island: anObject [
 	island := anObject "memoized"
 ]
 
 { #category : #memoization }
-PPIsland >> memoized [ 
-	^ PPMemoizingIsland new
+PPSea >> memoized [ 
+	^ PPMemoizingSea new
 		island: self island;
 		water: water;
 		yourself
 ]
 
 { #category : #queries }
-PPIsland >> name [
+PPSea >> name [
 	^ super name ifNil: [ 
 		island name ifNil: ['unknown island'] ifNotNil: [ island name, ' island' ] ].
 ]
 
 { #category : #analysis }
-PPIsland >> nextSet: aPPContext [
+PPSea >> nextSet: aPPContext [
 	^ aPPContext root nextSets at: self.
 ]
 
 { #category : #analysis }
-PPIsland >> nextSets: aNextDictionary into: aSet [
+PPSea >> nextSets: aNextDictionary into: aSet [
 	"return true/false, if something has changed or not...."
 	| islandSet change tally |
 	
@@ -258,17 +272,17 @@ PPIsland >> nextSets: aNextDictionary into: aSet [
 ]
 
 { #category : #parsing }
-PPIsland >> parseAfterWater: aPPContext [
+PPSea >> parseAfterWater: aPPContext [
 	^ (self afterWaterParser: aPPContext) parseOn: aPPContext .
 ]
 
 { #category : #parsing }
-PPIsland >> parseBeforeWater: aPPContext [
+PPSea >> parseBeforeWater: aPPContext [
 	^ (self beforeWaterParser: aPPContext) parseOn: aPPContext.
 ]
 
 { #category : #parsing }
-PPIsland >> parseIslandOn: aPPContext [ 
+PPSea >> parseIslandOn: aPPContext [ 
 	| tmp result |
 	tmp := aPPContext waterPosition.
 	aPPContext waterPosition: aPPContext position.
@@ -280,7 +294,7 @@ PPIsland >> parseIslandOn: aPPContext [
 ]
 
 { #category : #parsing }
-PPIsland >> parseIslandOn_old: aPPContext [ 
+PPSea >> parseIslandOn_old: aPPContext [ 
 	|  result |
 	"Do not allow empty parses, when searching for the island..."
 	(aPPContext waterPosition == aPPContext position) ifTrue:[
@@ -308,7 +322,7 @@ PPIsland >> parseIslandOn_old: aPPContext [
 ]
 
 { #category : #parsing }
-PPIsland >> parseOn: aPPContext [ 
+PPSea >> parseOn: aPPContext [ 
 	|  bwr awr result retval memento |
 	
 	aPPContext islandInvoke.
@@ -346,7 +360,7 @@ PPIsland >> parseOn: aPPContext [
 ]
 
 { #category : #accessing }
-PPIsland >> replace: parser with: anotherParser [ 
+PPSea >> replace: parser with: anotherParser [ 
 	super replace: parser with: anotherParser.
 	
 	(beforeWaterParser == parser) ifTrue: [ beforeWaterParser := anotherParser ].
@@ -358,28 +372,28 @@ PPIsland >> replace: parser with: anotherParser [
 ]
 
 { #category : #memoization }
-PPIsland >> reset: aPPContext [
+PPSea >> reset: aPPContext [
 	contextIdentifier := aPPContext identifier.
 	beforeWaterParser := defaultBeforeWaterParser.
 	afterWaterParser := defaultAfterWaterParser.
 ]
 
 { #category : #'accessing - private' }
-PPIsland >> setAfterWaterParser: parser [
+PPSea >> setAfterWaterParser: parser [
 	defaultAfterWaterParser := parser
 ]
 
 { #category : #'accessing - private' }
-PPIsland >> setBeforeWaterParser: parser [
+PPSea >> setBeforeWaterParser: parser [
 	defaultBeforeWaterParser  := parser
 ]
 
 { #category : #accessing }
-PPIsland >> water [
+PPSea >> water [
 	^ water
 ]
 
 { #category : #accessing }
-PPIsland >> water: aPPParser [
+PPSea >> water: aPPParser [
 	water := aPPParser
 ]

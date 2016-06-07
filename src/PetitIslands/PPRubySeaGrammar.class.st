@@ -9,7 +9,7 @@ The following structures are recognized:
 - methods
 "
 Class {
-	#name : #PPRubyIslandGrammar,
+	#name : #PPRubySeaGrammar,
 	#superclass : #PPCompositeParser,
 	#instVars : [
 		'primary',
@@ -51,7 +51,7 @@ Class {
 }
 
 { #category : #indentation }
-PPRubyIslandGrammar >> aligns [
+PPRubySeaGrammar >> aligns [
 	^ [:context |
 		(context column == (context indentStack topIfEmpty: -1)) ifTrue: [ 
 			#aligns
@@ -65,15 +65,15 @@ PPRubyIslandGrammar >> aligns [
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> body [
-	^	((((primaryElement) island: water) ==> #second) plus) 
+PPRubySeaGrammar >> body [
+	^	((((primaryElement) sea: water) ==> #second) plus) 
 			==> [ :args | args select: [ :e | e isEmpty not ]]
 	/
-		((nil asParser island: water) ==> [ :args | #() ])
+		((nil asParser sea: water) ==> [ :args | #() ])
 ]
 
 { #category : #'grammar - class' }
-PPRubyIslandGrammar >> classDef [
+PPRubySeaGrammar >> classDef [
 	"Indentation Sensitive Class Definition"
 	^ kClassIS, 
 		cpath trim, 
@@ -93,23 +93,23 @@ PPRubyIslandGrammar >> classDef [
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> comment [
+PPRubySeaGrammar >> comment [
 	^ $# asParser trimBlanks, (nl negate star), nl
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> cpath [
+PPRubySeaGrammar >> cpath [
 	^ ('::' asParser optional , identifier, (('::' asParser , identifier) star)) flatten
 ]
 
 { #category : #'grammar - method' }
-PPRubyIslandGrammar >> defEndIS [
+PPRubySeaGrammar >> defEndIS [
 	"End of Indentation Sensitive Feature"
 	^ kEnd optional, restoreIl
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> eigenDef [
+PPRubySeaGrammar >> eigenDef [
 	^ kClassIS , '<<' asParser trim , (identifier / kSelf) , 
 		body, 
 		kEndIS 
@@ -126,17 +126,17 @@ PPRubyIslandGrammar >> eigenDef [
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> eof [
+PPRubySeaGrammar >> eof [
 	^ #eof asParser
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> eol [
+PPRubySeaGrammar >> eol [
 	^ nl / eof
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> fname [
+PPRubySeaGrammar >> fname [
 	^ (operator / 
 		'..' asParser / '|' asParser / 'ˆ' asParser / '&' asParser 
 		/ '<=>' asParser / '==' asParser / 
@@ -149,48 +149,48 @@ PPRubyIslandGrammar >> fname [
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> identifier [
+PPRubySeaGrammar >> identifier [
 	^ (#letter asParser / $_ asParser, word star) flatten
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kClassIS [
+PPRubySeaGrammar >> kClassIS [
 	^ (($. asParser / word) previous not, setIl, 'class' asParser , ($. asParser / word) not) ==> #third
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kDefIS [
+PPRubySeaGrammar >> kDefIS [
 	^ (word previous not, setIl, 'def' asParser , word not) ==> #third
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kEnd [
+PPRubySeaGrammar >> kEnd [
 	^ (word previous not, 'end' asParser , word not) ==> #second
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kEndIS [
+PPRubySeaGrammar >> kEndIS [
 	"End of Indentation Sensitive Feature"
 	^ aligns, kEnd, restoreIl
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kModuleIS [
+PPRubySeaGrammar >> kModuleIS [
 	^ (word previous not, setIl, 'module' asParser , word not) trim ==> #third
 ]
 
 { #category : #keywords }
-PPRubyIslandGrammar >> kSelf [
+PPRubySeaGrammar >> kSelf [
 	^ (($. asParser / word) previous not, 'self' asParser , ($. asParser / word) not) trim ==> #second
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> line [
+PPRubySeaGrammar >> line [
 	^ (sol, nl negate star, eol) nonEmpty
 ]
 
 { #category : #'grammar - method' }
-PPRubyIslandGrammar >> methodDef [
+PPRubySeaGrammar >> methodDef [
 	^ kDefIS, 
 		('self.' asParser / (identifier, $. asParser)) flatten trim optional ,
 		fname trim, 
@@ -211,7 +211,7 @@ PPRubyIslandGrammar >> methodDef [
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> moduleDef [
+PPRubySeaGrammar >> moduleDef [
 	"Indentation Sensitive Class Definition"
 	^ kModuleIS, 
 		cpath trim, 
@@ -230,12 +230,12 @@ PPRubyIslandGrammar >> moduleDef [
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> nl [
+PPRubySeaGrammar >> nl [
 	^ #newline asParser
 ]
 
 { #category : #indentation }
-PPRubyIslandGrammar >> onside [
+PPRubySeaGrammar >> onside [
 	^ [:context |
 		(context column >= (context indentStack topIfEmpty: -1)) ifTrue: [ 
 			#onside
@@ -249,26 +249,26 @@ PPRubyIslandGrammar >> onside [
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> onsideLine [
+PPRubySeaGrammar >> onsideLine [
 	^ onside, #letter asParser, nl asParser negate star, eol
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> operator [
+PPRubySeaGrammar >> operator [
 	^ (identifier , ($? asParser / $! asParser / $= asParser) optional) flatten
 
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> primary [
-	^	((((primaryElement) island: water) ==> #second) plus) 
+PPRubySeaGrammar >> primary [
+	^	((((primaryElement) sea: water) ==> #second) plus) 
 			==> [ :args | args select: [ :e | e isEmpty not ]]
 	/
-		((nil asParser island: water) ==> [ :args | #() ])
+		((nil asParser sea: water) ==> [ :args | #() ])
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> primaryElement [
+PPRubySeaGrammar >> primaryElement [
 	^ onside, 
 		(classDef /
 		moduleDef /
@@ -278,14 +278,14 @@ PPRubyIslandGrammar >> primaryElement [
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> program [
+PPRubySeaGrammar >> program [
 	^ primary ==> [ :res | 
 		res flatten 
 	]
 ]
 
 { #category : #indentation }
-PPRubyIslandGrammar >> restoreIl [
+PPRubySeaGrammar >> restoreIl [
 	^ [ :context | context indentStack pop ] asParser
 		"JK: this is a hack, it improves the speed of compiled parser"
 		propertyAt: #indentPop put: true;
@@ -293,7 +293,7 @@ PPRubyIslandGrammar >> restoreIl [
 ]
 
 { #category : #indentation }
-PPRubyIslandGrammar >> setIl [
+PPRubySeaGrammar >> setIl [
 	^ [:context |
 		| level |
 		level := context column.
@@ -305,17 +305,17 @@ PPRubyIslandGrammar >> setIl [
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> sol [
+PPRubySeaGrammar >> sol [
 	^ #startOfLine asParser
 ]
 
 { #category : #accessing }
-PPRubyIslandGrammar >> start [
+PPRubySeaGrammar >> start [
 	^ program
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> string [
+PPRubySeaGrammar >> string [
 	| doubleQuotes singleQuotes slash doubleString singleString regexp |
 	doubleQuotes := $" asParser.
 	singleQuotes := $' asParser.
@@ -337,17 +337,17 @@ PPRubyIslandGrammar >> string [
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> superclass [
+PPRubySeaGrammar >> superclass [
 	^ (($< asParser trim , cpath) ==> #second)
 
 ]
 
 { #category : #whitespaces }
-PPRubyIslandGrammar >> water [
+PPRubySeaGrammar >> water [
 	^ (#space asParser plus) /  onsideLine  / comment "/ string / line" /  identifier / #any asParser
 ]
 
 { #category : #grammar }
-PPRubyIslandGrammar >> word [
+PPRubySeaGrammar >> word [
 	^ #word asParser / $_ asParser
 ]

@@ -1,24 +1,24 @@
 Class {
-	#name : #PPMemoizingIslandTest,
-	#superclass : #PPIslandTest,
+	#name : #PPMemoizingSeaTest,
+	#superclass : #PPSeaTest,
 	#category : #'PetitIslands-Tests'
 }
 
 { #category : #'as yet unclassified' }
-PPMemoizingIslandTest class >> shouldInheritSelectors [ 
+PPMemoizingSeaTest class >> shouldInheritSelectors [ 
 	^ true.
 ]
 
 { #category : #'as yet unclassified' }
-PPMemoizingIslandTest >> islandClass [
-	^ PPMemoizingIsland 
+PPMemoizingSeaTest >> seaClass [
+	^ PPMemoizingSea 
 ]
 
 { #category : #testing }
-PPMemoizingIslandTest >> testMemo [
+PPMemoizingSeaTest >> testMemo [
 	| parser  result1 result2 input |
 	
-	parser := self island: ('class' asParser, self identifier, 'endclass' asParser).
+	parser := self sea: ('class' asParser, self identifier, 'endclass' asParser).
 	input := 'class Foo endclass' asPetitStream.
 	
 	context := PPContext new.

@@ -15,8 +15,8 @@ rootParser
 
 "
 Class {
-	#name : #PPMemoizingIsland,
-	#superclass : #PPIsland,
+	#name : #PPMemoizingSea,
+	#superclass : #PPSea,
 	#instVars : [
 		'dictionary'
 	],
@@ -24,13 +24,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PPMemoizingIsland class >> initialize [ 
+PPMemoizingSea class >> initialize [ 
 	super initialize 
 
 ]
 
 { #category : #memoization }
-PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
+PPMemoizingSea >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
 	| memento |
 	memento := PPMemento new.
 	memento contextMemento: aPPContext remember.
@@ -42,27 +42,27 @@ PPMemoizingIsland >> memoizeResult: result onContext: aPPContext memento: ctxMem
 ]
 
 { #category : #converting }
-PPMemoizingIsland >> memoized [
+PPMemoizingSea >> memoized [
 	"We have our own implementation of memoization"
 	^ self
 ]
 
 { #category : #memoization }
-PPMemoizingIsland >> memoizedResult: aPPContext [
+PPMemoizingSea >> memoizedResult: aPPContext [
 "	(memoizedPositions at: aPPContext position + 1) isNil ifTrue: [ ^ nil ]."
 	^ dictionary at: (aPPContext remember) ifAbsent: nil .
 	
 ]
 
 { #category : #converting }
-PPMemoizingIsland >> nonMemoized [ 
-	^ PPIsland new
-		island: self island;
+PPMemoizingSea >> nonMemoized [ 
+	^ PPSea new
+		island: island;
 		yourself
 ]
 
 { #category : #parsing }
-PPMemoizingIsland >> parseOn: aPPContext [ 
+PPMemoizingSea >> parseOn: aPPContext [ 
 	|  memoizedResult retval memento |
 	self check: aPPContext.
 	
@@ -87,7 +87,7 @@ PPMemoizingIsland >> parseOn: aPPContext [
 ]
 
 { #category : #initialization }
-PPMemoizingIsland >> reset: aPPContext [
+PPMemoizingSea >> reset: aPPContext [
 	super reset: aPPContext.
 	dictionary := Dictionary new.
 	"memoizedPositions := Array new: aPPContext size + 1."

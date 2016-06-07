@@ -1,5 +1,5 @@
 Class {
-	#name : #PPJavaIslandParserTest,
+	#name : #PPJavaSeaParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
 		'debugResult',
@@ -9,17 +9,17 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest class >> classJavaLangClass [
+PPJavaSeaParserTest class >> classJavaLangClass [
 	^ self new classJavaLangClass
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest class >> classJavaLangObject [
+PPJavaSeaParserTest class >> classJavaLangObject [
 	^ self new classJavaLangObject
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest >> context [
+PPJavaSeaParserTest >> context [
 	context ifNil: [ 
 		context := PPContext new.
 	].
@@ -29,7 +29,7 @@ PPJavaIslandParserTest >> context [
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest >> createContext: anInput [
+PPJavaSeaParserTest >> createContext: anInput [
 	context := PPContext on: self parserInstance stream: anInput asPetitStream.
 	
 	^ context 
@@ -38,7 +38,7 @@ PPJavaIslandParserTest >> createContext: anInput [
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file1 [
+PPJavaSeaParserTest >> file1 [
  ^
 'package org.test;
 
@@ -51,7 +51,7 @@ public class Foo
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file2 [
+PPJavaSeaParserTest >> file2 [
  ^
 '
 public class Foo
@@ -63,7 +63,7 @@ public class Foo
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file3 [
+PPJavaSeaParserTest >> file3 [
  ^
 'package org.test;
 
@@ -90,7 +90,7 @@ public class Foo<Bar> extends Zorg
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file4 [
+PPJavaSeaParserTest >> file4 [
  ^
 'package java.lang;
 
@@ -166,7 +166,7 @@ public final
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file5 [
+PPJavaSeaParserTest >> file5 [
  ^
 'package java.lang;
 
@@ -206,7 +206,7 @@ public final class Foo implements java.io.Serializable {
 ]
 
 { #category : #src }
-PPJavaIslandParserTest >> file7 [
+PPJavaSeaParserTest >> file7 [
  ^
 '
 
@@ -253,25 +253,25 @@ public final
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest >> parserClass [
-	^ PPJavaIslandParser
+PPJavaSeaParserTest >> parserClass [
+	^ PPJavaSeaParser
 ]
 
 { #category : #'as yet unclassified' }
-PPJavaIslandParserTest >> setUp [
+PPJavaSeaParserTest >> setUp [
 	super setUp.
 	context := nil.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test1 [
+PPJavaSeaParserTest >> test1 [
 	self parse: self file1.
 	self assert: result first = 'Foo'.
 	self assert: result second size = 0.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test2 [
+PPJavaSeaParserTest >> test2 [
 	self parse: self file2.
 
 	self assert: result first = 'Foo'.
@@ -282,7 +282,7 @@ PPJavaIslandParserTest >> test2 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test3 [
+PPJavaSeaParserTest >> test3 [
 	self parse: self file3.
 
 	self assert: result first = 'Foo'.
@@ -293,7 +293,7 @@ PPJavaIslandParserTest >> test3 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test4 [
+PPJavaSeaParserTest >> test4 [
 	self parse: self file4.
 
 	self assert: result first = 'Class'.
@@ -304,7 +304,7 @@ PPJavaIslandParserTest >> test4 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test5 [
+PPJavaSeaParserTest >> test5 [
 	self parse: self file5.
 
 	self assert: result first = 'Foo'.
@@ -315,7 +315,7 @@ PPJavaIslandParserTest >> test5 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> test7 [
+PPJavaSeaParserTest >> test7 [
 	self parse: self file7.
 
 	self assert: result first = 'Class'.
@@ -329,22 +329,22 @@ PPJavaIslandParserTest >> test7 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testBlock [
+PPJavaSeaParserTest >> testBlock [
 	self parse: '{}' rule: #block.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testBlock2 [
+PPJavaSeaParserTest >> testBlock2 [
 	self parse: '{ }' rule: #block.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testBlock3 [
+PPJavaSeaParserTest >> testBlock3 [
 	self parse: '{ {}  }' rule: #block.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClass1 [
+PPJavaSeaParserTest >> testClass1 [
 	self parse: 'private final class Foo 
 		{
 			// I am only empty class
@@ -355,7 +355,7 @@ PPJavaIslandParserTest >> testClass1 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClass2 [
+PPJavaSeaParserTest >> testClass2 [
 	self parse: 'public class Foo<Bar> extends Zorg implements Qwark, Bark
 		{
 			// I am only empty class
@@ -366,7 +366,7 @@ PPJavaIslandParserTest >> testClass2 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClass3 [
+PPJavaSeaParserTest >> testClass3 [
 	self parse: 'private class Bar<T> extends Zorg implements Qwark, Bark
 		{
 			public static void methodA() { /* is empty */ }
@@ -378,7 +378,7 @@ PPJavaIslandParserTest >> testClass3 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody1 [
+PPJavaSeaParserTest >> testClassBody1 [
 	self parse: '{
 		// some comment
 		public void methodA() 
@@ -391,7 +391,7 @@ PPJavaIslandParserTest >> testClassBody1 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody10 [
+PPJavaSeaParserTest >> testClassBody10 [
 	self parse: '{
     private static final int SKIP_BUFFER_SIZE = 2048;
    	 public int read(byte b[]) throws IOException {
@@ -406,7 +406,7 @@ PPJavaIslandParserTest >> testClassBody10 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody11 [
+PPJavaSeaParserTest >> testClassBody11 [
 	self parse: '{
     void foo() { {}}
     void bar() { }
@@ -420,7 +420,7 @@ PPJavaIslandParserTest >> testClassBody11 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody12 [
+PPJavaSeaParserTest >> testClassBody12 [
 	self parse: '{
     public boolean addAll(int index, Collection<? extends E> c) {
     }	
@@ -438,7 +438,7 @@ PPJavaIslandParserTest >> testClassBody12 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody13 [
+PPJavaSeaParserTest >> testClassBody13 [
 	self parse: '{
 			class A { 
         		void bar() {}
@@ -455,7 +455,7 @@ PPJavaIslandParserTest >> testClassBody13 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody2 [
+PPJavaSeaParserTest >> testClassBody2 [
 	self parse: '{
 		// some comment
 		public void methodA() { 
@@ -473,7 +473,7 @@ PPJavaIslandParserTest >> testClassBody2 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody3 [
+PPJavaSeaParserTest >> testClassBody3 [
 	self parse: '{
 		// some comment
 	
@@ -496,7 +496,7 @@ PPJavaIslandParserTest >> testClassBody3 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody4 [
+PPJavaSeaParserTest >> testClassBody4 [
 	self parse: '{
 		public void methodA() {
 			System.out.println();
@@ -515,7 +515,7 @@ PPJavaIslandParserTest >> testClassBody4 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody5 [
+PPJavaSeaParserTest >> testClassBody5 [
 	self parse: '{
 	// I am only empty class
 }' 
@@ -526,7 +526,7 @@ PPJavaIslandParserTest >> testClassBody5 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody6 [
+PPJavaSeaParserTest >> testClassBody6 [
 	self parse: '{
 		static { int i; }
 }' 
@@ -538,7 +538,7 @@ PPJavaIslandParserTest >> testClassBody6 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody7 [
+PPJavaSeaParserTest >> testClassBody7 [
 	self parse: '{
 		static { int i; }
 		
@@ -552,7 +552,7 @@ PPJavaIslandParserTest >> testClassBody7 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody8 [
+PPJavaSeaParserTest >> testClassBody8 [
 	self parse: '{
 		private static final int ANNOTATION= 0x00002000;
 		static { int i; }
@@ -568,7 +568,7 @@ PPJavaIslandParserTest >> testClassBody8 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassBody9 [
+PPJavaSeaParserTest >> testClassBody9 [
 	self parse: '{
 	 private static final int ANNOTATION= 0x00002000;
    
@@ -592,19 +592,19 @@ PPJavaIslandParserTest >> testClassBody9 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testClassDef1 [
+PPJavaSeaParserTest >> testClassDef1 [
 	self parse: 'public class Foo' rule: #classDef
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testComment [
+PPJavaSeaParserTest >> testComment [
 	| input  |
 	input := '/* hello there */'.
 	self parse: input rule: #comment
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testComment2 [
+PPJavaSeaParserTest >> testComment2 [
 	| input  |
 	input := '/**
      * <p> If the {@code name} is "{@code <init>};"or "{@code <clinit>}" a
@@ -615,21 +615,21 @@ PPJavaIslandParserTest >> testComment2 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod1 [
+PPJavaSeaParserTest >> testMethod1 [
 	self parse: 'void foo() { }' rule: #methodDef.
 	
 	self assert: result = 'foo'.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod2 [
+PPJavaSeaParserTest >> testMethod2 [
 	self parse: 'Foo m() { /** method body */ }' rule: #methodDef.
 	
 	self assert: result = 'm'.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod3 [
+PPJavaSeaParserTest >> testMethod3 [
 	self parse: 'Bar methodB(Some argument, and another)
 		{
 			return new Bar();
@@ -640,7 +640,7 @@ PPJavaIslandParserTest >> testMethod3 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod4 [
+PPJavaSeaParserTest >> testMethod4 [
 	self parse: 'void finalize() throws Throwable { }'
 	rule: #methodDef.
 	
@@ -648,7 +648,7 @@ PPJavaIslandParserTest >> testMethod4 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod5 [
+PPJavaSeaParserTest >> testMethod5 [
 	self parse: 'public void methodA() 
 		{ 
 		}' 
@@ -658,7 +658,7 @@ PPJavaIslandParserTest >> testMethod5 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod6 [
+PPJavaSeaParserTest >> testMethod6 [
 	self fail: 'private InnerClass {  }
 	
 	   public void methodA() 
@@ -669,7 +669,7 @@ PPJavaIslandParserTest >> testMethod6 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod7 [
+PPJavaSeaParserTest >> testMethod7 [
 	self parse: 'public int read(byte b) throws IOException {
 		return b;
     }' 
@@ -680,20 +680,20 @@ PPJavaIslandParserTest >> testMethod7 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod8 [
+PPJavaSeaParserTest >> testMethod8 [
 	"type is missing"
 	self fail: 'private Class() {}' rule: #methodDef.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testMethod9 [
+PPJavaSeaParserTest >> testMethod9 [
 	self parse: 'public void foo() { if (true) {} return false;}' rule: #methodDef.
 
 	self assert: result = 'foo'.
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testNestedClass1 [
+PPJavaSeaParserTest >> testNestedClass1 [
 	self parse: 'private final class Foo 
 		{
 			public void foo() {  }
@@ -711,7 +711,7 @@ PPJavaIslandParserTest >> testNestedClass1 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testNestedClass2 [
+PPJavaSeaParserTest >> testNestedClass2 [
 	self parse: 'class Foo 
 		{
 			private class Entry {
@@ -731,7 +731,7 @@ PPJavaIslandParserTest >> testNestedClass2 [
 ]
 
 { #category : #tests }
-PPJavaIslandParserTest >> testSingleLineComment [
+PPJavaSeaParserTest >> testSingleLineComment [
 	| input  |
 	input := '// hello there
 '.
