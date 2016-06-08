@@ -185,7 +185,7 @@ PPJavaSeaParser >> methodModifiers [
 
 { #category : #method }
 PPJavaSeaParser >> methodName [
-	^ ((#letter asParser / $_ asParser), (#letter asParser / #digit asParser / $_ asParser) star) flatten 
+	^ ((#letter asParser / $_ asParser), (#letter asParser / #digit asParser / $_ asParser) star) flatten trimBlanks
 ]
 
 { #category : #class }

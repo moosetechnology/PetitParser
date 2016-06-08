@@ -622,6 +622,30 @@ PPJavaSeaParserTest >> testMethod1 [
 ]
 
 { #category : #tests }
+PPJavaSeaParserTest >> testMethod10 [
+	self parse: 'public void foo () { 
+	}' rule: #methodDef.
+
+	self assert: result = 'foo'.
+]
+
+{ #category : #tests }
+PPJavaSeaParserTest >> testMethod11 [
+	self parse: 'public void foo_bar () { 
+	}' rule: #methodDef.
+
+	self assert: result = 'foo_bar'.
+]
+
+{ #category : #tests }
+PPJavaSeaParserTest >> testMethod12 [
+	self parse: 'public void _bar () { 
+	}' rule: #methodDef.
+
+	self assert: result = '_bar'.
+]
+
+{ #category : #tests }
 PPJavaSeaParserTest >> testMethod2 [
 	self parse: 'Foo m() { /** method body */ }' rule: #methodDef.
 	
