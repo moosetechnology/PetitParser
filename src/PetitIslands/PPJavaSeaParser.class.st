@@ -80,7 +80,7 @@ Class {
 		'classId',
 		'type',
 		'throws',
-		'javaClassIsland',
+		'javaClassSea',
 		'methodModifiers',
 		'semicolon',
 		'comment',
@@ -129,7 +129,7 @@ PPJavaSeaParser >> classDef [
 
 { #category : #class }
 PPJavaSeaParser >> classId [
-	^ (#uppercase asParser, (#letter asParser / #digit asParser) star) flatten 
+	^ (#uppercase asParser, (#letter asParser / #digit asParser / $_ asParser) star) flatten 
 ]
 
 { #category : #support }
@@ -154,8 +154,8 @@ PPJavaSeaParser >> javaClass [
 ]
 
 { #category : #class }
-PPJavaSeaParser >> javaClassIsland [
-	^ (javaClass sea: water) ==> [:tokens | tokens second]
+PPJavaSeaParser >> javaClassSea [
+	^ (javaClass sea: water) ==> #second
 ]
 
 { #category : #method }
@@ -185,7 +185,7 @@ PPJavaSeaParser >> methodModifiers [
 
 { #category : #method }
 PPJavaSeaParser >> methodName [
-	^ (#letter asParser, (#letter asParser / #digit asParser) star) flatten 
+	^ ((#letter asParser / $_ asParser), (#letter asParser / #digit asParser / $_ asParser) star) flatten 
 ]
 
 { #category : #class }
@@ -210,9 +210,9 @@ PPJavaSeaParser >> spaces [
 	^ #space asParser plus
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPJavaSeaParser >> start [
-	^ javaClassIsland
+	^ javaClassSea
 ]
 
 { #category : #'comments and strings' }
@@ -231,7 +231,7 @@ PPJavaSeaParser >> throws [
 
 { #category : #method }
 PPJavaSeaParser >> type [
-	^ (#letter asParser, (#letter asParser / #digit asParser) star) flatten 
+	^ (#letter asParser, (#letter asParser / #digit asParser / $_ asParser) star) flatten 
 ]
 
 { #category : #method }
