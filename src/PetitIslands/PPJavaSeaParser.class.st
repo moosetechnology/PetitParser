@@ -88,7 +88,8 @@ Class {
 		'string',
 		'water',
 		'letters',
-		'spaces'
+		'spaces',
+		'javaClassInClassBody'
 	],
 	#category : #'PetitIslands-Examples'
 }
@@ -114,12 +115,13 @@ PPJavaSeaParser >> classBody [
 		(
 			(((methodDef ==> [:name | { name } ]) 
 			  / 
-			  (javaClass ==> [:t | self collectMethodNames: t ])
+			  "(javaClass ==> [:t | self collectMethodNames: t ])"
+			  javaClassInClassBody
 			) sea: water) ==> #second
 		) plus /
 		((nil asParser sea: water) ==> [ :tokens | OrderedCollection new ])
 		),
-	$} asParser) ==> [:tokens | tokens second flatten select: [:e | e isNil not ]]
+	$} asParser) ==> [:tokens | tokens second flatten reject: [:e | e isNil ]]
 ]
 
 { #category : #class }
@@ -151,6 +153,11 @@ PPJavaSeaParser >> comment [
 { #category : #class }
 PPJavaSeaParser >> javaClass [
 	^ classDef, ((classBody sea:water) ==> #second)
+]
+
+{ #category : #class }
+PPJavaSeaParser >> javaClassInClassBody [
+	^ (javaClass ==> [:t | self collectMethodNames: t ])
 ]
 
 { #category : #class }

@@ -1,9 +1,6 @@
 Class {
 	#name : #PPRobustXmlFeedParserTest,
 	#superclass : #PPCompositeParserTest,
-	#instVars : [
-		'debugResult'
-	],
 	#category : #'PetitIslands-Examples'
 }
 

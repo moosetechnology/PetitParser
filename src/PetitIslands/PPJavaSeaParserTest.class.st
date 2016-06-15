@@ -1,10 +1,6 @@
 Class {
 	#name : #PPJavaSeaParserTest,
 	#superclass : #PPCompositeParserTest,
-	#instVars : [
-		'debugResult',
-		'context'
-	],
 	#category : #'PetitIslands-Examples'
 }
 
@@ -16,25 +12,6 @@ PPJavaSeaParserTest class >> classJavaLangClass [
 { #category : #'as yet unclassified' }
 PPJavaSeaParserTest class >> classJavaLangObject [
 	^ self new classJavaLangObject
-]
-
-{ #category : #'as yet unclassified' }
-PPJavaSeaParserTest >> context [
-	context ifNil: [ 
-		context := PPContext new.
-	].
-	^ context 
-
-	
-]
-
-{ #category : #'as yet unclassified' }
-PPJavaSeaParserTest >> createContext: anInput [
-	context := PPContext on: self parserInstance stream: anInput asPetitStream.
-	
-	^ context 
-
-	
 ]
 
 { #category : #src }
@@ -252,15 +229,9 @@ public final
 }'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPJavaSeaParserTest >> parserClass [
 	^ PPJavaSeaParser
-]
-
-{ #category : #'as yet unclassified' }
-PPJavaSeaParserTest >> setUp [
-	super setUp.
-	context := nil.
 ]
 
 { #category : #tests }
@@ -377,7 +348,7 @@ PPJavaSeaParserTest >> testClass3 [
 	self assert: result second first = 'methodA'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody1 [
 	self parse: '{
 		// some comment
@@ -390,7 +361,7 @@ PPJavaSeaParserTest >> testClassBody1 [
 	self assert: result first = 'methodA'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody10 [
 	self parse: '{
     private static final int SKIP_BUFFER_SIZE = 2048;
@@ -405,7 +376,7 @@ PPJavaSeaParserTest >> testClassBody10 [
 	self assert: result first = 'read'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody11 [
 	self parse: '{
     void foo() { {}}
@@ -419,7 +390,7 @@ PPJavaSeaParserTest >> testClassBody11 [
 	self assert: result second = 'bar'.	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody12 [
 	self parse: '{
     public boolean addAll(int index, Collection<? extends E> c) {
@@ -437,7 +408,7 @@ PPJavaSeaParserTest >> testClassBody12 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody13 [
 	self parse: '{
 			class A { 
@@ -454,7 +425,7 @@ PPJavaSeaParserTest >> testClassBody13 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody2 [
 	self parse: '{
 		// some comment
@@ -472,7 +443,7 @@ PPJavaSeaParserTest >> testClassBody2 [
 	self assert: result second = 'methodB'.	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody3 [
 	self parse: '{
 		// some comment
@@ -495,7 +466,7 @@ PPJavaSeaParserTest >> testClassBody3 [
 	self assert: result second = 'methodB'.	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody4 [
 	self parse: '{
 		public void methodA() {
@@ -514,7 +485,7 @@ PPJavaSeaParserTest >> testClassBody4 [
 	self assert: result second = 'methodB'.	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody5 [
 	self parse: '{
 	// I am only empty class
@@ -525,7 +496,7 @@ PPJavaSeaParserTest >> testClassBody5 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody6 [
 	self parse: '{
 		static { int i; }
@@ -537,7 +508,7 @@ PPJavaSeaParserTest >> testClassBody6 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody7 [
 	self parse: '{
 		static { int i; }
@@ -551,7 +522,7 @@ PPJavaSeaParserTest >> testClassBody7 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody8 [
 	self parse: '{
 		private static final int ANNOTATION= 0x00002000;
@@ -567,7 +538,7 @@ PPJavaSeaParserTest >> testClassBody8 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassBody9 [
 	self parse: '{
 	 private static final int ANNOTATION= 0x00002000;
@@ -591,7 +562,7 @@ PPJavaSeaParserTest >> testClassBody9 [
 
 ]
 
-{ #category : #tests }
+{ #category : #'tests - class' }
 PPJavaSeaParserTest >> testClassDef1 [
 	self parse: 'public class Foo' rule: #classDef
 ]
@@ -614,14 +585,14 @@ PPJavaSeaParserTest >> testComment2 [
 	self parse: input rule: #comment
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod1 [
 	self parse: 'void foo() { }' rule: #methodDef.
 	
 	self assert: result = 'foo'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod10 [
 	self parse: 'public void foo () { 
 	}' rule: #methodDef.
@@ -629,7 +600,7 @@ PPJavaSeaParserTest >> testMethod10 [
 	self assert: result = 'foo'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod11 [
 	self parse: 'public void foo_bar () { 
 	}' rule: #methodDef.
@@ -637,7 +608,7 @@ PPJavaSeaParserTest >> testMethod11 [
 	self assert: result = 'foo_bar'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod12 [
 	self parse: 'public void _bar () { 
 	}' rule: #methodDef.
@@ -645,14 +616,14 @@ PPJavaSeaParserTest >> testMethod12 [
 	self assert: result = '_bar'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod2 [
 	self parse: 'Foo m() { /** method body */ }' rule: #methodDef.
 	
 	self assert: result = 'm'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod3 [
 	self parse: 'Bar methodB(Some argument, and another)
 		{
@@ -663,7 +634,7 @@ PPJavaSeaParserTest >> testMethod3 [
 	self assert: result = 'methodB'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod4 [
 	self parse: 'void finalize() throws Throwable { }'
 	rule: #methodDef.
@@ -671,7 +642,7 @@ PPJavaSeaParserTest >> testMethod4 [
 	self assert: result = 'finalize'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod5 [
 	self parse: 'public void methodA() 
 		{ 
@@ -681,7 +652,7 @@ PPJavaSeaParserTest >> testMethod5 [
 	self assert: result = 'methodA'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod6 [
 	self fail: 'private InnerClass {  }
 	
@@ -692,7 +663,7 @@ PPJavaSeaParserTest >> testMethod6 [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod7 [
 	self parse: 'public int read(byte b) throws IOException {
 		return b;
@@ -703,20 +674,20 @@ PPJavaSeaParserTest >> testMethod7 [
 	self assert: result = 'read'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod8 [
 	"type is missing"
 	self fail: 'private Class() {}' rule: #methodDef.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod9 [
 	self parse: 'public void foo() { if (true) {} return false;}' rule: #methodDef.
 
 	self assert: result = 'foo'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - nested class' }
 PPJavaSeaParserTest >> testNestedClass1 [
 	self parse: 'private final class Foo 
 		{
@@ -734,7 +705,7 @@ PPJavaSeaParserTest >> testNestedClass1 [
 	self assert: result second second = 'Bar::bar'.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - nested class' }
 PPJavaSeaParserTest >> testNestedClass2 [
 	self parse: 'class Foo 
 		{
