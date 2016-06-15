@@ -2,7 +2,6 @@ Class {
 	#name : #PPNestedStmtListsParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
-		'debugResult',
 		'aPPContext'
 	],
 	#category : #'PetitIndent-Examples'

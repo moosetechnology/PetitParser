@@ -2,7 +2,6 @@ Class {
 	#name : #PPListsParserTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
-		'debugResult',
 		'aPPContext',
 		'string',
 		'context'

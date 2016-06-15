@@ -2,8 +2,7 @@ Class {
 	#name : #PPMiniFSharpGrammarTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
-		'aPPContext',
-		'debugResult'
+		'aPPContext'
 	],
 	#category : #'PetitIndent-Examples'
 }
