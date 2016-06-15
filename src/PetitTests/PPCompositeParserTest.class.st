@@ -3,7 +3,8 @@ Class {
 	#superclass : #PPAbstractParserTest,
 	#instVars : [
 		'parser',
-		'result'
+		'result',
+		'debugResult'
 	],
 	#category : #'PetitTests-Core'
 }
@@ -38,8 +39,14 @@ PPCompositeParserTest >> debug: aString rule: aSymbol [
 	production := self parserInstanceFor: aSymbol.
 	context := self context.
 	
-	^ production end enableDebug parse: aString withContext: context.
-
+	debugResult := production end enableDebug parse: aString withContext: context.
+	result := debugResult children first result.
+	
+	self
+		deny: result isPetitFailure
+		description: 'Unable to parse ' , aString printString.	
+	
+	^ debugResult
 ]
 
 { #category : #parsing }
