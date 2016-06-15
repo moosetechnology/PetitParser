@@ -2,8 +2,7 @@ Class {
 	#name : #PPYAMLGrammarTest,
 	#superclass : #PPCompositeParserTest,
 	#instVars : [
-		'context',
-		'debugResult'
+		'context'
 	],
 	#category : #PetitYAML
 }
