@@ -29,6 +29,11 @@ PPMemoizedParser >> memoized [
 	^ self
 ]
 
+{ #category : #operators }
+PPMemoizedParser >> nonMemoized [
+	^ parser
+]
+
 { #category : #parsing }
 PPMemoizedParser >> parseOn: aPPContext [
 	| memento contextMemento  aStream |

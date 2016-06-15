@@ -401,6 +401,11 @@ PPParser >> negate [
 ]
 
 { #category : #operators }
+PPParser >> nonMemoized [
+	^ self
+]
+
+{ #category : #operators }
 PPParser >> not [
 	"Answer a new parser (logical not-predicate) that succeeds whenever the receiver fails, but never consumes input."
 
