@@ -237,65 +237,64 @@ PPJavaSeaParserTest >> parserClass [
 { #category : #tests }
 PPJavaSeaParserTest >> test1 [
 	self parse: self file1.
-	self assert: result first = 'Foo'.
-	self assert: result second size = 0.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 0.
 ]
 
 { #category : #tests }
 PPJavaSeaParserTest >> test2 [
 	self parse: self file2.
 
-	self assert: result first = 'Foo'.
-	self assert: result second size = 2.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 2.
 	
-	self assert: result second first = 'methodA'.
-	self assert: result second second = 'methodB'.	
+	self assert: result methodDeclarations first simpleName = 'methodA'.
+	self assert: result methodDeclarations second simpleName = 'methodB'.	
 ]
 
 { #category : #tests }
 PPJavaSeaParserTest >> test3 [
 	self parse: self file3.
 
-	self assert: result first = 'Foo'.
-	self assert: result second size = 2.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 2.
 	
-	self assert: result second first = 'methodA'.
-	self assert: result second second = 'methodB'.	
+	self assert: result methodDeclarations first simpleName = 'methodA'.
+	self assert: result methodDeclarations second simpleName = 'methodB'.	
 ]
 
 { #category : #tests }
 PPJavaSeaParserTest >> test4 [
 	self parse: self file4.
 
-	self assert: result first = 'Class'.
-	self assert: result second size = 2.
+	self assert: result simpleName = 'Class'.
+	self assert: result methodDeclarations size = 2.
 	
-	self assert: (result second anySatisfy: [ :e | e = 'registerNatives' ]).
-	self assert: (result second anySatisfy: [ :e | e = 'toString' ]).
+	self assert: (result methodDeclarations anySatisfy: [ :e | e simpleName = 'registerNatives' ]).
+	self assert: (result methodDeclarations anySatisfy: [ :e | e simpleName = 'toString' ]).
 ]
 
 { #category : #tests }
 PPJavaSeaParserTest >> test5 [
 	self parse: self file5.
 
-	self assert: result first = 'Foo'.
-	self assert: result second size = 1.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 1.
 	
 	"self assert: result second first = 'Foo'."
-	self assert: result second first = 'toString'.	
+	self assert: result methodDeclarations first simpleName = 'toString'.	
 ]
 
 { #category : #tests }
 PPJavaSeaParserTest >> test7 [
 	self parse: self file7.
 
-	self assert: result first = 'Class'.
-	self assert: result second size = 3.
+	self assert: result simpleName = 'Class'.
+	self assert: result methodDeclarations size = 3.
 	
-"	self assert: (result second anySatisfy: [ :e | e = 'Class' ])."
-	self assert: (result second anySatisfy: [ :e | e = 'toString' ]).
-	self assert: (result second anySatisfy: [ :e | e = 'getAnnotationType' ]).
-	self assert: (result second anySatisfy: [ :e | e = 'registerNatives' ]).
+	self assert: (result methodDeclarations anySatisfy: [ :e | e simpleName = 'toString' ]).
+	self assert: (result methodDeclarations anySatisfy: [ :e | e simpleName = 'getAnnotationType' ]).
+	self assert: (result methodDeclarations anySatisfy: [ :e | e simpleName = 'registerNatives' ]).
 
 ]
 
@@ -322,7 +321,8 @@ PPJavaSeaParserTest >> testClass1 [
 		}'
 	rule: #javaClass.
 
-	self assert: result first = 'Foo'.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 0.
 ]
 
 { #category : #tests }
@@ -333,7 +333,7 @@ PPJavaSeaParserTest >> testClass2 [
 		}' 
 	rule: #javaClass.
 
-	self assert: result first = 'Foo'.
+	self assert: result simpleName = 'Foo'.
 ]
 
 { #category : #tests }
@@ -344,8 +344,8 @@ PPJavaSeaParserTest >> testClass3 [
 		}' 
 	rule: #javaClass.
 
-	self assert: result first = 'Bar'.
-	self assert: result second first = 'methodA'.
+	self assert: result simpleName = 'Bar'.
+	self assert: result methodDeclarations first simpleName = 'methodA'.
 ]
 
 { #category : #'tests - class' }
@@ -357,8 +357,9 @@ PPJavaSeaParserTest >> testClassBody1 [
 		}
 	}' 
 	rule: #classBody.
-	
-	self assert: result first = 'methodA'.
+
+	self assert: result first returnType = 'void'.	
+	self assert: result first simpleName = 'methodA'.
 ]
 
 { #category : #'tests - class' }
@@ -373,7 +374,7 @@ PPJavaSeaParserTest >> testClassBody10 [
 	
 	self assert: result isPetitFailure not.
 	self assert: result size = 1.
-	self assert: result first = 'read'.
+	self assert: result first simpleName = 'read'.
 ]
 
 { #category : #'tests - class' }
@@ -386,8 +387,8 @@ PPJavaSeaParserTest >> testClassBody11 [
 	
 	self assert: result isPetitFailure not.
 	self assert: result size = 2.
-	self assert: result first = 'foo'.
-	self assert: result second = 'bar'.	
+	self assert: result first simpleName = 'foo'.
+	self assert: result second simpleName  = 'bar'.	
 ]
 
 { #category : #'tests - class' }
@@ -403,8 +404,8 @@ PPJavaSeaParserTest >> testClassBody12 [
 	rule: #classBody.
 	
 	self assert: result isPetitFailure not.
-	self assert: result first = 'addAll'.
-	self assert: result second = 'iterator'.
+	self assert: result first simpleName = 'addAll'.
+	self assert: result second simpleName = 'iterator'.
 
 ]
 
@@ -420,8 +421,9 @@ PPJavaSeaParserTest >> testClassBody13 [
 	rule: #classBody.
 	
 	self assert: result isPetitFailure not.
-	self assert: result first = 'A::bar'.
-	self assert: result second = 'baz'.
+	self assert: result first simpleName = 'A'.
+	self assert: result first methodDeclarations first simpleName = 'bar'.
+	self assert: result second simpleName = 'baz'.
 
 ]
 
@@ -439,8 +441,8 @@ PPJavaSeaParserTest >> testClassBody2 [
 	}' 
 	rule: #classBody.
 	
-	self assert: result first = 'methodA'.
-	self assert: result second = 'methodB'.	
+	self assert: result first simpleName = 'methodA'.
+	self assert: result second simpleName = 'methodB'.	
 ]
 
 { #category : #'tests - class' }
@@ -462,8 +464,9 @@ PPJavaSeaParserTest >> testClassBody3 [
 	}' 
 	rule: #classBody.
 	
-	self assert: result first = 'methodA'.
-	self assert: result second = 'methodB'.	
+	self assert: result first simpleName = 'methodA'.
+	self assert: result second simpleName = 'methodB'.	
+	self assert: result second returnType = 'Bar'.
 ]
 
 { #category : #'tests - class' }
@@ -481,8 +484,8 @@ PPJavaSeaParserTest >> testClassBody4 [
 	}' 
 	rule: #classBody.
 	
-	self assert: result first = 'methodA'.
-	self assert: result second = 'methodB'.	
+	self assert: result first simpleName = 'methodA'.
+	self assert: result second simpleName = 'methodB'.	
 ]
 
 { #category : #'tests - class' }
@@ -519,7 +522,7 @@ PPJavaSeaParserTest >> testClassBody7 [
 	
 	
 	self assert: result size = 1.
-
+	self assert: result first simpleName = 'getStrings'.
 ]
 
 { #category : #'tests - class' }
@@ -534,7 +537,7 @@ PPJavaSeaParserTest >> testClassBody8 [
 	
 	
 	self assert: result size = 1.
-	self assert: result first = 'getStrings'.
+	self assert: result first simpleName = 'getStrings'.
 
 ]
 
@@ -557,8 +560,8 @@ PPJavaSeaParserTest >> testClassBody9 [
 	
 	"debugResult inspect."
 	self assert: result isPetitFailure not.
-	self assert: result first = 'registerNatives'.
-	self assert: result second = 'toString'.
+	self assert: result first simpleName = 'registerNatives'.
+	self assert: result second simpleName = 'toString'.
 
 ]
 
@@ -589,7 +592,8 @@ PPJavaSeaParserTest >> testComment2 [
 PPJavaSeaParserTest >> testMethod1 [
 	self parse: 'void foo() { }' rule: #methodDef.
 	
-	self assert: result = 'foo'.
+	self assert: result simpleName = 'foo'.
+	self assert: result returnType = 'void'.
 ]
 
 { #category : #'tests - method' }
@@ -597,7 +601,7 @@ PPJavaSeaParserTest >> testMethod10 [
 	self parse: 'public void foo () { 
 	}' rule: #methodDef.
 
-	self assert: result = 'foo'.
+	self assert: result simpleName = 'foo'.
 ]
 
 { #category : #'tests - method' }
@@ -605,7 +609,7 @@ PPJavaSeaParserTest >> testMethod11 [
 	self parse: 'public void foo_bar () { 
 	}' rule: #methodDef.
 
-	self assert: result = 'foo_bar'.
+	self assert: result simpleName = 'foo_bar'.
 ]
 
 { #category : #'tests - method' }
@@ -613,14 +617,15 @@ PPJavaSeaParserTest >> testMethod12 [
 	self parse: 'public void _bar () { 
 	}' rule: #methodDef.
 
-	self assert: result = '_bar'.
+	self assert: result simpleName = '_bar'.
 ]
 
 { #category : #'tests - method' }
 PPJavaSeaParserTest >> testMethod2 [
 	self parse: 'Foo m() { /** method body */ }' rule: #methodDef.
 	
-	self assert: result = 'm'.
+	self assert: result simpleName = 'm'.
+	self assert: result returnType = 'Foo'.
 ]
 
 { #category : #'tests - method' }
@@ -631,7 +636,8 @@ PPJavaSeaParserTest >> testMethod3 [
 		}'
 	rule: #methodDef.
 	
-	self assert: result = 'methodB'.
+	self assert: result simpleName = 'methodB'.
+	self assert: result returnType = 'Bar'.
 ]
 
 { #category : #'tests - method' }
@@ -639,7 +645,7 @@ PPJavaSeaParserTest >> testMethod4 [
 	self parse: 'void finalize() throws Throwable { }'
 	rule: #methodDef.
 	
-	self assert: result = 'finalize'.
+	self assert: result simpleName = 'finalize'.
 ]
 
 { #category : #'tests - method' }
@@ -649,7 +655,7 @@ PPJavaSeaParserTest >> testMethod5 [
 		}' 
 	rule: #methodDef.
 	
-	self assert: result = 'methodA'.
+	self assert: result simpleName = 'methodA'.
 ]
 
 { #category : #'tests - method' }
@@ -671,7 +677,8 @@ PPJavaSeaParserTest >> testMethod7 [
 	rule: #methodDef.
 	
 	self assert: result isPetitFailure not.
-	self assert: result = 'read'.
+	self assert: result simpleName = 'read'.
+	self assert: result returnType = 'int'.	
 ]
 
 { #category : #'tests - method' }
@@ -684,7 +691,7 @@ PPJavaSeaParserTest >> testMethod8 [
 PPJavaSeaParserTest >> testMethod9 [
 	self parse: 'public void foo() { if (true) {} return false;}' rule: #methodDef.
 
-	self assert: result = 'foo'.
+	self assert: result simpleName = 'foo'.
 ]
 
 { #category : #'tests - nested class' }
@@ -699,10 +706,11 @@ PPJavaSeaParserTest >> testNestedClass1 [
 		}'
 	rule: #javaClass.
 
-	self assert: result first = 'Foo'.
-	self assert: result second size = 2.
-	self assert: result second first = 'foo'.
-	self assert: result second second = 'Bar::bar'.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 2.
+	self assert: result methodDeclarations first simpleName = 'foo'.
+	self assert: result methodDeclarations second simpleName = 'Bar'.
+	self assert: result methodDeclarations second methodDeclarations first simpleName = 'bar'.
 ]
 
 { #category : #'tests - nested class' }
@@ -718,11 +726,12 @@ PPJavaSeaParserTest >> testNestedClass2 [
 		}'
 	rule: #javaClass.
 
-	self assert: result first = 'Foo'.
-	self assert: result second size = 2.
+	self assert: result simpleName = 'Foo'.
+	self assert: result methodDeclarations size = 2.
 
-	self assert: result second first = 'Entry::bar'.
-	self assert: result second second = 'baz'.
+	self assert: result methodDeclarations first simpleName = 'Entry'.
+	self assert: result methodDeclarations first methodDeclarations first simpleName = 'bar'.
+	self assert: result methodDeclarations second simpleName = 'baz'.
 ]
 
 { #category : #tests }
