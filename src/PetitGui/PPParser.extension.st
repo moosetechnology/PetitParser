@@ -71,7 +71,7 @@ PPParser >> gtAllParsersIn: composite [
 
 	composite roassal2
 		title: 'Graph'; 
-		initializeView: [ RTMondrianViewBuilder new ];
+		initializeView: [ RTMondrian new ];
 		painting: [ :view |
 			self viewAllParsersOn: view.	
 		].
@@ -286,7 +286,7 @@ PPParser >> viewAllParsers [
 	PPSmalltalkParser new viewAllParsers
 	"
 	| view |
-	view := RTMondrianViewBuilder new.
+	view := RTMondrian new.
 	self viewAllParsersOn: view.
 	view openWithToolbarEntitled: 'All parsers'.
 	^ view
@@ -305,7 +305,7 @@ PPParser >> viewAllParsersOn: view [
 			labels asArray ];
 		if: [ :p | p name isNil ] fillColor: Color lightGray.
 	view nodes: self allParsers.
-	view edgesToAll: #children.	
+	view edges connectToAll: #children.	
 	view treeLayout
 ]
 
