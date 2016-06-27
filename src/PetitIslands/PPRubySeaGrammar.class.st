@@ -28,7 +28,6 @@ Class {
 		'program',
 		'kDefIS',
 		'defEndIS',
-		'line',
 		'kModuleIS',
 		'moduleDef',
 		'eigenDef',

@@ -164,12 +164,6 @@ PPRubySeaGrammarTest >> testEigenClass1 [
 ]
 
 { #category : #'as yet unclassified' }
-PPRubySeaGrammarTest >> testLine [
-	self parse: 'aaa' rule: #line.
-	self parse: '  aaa' rule: #line.
-]
-
-{ #category : #'as yet unclassified' }
 PPRubySeaGrammarTest >> testMethod1 [
 	self parse: 'def bar end' 
 	rule: #methodDef.
