@@ -199,6 +199,11 @@ PPContext >> printOn: aStream [
 ]
 
 { #category : #'accessing-properties' }
+PPContext >> properties [
+	^ properties 
+]
+
+{ #category : #'accessing-properties' }
 PPContext >> propertyAt: aKey [
 	"Answer the property value associated with aKey."
 	

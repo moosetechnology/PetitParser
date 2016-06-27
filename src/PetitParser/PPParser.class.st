@@ -513,6 +513,11 @@ PPParser >> printOn: aStream [
 ]
 
 { #category : #'accessing-properties' }
+PPParser >> properties [
+	^ properties
+]
+
+{ #category : #'accessing-properties' }
 PPParser >> propertyAt: aKey [
 	"Answer the property value associated with aKey."
 	
