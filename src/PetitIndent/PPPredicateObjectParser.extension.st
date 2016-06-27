@@ -19,7 +19,10 @@ PPPredicateObjectParser class >> align [
 { #category : #'*PetitIndent' }
 PPPredicateObjectParser class >> aligns [
 	"Return if the current column is the same as set by #setIl"
-	^ #top asParser
+	^ (#top asParser)
+		"JK: hackish, because of imprefect Push/Pop analysis"
+		propertyAt: #changesContext put: false;
+		yourself
 ]
 
 { #category : #'*PetitIndent-OffsideRule' }
@@ -90,7 +93,8 @@ PPPredicateObjectParser class >> onsideOL [
 { #category : #'*PetitIndent' }
 PPPredicateObjectParser class >> pop [
 	"Restores to the previous indentation level"
-	^ [ :context | context indentStack pop ] asParser
+"	^ [ :context | context indentStack pop ] asParser"
+	^ PPPopParser new
 ]
 
 { #category : #'*PetitIndent' }
@@ -99,7 +103,10 @@ PPPredicateObjectParser class >> prefix [
 	"Consume the content as defined by IndentStack from the beginning of a line"
 
 	sol := #startOfLine asParser.
-	^ sol, [ :context | context indentStack replay: context ] asParser
+	^ sol, ([ :context | context indentStack replay: context ] asParser
+		propertyAt: #changesContext put: false;
+		yourself
+	)
 ]
 
 { #category : #'*PetitIndent-OffsideRule' }

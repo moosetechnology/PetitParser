@@ -10,5 +10,5 @@ PPPopParser >> parseOn: context [
 		^ PPFailure message: 'cannot pop an empty stack' context: context
 	].
 
-	^ context pop
+	^ context indentStack pop
 ]

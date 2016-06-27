@@ -104,15 +104,19 @@ PPMiniPythonGrammar >> compoundStmt [
 
 { #category : #'indent-dedent' }
 PPMiniPythonGrammar >> dedent [
-
-	^ (([ :context | context indentStack pop ] asParser, 
+	^ ((([ :context | context indentStack pop ] asParser, 
 		(emptyLine, newline) star, 
 		((align, blank not ==> #first) / (align not, blank star flatten ==> #second))
 	  )
 	
 	map: [ :_pop :_empty :_align  | 
 		_align
-	]) and, #pop asParser ==> #first
+	]) and, #pop asParser ==> #first)
+
+		"JK: Hackish, because of imperfect push-pop analysis"
+		propertyAt: #indentPop put: true;
+		yourself
+
 ]
 
 { #category : #grammar }
@@ -231,11 +235,16 @@ PPMiniPythonGrammar >> ifStmt [
 
 { #category : #'indent-dedent' }
 PPMiniPythonGrammar >> indent [
-	^ ((emptyLine, newline) star, align, ((#blank asParser plus) flatten)
+	^ (((emptyLine, newline) star, align, ((#blank asParser plus) flatten)
 	
 	map: [ :emptylines :_align :_indent |
 		_indent
-	]) and pushAsParser
+	]) and pushAsParser)
+		"JK: Hackish, because of imperfect push-pop analysis"
+		propertyAt: #indentPush put: true;
+		yourself
+
+	
 ]
 
 { #category : #others }
