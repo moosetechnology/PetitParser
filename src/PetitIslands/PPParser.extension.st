@@ -2,7 +2,11 @@ Extension { #name : #PPParser }
 
 { #category : #'*petitislands' }
 PPParser >> acceptsEpsilon [
-	"return true, if parser can accept epsilon without failure"
+	"
+		return true, if parser can accept epsilon without failure.
+		
+		In another words, if the parser is provided with the epsilon, it will not fail!
+	"
 	^ self subclassResponsibility
 ]
 

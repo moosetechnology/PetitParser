@@ -2,7 +2,7 @@ Extension { #name : #PPStartOfLineParser }
 
 { #category : #'*petitislands' }
 PPStartOfLineParser >> acceptsEpsilon [
-	^ true
+	^ false
 ]
 
 { #category : #'*petitislands' }
