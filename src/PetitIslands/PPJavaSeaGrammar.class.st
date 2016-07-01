@@ -233,7 +233,7 @@ PPJavaSeaGrammar >> string [
 	| end |
 	end := $" asParser.
 	^ ($" asParser, (#any asParser starLazy: end), end)
-		name: 'string';
+		name: 'stringSeq';
 		yourself.
 ]
 
