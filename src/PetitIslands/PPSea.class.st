@@ -72,7 +72,7 @@ PPSea >> afterWaterParser: aPPContext [
 	self check: aPPContext.
 
 	afterWaterParser ifNil: [
-		"defaultAfterWaterParser := "afterWaterParser := self createAfterWaterParser: aPPContext.
+		afterWaterParser := self createAfterWaterParser: aPPContext.
 	].
 	^ afterWaterParser
 
@@ -83,7 +83,7 @@ PPSea >> beforeWaterParser: aPPContext [
 	self check: aPPContext.
 
 	beforeWaterParser ifNil: [
-		"defaultBeforeWaterParser := "beforeWaterParser := self createBeforeWaterParser: aPPContext.
+		beforeWaterParser := self createBeforeWaterParser: aPPContext.
 	].
 	^ beforeWaterParser
 
@@ -106,7 +106,7 @@ PPSea >> children [
 
 { #category : #parsing }
 PPSea >> createAfterWaterParser: aPPContext [
-	^ self createAfterWaterParserFromNextSet: (self nextSetFromRoot: aPPContext root).
+	^ self createAfterWaterParserFromNextSet: (self nextSet: aPPContext).
 ]
 
 { #category : #parsing }
@@ -125,7 +125,7 @@ PPSea >> createAfterWaterParserFromNextSet: nextSet [
 
 { #category : #parsing }
 PPSea >> createBeforeWaterParser: aPPContext [
-	^ self createBeforeWaterParserFromNextSet: (self nextSetFromRoot: aPPContext root).
+	^ self createBeforeWaterParserFromNextSet: (self nextSet: aPPContext).
 	
 ]
 
@@ -204,10 +204,11 @@ PPSea >> followSet: aPPContext [
 	^ aPPContext root followSets at: self.	
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 PPSea >> initialize [ 
 	super initialize.
 	water := #any asParser name: 'water'; yourself.
+
 ]
 
 { #category : #queries }
@@ -246,9 +247,8 @@ PPSea >> name [
 ]
 
 { #category : #analysis }
-PPSea >> nextSetFromRoot: aPPParser [
-	^ aPPParser nextSets at: self.
-
+PPSea >> nextSet: aPPContext [
+	^ aPPContext root nextSets at: self.
 ]
 
 { #category : #analysis }
@@ -362,8 +362,7 @@ PPSea >> parseOn: aPPContext [
 { #category : #accessing }
 PPSea >> replace: parser with: anotherParser [ 
 	super replace: parser with: anotherParser.
-	Halt if: [anotherParser name asString beginsWith: 'class'].
-
+	
 	(beforeWaterParser == parser) ifTrue: [ beforeWaterParser := anotherParser ].
 	(afterWaterParser == parser) ifTrue: [ afterWaterParser := anotherParser ].
 	(defaultBeforeWaterParser == parser) ifTrue: [ defaultBeforeWaterParser := anotherParser ].
@@ -372,13 +371,11 @@ PPSea >> replace: parser with: anotherParser [
 	(island == parser) ifTrue: [ island := anotherParser ].
 ]
 
-{ #category : #initialization }
+{ #category : #memoization }
 PPSea >> reset: aPPContext [
 	contextIdentifier := aPPContext identifier.
-	
 	beforeWaterParser := defaultBeforeWaterParser.
 	afterWaterParser := defaultAfterWaterParser.
-	
 ]
 
 { #category : #'accessing - private' }

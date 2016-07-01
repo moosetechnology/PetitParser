@@ -23,6 +23,12 @@ Class {
 	#category : #'PetitIslands-Parsers'
 }
 
+{ #category : #'as yet unclassified' }
+PPMemoizingSea class >> initialize [ 
+	super initialize 
+
+]
+
 { #category : #memoization }
 PPMemoizingSea >> memoizeResult: result onContext: aPPContext memento: ctxMemento [
 	| memento |

@@ -3,9 +3,9 @@ Extension { #name : #PPParser }
 { #category : #'*petitislands' }
 PPParser >> acceptsEpsilon [
 	"
-		return true, if parser can accept epsilon without failure.
+		return true, if parser can ALWAYS accept epsilon without a failure.
 		
-		In another words, if the parser is provided with the epsilon, it will not fail!
+		Use #isNullable if it can accept epsilon, but it can fail as well.
 	"
 	^ self subclassResponsibility
 ]
@@ -46,6 +46,16 @@ PPParser >> island [
 PPParser >> island: water [
 	self halt: 'deprecated'.
 	^ self sea: water
+]
+
+{ #category : #'*petitislands' }
+PPParser >> next: context [
+	^ PPChoiceParser withAll: (self nextSet: context)
+]
+
+{ #category : #'*petitislands' }
+PPParser >> nextSet: aPPContext [
+	^ aPPContext root nextSets at: self.
 ]
 
 { #category : #'*petitislands' }
