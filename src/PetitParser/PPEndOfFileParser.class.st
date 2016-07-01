@@ -19,28 +19,7 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'as yet unclassified' }
-PPEndOfFileParser >> acceptsEpsilon [
-	^ true
-]
-
-{ #category : #'as yet unclassified' }
-PPEndOfFileParser >> exampleOn: aStream [ 
-	aStream nextPutAll: #'end-of-input'
-]
-
-{ #category : #'as yet unclassified' }
-PPEndOfFileParser >> isNullable [ 
-	^ true
-]
-
-{ #category : #'as yet unclassified' }
-PPEndOfFileParser >> nonEmpty [
-	"I know I am empty, but it does not count in my case, I represent virtual non-existent character"
-	^ self
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPEndOfFileParser >> parseOn: aPPContext [
 	(aPPContext atEnd) ifFalse:
 	[

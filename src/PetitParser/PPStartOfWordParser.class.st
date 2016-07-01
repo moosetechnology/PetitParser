@@ -13,7 +13,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PPStartOfWordParser >> acceptsEpsilon [
-	^ true
+	^ false
 ]
 
 { #category : #'as yet unclassified' }
