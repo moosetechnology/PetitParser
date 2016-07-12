@@ -17,7 +17,7 @@ PPContext >> islandMemoized [
 
 { #category : #'*petitislands' }
 PPContext >> waterPosition [
-	^ self globalAt:  #waterPosition ifAbsentPut: [ nil ]
+	^ self globalAt:  #waterPosition ifAbsentPut: nil
 ]
 
 { #category : #'*petitislands' }

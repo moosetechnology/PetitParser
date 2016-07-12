@@ -3,7 +3,7 @@ Extension { #name : #PPParser }
 { #category : #'*petitislands' }
 PPParser >> acceptsEpsilon [
 	"
-		return true, if parser can ALWAYS accept epsilon without a failure.
+		return true, if parser ALWAYS accepts epsilon without a failure.
 		
 		Use #isNullable if it can accept epsilon, but it can fail as well.
 	"
