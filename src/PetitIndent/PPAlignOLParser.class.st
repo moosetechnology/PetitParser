@@ -6,7 +6,7 @@ Class {
 
 { #category : #analysis }
 PPAlignOLParser >> acceptsEpsilon [
-	^ false
+	^ true
 ]
 
 { #category : #analysis }

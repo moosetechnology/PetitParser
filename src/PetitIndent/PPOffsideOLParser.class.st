@@ -6,7 +6,7 @@ Class {
 
 { #category : #analysis }
 PPOffsideOLParser >> acceptsEpsilon [
-	^ false
+	^ true
 ]
 
 { #category : #analysis }

@@ -6,7 +6,7 @@ Class {
 
 { #category : #analysis }
 PPOnsideOLParser >> acceptsEpsilon [
-	^ false
+	^ true
 ]
 
 { #category : #analysis }
@@ -16,7 +16,7 @@ PPOnsideOLParser >> firstCharSet [
 
 { #category : #parsing }
 PPOnsideOLParser >> parseOn: context [
-	(context indentStack top < context column) ifFalse: [  
+	((context indentStack topIfEmpty: 0) < context column) ifFalse: [  
 		^ PPFailure message: 'Not in onside' context: context
 	].
 	^ #onside
