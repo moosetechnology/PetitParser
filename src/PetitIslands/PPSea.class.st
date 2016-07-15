@@ -114,10 +114,13 @@ PPSea >> createAfterWaterParserFromNextSet: nextSet [
 	| set p |
 	set := nextSet copy.
 	set := self filterOutNextSet: set.
-	(set anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ set add: PPEndOfFileParser new ].
+
+	(set anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ 
+		set := set collect: [ :e | e acceptsEpsilon ifTrue: [ e nonEmpty ] ifFalse: [ e ]].
+		set add: PPEndOfFileParser new.
+	].
 	
-	set := set collect: [ :e | e nonEmpty ].
-	set := set select: [ :e | e class ~= PPFailingParser ].
+	set := set reject: [ :e | e class = PPFailingParser ].
 		
 	p := (PPChoiceParser withAll: set) and.
 	^ PPWater on: p waterToken: water
@@ -134,12 +137,15 @@ PPSea >> createBeforeWaterParserFromNextSet: nextSet [
 	| set p |
 	set := nextSet copy.
 	set := self filterOutNextSet: nextSet.
-	(set anySatisfy: [ :e | e acceptsEpsilon ]) ifTrue: [ set add: PPEndOfFileParser new ].
-	
+
 	set add: island.
 
-	set := set collect: [:e | e nonEmpty].
-	set := set select: [ :e | e class ~= PPFailingParser ].
+	(set anySatisfy: [ :e | e acceptsEpsilon  ]) ifTrue: [ 
+		set := set collect: [ :e | e acceptsEpsilon ifTrue: [ e nonEmpty ] ifFalse: [ e ]].
+		set add: PPEndOfFileParser new.
+	].
+	
+	set := set reject: [ :e | e class = PPFailingParser ].
 	
 	p := (PPChoiceParser withAll: set) and.
 	^ PPWater on: p waterToken: water.
