@@ -1,6 +1,19 @@
 Extension { #name : #PPContext }
 
 { #category : #'*PetitGui' }
+PPContext >> gtGlobals: composite [
+	<gtInspectorPresentationOrder: 50>
+	
+	composite table
+		title: 'Globals';
+		column: 'Key' evaluated: [ :each | each key printString ];
+		column: 'Value' evaluated: [ :each | each value printString ];
+		display: [ :context |  (context globals ifNil: [ Dictionary new ]) associations ]
+
+
+]
+
+{ #category : #'*PetitGui' }
 PPContext >> gtIndentStack: composite [
 	<gtInspectorPresentationOrder: 40>
 	
