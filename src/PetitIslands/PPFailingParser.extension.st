@@ -4,8 +4,3 @@ Extension { #name : #PPFailingParser }
 PPFailingParser >> acceptsEpsilon [
 	^ false
 ]
-
-{ #category : #'*petitislands' }
-PPFailingParser >> isIslandBorder [
-	^ false
-]

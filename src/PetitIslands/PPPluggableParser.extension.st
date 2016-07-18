@@ -2,12 +2,7 @@ Extension { #name : #PPPluggableParser }
 
 { #category : #'*petitislands' }
 PPPluggableParser >> acceptsEpsilon [
-	^ true
-]
-
-{ #category : #'*petitislands' }
-PPPluggableParser >> acceptsEpsilonOpenSet: set [
-	^ true
+	^ false
 ]
 
 { #category : #'*petitislands' }

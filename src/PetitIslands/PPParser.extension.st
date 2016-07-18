@@ -3,11 +3,9 @@ Extension { #name : #PPParser }
 { #category : #'*petitislands' }
 PPParser >> acceptsEpsilon [
 	"
-		return true, if parser can accepts epsilon without a failure.
+		return true, if parser ALWAYS accepts epsilon without a failure.
 		
-		Use #neverFails if parser never fail, no matter what is the input.
-		The #isNullable semantics is a mystery for me. I think it is something 
-		like acceptsEpsilon and is used for first/set computation.
+		Use #isNullable if it can accept epsilon, but it can fail as well.
 	"
 	^ self subclassResponsibility
 ]
@@ -102,8 +100,7 @@ PPParser >> nextSets: aNextDictionary into: aSet [
 
 { #category : #'*petitislands' }
 PPParser >> nonEmpty [
-	^ PPNonEmptyParser on: self	
-
+	^ PPNonEmptyParser on: self
 ]
 
 { #category : #'*petitislands' }

@@ -47,6 +47,34 @@ PPSeaTest >> identifier [
  	^ ((#letter asParser / $# asParser), (#letter asParser / #digit asParser) star) flatten 
 ]
 
+{ #category : #'parse support' }
+PPSeaTest >> island: parser [
+	self halt: 'deprecated'.
+	^ self islandInstance island: parser.
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> island: parser water: water [
+	self halt: 'deprecated'.
+	^ self islandInstance 
+		island: parser;
+		water: water;
+		yourself
+	
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> islandClass [ 
+	self halt: 'deprecated'.
+	^ PPSea  
+]
+
+{ #category : #'parse support' }
+PPSeaTest >> islandInstance [
+	self halt: 'deprecated'.
+	^ self islandClass new 
+]
+
 { #category : #'tests - water objects' }
 PPSeaTest >> multilineCommentParser [
 	^ '/*' asParser, (#any asParser starLazy: '*/' asParser), '*/' asParser.
