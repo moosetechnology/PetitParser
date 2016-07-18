@@ -103,6 +103,11 @@ PPContext >> globalAt: aKey put: anObject [
 ]
 
 { #category : #'accessing-globals' }
+PPContext >> globals [
+	^ globals
+]
+
+{ #category : #'accessing-globals' }
 PPContext >> hasGlobal: aKey [
 	"Test if the global property aKey is present."
 	

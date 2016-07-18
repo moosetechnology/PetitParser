@@ -89,5 +89,7 @@ PPFailure >> position [
 
 { #category : #printing }
 PPFailure >> printOn: aStream [
-	aStream nextPutAll: self message; nextPutAll: ' at '; print: self position
+	aStream 
+		nextPutAll: (self message ifNil: ['<message not specified>']); 
+		nextPutAll: ' at '; print: self position
 ]
