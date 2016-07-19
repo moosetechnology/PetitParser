@@ -7,9 +7,19 @@ Class {
 	#category : #'PetitIslands-Parsers'
 }
 
+{ #category : #'*petitislands' }
+PPNonEmptyParser >> acceptsEpsilon [
+	^ false
+]
+
+{ #category : #analysis }
+PPNonEmptyParser >> isNullable [
+	^ false
+]
+
 { #category : #parsing }
 PPNonEmptyParser >> nonEmpty [
-	^ super nonEmpty.
+	^ self
 ]
 
 { #category : #parsing }

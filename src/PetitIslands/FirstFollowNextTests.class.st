@@ -907,6 +907,13 @@ FirstFollowNextTests >> testIsNullableCycle3 [
 ]
 
 { #category : #'test isNullable' }
+FirstFollowNextTests >> testIsNullableEOF [
+	| a |
+	a := #eof asParser.
+	self assert: a acceptsEpsilon not.
+]
+
+{ #category : #'test isNullable' }
 FirstFollowNextTests >> testIsNullableSeq1 [
 	| a b c p |
 	a := 'a' asParser.
@@ -952,6 +959,13 @@ FirstFollowNextTests >> testIsNullableSeq4 [
 	p := a, b, c.
 	
 	self assert: p acceptsEpsilon.
+]
+
+{ #category : #'test isNullable' }
+FirstFollowNextTests >> testIsNullableStartOfLine [
+	| a |
+	a := #startOfLine asParser.
+	self assert: a acceptsEpsilon not.
 ]
 
 { #category : #'test next' }

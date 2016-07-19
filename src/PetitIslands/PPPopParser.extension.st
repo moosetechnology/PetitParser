@@ -2,7 +2,7 @@ Extension { #name : #PPPopParser }
 
 { #category : #'*petitislands' }
 PPPopParser >> acceptsEpsilon [
-	^ false
+	^ true
 ]
 
 { #category : #'*petitislands' }
