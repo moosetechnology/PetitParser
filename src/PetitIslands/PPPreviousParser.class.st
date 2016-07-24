@@ -4,7 +4,7 @@ Class {
 	#category : #'PetitIslands-Extras'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPPreviousParser >> parseOn: aPPContext [
 	| result position |
 	(aPPContext position > 0) ifTrue: [  
