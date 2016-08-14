@@ -141,6 +141,8 @@ ConfigurationOfPetitMSE >> development: spec [
 
 	spec for: #'common' version: '0.1-baseline'.
 
+	spec for: #'pharo5.x' version: #'stable'.
+
 ]
 
 { #category : #accessing }
@@ -154,4 +156,26 @@ ConfigurationOfPetitMSE >> project [
 		(Smalltalk at: #MetacelloVersionConstructor) on: self project: project.
 		project loadType: #linear. "change to #atomic if desired"
 		project ]
+]
+
+{ #category : #'symbolic versions' }
+ConfigurationOfPetitMSE >> stable: spec [
+	<symbolicVersion: #'stable'>
+
+	spec for: #'pharo5.x' version: '1.0'.
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitMSE >> version10: spec [
+	<version: '1.0' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'Moose 6.0 release'.
+		spec author: 'TudorGirba'.
+		spec timestamp: '8/14/2016 20:44'.
+		spec project: 'PetitParser' with: #'stable'.
+		spec package: 'PetitMSE' with: 'PetitMSE-AndreHora.21'. ].
+
 ]
