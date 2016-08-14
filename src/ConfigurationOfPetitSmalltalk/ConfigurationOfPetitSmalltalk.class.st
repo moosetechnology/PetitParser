@@ -163,6 +163,8 @@ ConfigurationOfPetitSmalltalk >> development: spec [
 
 	spec for: #'common' version: '0.2-baseline'.
 
+	spec for: #'pharo5.x' version: #'stable'.
+
 ]
 
 { #category : #accessing }
@@ -185,6 +187,9 @@ ConfigurationOfPetitSmalltalk >> stable: spec [
 	spec for: #'common' version: '0.1-baseline'.
 
 	spec for: #'pharo3.x' version: '1.1'.
+
+	spec for: #'pharo5.x' version: '2.0'.
+
 ]
 
 { #category : #versions }
@@ -198,5 +203,19 @@ ConfigurationOfPetitSmalltalk >> version11: spec [
 		spec timestamp: '4/4/2015 11:32'.
 		spec project: 'PetitParser' with: #'development'.
 		spec package: 'PetitSmalltalk' with: 'PetitSmalltalk-JanKurs.79'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfPetitSmalltalk >> version20: spec [
+	<version: '2.0' imports: #('0.2-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'Moose 6.0 release'.
+		spec author: 'TudorGirba'.
+		spec timestamp: '8/14/2016 20:44'.
+		spec project: 'PetitParser' with: #'stable'.
+		spec package: 'PetitSmalltalk' with: 'PetitSmalltalk-TudorGirba.87'. ].
 
 ]
