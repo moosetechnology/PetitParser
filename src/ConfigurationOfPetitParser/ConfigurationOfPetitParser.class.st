@@ -524,8 +524,8 @@ ConfigurationOfPetitParser >> development: spec [
 	spec for: #'pharo3.x' version: '1.6-baseline'.
 
 	spec for: #'pharo4.x' version: '1.7-baseline'.
-	
-	spec for: #'pharo5.x' version: '1.8-baseline'.
+
+	spec for: #'pharo5.x' version: #'stable'.
 
 ]
 
@@ -554,8 +554,8 @@ ConfigurationOfPetitParser >> stable: spec [
 	spec for: #'pharo3.x' version: '1.10'.
 
 	spec for: #'pharo4.x' version: '1.14'.
-	
-	spec for: #'pharo5.x' version: '1.14'.
+
+	spec for: #'pharo5.x' version: '2.0'.
 
 ]
 
@@ -891,4 +891,36 @@ ConfigurationOfPetitParser >> version19: spec [
 			package: 'PetitIslands' with: 'PetitIslands-JanKurs.18';
 			package: 'PetitIndent' with: 'PetitIndent-JanKurs.1';
 			package: 'Factorial-Language' with: 'Factorial-Language-lr.6'. ].
+]
+
+{ #category : #versions }
+ConfigurationOfPetitParser >> version20: spec [
+	<version: '2.0' imports: #('1.8-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'Moose 6.0 release'.
+		spec author: 'TudorGirba'.
+		spec timestamp: '8/14/2016 20:44'.
+		spec 
+			package: 'PetitParser' with: 'PetitParser-JanKurs.290';
+			package: 'PetitTests' with: 'PetitTests-JanKurs.77';
+			package: 'PetitAnalyzer' with: 'PetitAnalyzer-JanKurs.49';
+			package: 'PetitSmalltalk' with: 'PetitSmalltalk-TudorGirba.87';
+			package: 'PetitCSV' with: 'PetitCSV-tg.7';
+			package: 'PetitJson' with: 'PetitJson-JanKurs.9';
+			package: 'PetitMSE' with: 'PetitMSE-AndreHora.21';
+			package: 'PetitManifestMf' with: 'PetitManifestMf-JanKurs.10';
+			package: 'PetitRegex' with: 'PetitRegex-JanKurs.32';
+			package: 'PetitXPath' with: 'PetitXPath-EstebanLorenzano.7';
+			package: 'PetitXml' with: 'PetitXml-JanKurs.36';
+			package: 'PetitIndent' with: 'PetitIndent-JanKurs.25';
+			package: 'PetitIslands' with: 'PetitIslands-JanKurs.56';
+			package: 'Factorial-Language' with: 'Factorial-Language-lr.6';
+			package: 'PetitYAML' with: 'PetitYAML-JanKurs.8'. ].
+
+	spec for: #'squeakCommon' do: [
+		spec project: 'Glamour' with: '1.0'.
+		spec package: 'PetitGui' with: 'PetitGui-JanKurs.162'. ].
+
 ]
