@@ -597,7 +597,7 @@ ConfigurationOfPetitParser >> development: spec [
 
 	spec for: #'pharo5.x' version: #'stable'.
 
-	spec for: #'pharo6.x' version: #'1.9-baseline'.
+	spec for: #'pharo6.x' version: '1.9-baseline'.
 
 ]
 
