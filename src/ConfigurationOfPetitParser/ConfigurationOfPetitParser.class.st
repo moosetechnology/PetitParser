@@ -511,6 +511,76 @@ ConfigurationOfPetitParser >> baseline18: spec [
 		spec group: 'ParserIDE' with: #( 'PetitGui' ) ] 
 ]
 
+{ #category : #baselines }
+ConfigurationOfPetitParser >> baseline19: spec [ 
+	<version: '1.9-baseline'>
+	
+	spec for: #common do: [
+		spec blessing: #'development'.
+		spec description: 'For Pharo 6. Use #development for Glamour'.
+		spec repository: 'http://www.smalltalkhub.com/mc/Moose/PetitParser/main'.
+		spec 
+			package: 'PetitParser';
+			package: 'PetitTests' with: [ spec requires: 'PetitParser'];
+			package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests'];
+			package: 'PetitSmalltalk' with: [
+				spec requires: #( 'PetitParser' 'PetitTests') ];
+			package: 'PetitCSV' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitJson' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitMSE' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitManifestMf' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitRegex' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitXPath' with: [
+				spec requires: #('PetitParser' 'PetitXml') ];
+			package: 'PetitXml' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitIndent' with: [
+				spec requires: #('PetitParser' 'PetitTests') ];
+			package: 'PetitIslands' with: [
+				spec requires: #('PetitParser' 'PetitIndent' 'PetitTests') ];
+			package: 'Factorial-Language' with: [
+				spec requires: #('PetitParser') ];
+			package: 'PetitYAML' with: [
+				spec requires: #('PetitParser' 'PetitIndent') ].
+
+
+		spec group: 'Core' with: #( 'PetitParser').
+		spec group: 'Tests' with: #( 'PetitTests').
+		spec group: 'Parser' with: #('PetitParser' 
+													'PetitTests' 
+													'PetitAnalyzer' 
+													'PetitSmalltalk' 
+													'PetitCSV' 
+													'PetitJson' 
+													'PetitMSE'
+													'PetitManifestMf' 
+													'PetitRegex'
+													'PetitXPath'
+													'PetitXml'
+													'PetitIndent'
+													'PetitIslands'
+													'Factorial-Language'
+													'PetitYAML').
+	].
+
+	spec for: #( 'squeakCommon' )  do: [
+		spec project: 'Glamour' with: [
+			spec
+				className: 'ConfigurationOfGlamour';
+				file: 'ConfigurationOfGlamour';
+				version: #development;
+				repository: 'http://www.smalltalkhub.com/mc/Moose/Glamour/main' ].
+		spec 
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+		
+		spec group: 'ParserIDE' with: #( 'PetitGui' ) ] 
+]
+
 { #category : #'symbolic versions' }
 ConfigurationOfPetitParser >> development: spec [
 	<symbolicVersion: #'development'>
@@ -526,6 +596,8 @@ ConfigurationOfPetitParser >> development: spec [
 	spec for: #'pharo4.x' version: '1.7-baseline'.
 
 	spec for: #'pharo5.x' version: #'stable'.
+
+	spec for: #'pharo6.x' version: #'1.9-baseline'.
 
 ]
 
