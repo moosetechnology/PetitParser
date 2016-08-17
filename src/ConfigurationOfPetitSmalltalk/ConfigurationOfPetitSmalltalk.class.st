@@ -161,6 +161,8 @@ ConfigurationOfPetitSmalltalk >> customProjectAttributes [
 ConfigurationOfPetitSmalltalk >> development: spec [
 	<symbolicVersion: #'development'>
 
+	spec for: #'pharo4.x' version: #'stable'.
+
 	spec for: #'pharo5.x' version: #'stable'.
 
 	spec for: #'pharo6.x' version: '0.2-baseline'.
@@ -180,13 +182,13 @@ ConfigurationOfPetitSmalltalk >> project [
 		project ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'symbolic versions' }
 ConfigurationOfPetitSmalltalk >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '0.1-baseline'.
-
 	spec for: #'pharo3.x' version: '1.1'.
+
+	spec for: #'pharo4.x' version: '1.1'.
 
 	spec for: #'pharo5.x' version: '2.0'.
 
