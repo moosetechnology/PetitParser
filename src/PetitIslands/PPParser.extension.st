@@ -40,7 +40,7 @@ PPParser >> isWater [
 
 { #category : #'*petitislands' }
 PPParser >> island [
-	self halt: 'deprecated'.
+	self deprecated: 'use sea instead'.
 	^ self sea
 ]
 
