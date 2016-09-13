@@ -617,7 +617,7 @@ ConfigurationOfPetitParser >> project [
 ConfigurationOfPetitParser >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '1.10'.
+	spec for: #'common' version: '2.0'.
 
 	spec for: #'pharo1.3.x' version: '1.5'.
 
@@ -628,7 +628,6 @@ ConfigurationOfPetitParser >> stable: spec [
 	spec for: #'pharo4.x' version: '1.14'.
 
 	spec for: #'pharo5.x' version: '2.0'.
-
 ]
 
 { #category : #versions }
@@ -992,7 +991,7 @@ ConfigurationOfPetitParser >> version20: spec [
 			package: 'PetitYAML' with: 'PetitYAML-JanKurs.8'. ].
 
 	spec for: #'squeakCommon' do: [
-		spec project: 'Glamour' with: '1.0'.
+		spec project: 'Glamour' with: #stable.
 		spec package: 'PetitGui' with: 'PetitGui-JanKurs.162'. ].
 
 ]
