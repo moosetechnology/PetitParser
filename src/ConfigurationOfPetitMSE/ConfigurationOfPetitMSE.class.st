@@ -127,6 +127,23 @@ ConfigurationOfPetitMSE >> baseline01: spec [
 
 ]
 
+{ #category : #baselines }
+ConfigurationOfPetitMSE >> baseline02: spec [
+	<version: '0.1-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec repository: 'http://smalltalkhub.com/mc/Moose/PetitParser/main/'.
+		spec	baseline: 'PetitParser2' with: [
+				spec
+				 	repository: 'github://kursjan/petitparser2' ].
+		spec package: 'PetitMSE'.
+		spec 
+			group: 'Core' with: #('PetitMSE' );
+			group: 'Tests' with: #('PetitMSE' ). ].
+
+]
+
 { #category : #accessing }
 ConfigurationOfPetitMSE >> customProjectAttributes [
 	 "Edit to return a collection of any custom attributes e.g. for conditional loading: Array with: #'Condition1' with: #'Condition2.
@@ -141,7 +158,7 @@ ConfigurationOfPetitMSE >> development: spec [
 
 	spec for: #'pharo5.x' version: '1.0'.
 
-	spec for: #'pharo6.x' version: '0.1-baseline'.
+	spec for: #'pharo6.x' version: '0.2-baseline'.
 
 ]
 
