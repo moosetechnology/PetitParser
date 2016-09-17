@@ -20,7 +20,7 @@ PPCommaSeparatedParser >> cell [
 
 { #category : #accessing }
 PPCommaSeparatedParser >> endOfLine [
-	^ #newline asParser2 token
+	^ #newline asPParser token
 ]
 
 { #category : #accessing }
@@ -30,13 +30,13 @@ PPCommaSeparatedParser >> nonComma [
 
 { #category : #accessing }
 PPCommaSeparatedParser >> number [ 
-	^ ($- asParser2 optional , #digit asParser2 plus , ($. asParser2 , #digit asParser2 plus) optional) token
+	^ ($- asPParser optional , #digit asPParser plus , ($. asPParser , #digit asPParser plus) optional) token
 		==> [ :nodes | nodes first value asNumber ]
 ]
 
 { #category : #accessing }
 PPCommaSeparatedParser >> row [
-	^ (cell delimitedBy: $, asParser2 token) ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
+	^ (cell delimitedBy: $, asPParser token) ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
 ]
 
 { #category : #accessing }
@@ -51,5 +51,5 @@ PPCommaSeparatedParser >> start [
 
 { #category : #accessing }
 PPCommaSeparatedParser >> whitespace [
-	^ #blank asParser2
+	^ #blank asPParser
 ]
