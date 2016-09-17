@@ -1,6 +1,6 @@
 Class {
 	#name : #PPCommaSeparatedParser,
-	#superclass : #PPCompositeParser,
+	#superclass : #PP2CompositeNode,
 	#instVars : [
 		'row',
 		'cell',
@@ -12,44 +12,44 @@ Class {
 	#category : #PetitCSV
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> cell [
 	^ whitespace star , nonComma star flatten , whitespace star
 		==> [ :nodes | nodes second value ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> endOfLine [
-	^ #newline asParser token
+	^ #newline asParser2 token
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> nonComma [
-	^ PPPredicateObjectParser anyExceptAnyOf: {Character space . Character tab . Character cr . Character lf . $, }
+	^ PP2PredicateObjectNode noneOf: {Character space . Character tab . Character cr . Character lf . $, }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> number [ 
-	^ ($- asParser optional , #digit asParser plus , ($. asParser , #digit asParser plus) optional) token
+	^ ($- asParser2 optional , #digit asParser2 plus , ($. asParser2 , #digit asParser2 plus) optional) token
 		==> [ :nodes | nodes first value asNumber ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> row [
-	^ (cell delimitedBy: $, asParser token) ==> [ :nodes | nodes reject: [ :each | each class = PPToken ] ]
+	^ (cell delimitedBy: $, asParser2 token) ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> rows [
-	^ (row delimitedBy: endOfLine)  ==> [ :nodes | nodes reject: [ :each | each class = PPToken ] ]
+	^ (row delimitedBy: endOfLine)  ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> start [
 	^ rows end
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPCommaSeparatedParser >> whitespace [
-	^ PPPredicateObjectParser anyOf: (Array with: Character space with: Character tab)
+	^ #blank asParser2
 ]

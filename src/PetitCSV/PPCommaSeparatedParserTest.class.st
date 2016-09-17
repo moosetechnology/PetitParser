@@ -1,6 +1,6 @@
 Class {
 	#name : #PPCommaSeparatedParserTest,
-	#superclass : #PPCompositeParserTest,
+	#superclass : #PPCompositeParserTestBridge,
 	#instVars : [
 		'row',
 		'cell',
