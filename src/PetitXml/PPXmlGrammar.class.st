@@ -26,7 +26,7 @@ Class {
 PPXmlGrammar >> attribute [
 	"[41] 	Attribute	   ::=   	 Name Eq AttValue"
 
-	^ qualified , whitespace optional , $= asParser2 , whitespace optional , attributeValue
+	^ qualified , whitespace optional , $= asPParser , whitespace optional , attributeValue
 		==> [ :nodes | Array with: nodes first with: nodes fifth ]
 ]
 
@@ -34,8 +34,8 @@ PPXmlGrammar >> attribute [
 PPXmlGrammar >> attributeValue [
 	"[10]   	AttValue	   ::=   	'""' ([^<&""] | Reference)* '""' |  ""'"" ([^<&'] | Reference)* "
 
-	^ ($" asParser2 , $" asParser2 negate star flatten , $" asParser2) 
-	/ ($' asParser2 , $' asParser2 negate star flatten , $' asParser2) 
+	^ ($" asPParser , $" asPParser negate star flatten , $" asPParser) 
+	/ ($' asPParser , $' asPParser negate star flatten , $' asPParser) 
 		==> #second
 ]
 
@@ -50,14 +50,14 @@ PPXmlGrammar >> attributes [
 PPXmlGrammar >> characterData [
 	"[14]   	CharData	   ::=   	[^<&]* - ([^<&]* ']]>' [^<&]*)"
 	
-	^ $< asParser2 negate plus flatten
+	^ $< asPParser negate plus flatten
 ]
 
 { #category : #grammar }
 PPXmlGrammar >> comment [
 	"[15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'"
 
-	^ '<!--' asParser2 ,  '-->' asParser2 negate star flatten , '-->' asParser2 ==> #second
+	^ '<!--' asPParser ,  '-->' asPParser negate star flatten , '-->' asPParser ==> #second
 ]
 
 { #category : #grammar }
@@ -71,7 +71,7 @@ PPXmlGrammar >> content [
 PPXmlGrammar >> doctype [
 	"[28]   	doctypedecl	   ::=   	'<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'"
 
-	^ '<!DOCTYPE' asParser2 , whitespace optional , ($[ asParser2 negate star , $[ asParser2 , $] asParser2 negate star , $] asParser2) flatten , whitespace optional , $> asParser2 ==> #third
+	^ '<!DOCTYPE' asPParser , whitespace optional , ($[ asPParser negate star , $[ asPParser , $] asPParser negate star , $] asPParser) flatten , whitespace optional , $> asPParser ==> #third
 ]
 
 { #category : #grammar }
@@ -87,7 +87,7 @@ PPXmlGrammar >> document [
 PPXmlGrammar >> element [
 	"[39]   	element	   ::=   	 EmptyElemTag | STag content ETag"
 	
-	^ $< asParser2 , qualified , attributes , whitespace optional , ('/>' asParser2 / ($> asParser2 , content , [ :stream | stream position ] asParser2 , '</' asParser2 , qualified , whitespace optional , $> asParser2)) ==> [ :nodes | 
+	^ $< asPParser , qualified , attributes , whitespace optional , ('/>' asPParser / ($> asPParser , content , [ :stream | stream position ] asPParser , '</' asPParser , qualified , whitespace optional , $> asPParser)) ==> [ :nodes | 
 		nodes fifth = '/>'
 			ifTrue: [ Array with: nodes second with: nodes third with: #() ]
 			ifFalse: [
@@ -141,7 +141,7 @@ PPXmlGrammar >> processing [
 	"[16]   	PI	   ::=   	'<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
 	[17]   	PITarget	   ::=   	 Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))"
 
-	^ '<?' asParser2 , nameToken , (whitespace , '?>' asParser2 negate star) optional flatten, '?>' asParser2
+	^ '<?' asPParser , nameToken , (whitespace , '?>' asPParser negate star) optional flatten, '?>' asPParser
 		==> [ :nodes | Array with: nodes second with: nodes third ]
 ]
 
@@ -159,5 +159,5 @@ PPXmlGrammar >> start [
 PPXmlGrammar >> whitespace [
 	"[3]   	S	   ::=   	(#x20 | #x9 | #xD | #xA)+"
 
-	^ #space asParser2 plus
+	^ #space asPParser plus
 ]
