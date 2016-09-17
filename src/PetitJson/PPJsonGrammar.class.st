@@ -42,7 +42,7 @@ PPJsonGrammar class >> initialize [
 
 { #category : #grammar }
 PPJsonGrammar >> array [
-	^ $[ asParser2 token trim , elements optional , $] asParser2 token trim
+	^ $[ asPParser token trim , elements optional , $] asPParser token trim
 ]
 
 { #category : #primitives }
@@ -52,7 +52,7 @@ PPJsonGrammar >> char [
 
 { #category : #primitives }
 PPJsonGrammar >> charEscape [
-	^ $\ asParser2 , (PP2PredicateObjectNode anyOf: (String withAll: CharacterTable keys))
+	^ $\ asPParser , (PP2PredicateObjectNode anyOf: (String withAll: CharacterTable keys))
 ]
 
 { #category : #primitives }
@@ -62,35 +62,35 @@ PPJsonGrammar >> charNormal [
 
 { #category : #primitives }
 PPJsonGrammar >> charOctal [
-	^ '\u' asParser2 , (#hex asParser2 min: 4 max: 4)
+	^ '\u' asPParser , (#hex asPParser min: 4 max: 4)
 ]
 
 { #category : #grammar }
 PPJsonGrammar >> elements [
-	^ value separatedBy: $, asParser2 token trim
+	^ value separatedBy: $, asPParser token trim
 ]
 
 { #category : #tokens }
 PPJsonGrammar >> falseToken [
-	^ 'false' asParser2 token trim
+	^ 'false' asPParser token trim
 ]
 
 { #category : #grammar }
 PPJsonGrammar >> members [
-	^ pair separatedBy: $, asParser2 token trim
+	^ pair separatedBy: $, asPParser token trim
 ]
 
 { #category : #tokens }
 PPJsonGrammar >> nullToken [
-	^ 'null' asParser2 token trim
+	^ 'null' asPParser token trim
 ]
 
 { #category : #primitives }
 PPJsonGrammar >> number [
-	^ $- asParser2 optional ,
-		($0 asParser2 / #digit asParser2 plus) ,
-		($. asParser2 , #digit asParser2 plus) optional , 
-		(($e asParser2 / $E asParser2) , ($- asParser2 / $+ asParser2) optional , #digit asParser2 plus) optional
+	^ $- asPParser optional ,
+		($0 asPParser / #digit asPParser plus) ,
+		($. asPParser , #digit asPParser plus) optional , 
+		(($e asPParser / $E asPParser) , ($- asPParser / $+ asPParser) optional , #digit asPParser plus) optional
 ]
 
 { #category : #tokens }
@@ -100,12 +100,12 @@ PPJsonGrammar >> numberToken [
 
 { #category : #grammar }
 PPJsonGrammar >> object [
-	^ ${ asParser2 token trim , members optional , $} asParser2 token trim
+	^ ${ asPParser token trim , members optional , $} asPParser token trim
 ]
 
 { #category : #grammar }
 PPJsonGrammar >> pair [
-	^ stringToken , $: asParser2 token trim , value
+	^ stringToken , $: asPParser token trim , value
 ]
 
 { #category : #accessing }
@@ -115,7 +115,7 @@ PPJsonGrammar >> start [
 
 { #category : #primitives }
 PPJsonGrammar >> string [
-	^ $" asParser2 , char star , $" asParser2
+	^ $" asPParser , char star , $" asPParser
 ]
 
 { #category : #tokens }
@@ -125,7 +125,7 @@ PPJsonGrammar >> stringToken [
 
 { #category : #tokens }
 PPJsonGrammar >> trueToken [
-	^ 'true' asParser2 token trim
+	^ 'true' asPParser token trim
 ]
 
 { #category : #grammar }
