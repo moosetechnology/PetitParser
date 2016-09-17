@@ -1,16 +1,16 @@
 Class {
-	#name : #PPJsonGrammarTest,
-	#superclass : #PPCompositeParserTest,
+	#name : #PPJsonParserTest,
+	#superclass : #PP2CompositeParserTest,
 	#category : #'PetitJson-Tests'
 }
 
 { #category : #accessing }
-PPJsonGrammarTest class >> packageNamesUnderTest [
+PPJsonParserTest class >> packageNamesUnderTest [
 	^ #('PetitJson')
 ]
 
 { #category : #utilities }
-PPJsonGrammarTest >> assertInvalid: aString [
+PPJsonParserTest >> assertInvalid: aString [
 	self 
 		should: [ self parse: aString ]
 		raise: TestResult failure
@@ -18,12 +18,12 @@ PPJsonGrammarTest >> assertInvalid: aString [
 ]
 
 { #category : #accessing }
-PPJsonGrammarTest >> parserClass [
+PPJsonParserTest >> parserClass [
 	^ PPJsonParser
 ]
 
 { #category : #'testing-array' }
-PPJsonGrammarTest >> testBigArray [
+PPJsonParserTest >> testBigArray [
 	self parse: ' [ "a" , "b" ] '.
 	self assert: (result isKindOf: Array).
 	self assert: result size = 2.
@@ -32,7 +32,7 @@ PPJsonGrammarTest >> testBigArray [
 ]
 
 { #category : #'testing-objects' }
-PPJsonGrammarTest >> testBigObject [
+PPJsonParserTest >> testBigObject [
 	self parse: ' { "a" : 1 , "b" : 2 } '.
 	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 2.
@@ -41,21 +41,21 @@ PPJsonGrammarTest >> testBigObject [
 ]
 
 { #category : #'testing-array' }
-PPJsonGrammarTest >> testEmptyArray [
+PPJsonParserTest >> testEmptyArray [
 	self parse: '[]'.
 	self assert: (result isKindOf: Array).
 	self assert: result isEmpty
 ]
 
 { #category : #'testing-objects' }
-PPJsonGrammarTest >> testEmptyObject [
+PPJsonParserTest >> testEmptyObject [
 	self parse: '{}'.
 	self assert: (result isKindOf: Dictionary).
 	self assert: result isEmpty
 ]
 
 { #category : #'testing-real' }
-PPJsonGrammarTest >> testExplorerEvent [
+PPJsonParserTest >> testExplorerEvent [
 	self parse: '{"recordset": null, "type": "change", "fromElement": null, "toElement": null, "altLeft": false, "keyCode": 0, "repeat": false, "reason": 0, "behaviorCookie": 0, "contentOverflow": false, "behaviorPart": 0, "dataTransfer": null, "ctrlKey": false, "shiftLeft": false, "dataFld": "", "qualifier": "", "wheelDelta": 0, "bookmarks": null, "button": 0, "srcFilter": null, "nextPage": "", "cancelBubble": false, "x": 89, "y": 502, "screenX": 231, "screenY": 1694, "srcUrn": "", "boundElements": {"length": 0}, "clientX": 89, "clientY": 502, "propertyName": "", "shiftKey": false, "ctrlLeft": false, "offsetX": 25, "offsetY": 2, "altKey": false}'.
 	self assert: (result at: 'type') = 'change'.
 	self assert: (result at: 'offsetY') = 2.
@@ -65,12 +65,12 @@ PPJsonGrammarTest >> testExplorerEvent [
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testFalse [
+PPJsonParserTest >> testFalse [
 	self deny: (self parse: 'false')
 ]
 
 { #category : #'testing-real' }
-PPJsonGrammarTest >> testFirefoxEvent [
+PPJsonParserTest >> testFirefoxEvent [
 	self parse: '{"type": "change", "eventPhase": 2, "bubbles": true, "cancelable": true, "timeStamp": 0, "CAPTURING_PHASE": 1, "AT_TARGET": 2, "BUBBLING_PHASE": 3, "isTrusted": true, "MOUSEDOWN": 1, "MOUSEUP": 2, "MOUSEOVER": 4, "MOUSEOUT": 8, "MOUSEMOVE": 16, "MOUSEDRAG": 32, "CLICK": 64, "DBLCLICK": 128, "KEYDOWN": 256, "KEYUP": 512, "KEYPRESS": 1024, "DRAGDROP": 2048, "FOCUS": 4096, "BLUR": 8192, "SELECT": 16384, "CHANGE": 32768, "RESET": 65536, "SUBMIT": 131072, "SCROLL": 262144, "LOAD": 524288, "UNLOAD": 1048576, "XFER_DONE": 2097152, "ABORT": 4194304, "ERROR": 8388608, "LOCATE": 16777216, "MOVE": 33554432, "RESIZE": 67108864, "FORWARD": 134217728, "HELP": 268435456, "BACK": 536870912, "TEXT": 1073741824, "ALT_MASK": 1, "CONTROL_MASK": 2, "SHIFT_MASK": 4, "META_MASK": 8}'.
 	self assert: (result at: 'type') = 'change'.
 	self assert: (result at: 'eventPhase') = 2.
@@ -80,7 +80,7 @@ PPJsonGrammarTest >> testFirefoxEvent [
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidArray [
+PPJsonParserTest >> testInvalidArray [
 	self assertInvalid: '['.
 	self assertInvalid: '[1'.
 	self assertInvalid: '[1,'.
@@ -90,28 +90,28 @@ PPJsonGrammarTest >> testInvalidArray [
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidFalse [
+PPJsonParserTest >> testInvalidFalse [
 	self assertInvalid: 'fa'.
 	self assertInvalid: 'falsely'.
 	self assertInvalid: 'fabulous'
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidNull [
+PPJsonParserTest >> testInvalidNull [
 	self assertInvalid: 'nu'.
 	self assertInvalid: 'nuclear'.
 	self assertInvalid: 'nullified'
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidNumberInteger [
+PPJsonParserTest >> testInvalidNumberInteger [
 	self assertInvalid: '00'.
 	self assertInvalid: '01'.
 	self assertInvalid: '00.1'
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidObject [
+PPJsonParserTest >> testInvalidObject [
 	self assertInvalid: '{'.
 	self assertInvalid: '{"a"'.
 	self assertInvalid: '{"a":'.
@@ -124,7 +124,7 @@ PPJsonGrammarTest >> testInvalidObject [
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidString [
+PPJsonParserTest >> testInvalidString [
 	self assertInvalid: '"'.
 	self assertInvalid: '"a'.
 	self assertInvalid: '"\"'.
@@ -137,14 +137,14 @@ PPJsonGrammarTest >> testInvalidString [
 ]
 
 { #category : #'testing-invalid' }
-PPJsonGrammarTest >> testInvalidTrue [
+PPJsonParserTest >> testInvalidTrue [
 	self assertInvalid: 'tr'.
 	self assertInvalid: 'trace'.
 	self assertInvalid: 'truest'
 ]
 
 { #category : #'testing-array' }
-PPJsonGrammarTest >> testNestedArray [
+PPJsonParserTest >> testNestedArray [
 	self parse: '[[2]]'.
 	self assert: (result isKindOf: Array).
 	self assert: result size = 1.
@@ -156,7 +156,7 @@ PPJsonGrammarTest >> testNestedArray [
 ]
 
 { #category : #'testing-objects' }
-PPJsonGrammarTest >> testNestedObject [
+PPJsonParserTest >> testNestedObject [
 	self parse: '{"object":{"1":"2"}} '.
 	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 1.
@@ -168,12 +168,12 @@ PPJsonGrammarTest >> testNestedObject [
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testNull [
+PPJsonParserTest >> testNull [
 	self assert: (self parse: 'null') isNil
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testNumberFloat [
+PPJsonParserTest >> testNumberFloat [
 	self assert: (self parse: '0.0') = 0.0.
 	self assert: (self parse: '0.12') = 0.12.
 	self assert: (self parse: '-0.12') = -0.12.
@@ -185,7 +185,7 @@ PPJsonGrammarTest >> testNumberFloat [
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testNumberInteger [
+PPJsonParserTest >> testNumberInteger [
 	self assert: (self parse: '0') = 0.
 	self assert: (self parse: '1') = 1.
 	self assert: (self parse: '-1') = -1.
@@ -196,7 +196,7 @@ PPJsonGrammarTest >> testNumberInteger [
 ]
 
 { #category : #'testing-real' }
-PPJsonGrammarTest >> testSafariEvent [
+PPJsonParserTest >> testSafariEvent [
 	self parse: '{"returnValue": true, "timeStamp": 1226697417289, "eventPhase": 2, "type": "change", "cancelable": false, "bubbles": true, "cancelBubble": false, "MOUSEOUT": 8, "FOCUS": 4096, "CHANGE": 32768, "MOUSEMOVE": 16, "AT_TARGET": 2, "SELECT": 16384, "BLUR": 8192, "KEYUP": 512, "MOUSEDOWN": 1, "MOUSEDRAG": 32, "BUBBLING_PHASE": 3, "MOUSEUP": 2, "CAPTURING_PHASE": 1, "MOUSEOVER": 4, "CLICK": 64, "DBLCLICK": 128, "KEYDOWN": 256, "KEYPRESS": 1024, "DRAGDROP": 2048}'.
 	self assert: (result at: 'type') = 'change'.
 	self assert: (result at: 'eventPhase') = 2.
@@ -207,7 +207,7 @@ PPJsonGrammarTest >> testSafariEvent [
 ]
 
 { #category : #'testing-array' }
-PPJsonGrammarTest >> testSmallArray [
+PPJsonParserTest >> testSmallArray [
 	self parse: '["a"]'.
 	self assert: (result isKindOf: Array).
 	self assert: result size = 1.
@@ -215,7 +215,7 @@ PPJsonGrammarTest >> testSmallArray [
 ]
 
 { #category : #'testing-objects' }
-PPJsonGrammarTest >> testSmallObject [
+PPJsonParserTest >> testSmallObject [
 	self parse: '{"a":1}'.
 	self assert: (result isKindOf: Dictionary).
 	self assert: result size = 1.
@@ -223,14 +223,14 @@ PPJsonGrammarTest >> testSmallObject [
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testString [
+PPJsonParserTest >> testString [
 	self assert: (self parse: '""') = ''.
 	self assert: (self parse: '"foo"') = 'foo'.
 	self assert: (self parse: '"foo bar"') = 'foo bar'
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testStringEscaped [
+PPJsonParserTest >> testStringEscaped [
 	self assert: (self parse: '"\""') = '"'.
 	self assert: (self parse: '"\\"') = '\'.
 	self assert: (self parse: '"\/"') = '/'.
@@ -243,6 +243,6 @@ PPJsonGrammarTest >> testStringEscaped [
 ]
 
 { #category : #'testing-literals' }
-PPJsonGrammarTest >> testTrue [
+PPJsonParserTest >> testTrue [
 	self assert: (self parse: 'true')
 ]
