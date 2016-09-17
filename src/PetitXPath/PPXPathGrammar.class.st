@@ -22,7 +22,7 @@ PPXPathGrammar >> attributeFilter [
 
 { #category : #accessing }
 PPXPathGrammar >> attributeFilterAssigned [
-	^ $[ asParser2, whitespace, attributeNameToken, whitespace, $= asParser2, whitespace, string, whitespace, $] asParser2 
+	^ $[ asPParser, whitespace, attributeNameToken, whitespace, $= asPParser, whitespace, string, whitespace, $] asPParser 
 		==> [ :nodes | 
 			Array 
 				with: nodes third
@@ -31,7 +31,7 @@ PPXPathGrammar >> attributeFilterAssigned [
 
 { #category : #accessing }
 PPXPathGrammar >> attributeFilterPresent [
-	^ $[ asParser2, whitespace, attributeNameToken, whitespace, $] asParser2 
+	^ $[ asPParser, whitespace, attributeNameToken, whitespace, $] asPParser 
 		==> [ :nodes | 
 			Array 
 				with: nodes third
@@ -40,23 +40,23 @@ PPXPathGrammar >> attributeFilterPresent [
 
 { #category : #accessing }
 PPXPathGrammar >> attributeNameToken [
-	^ ($@ asParser2, ((#letter asParser2 / $_ asParser2 / $- asParser2) plus)) flatten
+	^ ($@ asPParser, ((#letter asPParser / $_ asPParser / $- asPParser) plus)) flatten
 ]
 
 { #category : #accessing }
 PPXPathGrammar >> index [ 
-	^$[ asParser2, #digit asParser2 plus, $] asParser2 
+	^$[ asPParser, #digit asPParser plus, $] asPParser 
 		==> [ :nodes | Number readFrom: nodes second readStream ]
 ]
 
 { #category : #accessing }
 PPXPathGrammar >> multiple [
-	^$* asParser2
+	^$* asPParser
 ]
 
 { #category : #accessing }
 PPXPathGrammar >> nameToken [
-	^ (#letter asParser2 / $_ asParser2 / $- asParser2) plus flatten
+	^ (#letter asPParser / $_ asPParser / $- asPParser) plus flatten
 ]
 
 { #category : #accessing }
@@ -66,7 +66,7 @@ PPXPathGrammar >> node [
 
 { #category : #accessing }
 PPXPathGrammar >> path [ 
-	^$/ asParser2 optional, node, ($/ asParser2, node ==> #second) star 
+	^$/ asPParser optional, node, ($/ asPParser, node ==> #second) star 
 		==> [ :nodes | 
 			OrderedCollection new
 				add: nodes second;
@@ -81,11 +81,11 @@ PPXPathGrammar >> start [
 
 { #category : #accessing }
 PPXPathGrammar >> string [
-	^$" asParser2, $" asParser2 negate star flatten, $" asParser2
+	^$" asPParser, $" asPParser negate star flatten, $" asPParser
 		==> [ :nodes | nodes second ]
 ]
 
 { #category : #accessing }
 PPXPathGrammar >> whitespace [
-	^ #space asParser2 star
+	^ #space asPParser star
 ]
