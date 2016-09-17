@@ -1,6 +1,6 @@
 Class {
 	#name : #PPManifestMfParser,
-	#superclass : #PPCompositeParser,
+	#superclass : #PP2CompositeNode,
 	#instVars : [
 		'pairs',
 		'pair',
@@ -16,7 +16,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> basicValue [
-	^ oneLinerBasicValue , ((newline , #space asParser) , oneLinerBasicValue ==> #last) star
+	^ oneLinerBasicValue , ((newline , #space asParser2) , oneLinerBasicValue ==> #last) star
 	
 	==> [:token | 
 		((OrderedCollection with: token first inspect) addAll: token second; yourself) asArray ]
@@ -24,24 +24,24 @@ PPManifestMfParser >> basicValue [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> label [
-	^ (#letter asParser / #digit asParser / $- asParser) star flatten trim
+	^ (#letter asParser2 / #digit asParser2 / $- asParser2) star flatten trim
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> newline [
-	^ (Character lf asParser)
-	/ (Character cr asParser , Character lf asParser optional)
+	^ (Character lf asParser2)
+	/ (Character cr asParser2 , Character lf asParser2 optional)
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> oneLinerBasicValue [
-	^ (PPPredicateObjectParser anyExceptAnyOf: {$, . Character cr . Character lf })
+	^ (PP2PredicateObjectNode noneOf: {$, . Character cr . Character lf })
 		star flatten
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pair [
-	^label , $: asParser token trim, pairValue ==> [:token | (token at: 1)->(token at: 3)]
+	^label , $: asParser2 token trim, pairValue ==> [:token | (token at: 1)->(token at: 3)]
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,5 +67,5 @@ PPManifestMfParser >> start [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> valueSeparator [
-	^ $, asParser token trim
+	^ $, asParser2 token trim
 ]
