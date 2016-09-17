@@ -9,7 +9,7 @@ Instance Variables:
 "
 Class {
 	#name : #PPMSEGrammar,
-	#superclass : #PPCompositeParser,
+	#superclass : #PP2CompositeNode,
 	#instVars : [
 		'elements',
 		'element',
@@ -46,17 +46,17 @@ PPMSEGrammar >> attributeValue [
 
 { #category : #basic }
 PPMSEGrammar >> boolean [ 
-	^ ('true' asParser / 'false' asParser) flatten token trim
+	^ ('true' asParser2 / 'false' asParser2) flatten token trim
 ]
 
 { #category : #basic }
 PPMSEGrammar >> close [
-	^ $) asParser trim
+	^ $) asParser2 trim
 ]
 
 { #category : #basic }
 PPMSEGrammar >> e [
-	^ ($e asParser / $E asParser) , ($- asParser / $+ asParser) optional , natural
+	^ ($e asParser2 / $E asParser2) , ($- asParser2 / $+ asParser2) optional , natural
 ]
 
 { #category : #grammar }
@@ -66,8 +66,8 @@ PPMSEGrammar >> element [
 
 { #category : #basic }
 PPMSEGrammar >> elementName [
-	^ (#word asParser star flatten , 
-		( $. asParser , #word asParser star flatten ) optional) token trim
+	^ (#word asParser2 star flatten , 
+		( $. asParser2 , #word asParser2 star flatten ) optional) token trim
 ]
 
 { #category : #grammar }
@@ -77,32 +77,32 @@ PPMSEGrammar >> elements [
 
 { #category : #grammar }
 PPMSEGrammar >> id [
-	^ open , 'id:' asParser , #digit asParser star token trim , close
+	^ open , 'id:' asParser2 , #digit asParser2 star token trim , close
 ]
 
 { #category : #grammar }
 PPMSEGrammar >> integerReference [ 
-	^ (open , 'ref:' asParser , natural trim , close) token trim
+	^ (open , 'ref:' asParser2 , natural trim , close) token trim
 ]
 
 { #category : #grammar }
 PPMSEGrammar >> nameReference [ 
-	^ open , 'ref:' asParser , elementName trim , close
+	^ open , 'ref:' asParser2 , elementName trim , close
 ]
 
 { #category : #basic }
 PPMSEGrammar >> natural [
-	^ #digit asParser plus flatten trim
+	^ #digit asParser2 plus flatten trim
 ]
 
 { #category : #basic }
 PPMSEGrammar >> number [
-	^ ($- asParser optional , natural , ($. asParser , natural , e optional) optional) flatten token trim
+	^ ($- asParser2 optional , natural , ($. asParser2 , natural , e optional) optional) flatten token trim
 ]
 
 { #category : #basic }
 PPMSEGrammar >> open [
-	^ $( asParser trim
+	^ $( asParser2 trim
 ]
 
 { #category : #basic }
@@ -117,7 +117,7 @@ PPMSEGrammar >> reference [
 
 { #category : #basic }
 PPMSEGrammar >> simpleName [
-	^ #word asParser star flatten token trim
+	^ #word asParser2 star flatten token trim
 ]
 
 { #category : #accessing }
@@ -127,10 +127,10 @@ PPMSEGrammar >> start [
 
 { #category : #basic }
 PPMSEGrammar >> string [
-	^ ($' asParser , stringText , $' asParser) trim
+	^ ($' asParser2 , stringText , $' asParser2) trim
 ]
 
 { #category : #basic }
 PPMSEGrammar >> stringText [
-	^ ('''''' asParser / $' asParser negate) star flatten token
+	^ ('''''' asParser2 / $' asParser2 negate) star flatten token
 ]

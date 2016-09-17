@@ -17,7 +17,7 @@ PPMSEArrayParser >> attributeValue [
 	
 	==> [ :tokens | 
 		    (tokens size > 1 or: [ tokens isEmpty ]) 	
-				ifTrue: [ tokens ] 
+				ifTrue: [ tokens asArray ] 
 				ifFalse: [ tokens first ]]
 ]
 
@@ -32,7 +32,7 @@ PPMSEArrayParser >> boolean [
 PPMSEArrayParser >> element [
 	^ super element
 	
-	==> [:token | Array with: (token at: 2) with: (token at: 3) with: (token at: 4) ]
+	==> [:token | Array with: (token at: 2) with: (token at: 3) with: (token at: 4) asArray ]
 ]
 
 { #category : #accessing }
@@ -46,7 +46,7 @@ PPMSEArrayParser >> elementName [
 PPMSEArrayParser >> elements [
 	^ super elements
 	
-	==> [:token | token second ]
+	==> [:token | token second asArray ]
 ]
 
 { #category : #accessing }
