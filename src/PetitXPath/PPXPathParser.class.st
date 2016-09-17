@@ -12,6 +12,11 @@ PPXPathParser class >> default [
 	^ default ifNil: [ default := self new ]
 ]
 
+{ #category : #'instance creation' }
+PPXPathParser class >> reset [
+	default := nil
+]
+
 { #category : #accessing }
 PPXPathParser >> attributeFilter [ 
 	^super attributeFilter 
