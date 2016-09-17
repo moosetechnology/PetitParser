@@ -16,7 +16,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> basicValue [
-	^ oneLinerBasicValue , ((newline , #space asParser2) , oneLinerBasicValue ==> #last) star
+	^ oneLinerBasicValue , ((newline , #space asPParser) , oneLinerBasicValue ==> #last) star
 	
 	==> [:token | 
 		((OrderedCollection with: token first inspect) addAll: token second; yourself) asArray ]
@@ -24,13 +24,13 @@ PPManifestMfParser >> basicValue [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> label [
-	^ (#letter asParser2 / #digit asParser2 / $- asParser2) star flatten trim
+	^ (#letter asPParser / #digit asPParser / $- asPParser) star flatten trim
 ]
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> newline [
-	^ (Character lf asParser2)
-	/ (Character cr asParser2 , Character lf asParser2 optional)
+	^ (Character lf asPParser)
+	/ (Character cr asPParser , Character lf asPParser optional)
 ]
 
 { #category : #'as yet unclassified' }
@@ -41,7 +41,7 @@ PPManifestMfParser >> oneLinerBasicValue [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> pair [
-	^label , $: asParser2 token trim, pairValue ==> [:token | (token at: 1)->(token at: 3)]
+	^label , $: asPParser token trim, pairValue ==> [:token | (token at: 1)->(token at: 3)]
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,5 +67,5 @@ PPManifestMfParser >> start [
 
 { #category : #'as yet unclassified' }
 PPManifestMfParser >> valueSeparator [
-	^ $, asParser2 token trim
+	^ $, asPParser token trim
 ]
