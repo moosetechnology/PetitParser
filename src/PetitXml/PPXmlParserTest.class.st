@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlParserTest,
-	#superclass : #PPCompositeParserTest,
+	#superclass : #PPCompositeParserTestBridge,
 	#category : #'PetitXml-Tests'
 }
 
