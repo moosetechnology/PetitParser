@@ -136,7 +136,7 @@ PPParserDebuggerResult >> findStream [
 
 { #category : #'*petitgui' }
 PPParserDebuggerResult >> findStreamContents [
-	^ (self findStream ifNotNilDo: [ :s | s contents ]) ifNil: [ '' ]
+	^ (self findStream ifNotNil: [ :s | s contents ]) ifNil: [ '' ]
 ]
 
 { #category : #printing }
