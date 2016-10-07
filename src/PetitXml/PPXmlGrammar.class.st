@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlGrammar,
-	#superclass : #PPCompositeParserBridge,
+	#superclass : #PP2CompositeNode,
 	#instVars : [
 		'comment',
 		'whitespace',
