@@ -1,6 +1,6 @@
 Class {
 	#name : #PPManifestMfParserTest,
-	#superclass : #PPCompositeParserTestBridge,
+	#superclass : #PP2CompositeParserTest,
 	#category : #PetitManifestMf
 }
 
