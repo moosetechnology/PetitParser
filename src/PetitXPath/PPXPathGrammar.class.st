@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXPathGrammar,
-	#superclass : #PPCompositeParserBridge,
+	#superclass : #PP2CompositeNode,
 	#instVars : [
 		'node',
 		'nameToken',
