@@ -19,7 +19,7 @@ PPMSEArrayParserTest >> testElementName [
 PPMSEArrayParserTest >> testEmpty [
 	self assert: '()' is: #().
 	self assert: '( )' is: #().
-	self assert: ' ( ) ' is: #().
+	self assert: ' ( ) ' is: #()
 ]
 
 { #category : #'tests-basic' }

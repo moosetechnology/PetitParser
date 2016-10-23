@@ -1,6 +1,6 @@
 Class {
 	#name : #PPMSEGrammarTest,
-	#superclass : #PP2CompositeParserTest,
+	#superclass : #PPCompositeParserTest,
 	#category : #PetitMSE
 }
 
