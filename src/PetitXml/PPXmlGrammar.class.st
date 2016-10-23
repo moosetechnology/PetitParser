@@ -1,6 +1,6 @@
 Class {
 	#name : #PPXmlGrammar,
-	#superclass : #PP2CompositeNode,
+	#superclass : #PPCompositeParser,
 	#instVars : [
 		'comment',
 		'whitespace',
@@ -26,7 +26,7 @@ Class {
 PPXmlGrammar >> attribute [
 	"[41] 	Attribute	   ::=   	 Name Eq AttValue"
 
-	^ qualified , whitespace optional , $= asPParser , whitespace optional , attributeValue
+	^ qualified , whitespace optional , $= asParser , whitespace optional , attributeValue
 		==> [ :nodes | Array with: nodes first with: nodes fifth ]
 ]
 
@@ -34,8 +34,8 @@ PPXmlGrammar >> attribute [
 PPXmlGrammar >> attributeValue [
 	"[10]   	AttValue	   ::=   	'""' ([^<&""] | Reference)* '""' |  ""'"" ([^<&'] | Reference)* "
 
-	^ ($" asPParser , $" asPParser negate star flatten , $" asPParser) 
-	/ ($' asPParser , $' asPParser negate star flatten , $' asPParser) 
+	^ ($" asParser , $" asParser negate star flatten , $" asParser) 
+	/ ($' asParser , $' asParser negate star flatten , $' asParser) 
 		==> #second
 ]
 
@@ -50,14 +50,14 @@ PPXmlGrammar >> attributes [
 PPXmlGrammar >> characterData [
 	"[14]   	CharData	   ::=   	[^<&]* - ([^<&]* ']]>' [^<&]*)"
 	
-	^ $< asPParser negate plus flatten
+	^ $< asParser negate plus flatten
 ]
 
 { #category : #grammar }
 PPXmlGrammar >> comment [
 	"[15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'"
 
-	^ '<!--' asPParser ,  '-->' asPParser negate star flatten , '-->' asPParser ==> #second
+	^ '<!--' asParser ,  '-->' asParser negate star flatten , '-->' asParser ==> #second
 ]
 
 { #category : #grammar }
@@ -71,7 +71,7 @@ PPXmlGrammar >> content [
 PPXmlGrammar >> doctype [
 	"[28]   	doctypedecl	   ::=   	'<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'"
 
-	^ '<!DOCTYPE' asPParser , whitespace optional , ($[ asPParser negate star , $[ asPParser , $] asPParser negate star , $] asPParser) flatten , whitespace optional , $> asPParser ==> #third
+	^ '<!DOCTYPE' asParser , whitespace optional , ($[ asParser negate star , $[ asParser , $] asParser negate star , $] asParser) flatten , whitespace optional , $> asParser ==> #third
 ]
 
 { #category : #grammar }
@@ -87,13 +87,13 @@ PPXmlGrammar >> document [
 PPXmlGrammar >> element [
 	"[39]   	element	   ::=   	 EmptyElemTag | STag content ETag"
 	
-	^ $< asPParser , qualified , attributes , whitespace optional , ('/>' asPParser / ($> asPParser , content , [ :stream | stream position ] asPParser , '</' asPParser , qualified , whitespace optional , $> asPParser)) ==> [ :nodes | 
+	^ $< asParser , qualified , attributes , whitespace optional , ('/>' asParser / ($> asParser , content , [ :stream | stream position ] asParser , '</' asParser , qualified , whitespace optional , $> asParser)) ==> [ :nodes | 
 		nodes fifth = '/>'
 			ifTrue: [ Array with: nodes second with: nodes third with: #() ]
 			ifFalse: [
 				nodes second = nodes fifth fifth
 					ifTrue: [ Array with: nodes second with: nodes third with: nodes fifth second ]
-					ifFalse: [ PP2Failure message: 'Expected </' , nodes second qualifiedName , '>' context: nil at: nodes fifth third ] ] ]
+					ifFalse: [ PPFailure message: 'Expected </' , nodes second qualifiedName , '>' context: nil at: nodes fifth third ] ] ]
 ]
 
 { #category : #'grammar-character' }
@@ -107,26 +107,14 @@ PPXmlGrammar >> misc [
 PPXmlGrammar >> nameChar [
 	"[4a]   	NameChar	   ::=   	 NameStartChar | ""-"" | ""."" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]"
 
-	^ PP2PredicateObjectNode new
-		predicate: (PP2CharSetPredicate on: [ :char | 
-			char = $- or: [ 
-			char = $. or: [ 
-			char = $: or: [ 
-			char = $_ or: [ 
-			char isAlphaNumeric ] ] ] ] ]);
-		predicateMessage: 'name expected'
+	^ PPPredicateObjectParser on: (PPCharSetPredicate on: [ :char | char = $- or: [ char = $. or: [ char = $: or: [ char = $_ or: [ char isAlphaNumeric ] ] ] ] ]) message: 'name expected'
 ]
 
 { #category : #'token-characters' }
 PPXmlGrammar >> nameStartChar [
 	"[4]   	NameStartChar	   ::=   	"":"" | [A-Z] | ""_"" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]"
 
-	^ PP2PredicateObjectNode new
-		predicate: (PP2CharSetPredicate on: [ :char | 
-			char = $: or: [ 
-			char = $_ or: [ 
-			char isLetter ] ] ]); 
-		predicateMessage: 'name expected'
+	^ PPPredicateObjectParser on: (PPCharSetPredicate on: [ :char | char = $: or: [ char = $_ or: [ char isLetter ] ] ]) message: 'name expected'
 ]
 
 { #category : #token }
@@ -141,7 +129,7 @@ PPXmlGrammar >> processing [
 	"[16]   	PI	   ::=   	'<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
 	[17]   	PITarget	   ::=   	 Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))"
 
-	^ '<?' asPParser , nameToken , (whitespace , '?>' asPParser negate star) optional flatten, '?>' asPParser
+	^ '<?' asParser , nameToken , (whitespace , '?>' asParser negate star) optional flatten, '?>' asParser
 		==> [ :nodes | Array with: nodes second with: nodes third ]
 ]
 
@@ -159,5 +147,5 @@ PPXmlGrammar >> start [
 PPXmlGrammar >> whitespace [
 	"[3]   	S	   ::=   	(#x20 | #x9 | #xD | #xA)+"
 
-	^ #space asPParser plus
+	^ #space asParser plus
 ]
