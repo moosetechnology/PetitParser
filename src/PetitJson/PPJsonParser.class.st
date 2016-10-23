@@ -24,7 +24,7 @@ PPJsonParser >> charOctal [
 
 { #category : #grammar }
 PPJsonParser >> elements [
-	^ super elements ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
+	^ super elements ==> [ :nodes | nodes reject: [ :each | each isKindOf: PPToken ] ]
 ]
 
 { #category : #tokens }
@@ -34,7 +34,7 @@ PPJsonParser >> falseToken [
 
 { #category : #grammar }
 PPJsonParser >> members [
-	^ super members ==> [ :nodes | nodes reject: [ :each | each isToken ] ]
+	^ super members ==> [ :nodes | nodes reject: [ :each | each isKindOf: PPToken ] ]
 ]
 
 { #category : #tokens }
@@ -44,7 +44,7 @@ PPJsonParser >> nullToken [
 
 { #category : #tokens }
 PPJsonParser >> numberToken [
-	^ super numberToken ==> [ :token | (token inputValue copyWithout: $+) asLowercase asNumber ]
+	^ super numberToken ==> [ :token | (token value copyWithout: $+) asLowercase asNumber ]
 ]
 
 { #category : #grammar }
