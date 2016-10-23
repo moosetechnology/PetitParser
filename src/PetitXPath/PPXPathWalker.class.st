@@ -32,7 +32,7 @@ PPXPathWalker >> createXPathNodesFor: aString [
 { #category : #'as yet unclassified' }
 PPXPathWalker >> find: aString [
 	^ self 
-		resolve: (self createXPathNodesFor: aString) value
+		resolve: (self createXPathNodesFor: aString) 
 		in: self xmlElement
 ]
 
