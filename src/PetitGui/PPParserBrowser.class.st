@@ -197,7 +197,7 @@ PPParserBrowser >> productionsIn: composite [
 					list pane browser update ]
 			on: $x
 			entitled: 'Remove (x)';
-		selectionAct: [ :list :class | Smalltalk tools browser fullOnClass: class selector: list selection ]
+		selectionAct: [ :list :class | Smalltalk tools browser openOnClass: class selector: list selection ]
 			on: $b
 			entitled: 'Browse (b)';
 		selectionAct: [ :list :class | (self production: list selection from: class) explore ]

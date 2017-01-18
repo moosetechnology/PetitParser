@@ -250,7 +250,7 @@ PPDrabBrowser >> browseSelectorsOn: aBrowser [
 			on: $r entitled: 'Remove (x)';
 		selectionAct: [
 			Smalltalk tools browser 
-				fullOnClass: self selectedClass 
+				openOnClass: self selectedClass 
 				selector: self selectedSelector ] 
 			on: $b entitled: 'Browse (b)'
 ]
