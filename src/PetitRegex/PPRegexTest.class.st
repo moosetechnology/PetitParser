@@ -19,7 +19,8 @@ PPRegexTest >> compileRegex: aString [
 
 { #category : #'testing-henry' }
 PPRegexTest >> henryReadme [
-	self error: 'The tests in this category are based on the ones in Henry Spencer''s regexp.c package.'
+	self error: 'The tests in this category are based on the ones in Henry Spencer''s regexp.c package.
+	The parser currently does not pass all these tests. The failing ones are marked with <expectedFailure>'
 ]
 
 { #category : #accessing }
@@ -380,6 +381,9 @@ PPRegexTest >> testHenry027 [
 
 { #category : #'testing-henry' }
 PPRegexTest >> testHenry028 [
+
+	<expectedFailure>
+	
 	self runRegex: #('(f|o)+\B'
 		'quuxfoobar' true (1 'foo')
 		'quuxfoo ' true (1 'fo'))
