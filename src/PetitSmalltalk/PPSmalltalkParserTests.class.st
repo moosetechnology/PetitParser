@@ -59,7 +59,6 @@ PPSmalltalkParserTests >> testArgumentsBlock3 [
 { #category : #testing }
 PPSmalltalkParserTests >> testArray1 [
 	super testArray1.
-	self assert: result isArray.
 	self assert: result statements isEmpty.
 	self assert: result periods isEmpty
 ]
@@ -67,7 +66,6 @@ PPSmalltalkParserTests >> testArray1 [
 { #category : #testing }
 PPSmalltalkParserTests >> testArray2 [
 	super testArray2.
-	self assert: result isArray.
 	self assert: result periods isEmpty.
 	self assert: result statements size equals: 1.
 	self assert: result statements first isMessage.
@@ -77,7 +75,6 @@ PPSmalltalkParserTests >> testArray2 [
 { #category : #testing }
 PPSmalltalkParserTests >> testArray3 [
 	super testArray3.
-	self assert: result isArray.
 	self assert: result periods size equals: 1.
 	self assert: result statements size equals: 2.
 	self assert: result statements first isMessage.
@@ -89,7 +86,6 @@ PPSmalltalkParserTests >> testArray3 [
 { #category : #testing }
 PPSmalltalkParserTests >> testArray4 [
 	super testArray4.
-	self assert: result isArray.
 	self assert: result periods size equals: 2.
 	self assert: result statements size equals: 2.
 	self assert: result statements first isMessage.
