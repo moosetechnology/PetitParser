@@ -1,3 +1,20 @@
+"
+I am a grammar to parse YAML.
+See http://yaml.org/ for inforation about YAML.
+
+http://www.yaml.org/spec/1.2/spec.html has the gory details.
+
+There is a BNF at https://gist.github.com/tociyuki/3936873
+
+start points to l_bare_document
+
+Properties are not yet supported.
+| and & are not supported either.
+
+
+
+
+"
 Class {
 	#name : #PPYAMLGrammar,
 	#superclass : #PPCompositeParser,
@@ -126,7 +143,7 @@ Class {
 	#category : #PetitYAML
 }
 
-{ #category : #indentation }
+{ #category : #spec }
 PPYAMLGrammar >> aligns [
 	^ [ :context | 
 		context indentStack isEmpty ifFalse: [ 
@@ -139,7 +156,7 @@ PPYAMLGrammar >> autoDetect: context [
 	^ self autoDetect: context blockHeader: false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> autoDetect: context blockHeader: blockHeader [
 	| retval position |
 	position := context position.
@@ -366,7 +383,7 @@ PPYAMLGrammar >> c_l_block_map_implicit_value [
 	^ $: asParser, (s_l_block_node YAMLBlockOut / ((e_node, s_l_comments) ==> #first)) ==> #second
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> c_l_block_seq_entry [
 	^ ($- asParser, ns_char not), s_l_block_indented YAMLBlockIn"(n,block_in)" ==> #last
 ]
@@ -463,9 +480,16 @@ PPYAMLGrammar >> e_scalar [
 { #category : #spec }
 PPYAMLGrammar >> l_bare_document [ 	
 	^ s_l_block_node "(-1,block_in)" >=>
-	[ :context |
+	[ :context :cc |
+		| retval aYAMLContext |
+
+	
+		aYAMLContext := context YAMLContext.
 		context YAMLContext: #'block-in'.
 		context YAMLN: -1.
+
+		retval := cc value.
+		retval.
 	]
 ]
 
@@ -497,7 +521,7 @@ PPYAMLGrammar >> l_block_mapping [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> l_block_sequence [
 	^ ( s_indent "(n+m)", c_l_block_seq_entry"(n+m)" ==> #second) plus
 		"/* For some fixed auto_detected m > 0 */ "
@@ -513,7 +537,7 @@ PPYAMLGrammar >> l_block_sequence [
 	]		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> l_chomped_empty [ 	
 	^ 
 	(l_strip_empty if: [ :context | context YAMLChomp = #strip ]) /
@@ -849,7 +873,7 @@ PPYAMLGrammar >> ns_l_compact_mapping [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> ns_l_compact_sequence [
 	^ c_l_block_seq_entry, (s_indent, c_l_block_seq_entry ==> #second) star
 	map: [ :first :rest |
@@ -1059,7 +1083,7 @@ PPYAMLGrammar >> s_l_block_in_block [
 	^ s_l_block_scalar / s_l_block_collection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammar >> s_l_block_indented [ 	
 	"I did the hack here, because yaml's indent is n*space, 
 		mine is connected to the column"
@@ -1176,7 +1200,7 @@ PPYAMLGrammar >> s_white [
 	^ s_space / s_tab
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPYAMLGrammar >> start [
 	^ l_bare_document
 ]

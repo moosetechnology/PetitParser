@@ -7,12 +7,12 @@ Class {
 	#category : #PetitYAML
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPYAMLGrammarTest >> context [
 	^ context
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPYAMLGrammarTest >> debug: aString rule: aSymbol [
 	| production |
 	production := self parserInstanceFor: aSymbol.
@@ -26,15 +26,68 @@ PPYAMLGrammarTest >> debug: aString rule: aSymbol [
 	^ result
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PPYAMLGrammarTest >> parserClass [
 	^ PPYAMLGrammar
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 PPYAMLGrammarTest >> setUp [
 	super setUp.
 	context := PPContext new.
+]
+
+{ #category : #'tests - complex' }
+PPYAMLGrammarTest >> testDocument [
+	| string |
+	string :='receipt:     Oz-Ware Purchase Invoice'.
+
+	self parse: string rule: #l_bare_document.
+	self assert: result size = 1.
+	self assert: (result at: 'receipt') = 'Oz-Ware Purchase Invoice'
+]
+
+{ #category : #'tests - complex' }
+PPYAMLGrammarTest >> testDocument1 [
+	| string |
+	string :='receipt:     Oz-Ware Purchase Invoice
+date:        2012-08-06
+customer:
+    given:   Dorothy
+    family:  Gale
+
+items:
+    - part_no:   A4786
+      descrip:   Water Bucket (Filled)
+      price:     1.47
+      quantity:  4
+
+    - part_no:   E1628
+      descrip:   High Heeled "Ruby" Slippers
+      size:      8
+      price:     100.27
+      quantity:  1
+'.
+
+	self parse: (string allButFirst:4) rule: #l_bare_document.
+	self assert: result size = 4.
+	self assert: ((result at: 'items') second at: 'price') = '100.27'.
+	self assert: ((result at: 'items') first at: 'part_no') = 'A4786'
+	
+]
+
+{ #category : #'tests - complex' }
+PPYAMLGrammarTest >> testDocument2 [
+	| string |
+	string :='receipt:     Oz-Ware Purchase Invoice
+date:        2012-08-06
+customer:
+    given:   Dorothy
+    family:  Gale'.
+
+	self parse: string rule: #start.
+	self assert: result size = 3.
+	self assert: ((result at: 'customer') at: #family) = 'Gale'
 ]
 
 { #category : #'tests - complex' }
@@ -278,7 +331,7 @@ PPYAMLGrammarTest >> test_c_l_block_map_explicit_entry [
 	self assert: result value second = 'two'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammarTest >> test_c_l_block_map_explicit_key [
 	context YAMLN: 1.
 	context YAMLM: 1.
@@ -294,7 +347,7 @@ PPYAMLGrammarTest >> test_c_l_block_map_explicit_key [
 	self assert: result = ('block key', String cr).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammarTest >> test_c_l_block_map_explicit_value [
 	context YAMLN: 1.
 	context YAMLM: 1.
@@ -1134,7 +1187,7 @@ PPYAMLGrammarTest >> test_s_l_block_indented [
 	self assert: result second = 'bar'.	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #spec }
 PPYAMLGrammarTest >> test_s_l_block_indented_sequence [
 	context YAMLContext: #'block-in'.
 	context YAMLM: 3.
