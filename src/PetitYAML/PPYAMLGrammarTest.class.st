@@ -265,7 +265,7 @@ deploy:
 
 	self parse: string rule: #l_bare_document.
 	self assert: result size = 9.
-	result inspect.
+	
 
 ]
 
