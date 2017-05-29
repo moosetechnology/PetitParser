@@ -141,6 +141,134 @@ PPYAMLGrammarTest >> testSequence2 [
 	self assert: result size = 4.
 ]
 
+{ #category : #'tests - complex' }
+PPYAMLGrammarTest >> testTravisYml [
+	| string |
+	string :='language: c
+sudo: false
+cache:
+  directories:
+    - opensmalltalk-vm/.thirdparty-cache
+git:
+  depth: 5
+addons:
+  apt:
+    packages:
+      - debhelper
+      - devscripts
+      - libasound2-dev
+      - libssl-dev
+      - libfreetype6-dev
+      - libx11-dev
+      - libxext-dev
+      - gcc-multilib
+      - uuid-dev
+      - zip
+      # next ones are required for compiling libgit2
+      - cmake
+      - libssh2-1-dev
+      - openssh-client
+      - openssh-server
+      - libtool
+      - automake
+      - autoconf
+matrix:
+  include:
+    - os: osx
+      env: ARCH="macos32x86" FLAVOR="pharo.cog.spur" SRC_ARCH="i386"
+      after_deploy: 
+        - ./scripts/deploy-after.sh
+    - os: osx
+      env: ARCH="macos64x64" FLAVOR="pharo.cog.spur" SRC_ARCH="x86_64"
+    - os: linux
+      env: ARCH="linux32x86" FLAVOR="pharo.cog.spur" SRC_ARCH="i386" HEARTBEAT="threaded"
+      addons:
+        apt:
+          packages:
+          - debhelper
+          - devscripts
+          - libc6-dev:i386
+          - libasound2:i386
+          - libasound2-dev:i386
+          - libssl-dev:i386
+          - libssl0.9.8:i386
+          - libfreetype6-dev:i386
+          - libx11-dev:i386
+          - libsm-dev:i386
+          - libice-dev:i386
+          - libgl1-mesa-glx:i386
+          - libgl1-mesa-dev:i386
+          - libxext-dev:i386
+          - libglapi-mesa:i386
+          - gcc-multilib
+          - uuid-dev:i386
+    - os: linux
+      env: ARCH="linux32x86" FLAVOR="pharo.cog.spur" SRC_ARCH="i386" HEARTBEAT="itimer"
+      addons:
+        apt:
+          packages:
+          - debhelper
+          - devscripts
+          - libc6-dev:i386
+          - libasound2:i386
+          - libasound2-dev:i386
+          - libssl-dev:i386
+          - libssl0.9.8:i386
+          - libfreetype6-dev:i386
+          - libx11-dev:i386
+          - libsm-dev:i386
+          - libice-dev:i386
+          - libgl1-mesa-glx:i386
+          - libgl1-mesa-dev:i386
+          - libxext-dev:i386
+          - libglapi-mesa:i386
+          - gcc-multilib
+          - uuid-dev:i386
+    - os: linux
+      env: ARCH="linux64x64" FLAVOR="pharo.cog.spur" SRC_ARCH="x86_64" HEARTBEAT="threaded"
+    - os: linux
+      env: ARCH="linux64x64" FLAVOR="pharo.cog.spur" SRC_ARCH="x86_64" HEARTBEAT="itimer"
+    - os: linux
+      sudo: required
+      env: ARCH="linux32ARMv6" FLAVOR="pharo.cog.spur" SRC_ARCH="i386" CHROOT="schroot -p -c rpi
+        -- bash -c "
+      dist: trusty
+      group: edge
+      install:
+        - (cd opensmalltalk-vm && ./.travis_install.sh)
+script:
+  - (echo $PATH)
+  - (cd scripts && ./build-sources.sh -a $SRC_ARCH)
+  - (cd scripts && ./build-makefile-linux.sh)
+  - (cd opensmalltalk-vm && $CHROOT ./.travis_build.sh)
+  - (cd scripts && ./pack-vm.sh -p $ARCH -a $SRC_ARCH)
+  - ./scripts/run-tests.sh
+before_deploy: 
+  - (cd scripts && sh ./deploy-key.sh)
+  - ./scripts/deploy-before.sh
+deploy:
+  - provider: bintray
+    skip_cleanup: true
+    file: .bintray.json
+    user: $BINTRAY_USER
+    key: $BINTRAY_API_KEY
+    on:
+      branch: master
+      repo: pharo-project/pharo-vm
+  - provider: script
+    skip_cleanup: true
+    script: ./scripts/deploy-files.pharo.org.sh
+    on:
+      branch: master
+      repo: pharo-project/pharo-vm
+'.
+
+	self parse: string rule: #l_bare_document.
+	self assert: result size = 9.
+	result inspect.
+
+]
+
 { #category : #spec }
 PPYAMLGrammarTest >> test_b_chomped_last [
 	context YAMLChomp: #'strip'.
