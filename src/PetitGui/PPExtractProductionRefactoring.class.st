@@ -1,5 +1,8 @@
+"
+PetitParser Refactoring: extraction of a production rule
+"
 Class {
-	#name : #PPExtractProdcutionRefactoring,
+	#name : #PPExtractProductionRefactoring,
 	#superclass : #RBExtractMethodRefactoring,
 	#instVars : [
 		'targetProduction'
@@ -8,19 +11,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-PPExtractProdcutionRefactoring class >> onClass: aClass production: aSelector interval: anInterval to: aTargetSelector [
+PPExtractProductionRefactoring class >> onClass: aClass production: aSelector interval: anInterval to: aTargetSelector [
 	^ (self extract: anInterval from: aSelector in: aClass)
 		setTargetProduction: aTargetSelector;
 		yourself
 ]
 
 { #category : #transforming }
-PPExtractProdcutionRefactoring >> existingSelector [
+PPExtractProductionRefactoring >> existingSelector [
 	^ nil
 ]
 
 { #category : #transforming }
-PPExtractProdcutionRefactoring >> getNewMethodName [
+PPExtractProductionRefactoring >> getNewMethodName [
 	parameters isEmpty
 		ifFalse: [ self refactoringError: 'Cannot extract production since it contains references.' ].
 	targetProduction asSymbol isUnary
@@ -29,7 +32,7 @@ PPExtractProdcutionRefactoring >> getNewMethodName [
 ]
 
 { #category : #transforming }
-PPExtractProdcutionRefactoring >> nameNewMethod: aSymbol [ 
+PPExtractProductionRefactoring >> nameNewMethod: aSymbol [ 
 	class addInstanceVariable: aSymbol asString.
 	extractedParseTree renameSelector: aSymbol andArguments: #().
 	modifiedParseTree := RBParseTreeRewriter 
@@ -39,7 +42,7 @@ PPExtractProdcutionRefactoring >> nameNewMethod: aSymbol [
 ]
 
 { #category : #preconditions }
-PPExtractProdcutionRefactoring >> preconditions [
+PPExtractProductionRefactoring >> preconditions [
 	^ (self checkCompositeParser: class)
 		& super preconditions		
 		& (RBCondition definesSelector: targetProduction asSymbol in: class) not
@@ -47,11 +50,11 @@ PPExtractProdcutionRefactoring >> preconditions [
 ]
 
 { #category : #initialization }
-PPExtractProdcutionRefactoring >> setTargetProduction: aSymbol [
+PPExtractProductionRefactoring >> setTargetProduction: aSymbol [
 	targetProduction := aSymbol
 ]
 
 { #category : #requests }
-PPExtractProdcutionRefactoring >> shouldExtractAssignmentTo: aString [
+PPExtractProductionRefactoring >> shouldExtractAssignmentTo: aString [
 	^ false
 ]

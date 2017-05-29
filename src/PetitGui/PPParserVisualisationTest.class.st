@@ -1,3 +1,6 @@
+"
+Tests for parsers visualisations.
+"
 Class {
 	#name : #PPParserVisualisationTest,
 	#superclass : #TestCase,

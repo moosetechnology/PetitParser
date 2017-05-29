@@ -1,3 +1,6 @@
+"
+Tests for parser debugger results.
+"
 Class {
 	#name : #PPParserDebuggerResultTest,
 	#superclass : #TestCase,

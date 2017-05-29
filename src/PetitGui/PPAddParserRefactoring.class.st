@@ -1,3 +1,6 @@
+"
+PetitParser Refactoring: addition of a parser
+"
 Class {
 	#name : #PPAddParserRefactoring,
 	#superclass : #RBRefactoring,

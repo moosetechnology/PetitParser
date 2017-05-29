@@ -1,3 +1,7 @@
+"
+Provides the right part of the PPBrowser when a parser is selected.
+
+"
 Class {
 	#name : #PPDrabBrowser,
 	#superclass : #Object,
@@ -243,7 +247,7 @@ PPDrabBrowser >> browseSelectorsOn: aBrowser [
 				self selectedSelector: selector asSymbol ] ]
 			on: $r entitled: 'Rename... (r)';
 		selectionAct: [
-			self performRefactoring: (PPRemoveProdcutionRefactoring
+			self performRefactoring: (PPRemoveProductionRefactoring
 				onClass: self selectedClass
 				production: self selectedSelector).
 			self selectedSelector: nil ]
@@ -264,7 +268,7 @@ PPDrabBrowser >> browseSourceOn: aBrowser [
 		smalltalkClass: [ self selectedClass ];
 		act: [ :node |
 			| refactoring |
-			refactoring := PPDefineProdcutionRefactoring 	
+			refactoring := PPDefineProductionRefactoring 	
 				onClass: self selectedClass 
 				source: node text asString
 				protocols: #(production).

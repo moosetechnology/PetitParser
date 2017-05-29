@@ -1,13 +1,22 @@
 "
+I allow one to type in content and run the parser for the content.
+
 This browser expects an instance of PPParser in the #entity port.
 
 self openOn: PPArithmeticParser new.
+
+
 "
 Class {
 	#name : #PPParserInspector,
 	#superclass : #GLMCompositePresentation,
 	#category : #'PetitGui-Core'
 }
+
+{ #category : #'as yet unclassified' }
+PPParserInspector class >> exampleOpenOn [
+	^ self new openOn: PPArithmeticParser new
+]
 
 { #category : #'as yet unclassified' }
 PPParserInspector class >> openOn: aParserInstance [
@@ -100,7 +109,7 @@ PPParserInspector >> progressIn: composite [
 		display: [:result :sample :stream :parser  | 
 			| morph |
 			morph := ScrollPane new.
-			morph color: Color white.
+			morph color: UITheme current backgroundColor.
 			morph scroller addMorph: stream asPositionMorph.
 			morph ]
 ]

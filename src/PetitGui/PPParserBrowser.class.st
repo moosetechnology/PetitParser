@@ -1,4 +1,7 @@
 "
+I provide the details on a parser view, as see in PPBrowser.
+
+
 self new openOn: PPArithmeticParser
 "
 Class {
@@ -193,7 +196,7 @@ PPParserBrowser >> productionsIn: composite [
 			on: $r
 			entitled: 'Rename (r)';
 		selectionAct: [ :list :class | 
-					PPRefactoringUtils new performRefactoring: (PPRemoveProdcutionRefactoring onClass: class production: list selection).
+					PPRefactoringUtils new performRefactoring: (PPRemoveProductionRefactoring onClass: class production: list selection).
 					list pane browser update ]
 			on: $x
 			entitled: 'Remove (x)';
@@ -225,7 +228,7 @@ PPParserBrowser >> sourceIn: composite [
 					title: 'Extract production'.
 				selector isEmptyOrNil ifFalse: [
 					selector := selector asSymbol.
-					refactoring := PPExtractProdcutionRefactoring
+					refactoring := PPExtractProductionRefactoring
 						onClass: class
 						production: production
 						interval: text selectionInterval
@@ -237,7 +240,7 @@ PPParserBrowser >> sourceIn: composite [
 			entitled: 'Extract production';		
 		act: [ :text :class :production | 
 				| selector refactoring |
-				refactoring := PPDefineProdcutionRefactoring 	
+				refactoring := PPDefineProductionRefactoring 	
 						onClass: class 
 						source: text text asString 
 						protocols: #(grammar).

@@ -1,5 +1,8 @@
+"
+PetitParser Refactoring: removal of a production rule
+"
 Class {
-	#name : #PPRemoveProdcutionRefactoring,
+	#name : #PPRemoveProductionRefactoring,
 	#superclass : #RBRefactoring,
 	#instVars : [
 		'production',
@@ -9,7 +12,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PPRemoveProdcutionRefactoring class >> onClass: aClass production: aSelector [
+PPRemoveProductionRefactoring class >> onClass: aClass production: aSelector [
 	^ self new
 		setClass: aClass;
 		setProduction: aSelector;
@@ -17,24 +20,24 @@ PPRemoveProdcutionRefactoring class >> onClass: aClass production: aSelector [
 ]
 
 { #category : #preconditions }
-PPRemoveProdcutionRefactoring >> preconditions [
+PPRemoveProductionRefactoring >> preconditions [
 	^ (self checkCompositeParser: class)
 		& (RBCondition definesSelector: production asSymbol in: class)
 		& (RBCondition definesInstanceVariable: production asString in: class)
 ]
 
 { #category : #initialization }
-PPRemoveProdcutionRefactoring >> setClass: aClass [
+PPRemoveProductionRefactoring >> setClass: aClass [
 	class := self classObjectFor: aClass
 ]
 
 { #category : #initialization }
-PPRemoveProdcutionRefactoring >> setProduction: aSymbol [
+PPRemoveProductionRefactoring >> setProduction: aSymbol [
 	production := aSymbol
 ]
 
 { #category : #transforming }
-PPRemoveProdcutionRefactoring >> transform [
+PPRemoveProductionRefactoring >> transform [
 	class removeMethod: production asSymbol.
 	class removeInstanceVariable: production asString
 ]

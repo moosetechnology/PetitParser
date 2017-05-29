@@ -1,3 +1,6 @@
+"
+PetitParser Refactoring: removal of a parser
+"
 Class {
 	#name : #PPRemoveParserRefactoring,
 	#superclass : #RBRemoveClassRefactoring,

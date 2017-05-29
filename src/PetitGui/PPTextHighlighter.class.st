@@ -9,7 +9,9 @@ PPTextHighlighter new
 	parser: YourParser new;
 	color: 'tokenName1' with: Color blue;
 	color: 'tokenName2' with: Color gray;
-	highlight: string.
+	highlight: aString.
+	
+There is more to this as one can also use bold: etc to add further TextAttributes.
 "
 Class {
 	#name : #PPTextHighlighter,

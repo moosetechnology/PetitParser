@@ -1,3 +1,6 @@
+"
+Tests for grammar refactorings
+"
 Class {
 	#name : #PPGrammarRefactoringTest,
 	#superclass : #TestCase,
@@ -58,7 +61,7 @@ PPGrammarRefactoringTest >> testAddParserWithSuperclass [
 PPGrammarRefactoringTest >> testDefineProduction [
 	self
 		performRefactoring:
-			(PPDefineProdcutionRefactoring
+			(PPDefineProductionRefactoring
 				onClass: PPArithmeticParser
 				source: 'function ^ #any plus , $( , $) ==> [ :e | 0 ]'
 				protocols: (Array with: #productions)).
@@ -75,7 +78,7 @@ PPGrammarRefactoringTest >> testDefineProduction [
 PPGrammarRefactoringTest >> testExtractProduction [
 	self
 		performRefactoring:
-			(PPExtractProdcutionRefactoring
+			(PPExtractProductionRefactoring
 				onClass: PPArithmeticParser
 				production: #addition
 				interval: (36 to: 60)
@@ -104,7 +107,7 @@ PPGrammarRefactoringTest >> testRemoveParser [
 
 { #category : #'testing-productions' }
 PPGrammarRefactoringTest >> testRemoveProduction [
-	self performRefactoring: (PPRemoveProdcutionRefactoring onClass: PPArithmeticParser production: #addition).
+	self performRefactoring: (PPRemoveProductionRefactoring onClass: PPArithmeticParser production: #addition).
 	self assert: self changes size equals: 2.
 	self assert: self changes first class equals: RBRemoveMethodChange.
 	self assert: self changes first selector equals: #addition.

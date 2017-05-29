@@ -1,3 +1,6 @@
+"
+PetitParser Refactoring: renaming of a production rule.
+"
 Class {
 	#name : #PPRenameProdcutionRefactoring,
 	#superclass : #RBRefactoring,
