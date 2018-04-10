@@ -4,7 +4,7 @@ Extension { #name : #PPToken }
 PPToken >> gtInspectorSourceIn: composite [
 	<gtInspectorPresentationOrder: 10> 
 
-	^ composite pharoMethod 
+	^ composite text 
 		title: 'Source';
 		display: [ self collection asString ];
 		initialize: [ :presentation | 
