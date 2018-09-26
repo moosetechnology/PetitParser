@@ -159,6 +159,8 @@ ConfigurationOfPetitMSE >> development: spec [
 	spec for: #'pharo5.x' version: '1.0'.
 
 	spec for: #'pharo6.x' version: '0.2-baseline'.
+	
+	spec for: #'pharo7.x' version: '0.2-baseline'.
 
 ]
 
