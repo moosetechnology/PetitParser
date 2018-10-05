@@ -168,6 +168,8 @@ ConfigurationOfPetitSmalltalk >> development: spec [
 	spec for: #'pharo5.x' version: #'stable'.
 
 	spec for: #'pharo6.x' version: '0.2-baseline'.
+	
+	spec for: #'pharo7.x' version: '0.2-baseline'.
 
 ]
 
