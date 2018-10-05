@@ -578,7 +578,30 @@ ConfigurationOfPetitParser >> baseline19: spec [
 		spec 
 			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
 		
-		spec group: 'ParserIDE' with: #( 'PetitGui' ) ] 
+		spec group: 'ParserIDE' with: #( 'PetitGui' ) ] .
+	
+	spec
+    for: #(#'pharo6.x')
+    do: [
+		spec
+			baseline: 'Glamour' with: [ 
+				spec repository: 'github://moosetechnology/Glamour:pharo6/src' ].
+		spec 
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+		
+		spec group: 'ParserIDE' with: #( 'PetitGui' ) ].
+	
+	spec
+    for: #(#'pharo7.x')
+    do: [
+		spec
+			baseline: 'Glamour' with: [ 
+				spec repository: 'github://moosetechnology/Glamour/src' ].
+		spec 
+			package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer')].
+		
+		spec group: 'ParserIDE' with: #( 'PetitGui' ) ]
+
 ]
 
 { #category : #'symbolic versions' }
@@ -598,6 +621,8 @@ ConfigurationOfPetitParser >> development: spec [
 	spec for: #'pharo5.x' version: #'stable'.
 
 	spec for: #'pharo6.x' version: '1.9-baseline'.
+	
+	spec for: #'pharo7.x' version: '1.9-baseline'.
 
 ]
 
