@@ -1,6 +1,6 @@
 Extension { #name : #PositionableStream }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 PositionableStream >> asPetitStream [
 	"Some of my subclasses do not use the instance-variables collection, position and readLimit but instead have a completely different internal representation. In these cases just use the super implementation that is inefficient but should work in all cases."
 
@@ -14,7 +14,7 @@ PositionableStream >> asPetitStream [
 	^ super asPetitStream
 ]
 
-{ #category : #'*petitparser-core' }
+{ #category : #'*PetitParser' }
 PositionableStream >> peekTwice [
 	"Answer what would be returned if the message next were sent to the 
 	receiver. If the receiver is at the end, answer nil."

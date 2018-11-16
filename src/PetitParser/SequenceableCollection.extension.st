@@ -1,6 +1,6 @@
 Extension { #name : #SequenceableCollection }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 SequenceableCollection >> asPetitStream [
 	^ PPStream on: self
 ]

@@ -1,18 +1,18 @@
 Extension { #name : #Object }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 Object >> asParser [
 	"Answer a parser accepting the receiving object."
 
 	^ PPPredicateObjectParser expect: self
 ]
 
-{ #category : #'*petitparser-core-testing' }
+{ #category : #'*PetitParser' }
 Object >> isPetitFailure [
 	^ false
 ]
 
-{ #category : #'*petitparser-core-testing' }
+{ #category : #'*PetitParser' }
 Object >> isPetitParser [
 	^ false
 ]

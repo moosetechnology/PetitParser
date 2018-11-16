@@ -1,6 +1,6 @@
 Extension { #name : #Interval }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 Interval >> asParser [    
 	"Create a range of characters between start and stop."
 

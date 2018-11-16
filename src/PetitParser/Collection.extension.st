@@ -1,11 +1,11 @@
 Extension { #name : #Collection }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 Collection >> asChoiceParser [
 	^ PPChoiceParser withAll: (self collect: [ :each | each asParser ])
 ]
 
-{ #category : #'*petitparser-converting' }
+{ #category : #'*PetitParser' }
 Collection >> asParser [    
 	"Create a range of characters between start and stop."
 
@@ -24,7 +24,7 @@ Collection >> asParser [
 
 ]
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 Collection >> asSequenceParser [
 	^ PPSequenceParser withAll: (self collect: [ :each | each asParser ])
 ]

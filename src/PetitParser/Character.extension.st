@@ -1,6 +1,6 @@
 Extension { #name : #Character }
 
-{ #category : #'*petitparser-core-converting' }
+{ #category : #'*PetitParser' }
 Character >> asParser [
 	"Answer a parser that accepts the receiving character."
 	
