@@ -1,6 +1,6 @@
 Extension { #name : #PPOptionalParser }
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPOptionalParser >> isNullable [
 	^ true
 ]

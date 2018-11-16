@@ -1,11 +1,11 @@
 Extension { #name : #PPNotParser }
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPNotParser >> firstSets: aFirstDictionary into: aSet [
 	
 ]
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPNotParser >> isFirstSetTerminal [
 	^ true
 ]

@@ -1,6 +1,6 @@
 Extension { #name : #PPEndOfFileParser }
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPEndOfFileParser >> isNullable [ 
 	^ true
 ]

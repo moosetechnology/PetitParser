@@ -1,6 +1,6 @@
 Extension { #name : #PPRepeatingParser }
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPRepeatingParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
 	| firstSet |
 	super followSets: aFollowDictionary firstSets:  aFirstDictionary into: aSet.
@@ -9,12 +9,12 @@ PPRepeatingParser >> followSets: aFollowDictionary firstSets: aFirstDictionary i
 	self children do: [:p | (aFollowDictionary at: p) addAll: (firstSet reject: [:each | each isNullable]) ]
 ]
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPRepeatingParser >> isNullable [
 	^ min = 0
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPRepeatingParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
 	^ (super match: aParser inContext: aDictionary seen: anIdentitySet) and: [ self min = aParser min and: [ self max = aParser max ] ]
 ]

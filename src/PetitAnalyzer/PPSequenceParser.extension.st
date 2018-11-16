@@ -1,6 +1,6 @@
 Extension { #name : #PPSequenceParser }
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPSequenceParser >> cycleSet: aDictionary [
 	| firstSet |
 	1 to: parsers size do: [ :index |
@@ -10,7 +10,7 @@ PPSequenceParser >> cycleSet: aDictionary [
 	^ parsers
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 	| nullable |
 	parsers do: [ :parser |
@@ -24,7 +24,7 @@ PPSequenceParser >> firstSets: aFirstDictionary into: aSet [
 	aSet add: PPSentinel instance
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPSequenceParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
 	parsers keysAndValuesDo: [ :index :parser |
 		| followSet firstSet |

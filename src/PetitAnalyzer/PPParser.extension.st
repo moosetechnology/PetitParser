@@ -1,6 +1,6 @@
 Extension { #name : #PPParser }
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> allNamedParsers [
 	"Answer all the named parse nodes of the receiver."
 
@@ -10,7 +10,7 @@ PPParser >> allNamedParsers [
 	^ result
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> allNamedParsersDo: aBlock [
 	"Iterate over all the named parse nodes of the receiver."
 
@@ -19,12 +19,12 @@ PPParser >> allNamedParsersDo: aBlock [
 			ifTrue: [ aBlock value: each ] ]
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> copyInContext: aDictionary [
 	^ self copyInContext: aDictionary seen: IdentityDictionary new
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> copyInContext: aDictionary seen: aSeenDictionary [
 	| copy |
 	aSeenDictionary 
@@ -40,7 +40,7 @@ PPParser >> copyInContext: aDictionary seen: aSeenDictionary [
 	^ copy
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> cycleSet [
 	"Answer a set of all nodes that are within one or more cycles of left-recursion. This is generally not a problem if at least one of the nodes is memoized, but it might make the grammar very inefficient and should be avoided if possible."
 	
@@ -50,14 +50,14 @@ PPParser >> cycleSet [
 	^ cycles
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> cycleSet: aDictionary [
 	"PRIVATE: Answer the children that could be part of a cycle-set with the receiver, subclasses might restrict the number of children returned. aDictionary is pre-calcualted first-sets."
 
 	^ self children
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> cycleSet: aStack firstSets: aDictionary into: aSet [
 	"PRIVATE: Try to find a cycle, where aStack contains the previously visited parsers. The method returns quickly when the receiver is a terminal, terminals cannot be part of a cycle. If aStack already contains the receiver, then we are in a cycle. In this case we don't process the children further and add the nodes to aSet."
 
@@ -72,14 +72,14 @@ PPParser >> cycleSet: aStack firstSets: aDictionary into: aSet [
 	aStack removeLast
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> firstSet [
 	"Answer the first-set of the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #firstSets to calculate the first-sets at once."
 	
 	^ self firstSets at: self
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> firstSets [
 	"Answer a dictionary with all the parsers reachable from the receiver as key and their first-set as value. The first-set of a parser is the list of terminal parsers that begin the parser derivable from that parser."
 	
@@ -101,21 +101,21 @@ PPParser >> firstSets [
 	^ firstSets
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> firstSets: aFirstDictionary into: aSet [
 	"PRIVATE: Try to add additional elements to the first-set aSet of the receiver, use the incomplete aFirstDictionary."
 
 	self children do: [ :parser | aSet addAll: (aFirstDictionary at: parser) ]
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> followSet [
 	"Answer the follow-set of the receiver starting at the receiver. Note, this implementation is inefficient when called on different receivers of the same grammar, instead use #followSets to calculate the follow-sets at once."
 
 	^ self followSets at: self
 ]
 
-{ #category : #'*petitanalyzer-querying' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> followSets [
 	"Answer a dictionary with all the parsers reachable from the receiver as key and their follow-set as value. The follow-set of a parser is the list of terminal parsers that can appear immediately to the right of that parser."
 	
@@ -139,14 +139,14 @@ PPParser >> followSets [
 	^ followSets
 ]
 
-{ #category : #'*petitanalyzer-private' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> followSets: aFollowDictionary firstSets: aFirstDictionary into: aSet [
 	"PRIVATE: Try to add additional elements to the follow-set aSet of the receiver, use the incomplete aFollowDictionary and the complete aFirstDictionary."
 	
 	self children do: [ :parser | (aFollowDictionary at: parser) addAll: aSet ]
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> innerChildren [
 	"Answer the inner children of the receiver."
 
@@ -156,14 +156,14 @@ PPParser >> innerChildren [
 	^ result
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> innerChildrenDo: aBlock [
 	"Iterate over the inner children of the receiver."
 
 	self innerChildrenDo: aBlock seen: IdentitySet new
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> innerChildrenDo: aBlock seen: aSet [
 	"Iterate over the inner children of the receiver."
 	
@@ -176,33 +176,33 @@ PPParser >> innerChildrenDo: aBlock seen: aSet [
 			each innerChildrenDo: aBlock seen: aSet ] ]
 ]
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> isFirstSetTerminal [
 	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
 
 	^ self children isEmpty
 ]
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> isNullable [
 	"Answer true if the receiver is a nullable parser, e.g. it can successfully parse nothing."
 	
 	^ false
 ]
 
-{ #category : #'*petitanalyzer-testing' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> isTerminal [
 	"Answer true if the receiver is a terminal or leaf parser, that means it does not delegate to any other parser."
 
 	^ self children isEmpty
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> match: aParser inContext: aDictionary [
 	^ self match: aParser inContext: aDictionary seen: IdentitySet new
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
 	"This is the default implementation to match two parsers. This code can properly handle recursion. This is code is supposed to be overridden in subclasses that add new state."
 
@@ -212,12 +212,12 @@ PPParser >> match: aParser inContext: aDictionary seen: anIdentitySet [
 	^ self class = aParser class and: [ self matchList: self children against: aParser children inContext: aDictionary seen: anIdentitySet ]
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> matchList: matchList against: parserList inContext: aDictionary seen: aSet [
 	^ self matchList: matchList index: 1 against: parserList index: 1 inContext: aDictionary seen: aSet
 ]
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> matchList: matchList index: matchIndex against: parserList index: parserIndex inContext: aDictionary seen: aSet [
 	| parser currentIndex currentDictionary currentSeen parsers |
 	matchList size < matchIndex
@@ -255,7 +255,7 @@ PPParser >> matchList: matchList index: matchIndex against: parserList index: pa
 		seen: aSet
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> namedChildren [
 	"Answer the named children of the receiver."
 
@@ -265,14 +265,14 @@ PPParser >> namedChildren [
 	^ result
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> namedChildrenDo: aBlock [
 	"Iterate over the named children of the receiver."
 
 	self namedChildrenDo: aBlock seen: IdentitySet new
 ]
 
-{ #category : #'*petitanalyzer-named' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> namedChildrenDo: aBlock seen: aSet [
 	"Iterate over the named children of the receiver."
 	
@@ -285,12 +285,12 @@ PPParser >> namedChildrenDo: aBlock seen: aSet [
 			ifFalse: [ aBlock value: each ] ]
 ]
 
-{ #category : #'*petitanalyzer-transforming' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> replace: aParser with: anotherParser [
 	"Replace the references of the receiver pointing to aParser with anotherParser."
 ]
 
-{ #category : #'*petitanalyzer-transforming' }
+{ #category : #'*PetitAnalyzer' }
 PPParser >> transform: aBlock [
 	"Answer a copy of all parsers reachable from the receiver transformed using aBlock."
 

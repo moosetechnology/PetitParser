@@ -1,6 +1,6 @@
 Extension { #name : #PPListParser }
 
-{ #category : #'*petitanalyzer-matching' }
+{ #category : #'*PetitAnalyzer' }
 PPListParser >> copyInContext: aDictionary seen: aSeenDictionary [
 	| copy copies |
 	aSeenDictionary at: self ifPresent: [ :value | ^ value ].
@@ -19,7 +19,7 @@ PPListParser >> copyInContext: aDictionary seen: aSeenDictionary [
 		yourself
 ]
 
-{ #category : #'*petitanalyzer-transforming' }
+{ #category : #'*PetitAnalyzer' }
 PPListParser >> replace: aParser with: anotherParser [
 	super replace: aParser with: anotherParser.
 	parsers keysAndValuesDo: [ :index :parser |
