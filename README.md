@@ -42,3 +42,17 @@ When a release contains only bug fixes, the patch number increase. When the rele
 Thus, it should be safe to depend on a fixed major version and moving minor version of this project.
 
 The first release on this Github repository matches with the last release that happened on Smalltalkhub (v1.9.2).
+
+## Packages removed during/after migration
+Some package were not migrable, thus they stayed on smalltalkhub. If you find a way to migrate them, please propose a PR:
+- ConfigurationOfSqlEvaluator
+- GT-InspectorExtensions-Pillar
+- PetitBeta
+- PetitSQL
+- SQL-Evaluator
+- SQL-Evaluator-GemStone
+- SQL-Evaluator-Pharo
+
+Because its unit tests were all broken, the Java island grammar has been removed.
+The last time it was available in this repository is at commit 37074366fb6587dd8554cc4cd9a8621dfa5487bd. Feel free to load the version of this repository pointed by this commit to reanimate this island grammar if you want. In such case, a PPR is welcome.
+
