@@ -52,7 +52,7 @@ PPXPathWalker >> resolve: node continueWith: remainingNodes [
 		ifNotEmpty: [ 
 			result isCollection
 				ifTrue: [ 
-					((result collect: [ :each | self resolve: remainingNodes in: each ]) deepFlatten 
+					((result collect: [ :each | self resolve: remainingNodes in: each ]) flattened 
 						select: #notNil)
 						ifEmpty: [ nil ] ]
 				ifFalse: [ self resolve: remainingNodes in: result ] ]

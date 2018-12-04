@@ -279,7 +279,7 @@ PPRubySeaGrammar >> primaryElement [
 { #category : #grammar }
 PPRubySeaGrammar >> program [
 	^ primary ==> [ :res | 
-		res flatten 
+		res flattened
 	]
 ]
 

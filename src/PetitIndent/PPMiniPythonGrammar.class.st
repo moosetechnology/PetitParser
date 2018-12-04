@@ -319,7 +319,7 @@ PPMiniPythonGrammar >> start [
 	^ (statement trimBlanks / ((emptyLine, lineEnd) ==> [:e | #() ])) nonEmpty star
 	
 	==> [ :e | 
-		e deepFlatten
+		e flattened
 	]
 ]
 
