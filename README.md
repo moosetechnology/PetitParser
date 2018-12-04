@@ -24,9 +24,10 @@ Metacello new
 
 ### Groups
 It is possible to load subpart(s) of this project using groups:
-- `Core`: Contains the core of the framework, without tests.
-- `Tests`: Contains extensions to SUnit to make parsers testing easier.
-- `Parsers`: Contains a collection of various parsers.
+- `Core`: Contains the core of the framework, without tests and extensions to SUnit to make parsers testing easier.
+- `Tests`: Contains tests of PetitParser's core.
+- `Examples`: Contains simple examples of grammars.
+- `Parser`: Contains a collection of various parsers.
 - `PetitIDE`: Contains graphical tools to develop and debug parsers.
 
 ## Version management
