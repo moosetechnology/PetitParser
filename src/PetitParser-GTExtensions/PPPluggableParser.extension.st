@@ -1,6 +1,6 @@
 Extension { #name : #PPPluggableParser }
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPPluggableParser >> displayName [
 	^ String streamContents: [ :stream | block sourceNode printOn: stream ]
 ]

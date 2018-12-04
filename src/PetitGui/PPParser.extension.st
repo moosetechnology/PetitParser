@@ -20,13 +20,6 @@ PPParser >> displayColor [
 ]
 
 { #category : #'*PetitGui' }
-PPParser >> displayName [
-	^ self name isNil
-		ifFalse: [ self name asString ]
-		ifTrue: [ self class name asString ]
-]
-
-{ #category : #'*PetitGui' }
 PPParser >> example [
 	^ String streamContents: [ :stream | self exampleOn: stream ] limitedTo: 1024
 ]

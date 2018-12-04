@@ -4,8 +4,3 @@ Extension { #name : #PPFailingParser }
 PPFailingParser >> displayColor [
 	^ Color red
 ]
-
-{ #category : #'*PetitGui' }
-PPFailingParser >> displayName [
-	^ message
-]

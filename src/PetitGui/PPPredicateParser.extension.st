@@ -1,11 +1,6 @@
 Extension { #name : #PPPredicateParser }
 
 { #category : #'*PetitGui' }
-PPPredicateParser >> displayName [
-	^ predicateMessage
-]
-
-{ #category : #'*PetitGui' }
 PPPredicateParser >> exampleOn: aStream [
 	"Produce a random character that is valid. If there are characters in the alpha-numeric range prefer those over all others."
 

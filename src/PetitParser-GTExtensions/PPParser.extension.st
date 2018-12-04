@@ -1,6 +1,13 @@
 Extension { #name : #PPParser }
 
 { #category : #'*PetitParser-GTExtensions' }
+PPParser >> displayName [
+	^ self name isNil
+		ifFalse: [ self name asString ]
+		ifTrue: [ self class name asString ]
+]
+
+{ #category : #'*PetitParser-GTExtensions' }
 PPParser >> enableDebug [
    | root newParser  |
 	root := PPParserDebuggerResult new.

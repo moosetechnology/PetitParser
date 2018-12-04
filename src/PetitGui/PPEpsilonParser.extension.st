@@ -1,11 +1,6 @@
 Extension { #name : #PPEpsilonParser }
 
 { #category : #'*PetitGui' }
-PPEpsilonParser >> displayName [
-	^ 'epsilon'
-]
-
-{ #category : #'*PetitGui' }
 PPEpsilonParser >> morphicShapeSeen: aSet depth: anInteger [
 	^ self morphicShapeSeen: aSet depth: anInteger do: [ :cc |
 		self newRowMorph
