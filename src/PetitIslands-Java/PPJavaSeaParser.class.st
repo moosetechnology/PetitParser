@@ -1,7 +1,7 @@
 Class {
 	#name : #PPJavaSeaParser,
 	#superclass : #PPJavaSeaGrammar,
-	#category : #'PetitIslands-Examples'
+	#category : #'PetitIslands-Java'
 }
 
 { #category : #'as yet unclassified' }

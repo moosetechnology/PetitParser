@@ -91,7 +91,7 @@ Class {
 		'javaClassInClassBody',
 		'methodDefInClassBody'
 	],
-	#category : #'PetitIslands-Examples'
+	#category : #'PetitIslands-Java'
 }
 
 { #category : #method }
