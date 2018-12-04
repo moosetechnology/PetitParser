@@ -1,16 +1,16 @@
 Extension { #name : #PPDelegateParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPDelegateParser >> displayDescription [
 	^ nil
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPDelegateParser >> exampleOn: aStream [
 	parser exampleOn: aStream
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*PetitGui' }
 PPDelegateParser >> morphicShapeSeen: aSet depth: anInteger [
 	^ self morphicShapeSeen: aSet depth: anInteger do: [ :cc |
 		self displayDescription isNil

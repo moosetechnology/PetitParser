@@ -1,6 +1,6 @@
 Extension { #name : #PPActionParser }
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPActionParser >> visualizationGraphType [
 	^ '[]'
 ]

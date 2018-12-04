@@ -1,6 +1,6 @@
 Extension { #name : #PPEndOfFileParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPEndOfFileParser >> exampleOn: aStream [ 
 	aStream nextPutAll: #'end-of-input'
 ]

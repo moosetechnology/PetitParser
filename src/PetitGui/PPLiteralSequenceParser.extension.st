@@ -1,6 +1,6 @@
 Extension { #name : #PPLiteralSequenceParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPLiteralSequenceParser >> exampleOn: aStream [
 	aStream nextPutAll: literal
 ]

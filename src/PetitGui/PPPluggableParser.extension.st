@@ -1,6 +1,6 @@
 Extension { #name : #PPPluggableParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPPluggableParser >> displayName [
 	^ String streamContents: [ :stream | block sourceNode printOn: stream ]
 ]

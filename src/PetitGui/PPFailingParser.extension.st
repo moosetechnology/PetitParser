@@ -1,11 +1,11 @@
 Extension { #name : #PPFailingParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPFailingParser >> displayColor [
 	^ Color red
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPFailingParser >> displayName [
 	^ message
 ]

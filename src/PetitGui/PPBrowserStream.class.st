@@ -154,7 +154,7 @@ PPBrowserStream >> positions [
 	^ positions
 ]
 
-{ #category : #'*petitgui-debug' }
+{ #category : #'gt-extension' }
 PPBrowserStream >> progressIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	composite morph 
@@ -188,7 +188,7 @@ PPBrowserStream >> step [
 		ifNotNil: [ :aContext | parsers addLast: aContext receiver ].
 ]
 
-{ #category : #'*petitgui-debug' }
+{ #category : #'gt-extension' }
 PPBrowserStream >> tallyIn: composite [
 	<gtInspectorPresentationOrder: 30>
 

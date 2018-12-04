@@ -1,6 +1,6 @@
 Extension { #name : #PPRepeatingParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPRepeatingParser >> displayDescription [
 	^ String streamContents: [ :stream |
 		min = 0 
@@ -10,7 +10,7 @@ PPRepeatingParser >> displayDescription [
 			ifFalse: [ stream print: max ] ]
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPRepeatingParser >> exampleOn: aStream [
 	"Perform the minimal repeatitions required, and a random amount of more if possible and if not that much output has been produced yet."
 	
@@ -22,7 +22,7 @@ PPRepeatingParser >> exampleOn: aStream [
 		super exampleOn: aStream ]
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPRepeatingParser >> visualizationGraphType [
 	^ '*'
 ]

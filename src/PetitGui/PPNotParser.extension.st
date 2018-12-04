@@ -1,10 +1,10 @@
 Extension { #name : #PPNotParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPNotParser >> displayDescription [
 	^ 'not'
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPNotParser >> exampleOn: aStream [
 ]

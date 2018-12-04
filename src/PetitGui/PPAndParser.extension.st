@@ -1,10 +1,10 @@
 Extension { #name : #PPAndParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPAndParser >> displayDescription [
 	^ 'and'
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPAndParser >> exampleOn: aStream [
 ]

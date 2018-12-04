@@ -1,6 +1,6 @@
 Extension { #name : #PPEpsilonParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPEpsilonParser >> displayName [
 	^ 'epsilon'
 ]

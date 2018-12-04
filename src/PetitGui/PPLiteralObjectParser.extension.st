@@ -1,6 +1,6 @@
 Extension { #name : #PPLiteralObjectParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPLiteralObjectParser >> exampleOn: aStream [
 	aStream nextPut: literal
 ]

@@ -10,7 +10,7 @@ RBRefactoring >> checkCompositeParser: aClass [
 		errorString: aClass printString , ' is <1?:not >a subclass of ' , self compositeParserClass printString)
 ]
 
-{ #category : #'*petitgui-utilities' }
+{ #category : #'*PetitGui' }
 RBRefactoring >> compositeParserClass [
 	^ self classObjectFor: #PPCompositeParser
 ]

@@ -1,11 +1,11 @@
 Extension { #name : #PPLiteralParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPLiteralParser >> displayName [
 	^ literal printString
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPLiteralParser >> visualizationGraphType [
 	^ literal printString
 ]

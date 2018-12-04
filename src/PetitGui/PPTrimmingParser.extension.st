@@ -1,6 +1,6 @@
 Extension { #name : #PPTrimmingParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPTrimmingParser >> exampleOn: aStream [
 	super exampleOn: aStream.
 	aStream nextPut: Character space

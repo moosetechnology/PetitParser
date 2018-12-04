@@ -1,6 +1,6 @@
 Extension { #name : #PPUnresolvedParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPUnresolvedParser >> displayColor [
 	^ Color red
 ]

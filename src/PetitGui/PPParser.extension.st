@@ -1,32 +1,32 @@
 Extension { #name : #PPParser }
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPParser >> backgroundForDepth: anInteger [
 	^ Color gray: 1.0 - (anInteger / 20.0)
 ]
 
-{ #category : #'*petitgui-debug' }
+{ #category : #'*PetitGui' }
 PPParser >> debug: anObject [
 	"Parse anObject with the receiving parser and answer the parse-result or an instance of PPFailure."
 	
 	^ self enableDebug parse: anObject asPetitStream
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPParser >> displayColor [
 	^ self isTerminal
 		ifTrue: [ Color r: 0.5 g: 0.0 b: 0.5 ]
 		ifFalse: [ Color blue ]
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPParser >> displayName [
 	^ self name isNil
 		ifFalse: [ self name asString ]
 		ifTrue: [ self class name asString ]
 ]
 
-{ #category : #'*petitgui-debug' }
+{ #category : #'*PetitGui' }
 PPParser >> enableDebug [
    | root newParser  |
 	root := PPParserDebuggerResult new.
@@ -56,12 +56,12 @@ PPParser >> enableDebug [
 
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPParser >> example [
 	^ String streamContents: [ :stream | self exampleOn: stream ] limitedTo: 1024
 ]
 
-{ #category : #'*petitgui-accessing' }
+{ #category : #'*PetitGui' }
 PPParser >> exampleOn: aStream [
 ]
 
@@ -124,7 +124,7 @@ PPParser >> gtTreeViewIn: composite [
 			shouldExpandToLevel: 6
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*PetitGui' }
 PPParser >> morphicProduction [
 	^ self newRowMorph
 		layoutInset: 4;
@@ -144,7 +144,7 @@ PPParser >> morphicProduction [
 		yourself
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*PetitGui' }
 PPParser >> morphicShapeDefault [
 	^ self newRowMorph
 		addMorphBack: (self newColumnMorph
@@ -164,12 +164,12 @@ PPParser >> morphicShapeDefault [
 		yourself
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*PetitGui' }
 PPParser >> morphicShapeSeen: aSet depth: anInteger [
 	^ self morphicShapeDefault
 ]
 
-{ #category : #'*petitgui-morphic' }
+{ #category : #'*PetitGui' }
 PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 	" avoid recursion "
 	(aSet includes: self)
@@ -187,7 +187,7 @@ PPParser >> morphicShapeSeen: aSet depth: anInteger do: aBlock [
 			depth: anInteger + 1 ]
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> namedParsers [
     | result |
     result := OrderedCollection new.
@@ -195,12 +195,12 @@ PPParser >> namedParsers [
     ^ result
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> namedParsersDo: aBlock [
     self namedParsersDo: aBlock seen: IdentitySet new
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> namedParsersDo: aBlock seen: aSet [
     self children do: [ :each | 
         (aSet includes: each)
@@ -211,7 +211,7 @@ PPParser >> namedParsersDo: aBlock seen: aSet [
 		            ifTrue: [ each namedParsersDo: aBlock seen: aSet ] ] ]
 ]
 
-{ #category : #'*petitgui-morphic-creational' }
+{ #category : #'*PetitGui' }
 PPParser >> newColumnMorph [
 	^ AlignmentMorph newColumn
 		cellPositioning: #topLeft;
@@ -223,7 +223,7 @@ PPParser >> newColumnMorph [
 		yourself
 ]
 
-{ #category : #'*petitgui-morphic-creational' }
+{ #category : #'*PetitGui' }
 PPParser >> newRowMorph [
 	^ AlignmentMorph newRow
 		cellPositioning: #topLeft;
@@ -235,7 +235,7 @@ PPParser >> newRowMorph [
 		yourself
 ]
 
-{ #category : #'*petitgui-morphic-creational' }
+{ #category : #'*PetitGui' }
 PPParser >> newSpacerMorph [
 	^ Morph new
 		color: Color transparent;
@@ -244,7 +244,7 @@ PPParser >> newSpacerMorph [
 		yourself
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> viewAllNamedParsers [
 	"
 	PPSmalltalkParser new viewAllNamedParsers
@@ -255,12 +255,12 @@ PPParser >> viewAllNamedParsers [
 	^ view openWithToolbarEntitled: 'All named parsers'
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames on: view [
 	self viewAllNamedParsersWithSelection: aCollectionOfNames previewing: [ :each | each name ] on: view
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBlock on: view [
 	| l |
 	view shape label
@@ -279,7 +279,7 @@ PPParser >> viewAllNamedParsersWithSelection: aCollectionOfNames previewing: aBl
 		layered
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> viewAllParsers [
 
 	"
@@ -292,7 +292,7 @@ PPParser >> viewAllParsers [
 	^ view
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> viewAllParsersOn: view [
 
 	view shape label 
@@ -309,7 +309,7 @@ PPParser >> viewAllParsersOn: view [
 	view treeLayout
 ]
 
-{ #category : #'*petitgui-mondrian' }
+{ #category : #'*PetitGui' }
 PPParser >> visualizationGraphType [
 	^ nil
 ]
