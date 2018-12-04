@@ -1,21 +1,21 @@
 Extension { #name : #PPXmlElement }
 
-{ #category : #'*petitxpath-extensions' }
+{ #category : #'*PetitXPath' }
 PPXmlElement >> contentDate [ 
 	^self contentText asDate
 ]
 
-{ #category : #'*petitxpath-extensions' }
+{ #category : #'*PetitXPath' }
 PPXmlElement >> contentDateAndTime [ 
 	^self contentText asTimeStamp 
 ]
 
-{ #category : #'*petitxpath-extensions' }
+{ #category : #'*PetitXPath' }
 PPXmlElement >> contentNumber [ 
 	^self contentText asNumber
 ]
 
-{ #category : #'*petitxpath-extensions' }
+{ #category : #'*PetitXPath' }
 PPXmlElement >> contentText [ 
 	^ self firstChild 
 		ifNotNil: [ :child | child data ]
