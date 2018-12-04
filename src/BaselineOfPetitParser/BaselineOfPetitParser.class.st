@@ -13,14 +13,14 @@ BaselineOfPetitParser >> baseline: spec [
 			spec
 				package: 'PetitParser';
 				package: 'PetitTests' with: [ spec requires: 'PetitParser' ];
-				package: 'PetitParser-Tests' with: [ spec requires: #('PetitParser' 'PetitTests') ];
+				package: 'PetitParser-Tests' with: [ spec requires: #('Core') ];
 				package: 'PetitParser-Examples' with: [ spec requires: 'PetitParser' ];
-				package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests' ];
-				package: 'PetitIslands' with: [ spec requires: #('PetitParser' 'PetitIndent' 'PetitTests' 'PetitAnalyzer') ];
+				package: 'PetitAnalyzer' with: [ spec requires: #('Core' 'PetitParser-Examples') ];
+				package: 'PetitIslands' with: [ spec requires: #('Core' 'PetitIndent' 'PetitAnalyzer') ];
 				package: 'PetitIslands-Examples' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitIslands-Tests' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
-				package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer') ].
+				package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer' 'PetitParser-GTExtensions') ].
 			
 			"This methods adds spec for all Grammars available in this repository."	
 			self defineGrammarsOn: spec.
@@ -29,24 +29,21 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Core' with: #('PetitParser' 'PetitTests');
 				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
+				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
+				group: 'Analyzer' with: #('Core' 'PetitAnalyzer');
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
-				group: 'Parser' with: #('PetitParser' 
-													'PetitTests' 
-													'PetitAnalyzer' 
-													'PetitSmalltalk' 
-													'PetitCSV' 
-													'PetitJson' 
-													'PetitMSE'
-													'PetitManifestMf' 
-													'PetitRegex'
-													'PetitXPath'
-													'PetitXml'
-													'PetitIndent'
-													'PetitIslands'
-													'PetitIslands-Examples'
-													'PetitIslands-Tests'
-													'Factorial-Language'
-													'PetitYAML');
+				group: 'Parser' with: #('PetitAnalyzer'
+												'PetitSmalltalk'
+												'PetitCSV'
+												'PetitJson'
+												'PetitMSE'
+												'PetitManifestMf'
+												'PetitRegex'
+												'PetitXPath'
+												'PetitXml'
+												'PetitIndent'
+												'Factorial-Language'
+												'PetitYAML');
 				group: 'ParserIDE' with: #( 'PetitGui' ).
 			spec
 				baseline: 'Glamour'
