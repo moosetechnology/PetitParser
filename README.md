@@ -54,5 +54,5 @@ Some package were not migrable, thus they stayed on smalltalkhub. If you find a 
 - SQL-Evaluator-Pharo
 
 Because its unit tests were all broken, the Java island grammar has been removed.
-The last time it was available in this repository is at commit 37074366fb6587dd8554cc4cd9a8621dfa5487bd. Feel free to load the version of this repository pointed by this commit to reanimate this island grammar if you want. In such case, a PPR is welcome.
+The last time it was available in this repository is at commit [37074366fb6587dd8554cc4cd9a8621dfa5487bd](https://github.com/moosetechnology/PetitParser/commit/37074366fb6587dd8554cc4cd9a8621dfa5487bd). Feel free to load the version of this repository pointed by this commit to reanimate this island grammar if you want. In such case, a PPR is welcome.
 
