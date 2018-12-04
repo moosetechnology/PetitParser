@@ -1,6 +1,8 @@
 # PetitParser
 Petit Parser is a framework for building parsers.
 
+The version of PetitParser on this repository is supported by Pharo 6.1 and Pharo 7. To use it with older Pharo version, please refer to the [Smalltalkhub repository](http://smalltalkhub.com/#!/~Moose/PetitParser).
+
 ## About Petit Parser
 Petit Parser is a framework for building parsers. It was originally developed by Lukas Renggli.
 
