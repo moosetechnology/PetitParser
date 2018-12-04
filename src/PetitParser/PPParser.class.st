@@ -200,10 +200,6 @@ PPParser >> if: aBlock [
 	^ PPConditionalParser on: self block: aBlock
 ]
 
-{ #category : #initialization }
-PPParser >> initialize [
-]
-
 { #category : #testing }
 PPParser >> isPetitParser [
 	^ true
