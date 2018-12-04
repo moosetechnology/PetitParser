@@ -27,3 +27,16 @@ It is possible to load subpart(s) of this project using groups:
 - `Parsers`: Contains a collection of various parsers.
 - `PetitIDE`: Contains graphical tools to develop and debug parsers.
 
+## Version management
+
+This project use semantic versionning to define the releases. This mean that each stable release of the project will get associate a version number of the form `vX.Y.Z`.
+
+- **X** define the major version number
+- **Y** define the minor version number
+- **Z** define the patch version number
+
+When a release contains only bug fixes, the patch number increase. When the release contains new features backward compatibles, the minor version increase. When the release contains breaking changes, the major version increase.
+
+Thus, it should be safe to depend on a fixed major version and moving minor version of this project.
+
+The first release on this Github repository matches with the last release that happened on Smalltalkhub (v1.9.2).
