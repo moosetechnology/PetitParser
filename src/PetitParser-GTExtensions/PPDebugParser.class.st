@@ -16,7 +16,7 @@ Class {
 	#instVars : [
 		'root'
 	],
-	#category : #'PetitGui-Core'
+	#category : #'PetitParser-GTExtensions'
 }
 
 { #category : #'instance creation' }
