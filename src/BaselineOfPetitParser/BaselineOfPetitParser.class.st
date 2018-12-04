@@ -68,5 +68,5 @@ BaselineOfPetitParser >> defineGrammarsOn: spec [
 		package: 'PetitXml' with: [ spec requires: #('Core') ];
 		package: 'PetitIndent' with: [ spec requires: #('Core') ];
 		package: 'Factorial-Language' with: [ spec requires: #('Core') ];
-		package: 'PetitYAML' with: [ spec requires: #('Core') ]
+		package: 'PetitYAML' with: [ spec requires: #('Core' 'PetitIndent') ]
 ]
