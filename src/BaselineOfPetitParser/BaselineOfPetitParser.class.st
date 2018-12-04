@@ -10,6 +10,9 @@ BaselineOfPetitParser >> baseline: spec [
 	spec
 		for: #common
 		do: [
+			self defineGlamourDependencyOn: spec.
+			self defineRoassalDependencyOn: spec.
+			
 			spec
 				package: 'PetitParser';
 				package: 'PetitTests' with: [ spec requires: 'PetitParser' ];
@@ -20,7 +23,7 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitIslands-Examples' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitIslands-Tests' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
-				package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer' 'PetitParser-GTExtensions') ].
+				package: 'PetitGui' with: [ spec requires: #('Glamour' 'Roassal2' 'PetitAnalyzer' 'PetitParser-GTExtensions') ].
 			
 			"This methods adds spec for all Grammars available in this repository."	
 			self defineGrammarsOn: spec.
@@ -32,6 +35,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
 				group: 'Analyzer' with: #('Core' 'PetitAnalyzer');
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
+				group: 'ParserIDE' with: #('PetitGui');
 				group: 'Parser' with: #('PetitAnalyzer'
 												'PetitSmalltalk'
 												'PetitCSV'
@@ -43,11 +47,14 @@ BaselineOfPetitParser >> baseline: spec [
 												'PetitXml'
 												'PetitIndent'
 												'Factorial-Language'
-												'PetitYAML');
-				group: 'ParserIDE' with: #( 'PetitGui' ).
-			spec
-				baseline: 'Glamour'
-				with: [ spec repository: 'github://moosetechnology/Glamour/src' ] ]
+												'PetitYAML') ]
+]
+
+{ #category : #baselines }
+BaselineOfPetitParser >> defineGlamourDependencyOn: spec [
+	spec
+		baseline: 'Glamour'
+		with: [ spec repository: 'github://moosetechnology/Glamour/src' ]
 ]
 
 { #category : #baselines }
@@ -66,4 +73,11 @@ BaselineOfPetitParser >> defineGrammarsOn: spec [
 		package: 'PetitIndent' with: [ spec requires: #('Core') ];
 		package: 'Factorial-Language' with: [ spec requires: #('Core') ];
 		package: 'PetitYAML' with: [ spec requires: #('Core' 'PetitIndent') ]
+]
+
+{ #category : #baselines }
+BaselineOfPetitParser >> defineRoassalDependencyOn: spec [
+	spec
+		baseline: 'Roassal2'
+		with: [ spec repository: 'github://ObjectProfile/Roassal2/src' ]
 ]
