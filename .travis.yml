@@ -1,0 +1,19 @@
+language: smalltalk
+sudo: false
+
+notifications:
+    email:
+        on_success: never
+        on_failure: always
+
+os:
+    - linux
+    - osx
+
+smalltalk_edge:
+    source: peteruhnak/smalltalkCI
+    branch: master
+
+smalltalk:
+    - Pharo-6.1
+    - Pharo-7.0

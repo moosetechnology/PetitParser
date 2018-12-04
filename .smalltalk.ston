@@ -1,0 +1,15 @@
+SmalltalkCISpec {
+    #loading : [
+        SCIMetacelloLoadSpec {
+            #baseline : 'PetitParser',
+            #directory : 'src',
+            #platforms : [ #pharo ]
+        }
+    ],
+    #testing : {
+        #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIndent-Examples', 'PetitIndent-Examples', 'PetitSmalltalk-Tests', 'PetitCSV', 'PetitJson', 'PetitMSE', 'PetitManifestMf', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'PetitIslands-Examples', 'PetitIslands-Tests', 'PetitYAML' ],
+        #coverage : {
+            #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIndent-Examples', 'PetitIndent-Examples', 'PetitSmalltalk-Tests', 'PetitCSV', 'PetitJson', 'PetitMSE', 'PetitManifestMf', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'PetitIslands-Examples', 'PetitIslands-Tests', 'PetitYAML' ]
+    }
+  }
+}
