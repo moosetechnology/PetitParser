@@ -119,10 +119,3 @@ PPTokenTest >> testStop [
 	result := self parse: 'foo' using: self identifier.
 	self assert: result stop equals: 3
 ]
-
-{ #category : #testing }
-PPTokenTest >> testValue [
-	| result |
-	result := PPToken on: 'var'.
-	self should: [ result value ] raise: Notification
-]
