@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'parsers'
 	],
-	#category : #'PetitTests-Core'
+	#category : #PetitTests
 }
 
 { #category : #accessing }

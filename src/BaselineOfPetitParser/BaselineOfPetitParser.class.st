@@ -13,6 +13,8 @@ BaselineOfPetitParser >> baseline: spec [
 			spec
 				package: 'PetitParser';
 				package: 'PetitTests' with: [ spec requires: 'PetitParser' ];
+				package: 'PetitParser-Tests' with: [ spec requires: #('PetitParser' 'PetitTests') ];
+				package: 'PetitParser-Examples' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitAnalyzer' with: [ spec requires: 'PetitTests' ];
 				package: 'PetitSmalltalk' with: [ spec requires: #('PetitParser' 'PetitTests') ];
 				package: 'PetitCSV' with: [ spec requires: #('PetitParser' 'PetitTests') ];

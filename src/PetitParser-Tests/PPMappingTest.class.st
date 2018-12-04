@@ -1,7 +1,7 @@
 Class {
 	#name : #PPMappingTest,
 	#superclass : #PPAbstractParserTest,
-	#category : #'PetitTests-Tests'
+	#category : #'PetitParser-Tests'
 }
 
 { #category : #'as yet unclassified' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #PPArithmeticParserTest,
 	#superclass : #PPCompositeParserTest,
-	#category : #'PetitTests-Tests'
+	#category : #'PetitParser-Tests'
 }
 
 { #category : #accessing }

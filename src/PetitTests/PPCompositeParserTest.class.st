@@ -6,7 +6,7 @@ Class {
 		'result',
 		'debugResult'
 	],
-	#category : #'PetitTests-Core'
+	#category : #PetitTests
 }
 
 { #category : #testing }
