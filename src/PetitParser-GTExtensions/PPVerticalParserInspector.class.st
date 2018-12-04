@@ -5,7 +5,7 @@ The content and results are displayed on top of each other.
 Class {
 	#name : #PPVerticalParserInspector,
 	#superclass : #PPParserInspector,
-	#category : #'PetitGui-Core'
+	#category : #'PetitParser-GTExtensions'
 }
 
 { #category : #'as yet unclassified' }

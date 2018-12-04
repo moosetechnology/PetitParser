@@ -1,6 +1,6 @@
 Extension { #name : #PPToken }
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPToken >> gtInspectorSourceIn: composite [
 	<gtInspectorPresentationOrder: 10> 
 

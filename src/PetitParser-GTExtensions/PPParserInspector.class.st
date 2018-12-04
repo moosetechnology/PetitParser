@@ -10,7 +10,7 @@ self openOn: PPArithmeticParser new.
 Class {
 	#name : #PPParserInspector,
 	#superclass : #GLMCompositePresentation,
-	#category : #'PetitGui-Core'
+	#category : #'PetitParser-GTExtensions'
 }
 
 { #category : #'as yet unclassified' }

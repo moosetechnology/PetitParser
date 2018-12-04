@@ -23,48 +23,8 @@ Class {
 		'stream',
 		'allChildren'
 	],
-	#category : #'PetitGui-Core'
+	#category : #'PetitParser-GTExtensions'
 }
-
-{ #category : #'*petitgui' }
-PPParserDebuggerResult class >> gtExampleAlmostArithmetic [
-	<gtExample>
-	<label: 'Incomplete arithmetic expression'>
-	
-	^ PPParserDebuggerResult 
-		parse: '1 + ' 
-		with: PPArithmeticParser new
-]
-
-{ #category : #'*petitgui' }
-PPParserDebuggerResult class >> gtExampleArithmetic [
-	<gtExample>
-	<label: 'Arithmetic expression'>
-	
-	^ PPParserDebuggerResult 
-		parse: '1 + 2' 
-		with: PPArithmeticParser new
-]
-
-{ #category : #'*petitgui' }
-PPParserDebuggerResult class >> gtExampleNoNumber [
-	<gtExample>
-	<label: 'Result with #Number expected, but #String given'>
-	
-	^ PPParserDebuggerResult 
-		parse: 'hello world' 
-		with: (PPArithmeticParser new productionAt: #number)
-]
-
-{ #category : #'*petitgui' }
-PPParserDebuggerResult class >> gtExampleNumber [
-	<gtExample>
-	<label: 'Result with #Number'>
-	
-	^ PPParserDebuggerResult 
-		parse: '123' 
-		with: (PPArithmeticParser new productionAt: #number)
-]
 
 { #category : #'instance creation' }
 PPParserDebuggerResult class >> parse: aStream with: parser [ 
@@ -127,14 +87,14 @@ PPParserDebuggerResult >> end: anObject [
 	end := anObject
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> findStream [
 	
 	stream ifNil: [ ^ parent ifNotNil: [ parent findStream ] ].
 	^ stream
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> findStreamContents [
 	^ (self findStream ifNotNil: [ :s | s contents ]) ifNil: [ '' ]
 ]
@@ -146,7 +106,7 @@ PPParserDebuggerResult >> formattedText [
 		ifFalse: [ self printString]
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> gtDebugView: composite [
 	<gtInspectorPresentationOrder: 40>
 
@@ -226,7 +186,7 @@ PPParserDebuggerResult >> result: anObject [
 	result := anObject
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> sampleIn: composite [
 
 	(composite text)
@@ -245,19 +205,19 @@ PPParserDebuggerResult >> start: anObject [
 	start := anObject
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> stream [
 	
 	^ stream
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> stream: anObject [
 	
 	stream := anObject
 ]
 
-{ #category : #'*petitgui' }
+{ #category : #'as yet unclassified' }
 PPParserDebuggerResult >> treeViewIn: composite [
 	composite tree
 		title: 'Execution Traces';

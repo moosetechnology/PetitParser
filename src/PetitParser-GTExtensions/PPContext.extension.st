@@ -1,6 +1,6 @@
 Extension { #name : #PPContext }
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPContext >> gtGlobals: composite [
 	<gtInspectorPresentationOrder: 50>
 	
@@ -13,7 +13,7 @@ PPContext >> gtGlobals: composite [
 
 ]
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPContext >> gtIndentStack: composite [
 	<gtInspectorPresentationOrder: 40>
 	
@@ -24,7 +24,7 @@ PPContext >> gtIndentStack: composite [
 
 ]
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPContext >> gtProperties: composite [
 	<gtInspectorPresentationOrder: 40>
 	
@@ -37,7 +37,7 @@ PPContext >> gtProperties: composite [
 
 ]
 
-{ #category : #'*PetitGui' }
+{ #category : #'*PetitParser-GTExtensions' }
 PPContext >> gtStream: composite [
 	<gtInspectorPresentationOrder: 40>
 	
