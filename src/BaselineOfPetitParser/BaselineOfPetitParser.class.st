@@ -36,8 +36,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Analyzer' with: #('Core' 'PetitAnalyzer');
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
 				group: 'ParserIDE' with: #('PetitGui');
-				group: 'Parser' with: #('PetitAnalyzer'
-												'PetitSmalltalk'
+				group: 'Parser' with: #('PetitSmalltalk'
 												'PetitCSV'
 												'PetitJson'
 												'PetitMSE'
@@ -47,7 +46,9 @@ BaselineOfPetitParser >> baseline: spec [
 												'PetitXml'
 												'PetitIndent'
 												'Factorial-Language'
-												'PetitYAML') ]
+												'PetitYAML');
+				"Override default group to NOT include ParserIDE."
+				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'GT' 'Parser') ]
 ]
 
 { #category : #baselines }
