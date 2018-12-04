@@ -6,9 +6,9 @@ Petit Parser is a framework for building parsers. It was originally developed by
 
 Basic information about PetitParser can be found here:
 
-[Writing Parsers with PetitParser](http://www.lukas-renggli.ch/blog/petitparser-1)
-[Composite Grammars with PetitParser](http://www.lukas-renggli.ch/blog/petitparser-2)
-[Petit Parser in Deep into Pharo Book](http://pharobooks.gforge.inria.fr/PharoByExampleTwo-Eng/latest/PetitParser.pdf)
+- [Writing Parsers with PetitParser](http://www.lukas-renggli.ch/blog/petitparser-1)
+- [Composite Grammars with PetitParser](http://www.lukas-renggli.ch/blog/petitparser-2)
+- [Petit Parser in Deep into Pharo Book](http://pharobooks.gforge.inria.fr/PharoByExampleTwo-Eng/latest/PetitParser.pdf)
 
 This repository is a port from the [Smalltalkhub repository](http://smalltalkhub.com/#!/~Moose/PetitParser). However, further contributions to this project should take place on this Github repository.
 
