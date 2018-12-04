@@ -30,8 +30,9 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitYAML' with: [ spec requires: #('PetitParser' 'PetitIndent') ];
 				package: 'PetitGui' with: [ spec requires: #('Glamour' 'PetitAnalyzer') ].
 			spec
-				group: 'Core' with: #( 'PetitParser');
-				group: 'Tests' with: #( 'PetitTests');
+				group: 'Core' with: #('PetitParser' 'PetitTests');
+				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
+				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Parser' with: #('PetitParser' 
 													'PetitTests' 
 													'PetitAnalyzer' 
