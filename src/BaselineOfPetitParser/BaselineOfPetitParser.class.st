@@ -15,6 +15,7 @@ BaselineOfPetitParser >> baseline: spec [
 			
 			spec
 				package: 'PetitParser';
+				package: 'PetitParser-Deprecated' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitTests' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitParser-Tests' with: [ spec requires: #('Core') ];
 				package: 'PetitParser-Examples' with: [ spec requires: 'PetitParser' ];
@@ -33,7 +34,7 @@ BaselineOfPetitParser >> baseline: spec [
 			self defineGrammarsOn: spec.
 			
 			spec
-				group: 'Core' with: #('PetitParser' 'PetitTests');
+				group: 'Core' with: #('PetitParser' 'PetitTests' 'PetitParser-Deprecated');
 				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
