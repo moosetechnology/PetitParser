@@ -1,3 +1,15 @@
+"
+I am a predicate allowing to check if a character is included in the set of char described by the Block this object is initialized with.
+
+I work efficiently on characters for which the code point is between 1 and 255 using a lookup table.
+
+For example,
+[[[
+charSetPredicate := PPCharSetPredicate on: [ :char | #($a $b $c) includes: char ].
+charSetPredicate value: $a. ""true""
+charSetPredicate value: $z. ""false""
+]]]
+"
 Class {
 	#name : #PPCharSetPredicate,
 	#superclass : #Object,

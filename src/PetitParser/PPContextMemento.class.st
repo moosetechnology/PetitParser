@@ -1,3 +1,12 @@
+"
+I am an implementation of the memento design pattern.
+
+My goal is to remember the state of a PPContext to eventually be able to restore its state later.
+
+I should be instantiated using PPContext>>#memorize method.
+
+A PPContext can restore its state by providing the memento to PPContext>>#restore:.
+"
 Class {
 	#name : #PPContextMemento,
 	#superclass : #Object,
