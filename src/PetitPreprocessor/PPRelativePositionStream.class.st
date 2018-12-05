@@ -14,7 +14,7 @@ Class {
 	#category : 'PetitPreprocessor-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPRelativePositionStream class >> on: aStream relativeTo: aRelativeStream with: aTransformation [
 	^ (super on: aStream) relativeStream: aRelativeStream; transformation: aTransformation; yourself
 ]

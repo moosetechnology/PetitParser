@@ -8,7 +8,7 @@ Class {
 	#category : 'PetitPreprocessor-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPreIntervalTransformation class >> from: anInterval to: anotherInterval [
 	^ self new sourceInterval: anInterval; destinationInterval: anotherInterval 
 ]

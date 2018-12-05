@@ -7,7 +7,7 @@ Class {
 	#category : 'PetitPreprocessor-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPreStreamTransformation class >> startingAt: aPosition [
 	^ self new relativeStreamStartPosition: aPosition 
 ]

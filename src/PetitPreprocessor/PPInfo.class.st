@@ -27,12 +27,12 @@ Class {
 	#category : 'PetitPreprocessor-Core'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPInfo class >> new [
 	self error: 'Info can only be created using a dedicated constructor.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPInfo class >> on: anElement start: aStartInteger stop: aStopInteger [
 	^ self basicNew 
 		initializeOn: anElement
