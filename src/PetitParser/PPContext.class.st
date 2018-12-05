@@ -52,6 +52,12 @@ PPContext >> back [
 	^ stream back
 ]
 
+{ #category : #checking }
+PPContext >> checkMementoStreamIsSameAsMine: aPPContextMemento [
+	aPPContextMemento stream == stream ifFalse: [ 
+		self error: 'The stream held by the PPContextMemento must be identity-equals to the stream I hold.' ]
+]
+
 { #category : #'stream mimicry' }
 PPContext >> collection [
 	^ stream collection  
@@ -304,7 +310,7 @@ PPContext >> reset [
 
 { #category : #memoization }
 PPContext >> restore: aPPContextMemento [
-	aPPContextMemento stream == stream ifFalse: [ self error: 'Oops!' ].
+	self checkMementoStreamIsSameAsMine: aPPContextMemento.
 
 	stream position: aPPContextMemento position.
 	self restoreProperties: aPPContextMemento.
@@ -312,19 +318,15 @@ PPContext >> restore: aPPContextMemento [
 
 { #category : #memoization }
 PPContext >> restoreProperties: aPPContextMemento [
-	aPPContextMemento stream == stream ifFalse: [ self error: 'Oops!' ].
-	
+	self checkMementoStreamIsSameAsMine: aPPContextMemento.
 	properties ifNil: [ ^ self ].
-	
-	properties keysDo: [ :key |
-		(aPPContextMemento hasProperty: key)
-			ifTrue: [ properties at: key put: (aPPContextMemento propertyAt: key) ]
-			ifFalse: [ properties removeKey: key  ]. 
-	].
-
-	aPPContextMemento keysAndValuesDo: [ :key :value |
-		properties at: key put: value
-	]
+	properties
+		keysDo: [ :key | 
+			(aPPContextMemento hasProperty: key)
+				ifTrue: [ properties at: key put: (aPPContextMemento propertyAt: key) ]
+				ifFalse: [ properties removeKey: key ] ].
+	aPPContextMemento
+		keysAndValuesDo: [ :key :value | properties at: key put: value ]
 ]
 
 { #category : #acessing }
