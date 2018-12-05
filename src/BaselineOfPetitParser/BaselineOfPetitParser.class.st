@@ -22,6 +22,8 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitIslands' with: [ spec requires: #('Core' 'PetitIndent' 'PetitAnalyzer') ];
 				package: 'PetitIslands-Examples' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitIslands-Tests' with: [ spec requires: #('PetitIslands') ];
+				package: 'PetitPreprocessor' with: [ spec requires: 'PetitParser' ];
+				package: 'PetitPreprocessor-Tests' with: [ spec requires: #('PetitPreprocessor' 'PetitTests') ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
 				package: 'PetitGui' with: [ spec requires: #('Glamour' 'Roassal2' 'PetitAnalyzer' 'PetitParser-GTExtensions') ].
 			
@@ -34,6 +36,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
 				group: 'Analyzer' with: #('Core' 'PetitAnalyzer');
+				group: 'Preprocessor' with: #('PetitPreprocessor' 'PetitPreprocessor-Tests');
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
 				group: 'ParserIDE' with: #('PetitGui');
 				group: 'Parser' with: #('PetitSmalltalk'
@@ -48,7 +51,7 @@ BaselineOfPetitParser >> baseline: spec [
 												'Factorial-Language'
 												'PetitYAML');
 				"Override default group to NOT include ParserIDE."
-				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'GT' 'Parser') ]
+				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'Preprocessor' 'GT' 'Parser') ]
 ]
 
 { #category : #baselines }
