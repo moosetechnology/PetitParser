@@ -33,15 +33,6 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #'as yet unclassified' }
-PPContext class >> on: aPPParser stream: aStream [
-	^ self basicNew 
-		initialize;
-		root: aPPParser;
-		stream: aStream asPetitStream;
-		yourself
-]
-
 { #category : #'stream mimicry' }
 PPContext >> atEnd [
 	^ stream atEnd
