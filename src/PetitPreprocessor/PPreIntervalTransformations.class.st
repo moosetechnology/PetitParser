@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'intervals'
 	],
-	#category : #'PetitPreprocessor-Core'
+	#category : #PetitPreprocessor
 }
 
 { #category : #'as yet unclassified' }

@@ -5,7 +5,7 @@ Class {
 		'sourceInterval',
 		'destinationInterval'
 	],
-	#category : #'PetitPreprocessor-Core'
+	#category : #PetitPreprocessor
 }
 
 { #category : #'as yet unclassified' }

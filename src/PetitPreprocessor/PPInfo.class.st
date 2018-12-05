@@ -24,7 +24,7 @@ Class {
 		'start',
 		'stop'
 	],
-	#category : #'PetitPreprocessor-Core'
+	#category : #PetitPreprocessor
 }
 
 { #category : #'as yet unclassified' }

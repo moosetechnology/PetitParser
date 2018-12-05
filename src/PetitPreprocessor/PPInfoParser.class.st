@@ -11,7 +11,7 @@ Instance Variables
 Class {
 	#name : #PPInfoParser,
 	#superclass : #PPDelegateParser,
-	#category : #'PetitPreprocessor-Core'
+	#category : #PetitPreprocessor
 }
 
 { #category : #'as yet unclassified' }

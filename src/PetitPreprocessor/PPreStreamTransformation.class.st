@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'relativeStreamStartPosition'
 	],
-	#category : #'PetitPreprocessor-Core'
+	#category : #PetitPreprocessor
 }
 
 { #category : #'as yet unclassified' }
