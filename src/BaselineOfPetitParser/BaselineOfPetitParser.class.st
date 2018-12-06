@@ -50,7 +50,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Extension' with: #('PetitParser-Extension');
 				group: 'TestsExtension' with: #('PetitTests-Extension');
 				group: 'ParserIDE' with: #('PetitGui');
-				group: 'Parser' with: #('PetitSmalltalk'
+				group: 'ParserCore' with: #('PetitSmalltalk'
 												'PetitCSV'
 												'PetitJson'
 												'PetitMSE'
@@ -59,8 +59,19 @@ BaselineOfPetitParser >> baseline: spec [
 												'PetitXPath'
 												'PetitXml'
 												'PetitIndent'
-												'Factorial-Language'
+												'FactorialLanguage'
 												'PetitYAML');
+				group: 'Parser' with: #('PetitSmalltalk-Tests'
+												'PetitCSV-Tests'
+												'PetitJson-Tests'
+												'PetitMSE-Tests'
+												'PetitManifestMf-Tests'
+												'PetitRegex-Tests'
+												'PetitXPath-Tests'
+												'PetitXml-Tests'
+												'PetitIndent-Tests'
+												'FactorialLanguage-Tests'
+												'PetitYAML-Tests');
 				"Override default group to NOT include ParserIDE."
 				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'PetitPreprocessor' 'Indent' 'Extension' 'TestsExtension' 'GT' 'Parser') ]
 ]
@@ -77,16 +88,26 @@ BaselineOfPetitParser >> defineGrammarsOn: spec [
 	"Ideally, those packages should be in separated projects.
 	 I put them here so it is easier to do in the future."
 	spec
-		package: 'PetitSmalltalk' with: [ spec requires: #('Core') ];
+		package: 'PetitSmalltalk' with: [ spec requires: #('Minimal') ];
+		package: 'PetitSmalltalk-Tests' with: [ spec requires: #('Core' 'PetitSmalltalk') ];
 		package: 'PetitCSV' with: [ spec requires: #('Core') ];
-		package: 'PetitJson' with: [ spec requires: #('Core') ];
-		package: 'PetitMSE' with: [ spec requires: #('Core') ];
-		package: 'PetitManifestMf' with: [ spec requires: #('Core') ];
-		package: 'PetitRegex' with: [ spec requires: #('Core') ];
-		package: 'PetitXPath' with: [ spec requires: #('Core' 'PetitXml') ];
-		package: 'PetitXml' with: [ spec requires: #('Core') ];
-		package: 'Factorial-Language' with: [ spec requires: #('Core') ];
-		package: 'PetitYAML' with: [ spec requires: #('Core' 'PetitIndent') ]
+		package: 'PetitCSV-Tests' with: [ spec requires: #('Core' 'PetitCSV') ];
+		package: 'PetitJson' with: [ spec requires: #('Minimal') ];
+		package: 'PetitJson-Tests' with: [ spec requires: #('Core' 'PetitJson') ];
+		package: 'PetitMSE' with: [ spec requires: #('Minimal') ];
+		package: 'PetitMSE-Tests' with: [ spec requires: #('Core' 'PetitMSE') ];
+		package: 'PetitManifestMf' with: [ spec requires: #('Minimal') ];
+		package: 'PetitManifestMf-Tests' with: [ spec requires: #('Core' 'PetitManifestMf') ];
+		package: 'PetitRegex' with: [ spec requires: #('Minimal') ];
+		package: 'PetitRegex-Tests' with: [ spec requires: #('Core' 'PetitRegex') ];
+		package: 'PetitXml' with: [ spec requires: #('Minimal') ];
+		package: 'PetitXml-Tests' with: [ spec requires: #('Core' 'PetitXml') ];
+		package: 'PetitXPath' with: [ spec requires: #('Minimal' 'PetitXml') ];
+		package: 'PetitXPath-Tests' with: [ spec requires: #('PetitXPath') ];
+		package: 'FactorialLanguage' with: [ spec requires: #('Minimal') ];
+		package: 'FactorialLanguage-Tests' with: [ spec requires: #('Core' 'FactorialLanguage') ];
+		package: 'PetitYAML' with: [ spec requires: #('Minimal' 'PetitIndent') ];
+		package: 'PetitYAML-Tests' with: [ spec requires: #('Core' 'PetitYAML') ]
 ]
 
 { #category : #baselines }

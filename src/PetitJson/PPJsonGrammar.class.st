@@ -23,7 +23,7 @@ Class {
 	#classVars : [
 		'CharacterTable'
 	],
-	#category : #'PetitJson-Core'
+	#category : #PetitJson
 }
 
 { #category : #initialization }

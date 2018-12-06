@@ -1,7 +1,7 @@
 Class {
 	#name : #PPSmalltalkWhitespaceParser,
 	#superclass : #PPParser,
-	#category : #'PetitSmalltalk-Core'
+	#category : #PetitSmalltalk
 }
 
 { #category : #initialization }

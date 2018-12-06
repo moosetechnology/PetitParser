@@ -4,7 +4,7 @@ Enhances the Smalltalk grammar with production actions to build parse-tree nodes
 Class {
 	#name : #PPSmalltalkParser,
 	#superclass : #PPSmalltalkGrammar,
-	#category : #'PetitSmalltalk-Core'
+	#category : #PetitSmalltalk
 }
 
 { #category : #private }

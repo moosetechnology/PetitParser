@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'comments'
 	],
-	#category : #'PetitSmalltalk-Core'
+	#category : #PetitSmalltalk
 }
 
 { #category : #accessing }

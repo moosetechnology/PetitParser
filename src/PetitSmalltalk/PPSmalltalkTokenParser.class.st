@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'SeparatorPredicate'
 	],
-	#category : #'PetitSmalltalk-Core'
+	#category : #PetitSmalltalk
 }
 
 { #category : #initialization }

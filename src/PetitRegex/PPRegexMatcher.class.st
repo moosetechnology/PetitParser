@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'ParserValidator'
 	],
-	#category : #'PetitRegex-Core'
+	#category : #PetitRegex
 }
 
 { #category : #'instance creation' }

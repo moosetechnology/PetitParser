@@ -81,7 +81,7 @@ Class {
 		'unaryToken',
 		'variable'
 	],
-	#category : #'PetitSmalltalk-Core'
+	#category : #PetitSmalltalk
 }
 
 { #category : #testing }
