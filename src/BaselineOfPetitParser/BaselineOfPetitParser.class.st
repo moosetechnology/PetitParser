@@ -50,6 +50,12 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Extension' with: #('PetitParser-Extension');
 				group: 'TestsExtension' with: #('PetitTests-Extension');
 				group: 'ParserIDE' with: #('PetitGui');
+				group: 'SmalltalkCore' with: #('PetitSmalltalk');
+				group: 'Smalltalk' with: #('SmalltalkCore' 'PetitSmalltalk-Tests');
+				group: 'RegexCore' with: #('PetitRegex');
+				group: 'Regex' with: #('RegexCore' 'PetitRegex-Tests');
+				group: 'YAMLCore' with: #('PetitYAML');
+				group: 'YAML' with: #('YAMLCore' 'PetitYAML-Tests');
 				group: 'ParserCore' with: #('PetitSmalltalk'
 												'PetitCSV'
 												'PetitJson'
@@ -58,7 +64,6 @@ BaselineOfPetitParser >> baseline: spec [
 												'PetitRegex'
 												'PetitXPath'
 												'PetitXml'
-												'PetitIndent'
 												'FactorialLanguage'
 												'PetitYAML');
 				group: 'Parser' with: #('PetitSmalltalk-Tests'
@@ -69,7 +74,6 @@ BaselineOfPetitParser >> baseline: spec [
 												'PetitRegex-Tests'
 												'PetitXPath-Tests'
 												'PetitXml-Tests'
-												'PetitIndent-Tests'
 												'FactorialLanguage-Tests'
 												'PetitYAML-Tests');
 				"Override default group to NOT include ParserIDE."
