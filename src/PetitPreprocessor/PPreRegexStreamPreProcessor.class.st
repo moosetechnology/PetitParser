@@ -19,7 +19,7 @@ Class {
 		'regex',
 		'replacement'
 	],
-	#category : 'PetitPreprocessor-Core'
+	#category : #'PetitPreprocessor-Core'
 }
 
 { #category : #accessing }

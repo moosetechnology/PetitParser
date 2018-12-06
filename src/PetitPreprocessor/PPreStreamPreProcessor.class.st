@@ -7,7 +7,7 @@ Instance Variables
 Class {
 	#name : #PPreStreamPreProcessor,
 	#superclass : #PPDelegateParser,
-	#category : 'PetitPreprocessor-Core'
+	#category : #'PetitPreprocessor-Core'
 }
 
 { #category : #parsing }

@@ -11,7 +11,7 @@ Class {
 		'relativeStream',
 		'transformation'
 	],
-	#category : 'PetitPreprocessor-Core'
+	#category : #'PetitPreprocessor-Core'
 }
 
 { #category : #'instance creation' }
