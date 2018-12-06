@@ -8,13 +8,13 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PPStartOfLogicalLineParser >> isBlank: character [
 	^ (character == Character space or: [character == Character tab])
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPStartOfLogicalLineParser >> parseOn: aPPContext [
 	aPPContext peek isAlphaNumeric ifFalse: [ 
 		^ PPFailure message: 'Start of logical line expected' context: aPPContext 

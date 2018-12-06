@@ -25,12 +25,12 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #operators }
 PPLimitedChoiceParser >> // aRule [ 
 	^ self copyWith: aRule
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PPLimitedChoiceParser >> initialize [
 	limit := nil asParser
 ]
@@ -47,7 +47,7 @@ PPLimitedChoiceParser >> limit: anObject [
 	limit := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPLimitedChoiceParser >> parseOn: aPPContext [
 	"This is optimized code that avoids unnecessary block activations, do not change. When all choices fail, the last failure is answered."
 

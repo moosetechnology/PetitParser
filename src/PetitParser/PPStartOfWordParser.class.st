@@ -11,12 +11,12 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PPStartOfWordParser >> acceptsEpsilon [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #parsing }
 PPStartOfWordParser >> parseOn: aPPContext [
 	aPPContext atEnd ifTrue: [  
 		^ PPFailure message: 'Start of word expected' context: aPPContext at: aPPContext position 
