@@ -26,7 +26,7 @@ PPFailingParser >> message [
 	^ message
 ]
 
-{ #category : #'pp-context' }
+{ #category : #parsing }
 PPFailingParser >> parseOn: aPPContext [
 	^ PPFailure message: message context: aPPContext
 ]

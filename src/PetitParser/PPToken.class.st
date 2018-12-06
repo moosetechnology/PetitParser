@@ -21,7 +21,7 @@ Class {
 	#category : #'PetitParser-Core'
 }
 
-{ #category : #initialization }
+{ #category : #'class initialization' }
 PPToken class >> initialize [
 	"Platform independent newline sequence. LF: Unix, CR+LF: Windows, and CR: Apple."
 	| cr lf |

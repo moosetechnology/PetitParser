@@ -15,9 +15,9 @@ Class {
 	#category : #'PetitParser-Parsers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PPConditionalParser class >> on: aPPParser block: block [
-	^ (PPConditionalParser on: aPPParser)
+	^ (self on: aPPParser)
 		block: block;
 		yourself
 ]

@@ -322,7 +322,7 @@ PPContext >> root [
 	^ root 
 ]
 
-{ #category : #memoization }
+{ #category : #accessing }
 PPContext >> size [
 	^ stream size
 ]
