@@ -9,3 +9,13 @@ PPStream >> absolutePosition [
 PPStream >> absolutePosition: aPosition [
 	^ aPosition
 ]
+
+{ #category : #'*PetitPreprocessor' }
+PPStream >> relativePosition [
+	^ self relativePosition: self position
+]
+
+{ #category : #'*PetitPreprocessor' }
+PPStream >> relativePosition: aPosition [
+	^ aPosition
+]
