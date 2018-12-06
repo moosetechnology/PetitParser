@@ -4,7 +4,7 @@ I implement the example given in ""factorial.txt"". The code can be edited direc
 Class {
 	#name : #FLFactorialExample,
 	#superclass : #TestCase,
-	#category : #'Factorial-Language'
+	#category : #'FactorialLanguage-Tests'
 }
 
 { #category : #accessing }

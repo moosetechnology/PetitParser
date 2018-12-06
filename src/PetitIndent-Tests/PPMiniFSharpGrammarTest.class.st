@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'aPPContext'
 	],
-	#category : #'PetitIndent-Examples'
+	#category : #'PetitIndent-Tests'
 }
 
 { #category : #'as yet unclassified' }

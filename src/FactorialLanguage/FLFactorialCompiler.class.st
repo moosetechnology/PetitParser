@@ -4,7 +4,7 @@ I define productions to create a Smalltalk AST from the FL source. The Smalltalk
 Class {
 	#name : #FLFactorialCompiler,
 	#superclass : #FLFactorialGrammar,
-	#category : #'Factorial-Language'
+	#category : #FactorialLanguage
 }
 
 { #category : #grammar }

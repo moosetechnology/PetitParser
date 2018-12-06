@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'changed'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #public }

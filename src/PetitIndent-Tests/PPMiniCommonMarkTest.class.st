@@ -7,7 +7,7 @@ Class {
 		'string',
 		'expected'
 	],
-	#category : #'PetitIndent-Examples'
+	#category : #'PetitIndent-Tests'
 }
 
 { #category : #'as yet unclassified' }

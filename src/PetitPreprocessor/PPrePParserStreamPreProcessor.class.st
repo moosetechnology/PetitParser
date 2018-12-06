@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'matchingParser'
 	],
-	#category : 'PetitPreprocessor-Core'
+	#category : #'PetitPreprocessor-Core'
 }
 
 { #category : #accessing }

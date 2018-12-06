@@ -4,5 +4,5 @@ PPListPattern that is used to match any number of parsers. As its superclass, it
 Class {
 	#name : #PPListPattern,
 	#superclass : #PPPattern,
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }

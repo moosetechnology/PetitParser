@@ -25,7 +25,7 @@ Class {
 		'sub',
 		'then'
 	],
-	#category : #'Factorial-Language'
+	#category : #FactorialLanguage
 }
 
 { #category : #token }

@@ -7,9 +7,9 @@ SmalltalkCISpec {
         }
     ],
     #testing : {
-        #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIndent-Examples', 'PetitIndent-Examples', 'PetitSmalltalk-Tests', 'PetitCSV', 'PetitJson', 'PetitMSE', 'PetitManifestMf', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'PetitIslands-Examples', 'PetitIslands-Tests', 'PetitYAML', 'PetitPreprocessor-Tests' ],
-        #coverage : {
-            #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIndent-Examples', 'PetitIndent-Examples', 'PetitSmalltalk-Tests', 'PetitCSV', 'PetitJson', 'PetitMSE', 'PetitManifestMf', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'PetitIslands-Examples', 'PetitIslands-Tests', 'PetitYAML', 'PetitPreprocessor' ]
+        #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIslands-Tests', 'PetitPreprocessor-Tests', 'PetitIndent-Tests', 'PetitSmalltalk-Tests', 'PetitCSV-Tests', 'PetitJson-Tests', 'PetitMSE-Tests', 'PetitManifestMf-Tests', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'FactorialLanguage-Tests', 'PetitYAML-Tests' ],
+    #coverage : {
+        #categories : [  ]
     }
   }
 }

@@ -1,7 +1,7 @@
 Class {
 	#name : #PPJsonParser,
 	#superclass : #PPJsonGrammar,
-	#category : #'PetitJson-Core'
+	#category : #PetitJson
 }
 
 { #category : #grammar }

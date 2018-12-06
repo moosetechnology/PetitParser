@@ -1,7 +1,7 @@
 Class {
 	#name : #PPIndentExpressionGrammarTest,
 	#superclass : #PPCompositeParserTest,
-	#category : #'PetitIndent-Examples'
+	#category : #'PetitIndent-Tests'
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ I implement the pretty printer of the FL language.
 Class {
 	#name : #FLFactorialPrinter,
 	#superclass : #FLFactorialGrammar,
-	#category : #'Factorial-Language'
+	#category : #FactorialLanguage
 }
 
 { #category : #grammar }

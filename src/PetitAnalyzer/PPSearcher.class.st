@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'answer'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #private }
