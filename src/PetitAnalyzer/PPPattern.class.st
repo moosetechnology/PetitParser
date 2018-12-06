@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'verificationBlock'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #'instance creation' }

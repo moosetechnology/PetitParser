@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'verificationBlock'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #matching }

@@ -14,7 +14,7 @@ Class {
 		'searches',
 		'context'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #'instance creation' }

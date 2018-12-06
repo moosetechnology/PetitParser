@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'answerBlock'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #'instance creation' }

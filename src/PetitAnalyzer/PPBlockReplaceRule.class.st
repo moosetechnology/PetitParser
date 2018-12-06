@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'replaceBlock'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #'instance creation' }

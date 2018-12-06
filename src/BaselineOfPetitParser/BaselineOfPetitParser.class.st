@@ -19,7 +19,8 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitTests' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitParser-Tests' with: [ spec requires: #('Core') ];
 				package: 'PetitParser-Examples' with: [ spec requires: 'PetitParser' ];
-				package: 'PetitAnalyzer' with: [ spec requires: #('Core' 'PetitParser-Examples') ];
+				package: 'PetitAnalyzer' with: [ spec requires: #('PetitParser') ];
+				package: 'PetitAnalyzer-Tests' with: [ spec requires: #('Core' 'PetitParser-Examples') ];
 				package: 'PetitIslands' with: [ spec requires: #('Core' 'PetitIndent' 'PetitAnalyzer') ];
 				package: 'PetitIslands-Examples' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitIslands-Tests' with: [ spec requires: #('PetitIslands') ];
@@ -34,7 +35,8 @@ BaselineOfPetitParser >> baseline: spec [
 			self defineGrammarsOn: spec.
 			
 			spec
-				group: 'Core' with: #('PetitParser' 'PetitTests' 'PetitParser-Deprecated');
+				group: 'Minimal' with: #('PetitParser' 'PetitParser-Deprecated');
+				group: 'Core' with: #('Minimal' 'PetitTests');
 				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');

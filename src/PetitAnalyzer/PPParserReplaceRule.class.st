@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'replaceParser'
 	],
-	#category : #'PetitAnalyzer-Core'
+	#category : #PetitAnalyzer
 }
 
 { #category : #'instance creation' }
