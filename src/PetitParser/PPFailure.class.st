@@ -87,6 +87,11 @@ PPFailure >> position [
 	^ position
 ]
 
+{ #category : #accessing }
+PPFailure >> position: aPosition [
+	position := aPosition 
+]
+
 { #category : #printing }
 PPFailure >> printOn: aStream [
 	aStream 
