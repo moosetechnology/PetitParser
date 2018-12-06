@@ -5,7 +5,7 @@ Class {
 		'statementBlock',
 		'context'
 	],
-	#category : #'PetitIndent-Examples'
+	#category : #'PetitIndent-Tests'
 }
 
 { #category : #'test-grammar' }

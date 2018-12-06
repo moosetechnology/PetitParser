@@ -26,6 +26,9 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitIslands-Tests' with: [ spec requires: #('PetitIslands') ];
 				package: 'PetitPreprocessor' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitPreprocessor-Tests' with: [ spec requires: #('PetitPreprocessor' 'PetitTests') ];
+				package: 'PetitIndent' with: [ spec requires: #('Minimal') ];
+				package: 'PetitIndent-Examples' with: [ spec requires: #('PetitIndent') ];
+				package: 'PetitIndent-Tests' with: [ spec requires: #('Core' 'PetitIndent-Examples') ];
 				package: 'PetitParser-Extension' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitTests-Extension' with: [ spec requires: 'PetitTests' ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
@@ -81,7 +84,6 @@ BaselineOfPetitParser >> defineGrammarsOn: spec [
 		package: 'PetitRegex' with: [ spec requires: #('Core') ];
 		package: 'PetitXPath' with: [ spec requires: #('Core' 'PetitXml') ];
 		package: 'PetitXml' with: [ spec requires: #('Core') ];
-		package: 'PetitIndent' with: [ spec requires: #('Core') ];
 		package: 'Factorial-Language' with: [ spec requires: #('Core') ];
 		package: 'PetitYAML' with: [ spec requires: #('Core' 'PetitIndent') ]
 ]
