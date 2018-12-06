@@ -77,7 +77,7 @@ BaselineOfPetitParser >> baseline: spec [
 												'FactorialLanguage-Tests'
 												'PetitYAML-Tests');
 				"Override default group to NOT include ParserIDE."
-				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'PetitPreprocessor' 'Indent' 'Extension' 'TestsExtension' 'GT' 'Parser') ]
+				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'Preprocessor' 'Indent' 'Extension' 'TestsExtension' 'GT' 'Parser') ]
 ]
 
 { #category : #baselines }
