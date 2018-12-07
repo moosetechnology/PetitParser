@@ -24,14 +24,26 @@ Metacello new
 
 ### Groups
 It is possible to load subpart(s) of this project using groups:
-- `Core`: Contains the core of the framework, without tests and extensions to SUnit to make parsers testing easier.
-- `Tests`: Contains tests of PetitParser's core.
-- `Examples`: Contains simple examples of grammars.
-- `Islands`: Contains utilities to define island grammars.
-- `Analyzer`: Contains various tools to do code analysis / code rewriting.
-- `GT`: Contains extension to the inspector allowing to debug grammar more easily.
-- `Parser`: Contains a collection of various grammars.
-- `PetitIDE`: Contains graphical tools to develop and debug parsers.
+- `Minimal`: Kernel of the framework.
+- `Core`: Kernel of the framework and extensions to SUnit to make parsers testing easier.
+- `Tests`: Tests of PetitParser's core.
+- `Examples`: Simple examples of grammars.
+- `Islands`: Utilities to define island grammars.
+- `Analyzer`: Various tools to do code analysis / code rewriting.
+- `Indent`: Utilities to define grammar for language based on indentation (e.g. Python, YAML, etc.)
+- `Preprocessor`: Utilities to apply pre-processing on a parser input in a handy way.
+- `Extension`: Provides `PPExtendedCompositeParser` which allows one to define parsers for which rules do not rely on instance variables (allow to exceed the limit of 256 rules per parser) and `PPMultiStringParser` which allows to build efficient parsers for huge list of strings.
+- `TestsExtension`: Adds some useful methods to `PPCompositeParserTest`.
+- `GT`: Extension to the inspector allowing to debug grammar more easily.
+- `SmalltalkCore`: Smalltalk parser.
+- `Smalltalk`: Smalltalk parser and its tests.
+- `RegexCore`: Regex parser.
+- `Regex`: Regex parser and its tests.
+- `YAMLCore`: YAML parser.
+- `YAML`: YAML parser and its tests.
+- `ParserCore`: A collection of various grammars.
+- `Parser`: A collection of various grammars and their tests.
+- `PetitIDE`: Graphical tools to develop and debug parsers.
 
 By default, if no group is specified, `Core`, `Tests`, `Examples`, `Islands`, `Analyzer`, `GT` and `Parser` groups are loaded.
 
