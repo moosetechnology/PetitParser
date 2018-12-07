@@ -43,7 +43,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
-				group: 'Analyzer' with: #('Core' 'PetitAnalyzer');
+				group: 'Analyzer' with: #('Core' 'PetitAnalyzer' 'PetitAnalyzer-Tests');
 				group: 'Indent' with: #('PetitIndent' 'PetitIndent-Tests' 'PetitIndent-Examples');
 				group: 'Preprocessor' with: #('PetitPreprocessor' 'PetitPreprocessor-Tests');
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
