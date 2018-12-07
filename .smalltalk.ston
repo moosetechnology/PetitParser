@@ -7,9 +7,6 @@ SmalltalkCISpec {
         }
     ],
     #testing : {
-        #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIslands-Tests', 'PetitPreprocessor-Tests', 'PetitIndent-Tests', 'PetitSmalltalk-Tests', 'PetitCSV-Tests', 'PetitJson-Tests', 'PetitMSE-Tests', 'PetitManifestMf-Tests', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'FactorialLanguage-Tests', 'PetitYAML-Tests' ],
-    #coverage : {
-        #categories : [  ]
-    }
+        #categories : [ 'PetitParser-Tests', 'PetitAnalyzer-Tests', 'PetitIslands-Tests', 'PetitPreprocessor-Tests', 'PetitIndent-Tests', 'PetitSmalltalk-Tests', 'PetitCSV-Tests', 'PetitJson-Tests', 'PetitMSE-Tests', 'PetitManifestMf-Tests', 'PetitRegex-Tests', 'PetitXml-Tests', 'PetitXPath-Tests', 'FactorialLanguage-Tests', 'PetitYAML-Tests' ]
   }
 }
