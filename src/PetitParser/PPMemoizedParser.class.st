@@ -37,7 +37,6 @@ PPMemoizedParser >> nonMemoized [
 { #category : #parsing }
 PPMemoizedParser >> parseOn: aPPContext [
 	| memento contextMemento  aStream |
-	"TODO: JK memoizing needs review!"
 	self check: aPPContext.
 	contextMemento := aPPContext remember.
 	memento := (buffer at: contextMemento ifAbsentPut: [ PPMemento new ]).
