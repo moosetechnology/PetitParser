@@ -92,7 +92,7 @@ jsonParser parse: text asString.
 
 PPTextHighlighter new
 	parser: jsonParser;
-	addAttribute: TextColor gray for: #nullToken;
+	addAttribute: TextColor gray for: #nullToken; "The symbol is the name of the method in which the rule is defined."
 	addAttribute: TextColor green for: #trueToken;
 	addAttribute: TextColor red for: #falseToken;
 	addAttribute: TextColor yellow for: #number;
