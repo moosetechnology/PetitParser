@@ -114,6 +114,7 @@ It is possible to load subpart(s) of this project using groups:
 - `Preprocessor`: Utilities to apply pre-processing on a parser input in a handy way.
 - `Extension`: Provides `PPExtendedCompositeParser` which allows one to define parsers for which rules do not rely on instance variables (allow to exceed the limit of 256 rules per parser) and `PPMultiStringParser` which allows to build efficient parsers for huge list of strings.
 - `TestsExtension`: Adds some useful methods to `PPCompositeParserTest`.
+- `Highlighter`: Utility to create cheap highlighter for Text object from a grammar.
 - `GT`: Extension to the inspector allowing to debug grammar more easily.
 - `SmalltalkCore`: Smalltalk parser.
 - `Smalltalk`: Smalltalk parser and its tests.
@@ -123,7 +124,7 @@ It is possible to load subpart(s) of this project using groups:
 - `YAML`: YAML parser and its tests.
 - `ParserCore`: A collection of various grammars.
 - `Parser`: A collection of various grammars and their tests.
-- `PetitIDE`: Graphical tools to develop and debug parsers.
+- `ParserIDE`: Graphical tools to develop and debug parsers.
 
 By default, if no group is specified, `Core`, `Tests`, `Examples`, `Islands`, `Analyzer`, `GT` and `Parser` groups are loaded.
 
