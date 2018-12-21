@@ -29,6 +29,7 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitIndent' with: [ spec requires: #('Minimal') ];
 				package: 'PetitIndent-Examples' with: [ spec requires: #('PetitIndent') ];
 				package: 'PetitIndent-Tests' with: [ spec requires: #('Core' 'PetitIndent-Examples') ];
+				package: 'PetitParser-Highlighter' with: [ spec requires: #('Minimal') ];
 				package: 'PetitParser-Extension' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitTests-Extension' with: [ spec requires: 'PetitTests' ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
@@ -49,6 +50,7 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'GT' with: #('Core' 'PetitParser-GTExtensions');
 				group: 'Extension' with: #('PetitParser-Extension');
 				group: 'TestsExtension' with: #('PetitTests-Extension');
+				group: 'Highlighter' with: #('PetitParser-Highlighter');
 				group: 'ParserIDE' with: #('PetitGui');
 				group: 'SmalltalkCore' with: #('PetitSmalltalk');
 				group: 'Smalltalk' with: #('SmalltalkCore' 'PetitSmalltalk-Tests');
