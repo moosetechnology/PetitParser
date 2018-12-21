@@ -20,7 +20,7 @@ Class {
 		'parser',
 		'attributeMapper'
 	],
-	#category : #'PetitGui-Core'
+	#category : #'PetitParser-Highlighter'
 }
 
 { #category : #public }
