@@ -61,6 +61,39 @@ expression parse: '2^2^3'.
 expression parse: '(2^2)^3'.
 ```
 
+### Cool feature 2: Create a cheap highlighter from your grammar
+`PPTextHighlighter` allows you to create a cheap syntax highlighter from your grammar.
+Consider the following example from a JSON grammar. We want:
+- `null` to appear gray;
+- `true` to appear green;
+- `false` to appear red; and
+- any number to appear yellow.
+
+```
+jsonParser := PPJsonGrammar new.
+
+text := '{
+	"number" : 1,
+	"true" : true,
+	"false" : false,
+	"null" : null
+}' asText.
+
+jsonParser parse: text asString.
+
+PPTextHighlighter new
+	parser: jsonParser;
+	addAttribute: TextColor gray for: #nullToken;
+	addAttribute: TextColor green for: #trueToken;
+	addAttribute: TextColor red for: #falseToken;
+	addAttribute: TextColor yellow for: #number;
+	highlight: text. "Here we tell the highlighter to higlight text. This modifies the Text object."
+	
+text inspect
+```
+
+> Note: PPTextHighlighter is available in 'Highlighter' group of the baseline.
+
 ## Install
 ```
 Metacello new
