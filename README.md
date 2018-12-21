@@ -101,6 +101,10 @@ PPTextHighlighter new
 text inspect
 ```
 
+Result:
+
+![Inspector on highlighted text](resources/HighlightedTextInspector.png)
+
 > Note: PPTextHighlighter is available in 'Highlighter' group of the baseline.
 
 ## Install
