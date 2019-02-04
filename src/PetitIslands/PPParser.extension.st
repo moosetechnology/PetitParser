@@ -40,13 +40,19 @@ PPParser >> isWater [
 
 { #category : #'*petitislands' }
 PPParser >> island [
-	self deprecated: 'use sea instead'.
+	self
+		deprecated: 'Use #sea instead.'
+		transformWith: '`@receiver island' 
+						-> '`@receiver sea'.
 	^ self sea
 ]
 
 { #category : #'*petitislands' }
 PPParser >> island: water [
-	self halt: 'deprecated'.
+	self
+		deprecated: 'Use #sea: instead.'
+		transformWith: '`@receiver island: `@argument' 
+						-> '`@receiver sea: `@argument'.
 	^ self sea: water
 ]
 
