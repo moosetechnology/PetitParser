@@ -29,7 +29,7 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitIndent' with: [ spec requires: #('Minimal') ];
 				package: 'PetitIndent-Examples' with: [ spec requires: #('PetitIndent') ];
 				package: 'PetitIndent-Tests' with: [ spec requires: #('Core' 'PetitIndent-Examples') ];
-				package: 'PetitParser-Highlighter' with: [ spec requires: #('Minimal') ];
+				package: 'PetitParser-Highlighter' with: [ spec requires: #('Minimal' 'PetitAnalyzer') ];
 				package: 'PetitParser-Extension' with: [ spec requires: 'PetitParser' ];
 				package: 'PetitTests-Extension' with: [ spec requires: 'PetitTests' ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
