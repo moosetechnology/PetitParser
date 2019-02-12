@@ -16,3 +16,8 @@ Object >> isPetitFailure [
 Object >> isPetitParser [
 	^ false
 ]
+
+{ #category : #'*PetitParser' }
+Object >> isPetitToken [
+	^ false
+]
