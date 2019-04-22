@@ -34,6 +34,28 @@ PPSmalltalkParser >> array [
 ]
 
 { #category : #'grammar-literals' }
+PPSmalltalkParser >> arrayItemPeriod [
+	^ super arrayItemPeriod
+	==> [ :token | 
+	        (RBLiteralValueNode
+				value: (self buildString: token inputValue) asSymbol
+				start: token start
+				 stop: token stop)
+	 ]
+]
+
+{ #category : #'as yet unclassified' }
+PPSmalltalkParser >> arrayItemSemicolon [
+   ^ super arrayItemSemicolon
+	==> [ :token | 
+         (RBLiteralValueNode
+				value: (self buildString: token inputValue) asSymbol
+				start: token start
+				 stop: token stop)
+	 ]
+]
+
+{ #category : #'grammar-literals' }
 PPSmalltalkParser >> arrayLiteral [
 	^ super arrayLiteral
 		==> [ :nodes | 
