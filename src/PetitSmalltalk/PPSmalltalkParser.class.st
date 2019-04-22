@@ -33,7 +33,7 @@ PPSmalltalkParser >> array [
 			yourself ]
 ]
 
-{ #category : #'grammar-literals' }
+{ #category : #grammar }
 PPSmalltalkParser >> arrayItemPeriod [
 	^ super arrayItemPeriod
 	==> [ :token | 
@@ -44,7 +44,7 @@ PPSmalltalkParser >> arrayItemPeriod [
 	 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grammar }
 PPSmalltalkParser >> arrayItemSemicolon [
    ^ super arrayItemSemicolon
 	==> [ :token | 

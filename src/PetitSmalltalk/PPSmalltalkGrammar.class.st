@@ -117,17 +117,17 @@ PPSmalltalkGrammar >> array [
 	^ ${ asParser smalltalkToken , (expression delimitedBy: periodToken) optional , $} asParser smalltalkToken
 ]
 
-{ #category : #'grammar-literals' }
+{ #category : #grammar }
 PPSmalltalkGrammar >> arrayItem [
 	^ arrayItemPeriod / arrayItemSemicolon / literal / symbolLiteralArray / arrayLiteralArray / byteLiteralArray
 ]
 
-{ #category : #'as yet unclassified' }
-PPSmalltalkGrammar >> arrayItemPeriod [
+{ #category : #grammar }
+PPSmalltalkGrammar >> arrayItemPeriod [ 
    ^ ($. asParser) token
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grammar }
 PPSmalltalkGrammar >> arrayItemSemicolon [
    ^ ($; asParser) token
 ]
