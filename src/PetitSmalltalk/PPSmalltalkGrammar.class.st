@@ -79,14 +79,17 @@ Class {
 		'unaryMethod',
 		'unaryPragma',
 		'unaryToken',
-		'variable'
+		'variable',
+		'arrayItemPeriod',
+		'arrayItemSemicolon'
 	],
 	#category : #PetitSmalltalk
 }
 
 { #category : #testing }
 PPSmalltalkGrammar class >> allowUnderscoreAssignment [
-	^ (Scanner respondsTo: #allowUnderscoreAsAssignment) and: [ Scanner allowUnderscoreAsAssignment ]
+	"^ (Scanner respondsTo: #allowUnderscoreAsAssignment) and: [ Scanner allowUnderscoreAsAssignment ]"
+	^false
 ]
 
 { #category : #accessing }
@@ -114,9 +117,19 @@ PPSmalltalkGrammar >> array [
 	^ ${ asParser smalltalkToken , (expression delimitedBy: periodToken) optional , $} asParser smalltalkToken
 ]
 
-{ #category : #'grammar-literals' }
+{ #category : #grammar }
 PPSmalltalkGrammar >> arrayItem [
-	^ literal / symbolLiteralArray / arrayLiteralArray / byteLiteralArray
+	^ arrayItemPeriod / arrayItemSemicolon / literal / symbolLiteralArray / arrayLiteralArray / byteLiteralArray
+]
+
+{ #category : #grammar }
+PPSmalltalkGrammar >> arrayItemPeriod [ 
+   ^ ($. asParser) token
+]
+
+{ #category : #grammar }
+PPSmalltalkGrammar >> arrayItemSemicolon [
+   ^ ($; asParser) token
 ]
 
 { #category : #'grammar-literals' }
