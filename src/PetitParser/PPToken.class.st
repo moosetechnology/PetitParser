@@ -100,6 +100,11 @@ PPToken >> inputValue [
 	^ collection copyFrom: start to: stop
 ]
 
+{ #category : #testing }
+PPToken >> isPetitToken [
+	^ true
+]
+
 { #category : #querying }
 PPToken >> line [
 	"Answer the line number of this token in the underlying collection."
