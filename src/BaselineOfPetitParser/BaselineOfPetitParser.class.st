@@ -9,10 +9,9 @@ BaselineOfPetitParser >> baseline: spec [
 	<baseline>
 	spec
 		for: #common
-		do: [
-			self defineGlamourDependencyOn: spec.
+		do: [ self defineGlamourDependencyOn: spec.
 			self defineRoassalDependencyOn: spec.
-			
+
 			spec
 				package: 'PetitParser';
 				package: 'PetitParser-Deprecated' with: [ spec requires: 'PetitParser' ];
@@ -34,14 +33,14 @@ BaselineOfPetitParser >> baseline: spec [
 				package: 'PetitTests-Extension' with: [ spec requires: 'PetitTests' ];
 				package: 'PetitParser-GTExtensions' with: [ spec requires: #('PetitParser' 'PetitIslands' 'PetitParser-Examples') ];
 				package: 'PetitGui' with: [ spec requires: #('Glamour' 'Roassal2' 'PetitAnalyzer' 'PetitParser-GTExtensions') ].
-			
-			"This methods adds spec for all Grammars available in this repository."	
+
+			"This methods adds spec for all Grammars available in this repository."
 			self defineGrammarsOn: spec.
-			
+
 			spec
 				group: 'Minimal' with: #('PetitParser' 'PetitParser-Deprecated');
 				group: 'Core' with: #('Minimal' 'PetitTests');
-				group: 'Tests' with: #('Core' 'PetitParser-Tests' );
+				group: 'Tests' with: #('Core' 'PetitParser-Tests');
 				group: 'Examples' with: #('Core' 'PetitParser-Examples');
 				group: 'Islands' with: #('PetitIslands' 'PetitIslands-Examples' 'PetitIslands-Tests');
 				group: 'Analyzer' with: #('Core' 'PetitAnalyzer' 'PetitAnalyzer-Tests');
@@ -56,30 +55,18 @@ BaselineOfPetitParser >> baseline: spec [
 				group: 'Smalltalk' with: #('SmalltalkCore' 'PetitSmalltalk-Tests');
 				group: 'RegexCore' with: #('PetitRegex');
 				group: 'Regex' with: #('RegexCore' 'PetitRegex-Tests');
+				group: 'XmlCore' with: #('PetitXml');
+				group: 'Xml' with: #('XmlCore' 'PetitXml-Tests');
 				group: 'YAMLCore' with: #('PetitYAML');
 				group: 'YAML' with: #('YAMLCore' 'PetitYAML-Tests');
-				group: 'ParserCore' with: #('PetitSmalltalk'
-												'PetitCSV'
-												'PetitJson'
-												'PetitMSE'
-												'PetitManifestMf'
-												'PetitRegex'
-												'PetitXPath'
-												'PetitXml'
-												'FactorialLanguage'
-												'PetitYAML');
-				group: 'Parser' with: #('PetitSmalltalk-Tests'
-												'PetitCSV-Tests'
-												'PetitJson-Tests'
-												'PetitMSE-Tests'
-												'PetitManifestMf-Tests'
-												'PetitRegex-Tests'
-												'PetitXPath-Tests'
-												'PetitXml-Tests'
-												'FactorialLanguage-Tests'
-												'PetitYAML-Tests');
+				group: 'ParserCore'
+					with:
+					#('PetitSmalltalk' 'PetitCSV' 'PetitJson' 'PetitMSE' 'PetitManifestMf' 'PetitRegex' 'PetitXPath' 'PetitXml' 'FactorialLanguage' 'PetitYAML');
+				group: 'Parser'
+					with:
+					#('PetitSmalltalk-Tests' 'PetitCSV-Tests' 'PetitJson-Tests' 'PetitMSE-Tests' 'PetitManifestMf-Tests' 'PetitRegex-Tests' 'PetitXPath-Tests' 'PetitXml-Tests' 'FactorialLanguage-Tests' 'PetitYAML-Tests');
 				"Override default group to NOT include ParserIDE."
-				group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'Preprocessor' 'Indent' 'Extension' 'TestsExtension' 'GT' 'Parser') ]
+					group: 'default' with: #('Core' 'Tests' 'Examples' 'Islands' 'Analyzer' 'Preprocessor' 'Indent' 'Extension' 'TestsExtension' 'GT' 'Parser') ]
 ]
 
 { #category : #baselines }
