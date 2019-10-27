@@ -114,6 +114,14 @@ Metacello new
    repository: 'github://moosetechnology/PetitParser/src';
    load.
 ```
+### If you need it in a baseline
+
+
+```
+spec 
+   baseline: 'PetitParser' 
+   with: [ spec repository: 'github://moosetechnology/PetitParser/src' ].
+```
 
 ### Groups
 It is possible to load subpart(s) of this project using groups:
