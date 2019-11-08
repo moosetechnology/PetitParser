@@ -8,6 +8,7 @@ The version of PetitParser on this repository is supported by Pharo 6.1 and Phar
   * [Cool feature 2: Create a cheap highlighter from your grammar](#cool-feature-2-create-a-cheap-highlighter-from-your-grammar)
 - [Install](#install)
   * [Groups](#groups)
+  * [Use as dependency](#use-as-dependency)
 - [Version management](#version-management)
 - [Grammars provided](#grammars-provided)
 - [Packages removed during/after migration](#packages-removed-duringafter-migration)
@@ -78,7 +79,7 @@ Consider the following example from a JSON grammar. We want:
 - `false` to appear red; and
 - any number to appear yellow.
 
-```
+```Smalltalk
 jsonParser := PPJsonGrammar new.
 
 text := '{
@@ -108,19 +109,11 @@ Result:
 > Note: PPTextHighlighter is available in 'Highlighter' group of the baseline.
 
 ## Install
-```
+```Smalltalk
 Metacello new
    baseline: 'PetitParser';
    repository: 'github://moosetechnology/PetitParser/src';
    load.
-```
-### If you need it in a baseline
-
-
-```
-spec 
-   baseline: 'PetitParser' 
-   with: [ spec repository: 'github://moosetechnology/PetitParser/src' ].
 ```
 
 ### Groups
@@ -149,6 +142,12 @@ It is possible to load subpart(s) of this project using groups:
 
 By default, if no group is specified, `Core`, `Tests`, `Examples`, `Islands`, `Analyzer`, `GT` and `Parser` groups are loaded.
 
+### Use as dependency
+```Smalltalk
+spec 
+   baseline: 'PetitParser' 
+   with: [ spec repository: 'github://moosetechnology/PetitParser/src' ].
+```
 
 ## Version management
 
