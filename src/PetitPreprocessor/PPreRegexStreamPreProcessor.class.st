@@ -23,10 +23,10 @@ Class {
 }
 
 { #category : #accessing }
-PPreRegexStreamPreProcessor >> intervalsToReplace: aStream [ 
+PPreRegexStreamPreProcessor >> intervalsToReplace: aStream [
 	| position ranges |
 	position := aStream position.
-	ranges :=( regex matchingRangesIn: aStream) .
+	ranges := regex matchingRangesIn: aStream.
 
 	aStream position: position.
 	^ ranges
@@ -35,14 +35,13 @@ PPreRegexStreamPreProcessor >> intervalsToReplace: aStream [
 { #category : #parsing }
 PPreRegexStreamPreProcessor >> preProcess: aStream [
 	"Return a new PPRelativePositionStream which stores all transformations"
+
 	| result transformation |
 	result := WriteStream with: ''.
 	transformation := PPreIntervalTransformations startingAt: aStream position.
-	(self intervalsToReplace: aStream) do: 
-		[:aRange | transformation addTransformation: (self write: aStream into: result forRange: aRange).
-			 ].
-	aStream do: [:c | result nextPut: c].
-	^ PPRelativePositionStream on: (result contents) relativeTo: aStream with: transformation
+	(self intervalsToReplace: aStream) do: [ :aRange | transformation addTransformation: (self write: aStream into: result forRange: aRange) ].
+	aStream do: [ :c | result nextPut: c ].
+	^ PPRelativePositionStream on: result contents relativeTo: aStream with: transformation
 ]
 
 { #category : #accessing }
@@ -68,14 +67,13 @@ PPreRegexStreamPreProcessor >> replacement: anObject [
 { #category : #writing }
 PPreRegexStreamPreProcessor >> write: aStream into: anotherStream forRange: aRange [
 	| aStreamStart anotherStreamStart |
-	
-	[(aStream position + 1) < (aRange first)] whileTrue: [anotherStream nextPut: aStream next]. 
-	
-	aStreamStart:= aStream position.
-	anotherStreamStart:= anotherStream position.
-	
+	[ aStream position + 1 < aRange first ] whileTrue: [ anotherStream nextPut: aStream next ].
+
+	aStreamStart := aStream position.
+	anotherStreamStart := anotherStream position.
+
 	anotherStream nextPutAll: replacement.
 	aStream skip: aRange size.
-	
+
 	^ PPreIntervalTransformation from: (Interval from: aStreamStart to: aStream position) to: (Interval from: anotherStreamStart to: anotherStream position)
 ]

@@ -16,19 +16,24 @@ Class {
 
 { #category : #'instance creation' }
 PPRelativePositionStream class >> on: aStream relativeTo: aRelativeStream with: aTransformation [
-	^ (super on: aStream) relativeStream: aRelativeStream; transformation: aTransformation; yourself
+	^ (self on: aStream)
+		relativeStream: aRelativeStream;
+		transformation: aTransformation;
+		yourself
 ]
 
 { #category : #accessing }
 PPRelativePositionStream >> absolutePosition: aPosition [
 	"return the absolute position of this stream (related to the original stream)"
-	^  relativeStream absolutePosition: (self relativePosition: aPosition ) 
+
+	^ relativeStream absolutePosition: (self relativePosition: aPosition)
 ]
 
 { #category : #position }
 PPRelativePositionStream >> relativePosition: aPosition [
 	"Return the relative position of this stream to its parent stream"
-	^  (transformation relativePosition: aPosition) 
+
+	^ transformation relativePosition: aPosition
 ]
 
 { #category : #accessing }

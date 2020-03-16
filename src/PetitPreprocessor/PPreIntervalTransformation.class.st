@@ -10,17 +10,20 @@ Class {
 
 { #category : #'instance creation' }
 PPreIntervalTransformation class >> from: anInterval to: anotherInterval [
-	^ self new sourceInterval: anInterval; destinationInterval: anotherInterval 
+	^ self new
+		sourceInterval: anInterval;
+		destinationInterval: anotherInterval;
+		yourself
 ]
 
 { #category : #accessing }
 PPreIntervalTransformation >> concerns: aPosition [
-	^ (self destinationInterval last <= aPosition)
+	^ self destinationInterval last <= aPosition
 ]
 
 { #category : #accessing }
 PPreIntervalTransformation >> decalage [
-	^ destinationInterval size - sourceInterval size 
+	^ destinationInterval size - sourceInterval size
 ]
 
 { #category : #accessing }
@@ -35,7 +38,8 @@ PPreIntervalTransformation >> destinationInterval: anObject [
 
 { #category : #accessing }
 PPreIntervalTransformation >> printOn: aStream [
-	aStream nextPut: $[;
+	aStream
+		nextPut: $[;
 		print: sourceInterval;
 		nextPutAll: '=>';
 		print: destinationInterval;
