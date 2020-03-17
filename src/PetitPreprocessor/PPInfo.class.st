@@ -34,7 +34,7 @@ PPInfo class >> new [
 
 { #category : #'instance creation' }
 PPInfo class >> on: anElement start: aStartInteger stop: aStopInteger [
-	^ self new
+	^ super new
 		initializeOn: anElement start: aStartInteger stop: aStopInteger;
 		yourself
 ]
