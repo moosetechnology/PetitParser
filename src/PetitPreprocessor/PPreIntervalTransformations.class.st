@@ -13,7 +13,8 @@ PPreIntervalTransformations >> addTransformation: aTransformation [
 ]
 
 { #category : #initialization }
-PPreIntervalTransformations >> initialize [ 
+PPreIntervalTransformations >> initialize [
+	super initialize.
 	intervals := OrderedCollection new
 ]
 
@@ -30,7 +31,7 @@ PPreIntervalTransformations >> intervals: anObject [
 { #category : #accessing }
 PPreIntervalTransformations >> printOn: aStream [
 	aStream nextPut: ${.
-	 self intervals do: [:anInterval | aStream print: anInterval ].
+	self intervals do: [ :anInterval | aStream print: anInterval ].
 	aStream nextPut: $}
 ]
 
@@ -38,8 +39,6 @@ PPreIntervalTransformations >> printOn: aStream [
 PPreIntervalTransformations >> relativePosition: aPosition [
 	| decalage |
 	decalage := 0.
-	intervals
-		select: [ :aTransformation | aTransformation concerns: aPosition ]
-		thenDo: [ :aTransformation | decalage := decalage + aTransformation decalage ].
+	intervals select: [ :aTransformation | aTransformation concerns: aPosition ] thenDo: [ :aTransformation | decalage := decalage + aTransformation decalage ].
 	^ aPosition - decalage + relativeStreamStartPosition
 ]

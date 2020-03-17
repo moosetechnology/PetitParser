@@ -9,7 +9,9 @@ Class {
 
 { #category : #'instance creation' }
 PPreStreamTransformation class >> startingAt: aPosition [
-	^ self new relativeStreamStartPosition: aPosition 
+	^ self new
+		relativeStreamStartPosition: aPosition;
+		yourself
 ]
 
 { #category : #position }

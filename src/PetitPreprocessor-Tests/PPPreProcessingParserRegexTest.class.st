@@ -1,91 +1,97 @@
 Class {
 	#name : #PPPreProcessingParserRegexTest,
 	#superclass : #PPAbstractParserTest,
-	#category : 'PetitPreprocessor-Tests'
+	#instVars : [
+		'preProcessingParser'
+	],
+	#category : #'PetitPreprocessor-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testBiggerReplacementThanMatching [
-	|preProcessingParser|	
-	preProcessingParser := 'Troll' asParser preProcess: ('u' asRegex) into: 'll'. 
-	self assert: (('Un' asParser, preProcessingParser, 'DeTroy' asParser) end matches: 'UnTrouDeTroy')
+	preProcessingParser := 'Troll' asParser preProcess: 'u' asRegex into: 'll'.
+	self assert: (('Un' asParser , preProcessingParser , 'DeTroy' asParser) end matches: 'UnTrouDeTroy')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testDecomposedEntry [
-	|preProcessingParser|	
 	preProcessingParser := 'Libellule' asParser preProcess: 'T' asRegex into: ''.
 	self assert: (preProcessingParser end matches: 'LibTelTluTle')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testDecomposedEntryConsumed [
-	|preProcessingParser|	
 	preProcessingParser := 'Libellule' asParser preProcess: 'T' asRegex into: ''.
-	self assert:  ((preProcessingParser, 'yoyo' asParser) matches:  'LibTelTluTleyoyo')
+	self assert: (preProcessingParser , 'yoyo' asParser matches: 'LibTelTluTleyoyo')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testDoNotConsumeIfContainedParserDoNotMatch [
-	|preProcessingParser|	
-	preProcessingParser :=  'aNonMatchingString' asParser preProcess: 'T' asRegex into: ''.
-	self assert: ((preProcessingParser optional, 'LibTelTluTle' asParser) matches: 'LibTelTluTle')
+	preProcessingParser := 'aNonMatchingString' asParser preProcess: 'T' asRegex into: ''.
+	self assert: (preProcessingParser optional , 'LibTelTluTle' asParser matches: 'LibTelTluTle')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testDoubleInclusion [
-	| preProcessingParser parser |
-	preProcessingParser := ('Libellule' asParser preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex  into: ''.
-	parser :=  'yoyo' asParser, preProcessingParser, 'yoyo' asParser.
-	self assert: (parser matches: 'yoyoLiYYbTeYYlTluTlYYeyoyo').
+	| parser |
+	preProcessingParser := ('Libellule' asParser preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex into: ''.
+	parser := 'yoyo' asParser , preProcessingParser , 'yoyo' asParser.
+	self assert: (parser matches: 'yoyoLiYYbTeYYlTluTlYYeyoyo')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testMixingDataToPreProcessAndNot [
-	|preProcessingParser|	
 	preProcessingParser := 'Libellule' asParser preProcess: 'T' asRegex into: ''.
-	self assert: (('DoNoTPreProcess' asParser, preProcessingParser, 'NotThisToo' asParser) matches: 'DoNoTPreProcessLibTelTluTleNotThisToo')
+	self assert: ('DoNoTPreProcess' asParser , preProcessingParser , 'NotThisToo' asParser matches: 'DoNoTPreProcessLibTelTluTleNotThisToo')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testPreprocess [
 	| preProcessor |
-	preProcessor := PPreRegexStreamPreProcessor new.
-	preProcessor regex: 'T' asRegex .
-	preProcessor replacement: ''.
-	self assert: 'My String' equals: (preProcessor preProcess: 'MTy TStrTingT' asPetitStream ) contents 
+	preProcessor := PPreRegexStreamPreProcessor new
+		regex: 'T' asRegex;
+		replacement: '';
+		yourself.
+	self assert: 'My String' equals: (preProcessor preProcess: 'MTy TStrTingT' asPetitStream) contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testPreprocessWithPreviousContent [
-	| aStream preProcessor |
-	preProcessor := PPreRegexStreamPreProcessor new.
-	preProcessor regex: 'T' asRegex .
-	preProcessor replacement: ''.
-	self assert: 'My String' equals: (preProcessor preProcess: ('PreviousContentMTy TStrTingT' asPetitStream position: 15; yourself)) contents 
+	| preProcessor |
+	preProcessor := PPreRegexStreamPreProcessor new
+		regex: 'T' asRegex;
+		replacement: '';
+		yourself.
+	self
+		assert: 'My String'
+		equals:
+			(preProcessor
+				preProcess:
+					('PreviousContentMTy TStrTingT' asPetitStream
+						position: 15;
+						yourself)) contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testRelativePositionForDoubleInclusion [
-	|preProcessingParser token |	
-	preProcessingParser := (('yoyo' asParser, ('Libellule' asParser info), 'yoyo' asParser) preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex  into: ''.
-	token := (preProcessingParser parse:  'yTYYoyTYYoLiYYbTeYYlTluTlYYeyToYYyTo') second.
+	| token |
+	preProcessingParser := ('yoyo' asParser , 'Libellule' asParser info , 'yoyo' asParser preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex into: ''.
+	token := (preProcessingParser parse: 'yTYYoyTYYoLiYYbTeYYlTluTlYYeyToYYyTo') second.
 	self assert: token start equals: 11.
-	self assert: token stop equals: 28. 
+	self assert: token stop equals: 28
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testRelativePositionForIncludedParser [
-	|preProcessingParser token |	
-	preProcessingParser := (('yoyo' asParser, ('Libellule' asParser info), 'yoyo' asParser) preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex  into: ''.
-	token := (preProcessingParser parse:  'yToyToLibTelTluTleyToyTo') second.
+	| token |
+	preProcessingParser := ('yoyo' asParser , 'Libellule' asParser info , 'yoyo' asParser preProcess: 'Y+' asRegex into: '') preProcess: 'T' asRegex into: ''.
+	token := (preProcessingParser parse: 'yToyToLibTelTluTleyToyTo') second.
 	self assert: token start equals: 7.
-	self assert: token stop equals: 18. 
+	self assert: token stop equals: 18
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PPPreProcessingParserRegexTest >> testWithPotentiallyPreprocessedDataAround [
-	|preProcessingParser|	
 	preProcessingParser := 'Libellule' asParser preProcess: 'T' asRegex into: ''.
 	self assert: (preProcessingParser end matches: 'TLibTelTluTleT')
 ]
