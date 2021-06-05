@@ -13,6 +13,10 @@ The version of PetitParser on this repository is supported by Pharo 6.1 and Phar
 - [Grammars provided](#grammars-provided)
 - [Packages removed during/after migration](#packages-removed-duringafter-migration)
 
+## History
+- Version 2.2.0 from June 2020 is working on Pharo 6.1, Pharo 7.0 and Pharo8.0
+- We are working on a version for Pharo 90 (mainly fixing some tests). 
+
 ## About Petit Parser
 Petit Parser is a framework for building parsers. It was originally developed by Lukas Renggli.
 
