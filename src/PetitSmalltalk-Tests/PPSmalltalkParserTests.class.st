@@ -5,11 +5,21 @@ Class {
 }
 
 { #category : #private }
-PPSmalltalkParserTests >> assert: aNode format: aString [
+PPSmalltalkParserTests >> assert: aNode pragmas: aCollection [ 
+	"a string should be in the form of 
+			selector 	
+				pragma
+				^ self
+	We have to do it that way because the RBParser parseExpression: cannot parse <foo>"
+	| wrappedStringCollection |
+	wrappedStringCollection := aCollection collect: [ :each | self wrapped: each ]. 
 	aNode isCollection
-		ifFalse: [ ^ self assert: (Array with: aNode) format: (Array with: aString) ].
-	self assert: aNode size equals: aString size.
-	aNode with: aString do: [ :node :string | self assert: (BIConfigurableFormatter format: node) equals: string ]
+		ifFalse: [ ^ self assert: (Array with: aNode) pragmas: (Array with: wrappedStringCollection) ].
+	self assert: aNode size equals: wrappedStringCollection size.
+	aNode with: wrappedStringCollection do: [ :node :string | 
+		self 
+			assert: node dump
+			equals: (RBParser parseMethod: string) pragmas first dump ]
 ]
 
 { #category : #accessing }
@@ -844,7 +854,7 @@ PPSmalltalkParserTests >> testPragma1 [
 	super testPragma1.
 	self 
 		assert: result pragmas
-		format: #('<foo>' ).
+		pragmas: {'<foo>'}.
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -855,7 +865,7 @@ PPSmalltalkParserTests >> testPragma10 [
 	super testPragma10.
 	self 
 		assert: result pragmas
-		format: #('<foo: #bar>' ).
+		pragmas: { '<foo: #bar>' }.
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -866,7 +876,7 @@ PPSmalltalkParserTests >> testPragma11 [
 	super testPragma11.
 	self 
 		assert: result pragmas
-		format: #('<foo: true>' ).
+		pragmas: { '<foo: true>' }.
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -877,7 +887,7 @@ PPSmalltalkParserTests >> testPragma12 [
 	super testPragma12.
 	self 
 		assert: result pragmas
-		format: #('<foo: false>' ).
+		pragmas: { '<foo: false>' }.
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -888,7 +898,7 @@ PPSmalltalkParserTests >> testPragma13 [
 	super testPragma13.
 	self 
 		assert: result pragmas
-		format: #('<foo: nil>' ).
+		pragmas: { '<foo: nil>'}.
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -899,7 +909,7 @@ PPSmalltalkParserTests >> testPragma14 [
 	super testPragma14.
 	self 
 		assert: result pragmas
-		format: #('<foo: #()>' ).
+		pragmas: #('<foo: #()>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -910,7 +920,7 @@ PPSmalltalkParserTests >> testPragma15 [
 	super testPragma15.
 	self 
 		assert: result pragmas
-		format: #('<foo: #()>' ).
+		pragmas: #('<foo: #()>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -921,7 +931,7 @@ PPSmalltalkParserTests >> testPragma16 [
 	super testPragma16.
 	self 
 		assert: result pragmas
-		format: #('< + 1>' ).
+		pragmas: #('< + 1>' ).
 	self assert: result pragmas first keywordsPositions equals: #(10) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -932,7 +942,7 @@ PPSmalltalkParserTests >> testPragma17 [
 	super testPragma17.
 	self 
 		assert: result pragmas
-		format: #('<foo: 1 bar: 2>' ).
+		pragmas: #('<foo: 1 bar: 2>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9 16) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -943,7 +953,7 @@ PPSmalltalkParserTests >> testPragma18 [
 	super testPragma18.
 	self 
 		assert: result pragmas
-		format: #('<foo: 1 bar: 2 baz: #b>' ).
+		pragmas: #('<foo: 1 bar: 2 baz: #b>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9 16 24) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -954,7 +964,7 @@ PPSmalltalkParserTests >> testPragma2 [
 	super testPragma2.
 	self 
 		assert: result pragmas
-		format: #('<foo>' '<bar>' ).
+		pragmas: #('<foo>' '<bar>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result pragmas second keywordsPositions equals: #(15) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
@@ -964,7 +974,7 @@ PPSmalltalkParserTests >> testPragma2 [
 { #category : #'testing-pragmas' }
 PPSmalltalkParserTests >> testPragma3 [
 	super testPragma3.
-	self assert: result pragmas format: #('<foo>').
+	self assert: result pragmas pragmas: #('<foo>').
 	self assert: result pragmas first keywordsPositions equals: #(15) asIntegerArray.
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
@@ -973,7 +983,7 @@ PPSmalltalkParserTests >> testPragma3 [
 { #category : #'testing-pragmas' }
 PPSmalltalkParserTests >> testPragma4 [
 	super testPragma4.
-	self assert: result pragmas format: #('<foo>').
+	self assert: result pragmas pragmas: #('<foo>').
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.	
 	self assert: result body temporaries size equals: 1.
 	self assert: result body statements isEmpty
@@ -982,7 +992,7 @@ PPSmalltalkParserTests >> testPragma4 [
 { #category : #'testing-pragmas' }
 PPSmalltalkParserTests >> testPragma5 [
 	super testPragma5.
-	self assert: result pragmas format: #('<foo>' '<bar>').
+	self assert: result pragmas pragmas: #('<foo>' '<bar>').
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.
 	self assert: result pragmas second keywordsPositions equals: #(21) asIntegerArray.	
 	self assert: result body temporaries size equals: 1.
@@ -994,7 +1004,7 @@ PPSmalltalkParserTests >> testPragma6 [
 	super testPragma6.
 	self 
 		assert: result pragmas
-		format: #('<foo: 1>' ).
+		pragmas: #('<foo: 1>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -1005,7 +1015,7 @@ PPSmalltalkParserTests >> testPragma7 [
 	super testPragma7.
 	self 
 		assert: result pragmas
-		format: #('<foo: 1.2>' ).
+		pragmas: #('<foo: 1.2>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -1016,7 +1026,7 @@ PPSmalltalkParserTests >> testPragma8 [
 	super testPragma8.
 	self 
 		assert: result pragmas
-		format: #('<foo: ''bar''>' ).
+		pragmas: #('<foo: ''bar''>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -1027,7 +1037,7 @@ PPSmalltalkParserTests >> testPragma9 [
 	super testPragma9.
 	self 
 		assert: result pragmas
-		format: #('<foo: #bar>' ).
+		pragmas: #('<foo: #bar>' ).
 	self assert: result pragmas first keywordsPositions equals: #(9) asIntegerArray.		
 	self assert: result body temporaries isEmpty.
 	self assert: result body statements isEmpty
@@ -1499,4 +1509,11 @@ PPSmalltalkParserTests >> testVariable7 [
 		ifTrue: [ ^ self ].
 	self assert: result isVariable.
 	self assert: result name equals: '__gen_var_123__'
+]
+
+{ #category : #'testing-pragmas' }
+PPSmalltalkParserTests >> wrapped: aString [
+	^ 'foo ', aString, ' ^self' 
+
+
 ]
