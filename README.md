@@ -113,14 +113,29 @@ Result:
 > Note: PPTextHighlighter is available in 'Highlighter' group of the baseline.
 
 ## Install
+
+![Pharo 9 version](https://img.shields.io/badge/Pharo-9-%23aac9ff.svg)
+ 
 ```Smalltalk
 Metacello new
    baseline: 'PetitParser';
-   repository: 'github://moosetechnology/PetitParser/src';
+   repository: 'github://moosetechnology/PetitParser:v3.x.x/src';
+   load.
+```
+
+ ![Pharo 6 version](https://img.shields.io/badge/Pharo-6-%23aac9ff.svg)
+ ![Pharo 7 version](https://img.shields.io/badge/Pharo-7-%23aac9ff.svg)
+ ![Pharo 8 version](https://img.shields.io/badge/Pharo-8-%23aac9ff.svg)
+ 
+```Smalltalk
+Metacello new
+   baseline: 'PetitParser';
+   repository: 'github://moosetechnology/PetitParser:v2.x.x/src';
    load.
 ```
 
 ### Groups
+
 It is possible to load subpart(s) of this project using groups:
 - `Minimal`: Kernel of the framework.
 - `Core`: Kernel of the framework and extensions to SUnit to make parsers testing easier.
