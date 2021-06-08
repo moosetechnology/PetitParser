@@ -1,13 +1,13 @@
-name: CI
+name: CI V2
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   push:
-    branches: [ master, development ]
+    branches: [ v2 ]
   pull_request:
-    branches: [ master, development ]
+    branches: [ v2 ]
 
 jobs:
   build:
