@@ -1,4 +1,4 @@
-# PetitParser [![Build Status](https://travis-ci.org/moosetechnology/PetitParser.svg?branch=development)](https://travis-ci.org/moosetechnology/PetitParser)
+# PetitParser [![CI V3](https://github.com/moosetechnology/PetitParser/actions/workflows/test.yml/badge.svg?branch=development)](https://github.com/moosetechnology/PetitParser/actions/workflows/test.yml)
 Petit Parser is a framework for building parsers.
 
 The version of PetitParser on this repository is supported by Pharo 6.1 and Pharo 7. To use it with older Pharo version, please refer to the [Smalltalkhub repository](http://smalltalkhub.com/#!/~Moose/PetitParser).
